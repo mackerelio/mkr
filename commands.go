@@ -150,8 +150,7 @@ func doStatus(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	mackerel := newMackerel()
-	host, err := mackerel.FindHost(argHostId)
+	host, err := newMackerel().FindHost(argHostId)
 	utils.DieIf(err)
 
 	if isVerbose {
@@ -177,8 +176,7 @@ func doHosts(c *cli.Context) {
 	argRoles := c.StringSlice("role")
 	argStatuses := c.StringSlice("status")
 
-	mackerel := newMackerel()
-	hosts, err := mackerel.FindHosts(&mkr.FindHostsParam{
+	hosts, err := newMackerel().FindHosts(&mkr.FindHostsParam{
 		Name:     argName,
 		Service:  argService,
 		Roles:    argRoles,
@@ -220,18 +218,16 @@ func doUpdate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	mackerel := newMackerel()
-
 	isUpdated := false
 
 	if status != "" {
-		err := mackerel.UpdateHostStatus(argHostId, status)
+		err := newMackerel().UpdateHostStatus(argHostId, status)
 		utils.DieIf(err)
 
 		isUpdated = true
 	}
 	if name != "" || len(RoleFullnames) > 0 {
-		_, err := mackerel.UpdateHost(argHostId, &mkr.UpdateHostParam{
+		_, err := newMackerel().UpdateHost(argHostId, &mkr.UpdateHostParam{
 			Name:          name,
 			RoleFullnames: RoleFullnames,
 		})
@@ -284,13 +280,11 @@ func doThrow(c *cli.Context) {
 	}
 	utils.ErrorIf(scanner.Err())
 
-	mackerel := newMackerel()
-
 	if argHostId != "" {
-		err := mackerel.PostHostMetricValuesByHostId(argHostId, metricValues)
+		err := newMackerel().PostHostMetricValuesByHostId(argHostId, metricValues)
 		utils.DieIf(err)
 	} else if argService != "" {
-		err := mackerel.PostServiceMetricValues(argService, metricValues)
+		err := newMackerel().PostServiceMetricValues(argService, metricValues)
 		utils.DieIf(err)
 	} else {
 		cli.ShowCommandHelp(c, "throw")
