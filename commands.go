@@ -107,8 +107,15 @@ Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<You
 `)
 		os.Exit(1)
 	}
-	mackerel := mkr.NewClient(apiKey)
-	return mackerel
+
+	if os.Getenv("DEBUG") != "" {
+		mackerel, err := mkr.NewClientForTest(apiKey, "https://mackerel.io/api/v0", true)
+		utils.DieIf(err)
+
+		return mackerel
+	} else {
+		return mkr.NewClient(apiKey)
+	}
 }
 
 func doStatus(c *cli.Context) {
