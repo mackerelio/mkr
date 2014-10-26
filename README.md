@@ -18,22 +18,26 @@ export MACKEREL_APIKEY=<Put your API key>
 ### On your local host
 
 ```
-gomkr host show <hostId> [--json]
-gomkr host list [--name[-n] <hostName>] [--service[-s] <serviceName>] [--role[-r] <roleName>] [--json]
-gomkr host status --host[-h] <hostId> --status[-s] <statusName>
+gomkr status <hostId> [--json]
+gomkr hosts [--name[-n] <hostName>] [--service[-s] <serviceName>] [--role[-r] <roleName>] [--json]
 ```
 
 ```
-gomkr metric --host[-h] <hostId> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
-gomkr metric --service[-s] <serviceName> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
+gomkr create [--status[-s] <statusName>] [ [--fullRoleName[-r] <serviceName>:<roleName>] ... ] <hostName>
+gomkr update [--status[-s] <statusName>] [ [--fullRoleName[-r] <serviceName>:<roleName>] ... ] <hostId>
 ```
 
 ```
-gomkr metric show --host[-h] <hostId> [--name[-n] <metricName>] [--json]
+gomkr throw --host[-h] <hostId> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
+gomkr throw --service[-s] <serviceName> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
 ```
 
 ```
-gomkr host retire --host[-h] <hostId>
+gomkr fetch --name[-n] <metricName> [--json] <hostId>
+```
+
+```
+gomkr retire <hostId>
 ```
 
 ### On host running mackerel-agent
@@ -42,15 +46,23 @@ You can omit specifing ```<hostId>``` and ```MACKEREL_APIKEY```.
 ```gomkr``` refers ```/var/lib/mackerel-agent/id``` and ```/etc/mackerel-agent/mackerel-agent.conf``` instead of specifing ```<hostId>```.
 
 ```
-gomkr host info
+gomkr status
 ```
 
 ```
-gomkr host status --status[-s] <statusName>
+gomkr update [--status[-s] <statusName>] [ [--fullRoleName[-r] <serviceName>:<roleName>] ... ]
 ```
 
 ```
-gomkr metric name\ttime\tvalue [ [name\ttime\tvalue] ... ]
+gomkr fetch --name[-n] <metricName>
+```
+
+```
+gomkr throw name\ttime\tvalue [ [name\ttime\tvalue] ... ]
+```
+
+```
+gomkr retire
 ```
 
 ## Advanced Usage
