@@ -1,10 +1,15 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/mackerelio/gomkr/utils"
+	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
 var Commands = []cli.Command{
@@ -19,10 +24,13 @@ var Commands = []cli.Command{
 
 var commandStatus = cli.Command{
 	Name:  "status",
-	Usage: "",
+	Usage: "Show host status",
 	Description: `
 `,
 	Action: doStatus,
+	Flags: []cli.Flag{
+		cli.BoolFlag{Name: "verbose, V", Usage: "Output verbose info"},
+	},
 }
 
 var commandHosts = cli.Command{
@@ -85,7 +93,34 @@ func assert(err error) {
 	}
 }
 
+func newMackerel() *mkr.Client {
+	apiKey := os.Getenv("MACKEREL_APIKEY")
+	if apiKey == "" {
+		utils.DieIf(errors.New(`
+Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
+`))
+		os.Exit(1)
+	}
+	mackerel := mkr.NewClient(apiKey)
+	return mackerel
+}
+
 func doStatus(c *cli.Context) {
+	argHostId := c.Args().Get(0)
+
+	if argHostId == "" {
+		cli.ShowCommandHelp(c, "status")
+		os.Exit(1)
+	}
+
+	mackerel := newMackerel()
+	host, err := mackerel.FindHost(argHostId)
+	utils.DieIf(err)
+
+	data, err := json.MarshalIndent(host, "", "    ")
+	utils.DieIf(err)
+
+	fmt.Fprintln(os.Stdout, string(data))
 }
 
 func doHosts(c *cli.Context) {
