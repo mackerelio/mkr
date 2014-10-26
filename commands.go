@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -96,9 +95,9 @@ func assert(err error) {
 func newMackerel() *mkr.Client {
 	apiKey := os.Getenv("MACKEREL_APIKEY")
 	if apiKey == "" {
-		utils.DieIf(errors.New(`
+		utils.Log("error", `
 Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
-`))
+`)
 		os.Exit(1)
 	}
 	mackerel := mkr.NewClient(apiKey)
