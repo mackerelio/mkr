@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/mackerelio/gomkr/utils"
@@ -65,10 +68,14 @@ var commandUpdate = cli.Command{
 
 var commandThrow = cli.Command{
 	Name:  "throw",
-	Usage: "",
+	Usage: "Post metric values",
 	Description: `
 `,
 	Action: doThrow,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostId>."},
+		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
+	},
 }
 
 var commandFetch = cli.Command{
@@ -202,6 +209,55 @@ func doUpdate(c *cli.Context) {
 }
 
 func doThrow(c *cli.Context) {
+	argHostId := c.String("host")
+	argService := c.String("service")
+
+	var metricValues []*(mkr.MetricValue)
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// name, value, timestamp
+		// ex.) tcp.CLOSING 0 1397031808
+		items := strings.Fields(line)
+		fmt.Printf("%v+", items)
+		if len(items) != 3 {
+			continue
+		}
+		value, err := strconv.ParseFloat(items[1], 64)
+		if err != nil {
+			utils.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
+			continue
+		}
+		time, err := strconv.ParseInt(items[2], 10, 64)
+		if err != nil {
+			utils.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
+			continue
+		}
+
+		metricValue := &mkr.MetricValue{
+			Name:  items[0],
+			Value: value,
+			Time:  time,
+		}
+
+		metricValues = append(metricValues, metricValue)
+	}
+	utils.ErrorIf(scanner.Err())
+
+	mackerel := newMackerel()
+
+	if argHostId != "" {
+		err := mackerel.PostHostMetricValuesByHostId(argHostId, metricValues)
+		utils.DieIf(err)
+	} else if argService != "" {
+		err := mackerel.PostServiceMetricValues(argService, metricValues)
+		utils.DieIf(err)
+	} else {
+		cli.ShowCommandHelp(c, "throw")
+		os.Exit(1)
+	}
 }
 
 func doFetch(c *cli.Context) {
