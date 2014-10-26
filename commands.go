@@ -67,10 +67,19 @@ var commandCreate = cli.Command{
 
 var commandUpdate = cli.Command{
 	Name:  "update",
-	Usage: "",
+	Usage: "Update host information like hostname, status and role",
 	Description: `
 `,
 	Action: doUpdate,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update <hostId> hostname to <name>."},
+		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update <hostId> status to <status>."},
+		cli.StringSliceFlag{
+			Name:  "fullRolename, R",
+			Value: &cli.StringSlice{},
+			Usage: "Update <hostId> fullRolename to <fullRolename>.",
+		},
+	},
 }
 
 var commandThrow = cli.Command{
@@ -201,6 +210,40 @@ func doCreate(c *cli.Context) {
 }
 
 func doUpdate(c *cli.Context) {
+	argHostId := c.Args().Get(0)
+	name := c.String("name")
+	status := c.String("status")
+	RoleFullnames := c.StringSlice("roleFullname")
+
+	if argHostId == "" {
+		cli.ShowCommandHelp(c, "update")
+		os.Exit(1)
+	}
+
+	mackerel := newMackerel()
+
+	isUpdated := false
+
+	if status != "" {
+		err := mackerel.UpdateHostStatus(argHostId, status)
+		utils.DieIf(err)
+
+		isUpdated = true
+	}
+	if name != "" || len(RoleFullnames) > 0 {
+		_, err := mackerel.UpdateHost(argHostId, &mkr.UpdateHostParam{
+			Name:          name,
+			RoleFullnames: RoleFullnames,
+		})
+		utils.DieIf(err)
+
+		isUpdated = true
+	}
+
+	if !isUpdated {
+		cli.ShowCommandHelp(c, "update")
+		os.Exit(1)
+	}
 }
 
 func doThrow(c *cli.Context) {
