@@ -28,7 +28,7 @@ var commandStatus = cli.Command{
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "verbose, V", Usage: "Output verbose info"},
+		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
 }
 
@@ -106,6 +106,7 @@ Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<You
 
 func doStatus(c *cli.Context) {
 	argHostId := c.Args().Get(0)
+	isVerbose := c.Bool("verbose")
 
 	if argHostId == "" {
 		cli.ShowCommandHelp(c, "status")
@@ -116,10 +117,26 @@ func doStatus(c *cli.Context) {
 	host, err := mackerel.FindHost(argHostId)
 	utils.DieIf(err)
 
-	data, err := json.MarshalIndent(host, "", "    ")
-	utils.DieIf(err)
+	if isVerbose {
+		data, err := json.MarshalIndent(host, "", "    ")
+		utils.DieIf(err)
 
-	fmt.Fprintln(os.Stdout, string(data))
+		fmt.Fprintln(os.Stdout, string(data))
+	} else {
+		format := &HostFormat{
+			Id:            host.Id,
+			Name:          host.Name,
+			Status:        host.Status,
+			RoleFullnames: host.GetRoleFullnames(),
+			IsRetired:     host.IsRetired,
+			CreatedAt:     host.DateStringFromCreatedAt(),
+		}
+
+		data, err := json.MarshalIndent(format, "", "    ")
+		utils.DieIf(err)
+
+		fmt.Fprintln(os.Stdout, string(data))
+	}
 }
 
 func doHosts(c *cli.Context) {
