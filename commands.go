@@ -104,8 +104,9 @@ var commandFetch = cli.Command{
 
 var commandRetire = cli.Command{
 	Name:  "retire",
-	Usage: "",
+	Usage: "Retire host",
 	Description: `
+Retire host identified by <hostId>. Be careful because this is a irreversible operation.
 `,
 	Action: doRetire,
 }
@@ -296,4 +297,13 @@ func doFetch(c *cli.Context) {
 }
 
 func doRetire(c *cli.Context) {
+	argHostId := c.Args().Get(0)
+
+	if argHostId == "" {
+		cli.ShowCommandHelp(c, "retire")
+		os.Exit(1)
+	}
+
+	err := newMackerel().RetireHost(argHostId)
+	utils.DieIf(err)
 }
