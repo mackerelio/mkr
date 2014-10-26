@@ -96,10 +96,17 @@ var commandThrow = cli.Command{
 
 var commandFetch = cli.Command{
 	Name:  "fetch",
-	Usage: "",
+	Usage: "Fetch metric values",
 	Description: `
 `,
 	Action: doFetch,
+	Flags: []cli.Flag{
+		cli.StringSliceFlag{
+			Name:  "name, n",
+			Value: &cli.StringSlice{},
+			Usage: "Fetch metric values identified with <name>. Required. Multiple choise allow. ",
+		},
+	},
 }
 
 var commandRetire = cli.Command{
@@ -294,6 +301,18 @@ func doThrow(c *cli.Context) {
 }
 
 func doFetch(c *cli.Context) {
+	argHostIds := c.Args()
+	argMetricNames := c.StringSlice("name")
+
+	if len(argHostIds) < 1 || len(argMetricNames) < 1 {
+		cli.ShowCommandHelp(c, "fetch")
+		os.Exit(1)
+	}
+
+	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIds, argMetricNames)
+	utils.DieIf(err)
+
+	PrettyPrintJson(metricValues)
 }
 
 func doRetire(c *cli.Context) {
