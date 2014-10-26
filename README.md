@@ -28,8 +28,17 @@ gomkr update [--status[-s] <statusName>] [ [--fullRoleName[-r] <serviceName>:<ro
 ```
 
 ```bash
-gomkr throw --host[-h] <hostId> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
-gomkr throw --service[-s] <serviceName> name\ttime\tvalue [ [name\ttime\tvalue] ... ]
+cat <<EOF | gomkr throw --host[-h] <hostId>
+<name>  <time>  <value>
+<name>  <time>  <value>
+EOF
+...
+
+cat <<EOF | gomkr throw --service[-s] <serviceName>
+<name>  <time>  <value>
+<name>  <time>  <value>
+EOF
+...
 ```
 
 ```bash
