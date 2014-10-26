@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -147,10 +146,7 @@ func doStatus(c *cli.Context) {
 	utils.DieIf(err)
 
 	if isVerbose {
-		data, err := json.MarshalIndent(host, "", "    ")
-		utils.DieIf(err)
-
-		fmt.Fprintln(os.Stdout, string(data))
+		PrettyPrintJson(host)
 	} else {
 		format := &HostFormat{
 			Id:            host.Id,
@@ -161,10 +157,7 @@ func doStatus(c *cli.Context) {
 			CreatedAt:     host.DateStringFromCreatedAt(),
 		}
 
-		data, err := json.MarshalIndent(format, "", "    ")
-		utils.DieIf(err)
-
-		fmt.Fprintln(os.Stdout, string(data))
+		PrettyPrintJson(format)
 	}
 }
 
@@ -185,12 +178,9 @@ func doHosts(c *cli.Context) {
 	utils.DieIf(err)
 
 	if isVerbose {
-		data, err := json.MarshalIndent(hosts, "", "    ")
-		utils.DieIf(err)
-
-		fmt.Fprintln(os.Stdout, string(data))
+		PrettyPrintJson(hosts)
 	} else {
-		var hosts_format []*HostFormat
+		var hostsFormat []*HostFormat
 		for _, host := range hosts {
 			format := &HostFormat{
 				Id:            host.Id,
@@ -200,13 +190,10 @@ func doHosts(c *cli.Context) {
 				IsRetired:     host.IsRetired,
 				CreatedAt:     host.DateStringFromCreatedAt(),
 			}
-			hosts_format = append(hosts_format, format)
+			hostsFormat = append(hostsFormat, format)
 		}
 
-		data, err := json.MarshalIndent(hosts_format, "", "    ")
-		utils.DieIf(err)
-
-		fmt.Fprintln(os.Stdout, string(data))
+		PrettyPrintJson(hostsFormat)
 	}
 }
 
