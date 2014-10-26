@@ -8,24 +8,69 @@ import (
 )
 
 var Commands = []cli.Command{
-	commandHost,
-	commandMetric,
+	commandStatus,
+	commandHosts,
+	commandCreate,
+	commandUpdate,
+	commandThrow,
+	commandFetch,
+	commandRetire,
 }
 
-var commandHost = cli.Command{
-	Name:  "host",
+var commandStatus = cli.Command{
+	Name:  "status",
 	Usage: "",
 	Description: `
 `,
-	Action: doHost,
+	Action: doStatus,
 }
 
-var commandMetric = cli.Command{
-	Name:  "metric",
+var commandHosts = cli.Command{
+	Name:  "hosts",
 	Usage: "",
 	Description: `
 `,
-	Action: doMetric,
+	Action: doHosts,
+}
+
+var commandCreate = cli.Command{
+	Name:  "create",
+	Usage: "",
+	Description: `
+`,
+	Action: doCreate,
+}
+
+var commandUpdate = cli.Command{
+	Name:  "update",
+	Usage: "",
+	Description: `
+`,
+	Action: doUpdate,
+}
+
+var commandThrow = cli.Command{
+	Name:  "throw",
+	Usage: "",
+	Description: `
+`,
+	Action: doThrow,
+}
+
+var commandFetch = cli.Command{
+	Name:  "fetch",
+	Usage: "",
+	Description: `
+`,
+	Action: doFetch,
+}
+
+var commandRetire = cli.Command{
+	Name:  "retire",
+	Usage: "",
+	Description: `
+`,
+	Action: doRetire,
 }
 
 func debug(v ...interface{}) {
@@ -40,8 +85,23 @@ func assert(err error) {
 	}
 }
 
-func doHost(c *cli.Context) {
+func doStatus(c *cli.Context) {
 }
 
-func doMetric(c *cli.Context) {
+func doHosts(c *cli.Context) {
+}
+
+func doCreate(c *cli.Context) {
+}
+
+func doUpdate(c *cli.Context) {
+}
+
+func doThrow(c *cli.Context) {
+}
+
+func doFetch(c *cli.Context) {
+}
+
+func doRetire(c *cli.Context) {
 }
