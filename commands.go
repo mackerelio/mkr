@@ -34,10 +34,17 @@ var commandStatus = cli.Command{
 
 var commandHosts = cli.Command{
 	Name:  "hosts",
-	Usage: "",
+	Usage: "Show hosts",
 	Description: `
 `,
 	Action: doHosts,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "Show hosts only matched with <name>"},
+		cli.StringFlag{Name: "service, s", Value: "", Usage: "Show hosts only belongs to <service>"},
+		cli.StringSliceFlag{Name: "role, r", Value: &cli.StringSlice{}, Usage: "Show hosts only belongs to <role>. Multiple choice allow. Required --service"},
+		cli.StringSliceFlag{Name: "status, st", Value: &cli.StringSlice{}, Usage: "Show hosts only matched <status>. Multiple choice allow."},
+		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+	},
 }
 
 var commandCreate = cli.Command{
@@ -140,6 +147,45 @@ func doStatus(c *cli.Context) {
 }
 
 func doHosts(c *cli.Context) {
+	isVerbose := c.Bool("verbose")
+	argName := c.String("name")
+	argService := c.String("service")
+	argRoles := c.StringSlice("role")
+	argStatuses := c.StringSlice("status")
+
+	mackerel := newMackerel()
+	hosts, err := mackerel.FindHosts(&mkr.FindHostsParam{
+		Name:     argName,
+		Service:  argService,
+		Roles:    argRoles,
+		Statuses: argStatuses,
+	})
+	utils.DieIf(err)
+
+	if isVerbose {
+		data, err := json.MarshalIndent(hosts, "", "    ")
+		utils.DieIf(err)
+
+		fmt.Fprintln(os.Stdout, string(data))
+	} else {
+		var hosts_format []*HostFormat
+		for _, host := range hosts {
+			format := &HostFormat{
+				Id:            host.Id,
+				Name:          host.Name,
+				Status:        host.Status,
+				RoleFullnames: host.GetRoleFullnames(),
+				IsRetired:     host.IsRetired,
+				CreatedAt:     host.DateStringFromCreatedAt(),
+			}
+			hosts_format = append(hosts_format, format)
+		}
+
+		data, err := json.MarshalIndent(hosts_format, "", "    ")
+		utils.DieIf(err)
+
+		fmt.Fprintln(os.Stdout, string(data))
+	}
 }
 
 func doCreate(c *cli.Context) {
