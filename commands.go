@@ -59,10 +59,18 @@ var commandHosts = cli.Command{
 
 var commandCreate = cli.Command{
 	Name:  "create",
-	Usage: "",
+	Usage: "Create a new host",
 	Description: `
 `,
 	Action: doCreate,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'meintenance')"},
+		cli.StringSliceFlag{
+			Name:  "roleFullname, R",
+			Value: &cli.StringSlice{},
+			Usage: "Multiple choice allow. ex. My-Service:proxy, My-Service:db-master",
+		},
+	},
 }
 
 var commandUpdate = cli.Command{
@@ -213,6 +221,25 @@ func doHosts(c *cli.Context) {
 }
 
 func doCreate(c *cli.Context) {
+	argHostName := c.Args().Get(0)
+	argRoleFullnames := c.StringSlice("roleFullname")
+	argStatus := c.String("status")
+
+	if argHostName == "" {
+		cli.ShowCommandHelp(c, "create")
+		os.Exit(1)
+	}
+
+	hostId, err := newMackerel().CreateHost(&mkr.CreateHostParam{
+		Name:          argHostName,
+		RoleFullnames: argRoleFullnames,
+	})
+	utils.DieIf(err)
+
+	if argStatus != "" {
+		err := newMackerel().UpdateHostStatus(hostId, argStatus)
+		utils.DieIf(err)
+	}
 }
 
 func doUpdate(c *cli.Context) {
