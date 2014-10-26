@@ -37,15 +37,23 @@ var commandStatus = cli.Command{
 
 var commandHosts = cli.Command{
 	Name:  "hosts",
-	Usage: "Show hosts",
+	Usage: "List hosts",
 	Description: `
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "Show hosts only matched with <name>"},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Show hosts only belongs to <service>"},
-		cli.StringSliceFlag{Name: "role, r", Value: &cli.StringSlice{}, Usage: "Show hosts only belongs to <role>. Multiple choice allow. Required --service"},
-		cli.StringSliceFlag{Name: "status, st", Value: &cli.StringSlice{}, Usage: "Show hosts only matched <status>. Multiple choice allow."},
+		cli.StringSliceFlag{
+			Name:  "role, r",
+			Value: &cli.StringSlice{},
+			Usage: "Show hosts only belongs to <role>. Multiple choice allow. Required --service",
+		},
+		cli.StringSliceFlag{
+			Name:  "status, st",
+			Value: &cli.StringSlice{},
+			Usage: "Show hosts only matched <status>. Multiple choice allow.",
+		},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
 }
