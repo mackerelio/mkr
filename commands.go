@@ -83,9 +83,9 @@ var commandUpdate = cli.Command{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update <hostId> hostname to <name>."},
 		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update <hostId> status to <status>."},
 		cli.StringSliceFlag{
-			Name:  "fullRolename, R",
+			Name:  "roleFullname, R",
 			Value: &cli.StringSlice{},
-			Usage: "Update <hostId> fullRolename to <fullRolename>.",
+			Usage: "Update <hostId> rolefullname to <roleFullname>.",
 		},
 	},
 }
