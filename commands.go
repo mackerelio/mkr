@@ -188,16 +188,12 @@ func doStatus(c *cli.Context) {
 
 func doHosts(c *cli.Context) {
 	isVerbose := c.Bool("verbose")
-	argName := c.String("name")
-	argService := c.String("service")
-	argRoles := c.StringSlice("role")
-	argStatuses := c.StringSlice("status")
 
 	hosts, err := newMackerel().FindHosts(&mkr.FindHostsParam{
-		Name:     argName,
-		Service:  argService,
-		Roles:    argRoles,
-		Statuses: argStatuses,
+		Name:     c.String("name"),
+		Service:  c.String("service"),
+		Roles:    c.StringSlice("role"),
+		Statuses: c.StringSlice("status"),
 	})
 	utils.DieIf(err)
 
