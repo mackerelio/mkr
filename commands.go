@@ -179,6 +179,7 @@ func doStatus(c *cli.Context) {
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
 			CreatedAt:     host.DateStringFromCreatedAt(),
+			IpAddresses:   host.IpAddresses(),
 		}
 
 		PrettyPrintJson(format)
@@ -212,6 +213,7 @@ func doHosts(c *cli.Context) {
 				RoleFullnames: host.GetRoleFullnames(),
 				IsRetired:     host.IsRetired,
 				CreatedAt:     host.DateStringFromCreatedAt(),
+				IpAddresses:   host.IpAddresses(),
 			}
 			hostsFormat = append(hostsFormat, format)
 		}

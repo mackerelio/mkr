@@ -9,13 +9,14 @@ import (
 )
 
 type HostFormat struct {
-	Id            string   `json:"id,omitempty"`
-	Name          string   `json:"name,omitempty"`
-	Status        string   `json:"status,omitempty"`
-	Memo          string   `json:"memo,omitempty"`
-	RoleFullnames []string `json:"roleFullnames,omitempty"`
-	IsRetired     bool     `json:"isRetired,omitempty"`
-	CreatedAt     string   `json:"createdAt,omitempty"`
+	Id            string            `json:"id,omitempty"`
+	Name          string            `json:"name,omitempty"`
+	Status        string            `json:"status,omitempty"`
+	Memo          string            `json:"memo,omitempty"`
+	RoleFullnames []string          `json:"roleFullnames,omitempty"`
+	IsRetired     bool              `json:"isRetired,omitempty"`
+	CreatedAt     string            `json:"createdAt,omitempty"`
+	IpAddresses   map[string]string `json:"ipAddresses,omitempty"`
 }
 
 func PrettyPrintJson(src interface{}) {
