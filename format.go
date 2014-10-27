@@ -14,7 +14,7 @@ type HostFormat struct {
 	Status        string            `json:"status,omitempty"`
 	Memo          string            `json:"memo,omitempty"`
 	RoleFullnames []string          `json:"roleFullnames,omitempty"`
-	IsRetired     bool              `json:"isRetired,omitempty"`
+	IsRetired     bool              `json:"isRetired"` // 'omitempty' regard boolean 'false' as empty.
 	CreatedAt     string            `json:"createdAt,omitempty"`
 	IpAddresses   map[string]string `json:"ipAddresses,omitempty"`
 }
