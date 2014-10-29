@@ -25,8 +25,10 @@ var Commands = []cli.Command{
 
 var commandStatus = cli.Command{
 	Name:  "status",
-	Usage: "Show host status",
+	Usage: "Show a host",
 	Description: `
+    Show the information of the host identified with <hostId>.
+    Request "GET /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-get.
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
@@ -38,6 +40,8 @@ var commandHosts = cli.Command{
 	Name:  "hosts",
 	Usage: "List hosts",
 	Description: `
+    List the information of the hosts refined by host name, service name, role name and/or status.
+    Request "GET /api/v0/hosts.json". See http://help-ja.mackerel.io/entry/spec/api/v0#hosts-list.
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
@@ -61,6 +65,8 @@ var commandCreate = cli.Command{
 	Name:  "create",
 	Usage: "Create a new host",
 	Description: `
+    Create a new host with staus and/or roleFullname.
+    Request "POST /api/v0/hosts". See http://help-ja.mackerel.io/entry/spec/api/v0#host-create.
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
@@ -75,8 +81,10 @@ var commandCreate = cli.Command{
 
 var commandUpdate = cli.Command{
 	Name:  "update",
-	Usage: "Update host information like hostname, status and role",
+	Usage: "Update the host",
 	Description: `
+    Update the host identified with <hostId>.
+    Request "PUT /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-update.
 `,
 	Action: doUpdate,
 	Flags: []cli.Flag{
@@ -94,6 +102,9 @@ var commandThrow = cli.Command{
 	Name:  "throw",
 	Usage: "Post metric values",
 	Description: `
+    Post metric values to 'host metric' or 'service metric'.
+    Output format of metric value is compatibled with that of Sensu plugin.
+    Request "POST /api/v0/tsdb". See http://help-ja.mackerel.io/entry/spec/api/v0#metric-value-post.
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
@@ -104,8 +115,10 @@ var commandThrow = cli.Command{
 
 var commandFetch = cli.Command{
 	Name:  "fetch",
-	Usage: "Fetch metric values",
+	Usage: "Fetch latest metric values",
 	Description: `
+    Fetch latest metric values about <hostId>... hosts.
+    Request "GET /api/v0/tsdb/latest". See http://help-ja.mackerel.io/entry/spec/api/v0#tsdb-latest.
 `,
 	Action: doFetch,
 	Flags: []cli.Flag{
@@ -121,7 +134,8 @@ var commandRetire = cli.Command{
 	Name:  "retire",
 	Usage: "Retire host",
 	Description: `
-Retire host identified by <hostId>. Be careful because this is a irreversible operation.
+    Retire host identified by <hostId>. Be careful because this is a irreversible operation.
+    Request POST /api/v0/hosts/<hostId>/retire. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
 }
@@ -142,7 +156,7 @@ func newMackerel() *mkr.Client {
 	apiKey := os.Getenv("MACKEREL_APIKEY")
 	if apiKey == "" {
 		utils.Log("error", `
-Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
+    Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
 `)
 		os.Exit(1)
 	}
@@ -278,7 +292,7 @@ func doCreate(c *cli.Context) {
 
 	utils.Log("created", hostId)
 
-	if argStatus != "" {
+	if optStatus != "" {
 		err := newMackerel().UpdateHostStatus(hostId, optStatus)
 		utils.DieIf(err)
 	}
@@ -297,13 +311,13 @@ func doUpdate(c *cli.Context) {
 
 	isUpdated := false
 
-	if status != "" {
+	if optStatus != "" {
 		err := newMackerel().UpdateHostStatus(argHostId, optStatus)
 		utils.DieIf(err)
 
 		isUpdated = true
 	}
-	if name != "" || len(optRoleFullnames) > 0 {
+	if optName != "" || len(optRoleFullnames) > 0 {
 		_, err := newMackerel().UpdateHost(argHostId, &mkr.UpdateHostParam{
 			Name:          optName,
 			RoleFullnames: optRoleFullnames,
