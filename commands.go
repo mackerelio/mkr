@@ -177,13 +177,13 @@ type commandDoc struct {
 }
 
 var commandDocs = map[string]commandDoc{
-	"status":    {"", "[-v|verbose]"},
-	"hosts":   {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
-	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
+	"status": {"", "[-v|verbose]"},
+	"hosts":  {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
+	"create": {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
 	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId>"},
-	"throw":   {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
-	"fetch":   {"", "[--name | -n <metricName>] <hostId>..."},
-	"retire":   {"", "<hostId>"},
+	"throw":  {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
+	"fetch":  {"", "[--name | -n <metricName>] <hostId>..."},
+	"retire": {"", "<hostId>"},
 }
 
 // Makes template conditionals to generate per-command documents.
