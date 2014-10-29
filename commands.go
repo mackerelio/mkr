@@ -262,8 +262,8 @@ func doHosts(c *cli.Context) {
 
 func doCreate(c *cli.Context) {
 	argHostName := c.Args().Get(0)
-	argRoleFullnames := c.StringSlice("roleFullname")
-	argStatus := c.String("status")
+	optRoleFullnames := c.StringSlice("roleFullname")
+	optStatus := c.String("status")
 
 	if argHostName == "" {
 		cli.ShowCommandHelp(c, "create")
@@ -272,23 +272,23 @@ func doCreate(c *cli.Context) {
 
 	hostId, err := newMackerel().CreateHost(&mkr.CreateHostParam{
 		Name:          argHostName,
-		RoleFullnames: argRoleFullnames,
+		RoleFullnames: optRoleFullnames,
 	})
 	utils.DieIf(err)
 
 	utils.Log("created", hostId)
 
 	if argStatus != "" {
-		err := newMackerel().UpdateHostStatus(hostId, argStatus)
+		err := newMackerel().UpdateHostStatus(hostId, optStatus)
 		utils.DieIf(err)
 	}
 }
 
 func doUpdate(c *cli.Context) {
 	argHostId := c.Args().Get(0)
-	name := c.String("name")
-	status := c.String("status")
-	RoleFullnames := c.StringSlice("roleFullname")
+	optName := c.String("name")
+	optStatus := c.String("status")
+	optRoleFullnames := c.StringSlice("roleFullname")
 
 	if argHostId == "" {
 		cli.ShowCommandHelp(c, "update")
@@ -298,15 +298,15 @@ func doUpdate(c *cli.Context) {
 	isUpdated := false
 
 	if status != "" {
-		err := newMackerel().UpdateHostStatus(argHostId, status)
+		err := newMackerel().UpdateHostStatus(argHostId, optStatus)
 		utils.DieIf(err)
 
 		isUpdated = true
 	}
-	if name != "" || len(RoleFullnames) > 0 {
+	if name != "" || len(optRoleFullnames) > 0 {
 		_, err := newMackerel().UpdateHost(argHostId, &mkr.UpdateHostParam{
-			Name:          name,
-			RoleFullnames: RoleFullnames,
+			Name:          optName,
+			RoleFullnames: optRoleFullnames,
 		})
 		utils.DieIf(err)
 
@@ -322,8 +322,8 @@ func doUpdate(c *cli.Context) {
 }
 
 func doThrow(c *cli.Context) {
-	argHostId := c.String("host")
-	argService := c.String("service")
+	optHostId := c.String("host")
+	optService := c.String("service")
 
 	var metricValues []*(mkr.MetricValue)
 
@@ -358,19 +358,19 @@ func doThrow(c *cli.Context) {
 	}
 	utils.ErrorIf(scanner.Err())
 
-	if argHostId != "" {
-		err := newMackerel().PostHostMetricValuesByHostId(argHostId, metricValues)
+	if optHostId != "" {
+		err := newMackerel().PostHostMetricValuesByHostId(optHostId, metricValues)
 		utils.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", argHostId, metric.Name, metric.Value, metric.Time))
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostId, metric.Name, metric.Value, metric.Time))
 		}
-	} else if argService != "" {
-		err := newMackerel().PostServiceMetricValues(argService, metricValues)
+	} else if optService != "" {
+		err := newMackerel().PostServiceMetricValues(optService, metricValues)
 		utils.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", argService, metric.Name, metric.Value, metric.Time))
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")
@@ -380,14 +380,14 @@ func doThrow(c *cli.Context) {
 
 func doFetch(c *cli.Context) {
 	argHostIds := c.Args()
-	argMetricNames := c.StringSlice("name")
+	optMetricNames := c.StringSlice("name")
 
-	if len(argHostIds) < 1 || len(argMetricNames) < 1 {
+	if len(argHostIds) < 1 || len(optMetricNames) < 1 {
 		cli.ShowCommandHelp(c, "fetch")
 		os.Exit(1)
 	}
 
-	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIds, argMetricNames)
+	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIds, optMetricNames)
 	utils.DieIf(err)
 
 	PrettyPrintJson(metricValues)
