@@ -10,15 +10,15 @@ import (
 
 var logger = &colorine.Logger{
 	colorine.Prefixes{
-		"open":    colorine.Warn,
-		"exists":  colorine.Warn,
 		"warning": colorine.Warn,
-
-		"authorized": colorine.Notice,
 
 		"error": colorine.Error,
 
 		"": colorine.Info,
+		"created":  colorine.Info,
+		"updated":  colorine.Info,
+		"thrown":  colorine.Info,
+		"retired":  colorine.Info,
 	},
 }
 

@@ -276,6 +276,8 @@ func doCreate(c *cli.Context) {
 	})
 	utils.DieIf(err)
 
+	utils.Log("created", hostId)
+
 	if argStatus != "" {
 		err := newMackerel().UpdateHostStatus(hostId, argStatus)
 		utils.DieIf(err)
@@ -315,6 +317,8 @@ func doUpdate(c *cli.Context) {
 		cli.ShowCommandHelp(c, "update")
 		os.Exit(1)
 	}
+
+	utils.Log("updated", argHostId)
 }
 
 func doThrow(c *cli.Context) {
@@ -330,7 +334,6 @@ func doThrow(c *cli.Context) {
 		// name, value, timestamp
 		// ex.) tcp.CLOSING 0 1397031808
 		items := strings.Fields(line)
-		fmt.Printf("%v+", items)
 		if len(items) != 3 {
 			continue
 		}
@@ -358,9 +361,17 @@ func doThrow(c *cli.Context) {
 	if argHostId != "" {
 		err := newMackerel().PostHostMetricValuesByHostId(argHostId, metricValues)
 		utils.DieIf(err)
+
+		for _, metric := range metricValues {
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", argHostId, metric.Name, metric.Value, metric.Time))
+		}
 	} else if argService != "" {
 		err := newMackerel().PostServiceMetricValues(argService, metricValues)
 		utils.DieIf(err)
+
+		for _, metric := range metricValues {
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", argService, metric.Name, metric.Value, metric.Time))
+		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")
 		os.Exit(1)
@@ -392,4 +403,5 @@ func doRetire(c *cli.Context) {
 
 	err := newMackerel().RetireHost(argHostId)
 	utils.DieIf(err)
+	utils.Log("retired", argHostId)
 }
