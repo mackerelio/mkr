@@ -157,6 +157,48 @@ Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<You
 	}
 }
 
+type commandDoc struct {
+	Parent    string
+	Arguments string
+}
+
+var commandDocs = map[string]commandDoc{
+	"status":    {"", "[-v|verbose]"},
+	"hosts":   {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
+	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
+	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId>"},
+	"throw":   {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
+	"fetch":   {"", "[--name | -n <metricName>] <hostId>..."},
+	"retire":   {"", "<hostId>"},
+}
+
+// Makes template conditionals to generate per-command documents.
+func mkCommandsTemplate(genTemplate func(commandDoc) string) string {
+	template := "{{if false}}"
+	for _, command := range append(Commands) {
+		template = template + fmt.Sprintf("{{else if (eq .Name %q)}}%s", command.Name, genTemplate(commandDocs[command.Name]))
+	}
+	return template + "{{end}}"
+}
+
+func init() {
+	argsTemplate := mkCommandsTemplate(func(doc commandDoc) string { return doc.Arguments })
+	parentTemplate := mkCommandsTemplate(func(doc commandDoc) string { return string(strings.TrimLeft(doc.Parent+" ", " ")) })
+
+	cli.CommandHelpTemplate = `NAME:
+    {{.Name}} - {{.Usage}}
+
+USAGE:
+    gomkr ` + parentTemplate + `{{.Name}} ` + argsTemplate + `
+{{if (len .Description)}}
+DESCRIPTION: {{.Description}}
+{{end}}{{if (len .Flags)}}
+OPTIONS:
+    {{range .Flags}}{{.}}
+    {{end}}
+{{end}}`
+}
+
 func doStatus(c *cli.Context) {
 	argHostId := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
