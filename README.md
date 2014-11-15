@@ -52,7 +52,7 @@ gomkr fetch --name loadavg5 <hostId>
 gomkr retire <hostId>
 ```
 
-### On host running mackerel-agent (Still not implemlemented)
+### On host running mackerel-agent
 
 You can omit specifing ```<hostId>``` and ```MACKEREL_APIKEY```.
 ```gomkr``` refers ```/var/lib/mackerel-agent/id``` and ```/etc/mackerel-agent/mackerel-agent.conf``` instead of specifing ```<hostId>```.
