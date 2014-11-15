@@ -10,6 +10,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/mackerelio/gomkr/utils"
+	"github.com/mackerelio/mackerel-agent/command"
+	"github.com/mackerelio/mackerel-agent/config"
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
@@ -213,13 +215,27 @@ OPTIONS:
 {{end}}`
 }
 
+func LoadHostIdFromConfig() string {
+	conf, err := config.LoadConfig(config.DefaultConfig.Conffile)
+	if err != nil {
+		return ""
+	}
+	hostId, err := command.LoadHostId(conf.Root)
+	if err != nil {
+		return ""
+	}
+	return hostId
+}
+
 func doStatus(c *cli.Context) {
 	argHostId := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 
 	if argHostId == "" {
-		cli.ShowCommandHelp(c, "status")
-		os.Exit(1)
+		if argHostId = LoadHostIdFromConfig(); argHostId == "" {
+			cli.ShowCommandHelp(c, "status")
+			os.Exit(1)
+		}
 	}
 
 	host, err := newMackerel().FindHost(argHostId)
@@ -304,7 +320,7 @@ func doUpdate(c *cli.Context) {
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 
-	if argHostId == "" {
+	if argHostId = LoadHostIdFromConfig(); argHostId == "" {
 		cli.ShowCommandHelp(c, "update")
 		os.Exit(1)
 	}
@@ -410,7 +426,7 @@ func doFetch(c *cli.Context) {
 func doRetire(c *cli.Context) {
 	argHostId := c.Args().Get(0)
 
-	if argHostId == "" {
+	if argHostId = LoadHostIdFromConfig(); argHostId == "" {
 		cli.ShowCommandHelp(c, "retire")
 		os.Exit(1)
 	}
