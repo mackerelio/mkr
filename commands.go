@@ -84,17 +84,17 @@ var commandUpdate = cli.Command{
 	Name:  "update",
 	Usage: "Update the host",
 	Description: `
-    Update the host identified with <hostId>.
+    Update the hosts identified with <hostIds>.
     Request "PUT /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-update.
 `,
 	Action: doUpdate,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update <hostId> hostname to <name>."},
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update <hostId> status to <status>."},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update hostname."},
+		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update status."},
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
 			Value: &cli.StringSlice{},
-			Usage: "Update <hostId> rolefullname to <roleFullname>.",
+			Usage: "Update rolefullname.",
 		},
 	},
 }
@@ -181,7 +181,7 @@ var commandDocs = map[string]commandDoc{
 	"status": {"", "[-v|verbose]"},
 	"hosts":  {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
 	"create": {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId>"},
+	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId> [ ... ]"},
 	"throw":  {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
 	"fetch":  {"", "[--name | -n <metricName>] <hostId>..."},
 	"retire": {"", "<hostId> [ ... ]"},
@@ -302,14 +302,17 @@ func doCreate(c *cli.Context) {
 }
 
 func doUpdate(c *cli.Context) {
-	argHostId := c.Args().Get(0)
+	argHostIds := c.Args()
 	optName := c.String("name")
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 
-	if argHostId = LoadHostIdFromConfig(); argHostId == "" {
-		cli.ShowCommandHelp(c, "update")
-		os.Exit(1)
+	if len(argHostIds) < 1 {
+		argHostIds = make([]string, 1)
+		if argHostIds[0] = LoadHostIdFromConfig(); argHostIds[0] == "" {
+			cli.ShowCommandHelp(c, "update")
+			os.Exit(1)
+		}
 	}
 
 	needUpdateHostStatus := optStatus != ""
@@ -320,20 +323,31 @@ func doUpdate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	if needUpdateHostStatus {
-		err := newMackerel().UpdateHostStatus(argHostId, optStatus)
-		utils.DieIf(err)
+	var wg sync.WaitGroup
+
+	for _, hostId := range argHostIds {
+		wg.Add(1)
+		go func(hostId string) {
+			defer wg.Done()
+
+			if needUpdateHostStatus {
+				err := newMackerel().UpdateHostStatus(hostId, optStatus)
+				utils.DieIf(err)
+			}
+
+			if needUpdateHost {
+				_, err := newMackerel().UpdateHost(hostId, &mkr.UpdateHostParam{
+					Name:          optName,
+					RoleFullnames: optRoleFullnames,
+				})
+				utils.DieIf(err)
+			}
+
+			utils.Log("updated", hostId)
+		}(hostId)
 	}
 
-	if needUpdateHost {
-		_, err := newMackerel().UpdateHost(argHostId, &mkr.UpdateHostParam{
-			Name:          optName,
-			RoleFullnames: optRoleFullnames,
-		})
-		utils.DieIf(err)
-	}
-
-	utils.Log("updated", argHostId)
+	wg.Wait()
 }
 
 func doThrow(c *cli.Context) {
