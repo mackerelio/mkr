@@ -26,7 +26,7 @@ var Commands = []cli.Command{
 
 var commandStatus = cli.Command{
 	Name:  "status",
-	Usage: "Show a host",
+	Usage: "Show the host",
 	Description: `
     Show the information of the host identified with <hostId>.
     Request "GET /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-get.
@@ -46,17 +46,17 @@ var commandHosts = cli.Command{
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "Show hosts only matched with <name>"},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "Show hosts only belongs to <service>"},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "List hosts only matched with <name>"},
+		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belongs to <service>"},
 		cli.StringSliceFlag{
 			Name:  "role, r",
 			Value: &cli.StringSlice{},
-			Usage: "Show hosts only belongs to <role>. Multiple choice allow. Required --service",
+			Usage: "List hosts only belongs to <role>. Multiple choice allow. Required --service",
 		},
 		cli.StringSliceFlag{
 			Name:  "status, st",
 			Value: &cli.StringSlice{},
-			Usage: "Show hosts only matched <status>. Multiple choice allow.",
+			Usage: "List hosts only matched <status>. Multiple choice allow.",
 		},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
@@ -118,7 +118,7 @@ var commandFetch = cli.Command{
 	Name:  "fetch",
 	Usage: "Fetch latest metric values",
 	Description: `
-    Fetch latest metric values about <hostId>... hosts.
+    Fetch latest metric values about the hosts.
     Request "GET /api/v0/tsdb/latest". See http://help-ja.mackerel.io/entry/spec/api/v0#tsdb-latest.
 `,
 	Action: doFetch,
@@ -135,7 +135,7 @@ var commandRetire = cli.Command{
 	Name:  "retire",
 	Usage: "Retire hosts",
 	Description: `
-    Retire host identified by <hostIds>. Be careful because this is a irreversible operation.
+    Retire host identified by hostIds. Be careful because this is a irreversible operation.
     Request POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
@@ -181,10 +181,10 @@ var commandDocs = map[string]commandDoc{
 	"status": {"", "[-v|verbose]"},
 	"hosts":  {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
 	"create": {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId> [ ... ]"},
+	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
 	"throw":  {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
-	"fetch":  {"", "[--name | -n <metricName>] <hostId>..."},
-	"retire": {"", "<hostId> [ ... ]"},
+	"fetch":  {"", "[--name | -n <metricName>] hostIds..."},
+	"retire": {"", "hostIds..."},
 }
 
 // Makes template conditionals to generate per-command documents.

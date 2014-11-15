@@ -1,36 +1,76 @@
 gomkr
 =====
 
-```gomkr``` is a CLI tool in Go for [mackerel.io](https://mackerel.io).
+gomkr - A fast Mackerel client in Go.
+
+# DESCRIPTION
+
+gomkr is a command-line interface tool for [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go language.
+gomkr helps you to free your daily troublesome server operations and accelarates to leverage Mackerel and the Unix tools.
+gomkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
 
 ## Installation
 
 ```bash
-curl -sL github.com/mackerelio/gomkr/releases/download/latest/gomkr-linux-amd64 > ~/bin/gomkr
+$ curl -sL github.com/mackerelio/gomkr/releases/download/latest/gomkr-linux-amd64 > ~/bin/gomkr && chmod +x ~/bin/gomkr
 ```
 
 ## Usage
+
+Set MACKEREL_APIKEY environment variable, but you don't have to set MACKEREL_APIKEY on your host running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
 
 ```bash
 export MACKEREL_APIKEY=<Put your API key>
 ```
 
-### On your local host
+### Examples
 
-```bash
-gomkr status <hostId>
+```
+$ gomkr status <hostId>
+{
+    "id": "2eQGEaLxiYU",
+    "name": "myproxy001",
+    "status": "standby",
+    "roleFullnames": [
+        "My-Service:proxy"
+    ],
+    "isRetired": false,
+    "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+}
 ```
 
-```bash
-gomkr hosts --service My-Service --role db-master --role db-slave
+```
+$ gomkr hosts --service My-Service --role proxy
+[
+    {
+        "id": "2eQGEaLxiYU",
+        "name": "myproxy001",
+        "status": "standby",
+        "roleFullnames": [
+            "My-Service:proxy"
+        ],
+        "isRetired": false,
+        "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+    },
+    {
+        "id": "2eQGDXqtoXs",
+        "name": "myproxy002",
+        "status": "standby",
+        "roleFullnames": [
+            "My-Serviceg:proxy"
+        ],
+        "isRetired": false,
+        "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+    },
+]
 ```
 
-```bash
+```
 gomkr create --status working -R My-Service:db-master mydb001
 gomkr update --status maintenance --role My-Service:db-master <hostId>
 ```
 
-```bash
+```
 cat <<EOF | gomkr throw --host <hostId>
 <name>  <time>  <value>
 <name>  <time>  <value>
@@ -44,43 +84,53 @@ EOF
 ...
 ```
 
-```bash
-gomkr fetch --name loadavg5 <hostId>
+```
+gomkr fetch --name loadavg5 2eQGDXqtoXs
+{
+    "2eQGDXqtoXs": {
+        "loadavg5": {
+            "time": 1416061500,
+            "value": 0.025
+        }
+    }
+}
 ```
 
-```bash
-gomkr retire <hostId>
+```
+gomkr retire <hostId> ...
 ```
 
-### On host running mackerel-agent
+### Examples (on host running mackerel-agent)
 
-You can omit specifing ```<hostId>``` and ```MACKEREL_APIKEY```.
-```gomkr``` refers ```/var/lib/mackerel-agent/id``` and ```/etc/mackerel-agent/mackerel-agent.conf``` instead of specifing ```<hostId>```.
+You can omit specifing <hostId> and MACKEREL_APIKEY.
+gomkrrefers /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifing <hostId>.
 
-```bash
+```
 gomkr status
 ```
 
-```bash
-gomkr update [--status[-s] <statusName>] [ [--fullRoleName[-r] <serviceName>:<roleName>] ... ]
+```
+gomkr update -st maintenance <hostIds>...
+```
+
+```
+gomkr fetch -n loadavg5
 ```
 
 ```bash
-gomkr fetch --name[-n] <metricName>
+cat <<EOF | gomkr throw --host <hostId>
+<name>  <time>  <value>
+EOF
 ```
 
-```bash
-gomkr throw name\ttime\tvalue [ [name\ttime\tvalue] ... ]
 ```
-
-```bash
 gomkr retire
 ```
 
 ## Advanced Usage
 
 ```bash
-gomkr hosts -s My-Service -r proxy | jq -r '.[].id'  | xargs -I{} gomkr update --st working {}
+$ gomkr update --st working $(gomkr hosts -s My-Service -r proxy | jq -r '.[].id')
 ```
 
 ## Contribution
