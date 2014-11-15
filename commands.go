@@ -10,8 +10,6 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/mackerelio/gomkr/utils"
-	"github.com/mackerelio/mackerel-agent/command"
-	"github.com/mackerelio/mackerel-agent/config"
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
@@ -213,18 +211,6 @@ OPTIONS:
     {{range .Flags}}{{.}}
     {{end}}
 {{end}}`
-}
-
-func LoadHostIdFromConfig() string {
-	conf, err := config.LoadConfig(config.DefaultConfig.Conffile)
-	if err != nil {
-		return ""
-	}
-	hostId, err := command.LoadHostId(conf.Root)
-	if err != nil {
-		return ""
-	}
-	return hostId
 }
 
 func doStatus(c *cli.Context) {
