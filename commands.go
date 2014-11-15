@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/codegangsta/cli"
 	"github.com/mackerelio/gomkr/utils"
@@ -132,10 +133,10 @@ var commandFetch = cli.Command{
 
 var commandRetire = cli.Command{
 	Name:  "retire",
-	Usage: "Retire host",
+	Usage: "Retire hosts",
 	Description: `
-    Retire host identified by <hostId>. Be careful because this is a irreversible operation.
-    Request POST /api/v0/hosts/<hostId>/retire. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
+    Retire host identified by <hostIds>. Be careful because this is a irreversible operation.
+    Request POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
 }
@@ -183,7 +184,7 @@ var commandDocs = map[string]commandDoc{
 	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostId>"},
 	"throw":  {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
 	"fetch":  {"", "[--name | -n <metricName>] <hostId>..."},
-	"retire": {"", "<hostId>"},
+	"retire": {"", "<hostId> [ ... ]"},
 }
 
 // Makes template conditionals to generate per-command documents.
@@ -408,14 +409,29 @@ func doFetch(c *cli.Context) {
 }
 
 func doRetire(c *cli.Context) {
-	argHostId := c.Args().Get(0)
+	argHostIds := c.Args()
 
-	if argHostId = LoadHostIdFromConfig(); argHostId == "" {
-		cli.ShowCommandHelp(c, "retire")
-		os.Exit(1)
+	if len(argHostIds) < 1 {
+		argHostIds = make([]string, 1)
+		if argHostIds[0] = LoadHostIdFromConfig(); argHostIds[0] == "" {
+			cli.ShowCommandHelp(c, "retire")
+			os.Exit(1)
+		}
 	}
 
-	err := newMackerel().RetireHost(argHostId)
-	utils.DieIf(err)
-	utils.Log("retired", argHostId)
+	var wg sync.WaitGroup
+
+	for _, hostId := range argHostIds {
+		wg.Add(1)
+		go func(hostId string) {
+			defer wg.Done()
+
+			err := newMackerel().RetireHost(hostId)
+			utils.DieIf(err)
+
+			utils.Log("retired", hostId)
+		}(hostId)
+	}
+
+	wg.Wait()
 }
