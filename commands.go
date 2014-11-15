@@ -153,7 +153,7 @@ func assert(err error) {
 }
 
 func newMackerel() *mkr.Client {
-	apiKey := os.Getenv("MACKEREL_APIKEY")
+	apiKey := LoadApikeyFromConfigOrEnv()
 	if apiKey == "" {
 		utils.Log("error", `
     Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
