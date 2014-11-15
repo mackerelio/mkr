@@ -311,27 +311,25 @@ func doUpdate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	isUpdated := false
+	needUpdateHostStatus := optStatus != ""
+	needUpdateHost := (optName != "" || len(optRoleFullnames) > 0)
 
-	if optStatus != "" {
+	if !needUpdateHostStatus && !needUpdateHost {
+		cli.ShowCommandHelp(c, "update")
+		os.Exit(1)
+	}
+
+	if needUpdateHostStatus {
 		err := newMackerel().UpdateHostStatus(argHostId, optStatus)
 		utils.DieIf(err)
-
-		isUpdated = true
 	}
-	if optName != "" || len(optRoleFullnames) > 0 {
+
+	if needUpdateHost {
 		_, err := newMackerel().UpdateHost(argHostId, &mkr.UpdateHostParam{
 			Name:          optName,
 			RoleFullnames: optRoleFullnames,
 		})
 		utils.DieIf(err)
-
-		isUpdated = true
-	}
-
-	if !isUpdated {
-		cli.ShowCommandHelp(c, "update")
-		os.Exit(1)
 	}
 
 	utils.Log("updated", argHostId)
