@@ -48,7 +48,7 @@ func TestLoadHostIdFromConfig(t *testing.T) {
 	hostId := LoadHostIdFromConfig()
 
 	if hostId == "" {
-		t.Error("should not empty")
+		t.Error("should not be empty")
 	}
 
 	if hostId != "9876ABCD" {
