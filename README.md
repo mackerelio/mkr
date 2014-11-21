@@ -110,7 +110,7 @@ gomkr status
 ```
 
 ```
-gomkr update -st maintenance <hostIds>...
+gomkr update --status maintenance <hostIds>...
 ```
 
 ```
