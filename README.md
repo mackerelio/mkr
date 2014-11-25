@@ -9,13 +9,13 @@ gomkr is a command-line interface tool for [Mackerel API](http://help-ja.mackere
 gomkr helps you to free your daily troublesome server operations and accelarates to leverage Mackerel and the Unix tools.
 gomkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
 
-## Installation
+# INSTALLATION
 
 ```bash
 $ curl -sL github.com/mackerelio/gomkr/releases/download/latest/gomkr-linux-amd64 > ~/bin/gomkr && chmod +x ~/bin/gomkr
 ```
 
-## Usage
+# USAGE
 
 Set MACKEREL_APIKEY environment variable, but you don't have to set MACKEREL_APIKEY on your host running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
 
@@ -23,7 +23,7 @@ Set MACKEREL_APIKEY environment variable, but you don't have to set MACKEREL_API
 export MACKEREL_APIKEY=<Put your API key>
 ```
 
-### Examples
+## EXAMPLES
 
 ```
 $ gomkr status <hostId>
@@ -127,13 +127,13 @@ EOF
 gomkr retire
 ```
 
-## Advanced Usage
+## ADVANCED USAGE
 
 ```bash
 $ gomkr update --st working $(gomkr hosts -s My-Service -r proxy | jq -r '.[].id')
 ```
 
-## Contribution
+# CONTRIBUTION
 
 1. Fork ([https://github.com/mackerelio/gomkr/fork](https://github.com/mackerelio/gomkr/fork))
 1. Create a feature branch
