@@ -11,6 +11,11 @@ gomkr output format is JSON, so you can filter it by JSON processor such as [jq]
 
 # INSTALLATION
 
+  $ go get github.com/y-uuki/gomkr
+  $ go install github.com/y-uuki/gomkr
+
+## TODO
+
 ```bash
 $ curl -sL github.com/mackerelio/gomkr/releases/download/latest/gomkr-linux-amd64 > ~/bin/gomkr && chmod +x ~/bin/gomkr
 ```
