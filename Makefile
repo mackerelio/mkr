@@ -1,12 +1,18 @@
 BIN = mkr
 
+VERSION = $$(git describe --tags --always --dirty)
+
+BUILD_FLAGS = -ldflags "\
+	      -X main.Version \"$(VERSION)\" \
+	      "
+
 all: clean cross test
 
 test: testdeps
 	go test -v ./...
 
 build: deps
-	go build -o $(BIN) .
+	go build $(BUILD_FLAGS) -o $(BIN) .
 
 lint: deps testdeps
 	go vet
@@ -14,8 +20,8 @@ lint: deps testdeps
 
 cross: deps
 	mkdir -p build
-	gox -osarch="linux/amd64" -output build/linux/amd64/mkr
-	gox -osarch="darwin/amd64" -output build/darwin/amd64/mkr
+	gox $(BUILD_FLAGS) -osarch="linux/amd64" -output build/linux/amd64/mkr
+	gox $(BUILD_FLAGS) -osarch="darwin/amd64" -output build/darwin/amd64/mkr
 
 deps:
 	go get -d -v .
