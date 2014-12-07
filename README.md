@@ -11,13 +11,15 @@ mkr output format is JSON, so you can filter it by JSON processor such as [jq](h
 
 # INSTALLATION
 
-  $ go get github.com/y-uuki/mkr
-  $ go install github.com/y-uuki/mkr
+```bash
+$ go get github.com/mackerelio/mkr
+$ go install github.com/mackerelio/mkr
+```
 
-## TODO
+## Linux
 
 ```bash
-$ curl -sL github.com/mackerelio/mkr/releases/download/latest/mkr-linux-amd64 > ~/bin/mkr && chmod +x ~/bin/mkr
+$ curl --silent -L https://github.com/mackerelio/mkr/releases/latest/mkr_linux_amd64.tar.gz | sudo tar xzpf - -C /usr/local/bin --strip-components=1 --exclude=README.md
 ```
 
 # USAGE
