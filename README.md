@@ -1,23 +1,23 @@
-gomkr
+mkr
 =====
 
-gomkr - A fast Mackerel client in Go.
+mkr - A fast Mackerel client in Go.
 
 # DESCRIPTION
 
-gomkr is a command-line interface tool for [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go language.
-gomkr helps you to free your daily troublesome server operations and accelarates to leverage Mackerel and the Unix tools.
-gomkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
+mkr is a command-line interface tool for [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go language.
+mkr helps you to free your daily troublesome server operations and accelarates to leverage Mackerel and the Unix tools.
+mkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
 
 # INSTALLATION
 
-  $ go get github.com/y-uuki/gomkr
-  $ go install github.com/y-uuki/gomkr
+  $ go get github.com/y-uuki/mkr
+  $ go install github.com/y-uuki/mkr
 
 ## TODO
 
 ```bash
-$ curl -sL github.com/mackerelio/gomkr/releases/download/latest/gomkr-linux-amd64 > ~/bin/gomkr && chmod +x ~/bin/gomkr
+$ curl -sL github.com/mackerelio/mkr/releases/download/latest/mkr-linux-amd64 > ~/bin/mkr && chmod +x ~/bin/mkr
 ```
 
 # USAGE
@@ -31,7 +31,7 @@ export MACKEREL_APIKEY=<Put your API key>
 ## EXAMPLES
 
 ```
-$ gomkr status <hostId>
+$ mkr status <hostId>
 {
     "id": "2eQGEaLxiYU",
     "name": "myproxy001",
@@ -45,7 +45,7 @@ $ gomkr status <hostId>
 ```
 
 ```
-$ gomkr hosts --service My-Service --role proxy
+$ mkr hosts --service My-Service --role proxy
 [
     {
         "id": "2eQGEaLxiYU",
@@ -71,18 +71,18 @@ $ gomkr hosts --service My-Service --role proxy
 ```
 
 ```
-gomkr create --status working -R My-Service:db-master mydb001
-gomkr update --status maintenance --role My-Service:db-master <hostId>
+mkr create --status working -R My-Service:db-master mydb001
+mkr update --status maintenance --role My-Service:db-master <hostId>
 ```
 
 ```
-cat <<EOF | gomkr throw --host <hostId>
+cat <<EOF | mkr throw --host <hostId>
 <name>  <time>  <value>
 <name>  <time>  <value>
 EOF
 ...
 
-cat <<EOF | gomkr throw --service My-Service
+cat <<EOF | mkr throw --service My-Service
 <name>  <time>  <value>
 <name>  <time>  <value>
 EOF
@@ -90,7 +90,7 @@ EOF
 ```
 
 ```
-gomkr fetch --name loadavg5 2eQGDXqtoXs
+mkr fetch --name loadavg5 2eQGDXqtoXs
 {
     "2eQGDXqtoXs": {
         "loadavg5": {
@@ -102,45 +102,45 @@ gomkr fetch --name loadavg5 2eQGDXqtoXs
 ```
 
 ```
-gomkr retire <hostId> ...
+mkr retire <hostId> ...
 ```
 
 ### Examples (on host running mackerel-agent)
 
 You can omit specifing <hostId> and MACKEREL_APIKEY.
-gomkrrefers /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifing <hostId>.
+mkrrefers /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifing <hostId>.
 
 ```
-gomkr status
-```
-
-```
-gomkr update --status maintenance <hostIds>...
+mkr status
 ```
 
 ```
-gomkr fetch -n loadavg5
+mkr update --status maintenance <hostIds>...
+```
+
+```
+mkr fetch -n loadavg5
 ```
 
 ```bash
-cat <<EOF | gomkr throw --host <hostId>
+cat <<EOF | mkr throw --host <hostId>
 <name>  <time>  <value>
 EOF
 ```
 
 ```
-gomkr retire
+mkr retire
 ```
 
 ## ADVANCED USAGE
 
 ```bash
-$ gomkr update --st working $(gomkr hosts -s My-Service -r proxy | jq -r '.[].id')
+$ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
 ```
 
 # CONTRIBUTION
 
-1. Fork ([https://github.com/mackerelio/gomkr/fork](https://github.com/mackerelio/gomkr/fork))
+1. Fork ([https://github.com/mackerelio/mkr/fork](https://github.com/mackerelio/mkr/fork))
 1. Create a feature branch
 1. Commit your changes
 1. Rebase your local changes against the master branch

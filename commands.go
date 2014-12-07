@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/codegangsta/cli"
-	"github.com/mackerelio/gomkr/utils"
+	"github.com/mackerelio/mkr/utils"
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
@@ -204,7 +204,7 @@ func init() {
     {{.Name}} - {{.Usage}}
 
 USAGE:
-    gomkr ` + parentTemplate + `{{.Name}} ` + argsTemplate + `
+    mkr ` + parentTemplate + `{{.Name}} ` + argsTemplate + `
 {{if (len .Description)}}
 DESCRIPTION: {{.Description}}
 {{end}}{{if (len .Flags)}}

@@ -9,7 +9,7 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "gomkr"
+	app.Name = "mkr"
 	app.Version = Version
 	app.Usage = "A CLI tool for mackerel.io"
 	app.Author = "Hatena Co., Ltd."

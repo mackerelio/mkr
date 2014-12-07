@@ -9,11 +9,11 @@ install:
 script:
   - make all
 file:
-  - "/home/travis/build/linux/amd64/gomkr"
-  - "/home/travis/build/darwin/amd64/gomkr"
+  - "/home/travis/build/linux/amd64/mkr"
+  - "/home/travis/build/darwin/amd64/mkr"
   skip_cleanup: true
   on:
-    repo: mackerelio/gomkr
+    repo: mackerelio/mkr
     all_branches: true
     tags: true
 notifications:

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mackerelio/gomkr/utils"
+	"github.com/mackerelio/mkr/utils"
 )
 
 type HostFormat struct {
