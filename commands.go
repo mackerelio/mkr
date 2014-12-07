@@ -179,7 +179,7 @@ type commandDoc struct {
 }
 
 var commandDocs = map[string]commandDoc{
-	"status": {"", "[-v|verbose]"},
+	"status": {"", "[-v|verbose] <hostId>"},
 	"hosts":  {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
 	"create": {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
 	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
