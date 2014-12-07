@@ -1,0 +1,21 @@
+language: go
+go:
+- 1.3
+env: PATH=/home/travis/gopath/bin:$PATH
+install:
+- go get github.com/mitchellh/gox
+- gox -build-toolchain -osarch=linux/amd64
+- gox -build-toolchain -osarch=darwin/amd64
+script:
+  - make all
+file:
+  - "/home/travis/build/linux/amd64/gomkr"
+  - "/home/travis/build/darwin/amd64/gomkr"
+  skip_cleanup: true
+  on:
+    repo: mackerelio/gomkr
+    all_branches: true
+    tags: true
+notifications:
+  slack:
+    secure: cPeJRg+ouTlemEV5UM4muhDwtIM0dktcs3mnfB73oZ2MGOimv/DFpL+VTRLlkWau8l0dT4ngLlGPcveLrXQXwps2LsJMr+gS6Az/CAQCIl21oj4bnjs5uGYTG8hM8ymVzGINPNnj5Fnn5DUMunA2sow30qxfuCnSUMGot2nFRKw=
