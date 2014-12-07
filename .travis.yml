@@ -12,8 +12,8 @@ deploy:
   api_key:
     secure: LkFrlQqeNwI4ozA4I/u6CCKLc+UGE7eKdQE/+I3cQAkxZM05t0FaPCkO+TkPhNhPWqIO9lxKnH571CKaR11mQhll14otEiPFJrACkgN0+KUYBZ7jg0cWslreS74c3yZgBlKBLjavrkmpYyuReJjZa5J7+oEiHR9eoKBDQS1xlIc=
   file:
-    - "/home/travis/build/linux/amd64/mkr"
-    - "/home/travis/build/darwin/amd64/mkr"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/build/linux/amd64/mkr"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/build/darwin/amd64/mkr"
   skip_cleanup: true
   on:
     repo: mackerelio/mkr
