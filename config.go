@@ -7,6 +7,7 @@ import (
 	"github.com/mackerelio/mackerel-agent/config"
 )
 
+// LoadApikeyFromConfig gets mackerel.io apikey from mackerel-agent.conf if it's installed mackerel-agent on localhost
 func LoadApikeyFromConfig() string {
 	conf, err := config.LoadConfig(config.DefaultConfig.Conffile)
 	if err != nil {
@@ -15,7 +16,8 @@ func LoadApikeyFromConfig() string {
 	return conf.Apikey
 }
 
-func LoadApikeyFromConfigOrEnv() string {
+// LoadApikeyFromEnvOrConfig is similar to LoadApikeyFromConfig. return MACKEREL_APIKEY environment value if defined MACKEREL_APIKEY 
+func LoadApikeyFromEnvOrConfig() string {
 	if apiKey := os.Getenv("MACKEREL_APIKEY"); apiKey != "" {
 		return apiKey
 	}
@@ -23,14 +25,15 @@ func LoadApikeyFromConfigOrEnv() string {
 	return key
 }
 
-func LoadHostIdFromConfig() string {
+// LoadHostIDFromConfig gets localhost's hostID from conf.Root (ex. /var/lib/mackerel/id) if it's installed mackerel-agent on localhost
+func LoadHostIDFromConfig() string {
 	conf, err := config.LoadConfig(config.DefaultConfig.Conffile)
 	if err != nil {
 		return ""
 	}
-	hostId, err := command.LoadHostId(conf.Root)
+	hostID, err := command.LoadHostId(conf.Root)
 	if err != nil {
 		return ""
 	}
-	return hostId
+	return hostID
 }

@@ -8,18 +8,20 @@ import (
 	"github.com/mackerelio/mkr/logger"
 )
 
+// HostFormat defines output json structure.
 type HostFormat struct {
-	Id            string            `json:"id,omitempty"`
+	ID            string            `json:"id,omitempty"`
 	Name          string            `json:"name,omitempty"`
 	Status        string            `json:"status,omitempty"`
 	Memo          string            `json:"memo,omitempty"`
 	RoleFullnames []string          `json:"roleFullnames,omitempty"`
 	IsRetired     bool              `json:"isRetired"` // 'omitempty' regard boolean 'false' as empty.
 	CreatedAt     string            `json:"createdAt,omitempty"`
-	IpAddresses   map[string]string `json:"ipAddresses,omitempty"`
+	IPAddresses   map[string]string `json:"ipAddresses,omitempty"`
 }
 
-func PrettyPrintJson(src interface{}) {
+// PrettyPrintJSON output indented json via stdout.
+func PrettyPrintJSON(src interface{}) {
 	data, err := json.MarshalIndent(src, "", "    ")
 	logger.DieIf(err)
 	fmt.Fprintln(os.Stdout, string(data))

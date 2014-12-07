@@ -25,7 +25,7 @@ func TestLoadApikeyFromConfigOrEnv(t *testing.T) {
 
 	config.DefaultConfig.Conffile = "test/mackerel-agent.conf"
 
-	apiKey := LoadApikeyFromConfigOrEnv()
+	apiKey := LoadApikeyFromEnvOrConfig()
 
 	if apiKey != "123456ABCD" {
 		t.Error("should be 123456ABCD")
@@ -33,7 +33,7 @@ func TestLoadApikeyFromConfigOrEnv(t *testing.T) {
 
 	os.Setenv("MACKEREL_APIKEY", "ENV123456ABCD")
 
-	apiKey = LoadApikeyFromConfigOrEnv()
+	apiKey = LoadApikeyFromEnvOrConfig()
 
 	if apiKey != "ENV123456ABCD" {
 		t.Error("should be ENV123456ABCD")
@@ -42,16 +42,16 @@ func TestLoadApikeyFromConfigOrEnv(t *testing.T) {
 	os.Setenv("MACKEREL_APIKEY", "")
 }
 
-func TestLoadHostIdFromConfig(t *testing.T) {
+func TestLoadHostIDFromConfig(t *testing.T) {
 	config.DefaultConfig.Conffile = "test/mackerel-agent.conf"
 
-	hostId := LoadHostIdFromConfig()
+	hostID := LoadHostIDFromConfig()
 
-	if hostId == "" {
+	if hostID == "" {
 		t.Error("should not be empty")
 	}
 
-	if hostId != "9876ABCD" {
+	if hostID != "9876ABCD" {
 		t.Error("should be 9876ABCD")
 	}
 }

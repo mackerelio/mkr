@@ -14,6 +14,7 @@ import (
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
+// cli.Commad object list
 var Commands = []cli.Command{
 	commandStatus,
 	commandHosts,
@@ -109,7 +110,7 @@ var commandThrow = cli.Command{
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostId>."},
+		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
 	},
 }
@@ -154,7 +155,7 @@ func assert(err error) {
 }
 
 func newMackerel() *mkr.Client {
-	apiKey := LoadApikeyFromConfigOrEnv()
+	apiKey := LoadApikeyFromEnvOrConfig()
 	if apiKey == "" {
 		logger.Log("error", `
     Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
@@ -167,9 +168,9 @@ func newMackerel() *mkr.Client {
 		logger.DieIf(err)
 
 		return mackerel
-	} else {
-		return mkr.NewClient(apiKey)
 	}
+
+	return mkr.NewClient(apiKey)
 }
 
 type commandDoc struct {
@@ -215,33 +216,33 @@ OPTIONS:
 }
 
 func doStatus(c *cli.Context) {
-	argHostId := c.Args().Get(0)
+	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 
-	if argHostId == "" {
-		if argHostId = LoadHostIdFromConfig(); argHostId == "" {
+	if argHostID == "" {
+		if argHostID = LoadHostIDFromConfig(); argHostID == "" {
 			cli.ShowCommandHelp(c, "status")
 			os.Exit(1)
 		}
 	}
 
-	host, err := newMackerel().FindHost(argHostId)
+	host, err := newMackerel().FindHost(argHostID)
 	logger.DieIf(err)
 
 	if isVerbose {
-		PrettyPrintJson(host)
+		PrettyPrintJSON(host)
 	} else {
 		format := &HostFormat{
-			Id:            host.Id,
+			ID:            host.Id,
 			Name:          host.Name,
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
 			CreatedAt:     host.DateStringFromCreatedAt(),
-			IpAddresses:   host.IpAddresses(),
+			IPAddresses:   host.IpAddresses(),
 		}
 
-		PrettyPrintJson(format)
+		PrettyPrintJSON(format)
 	}
 }
 
@@ -257,23 +258,23 @@ func doHosts(c *cli.Context) {
 	logger.DieIf(err)
 
 	if isVerbose {
-		PrettyPrintJson(hosts)
+		PrettyPrintJSON(hosts)
 	} else {
 		var hostsFormat []*HostFormat
 		for _, host := range hosts {
 			format := &HostFormat{
-				Id:            host.Id,
+				ID:            host.Id,
 				Name:          host.Name,
 				Status:        host.Status,
 				RoleFullnames: host.GetRoleFullnames(),
 				IsRetired:     host.IsRetired,
 				CreatedAt:     host.DateStringFromCreatedAt(),
-				IpAddresses:   host.IpAddresses(),
+				IPAddresses:   host.IpAddresses(),
 			}
 			hostsFormat = append(hostsFormat, format)
 		}
 
-		PrettyPrintJson(hostsFormat)
+		PrettyPrintJSON(hostsFormat)
 	}
 }
 
@@ -287,29 +288,29 @@ func doCreate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	hostId, err := newMackerel().CreateHost(&mkr.CreateHostParam{
+	hostID, err := newMackerel().CreateHost(&mkr.CreateHostParam{
 		Name:          argHostName,
 		RoleFullnames: optRoleFullnames,
 	})
 	logger.DieIf(err)
 
-	logger.Log("created", hostId)
+	logger.Log("created", hostID)
 
 	if optStatus != "" {
-		err := newMackerel().UpdateHostStatus(hostId, optStatus)
+		err := newMackerel().UpdateHostStatus(hostID, optStatus)
 		logger.DieIf(err)
 	}
 }
 
 func doUpdate(c *cli.Context) {
-	argHostIds := c.Args()
+	argHostIDs := c.Args()
 	optName := c.String("name")
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 
-	if len(argHostIds) < 1 {
-		argHostIds = make([]string, 1)
-		if argHostIds[0] = LoadHostIdFromConfig(); argHostIds[0] == "" {
+	if len(argHostIDs) < 1 {
+		argHostIDs = make([]string, 1)
+		if argHostIDs[0] = LoadHostIDFromConfig(); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "update")
 			os.Exit(1)
 		}
@@ -325,33 +326,33 @@ func doUpdate(c *cli.Context) {
 
 	var wg sync.WaitGroup
 
-	for _, hostId := range argHostIds {
+	for _, hostID := range argHostIDs {
 		wg.Add(1)
-		go func(hostId string) {
+		go func(hostID string) {
 			defer wg.Done()
 
 			if needUpdateHostStatus {
-				err := newMackerel().UpdateHostStatus(hostId, optStatus)
+				err := newMackerel().UpdateHostStatus(hostID, optStatus)
 				logger.DieIf(err)
 			}
 
 			if needUpdateHost {
-				_, err := newMackerel().UpdateHost(hostId, &mkr.UpdateHostParam{
+				_, err := newMackerel().UpdateHost(hostID, &mkr.UpdateHostParam{
 					Name:          optName,
 					RoleFullnames: optRoleFullnames,
 				})
 				logger.DieIf(err)
 			}
 
-			logger.Log("updated", hostId)
-		}(hostId)
+			logger.Log("updated", hostID)
+		}(hostID)
 	}
 
 	wg.Wait()
 }
 
 func doThrow(c *cli.Context) {
-	optHostId := c.String("host")
+	optHostID := c.String("host")
 	optService := c.String("service")
 
 	var metricValues []*(mkr.MetricValue)
@@ -387,12 +388,12 @@ func doThrow(c *cli.Context) {
 	}
 	logger.ErrorIf(scanner.Err())
 
-	if optHostId != "" {
-		err := newMackerel().PostHostMetricValuesByHostId(optHostId, metricValues)
+	if optHostID != "" {
+		err := newMackerel().PostHostMetricValuesByHostId(optHostID, metricValues)
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
-			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostId, metric.Name, metric.Value, metric.Time))
+			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostID, metric.Name, metric.Value, metric.Time))
 		}
 	} else if optService != "" {
 		err := newMackerel().PostServiceMetricValues(optService, metricValues)
@@ -408,26 +409,26 @@ func doThrow(c *cli.Context) {
 }
 
 func doFetch(c *cli.Context) {
-	argHostIds := c.Args()
+	argHostIDs := c.Args()
 	optMetricNames := c.StringSlice("name")
 
-	if len(argHostIds) < 1 || len(optMetricNames) < 1 {
+	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {
 		cli.ShowCommandHelp(c, "fetch")
 		os.Exit(1)
 	}
 
-	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIds, optMetricNames)
+	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIDs, optMetricNames)
 	logger.DieIf(err)
 
-	PrettyPrintJson(metricValues)
+	PrettyPrintJSON(metricValues)
 }
 
 func doRetire(c *cli.Context) {
-	argHostIds := c.Args()
+	argHostIDs := c.Args()
 
-	if len(argHostIds) < 1 {
-		argHostIds = make([]string, 1)
-		if argHostIds[0] = LoadHostIdFromConfig(); argHostIds[0] == "" {
+	if len(argHostIDs) < 1 {
+		argHostIDs = make([]string, 1)
+		if argHostIDs[0] = LoadHostIDFromConfig(); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "retire")
 			os.Exit(1)
 		}
@@ -435,16 +436,16 @@ func doRetire(c *cli.Context) {
 
 	var wg sync.WaitGroup
 
-	for _, hostId := range argHostIds {
+	for _, hostID := range argHostIDs {
 		wg.Add(1)
-		go func(hostId string) {
+		go func(hostID string) {
 			defer wg.Done()
 
-			err := newMackerel().RetireHost(hostId)
+			err := newMackerel().RetireHost(hostID)
 			logger.DieIf(err)
 
-			logger.Log("retired", hostId)
-		}(hostId)
+			logger.Log("retired", hostID)
+		}(hostID)
 	}
 
 	wg.Wait()
