@@ -8,6 +8,10 @@ test: testdeps
 build: deps
 	go build -o $(BIN) .
 
+lint: deps testdeps
+	go vet
+	golint
+
 cross: deps
 	mkdir -p build
 	gox -osarch="linux/amd64" -output build/linux/amd64/mkr
@@ -23,4 +27,4 @@ clean:
 	rm -fr build
 	go clean
 
-.PHONY: test build cross deps testdeps clean
+.PHONY: test build cross lint deps testdeps clean
