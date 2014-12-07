@@ -1,5 +1,5 @@
-mkr
-=====
+mkr [![Build Status](https://travis-ci.org/mackerelio/mkr.svg?branch=master)](https://travis-ci.org/mackerelio/mkr)
+===
 
 mkr - A fast Mackerel client in Go.
 
