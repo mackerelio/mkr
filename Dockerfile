@@ -1,2 +1,2 @@
 FROM golang:1.3.3-onbuild
-ENTRYPOINT ["./mkr"]
+ENTRYPOINT ["/go/bin/app"]
