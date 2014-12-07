@@ -22,6 +22,13 @@ $ go install github.com/mackerelio/mkr
 $ curl --silent -L https://github.com/mackerelio/mkr/releases/latest/mkr_linux_amd64.tar.gz | sudo tar xzpf - -C /usr/local/bin --strip-components=1 --exclude=README.md
 ```
 
+## Mac (Homebrew)
+
+```bash
+$ brew tap y-uuki/mkr
+$ brew install mkr
+```
+
 # USAGE
 
 Set MACKEREL_APIKEY environment variable, but you don't have to set MACKEREL_APIKEY on your host running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
