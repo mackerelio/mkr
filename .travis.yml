@@ -7,19 +7,16 @@ install:
 - gox -build-toolchain -osarch=linux/amd64
 - gox -build-toolchain -osarch=darwin/amd64
 script:
-  - make all
+- make all
 deploy:
   provider: releases
   api_key:
-    secure: c2pLKkM2leWMIzakVisNf3kAK6TBYslDM8SFEVrTTHpHnTI/6jUFnDLuL9cKuq9c76QcgYfqdLDn/hP+uFHf5WdtdJR00R+bX8cCx6NfOe7Kk9GlqGinUcXKAVs0kQHaYtQrN/rCOIG92kYFdbRHMD8uMrADJVRySePTMMhMX9o=
+    secure: LkFrlQqeNwI4ozA4I/u6CCKLc+UGE7eKdQE/+I3cQAkxZM05t0FaPCkO+TkPhNhPWqIO9lxKnH571CKaR11mQhll14otEiPFJrACkgN0+KUYBZ7jg0cWslreS74c3yZgBlKBLjavrkmpYyuReJjZa5J7+oEiHR9eoKBDQS1xlIc=
   file:
-  - "/home/travis/build/linux/amd64/mkr"
-  - "/home/travis/build/darwin/amd64/mkr"
+    - "/home/travis/build/linux/amd64/mkr"
+    - "/home/travis/build/darwin/amd64/mkr"
   skip_cleanup: true
   on:
     repo: mackerelio/mkr
-    all_branches: true
     tags: true
-notifications:
-  slack:
-    secure: cPeJRg+ouTlemEV5UM4muhDwtIM0dktcs3mnfB73oZ2MGOimv/DFpL+VTRLlkWau8l0dT4ngLlGPcveLrXQXwps2LsJMr+gS6Az/CAQCIl21oj4bnjs5uGYTG8hM8ymVzGINPNnj5Fnn5DUMunA2sow30qxfuCnSUMGot2nFRKw=
+    all_branches: true
