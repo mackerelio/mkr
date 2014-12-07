@@ -1,6 +1,6 @@
 BIN = mkr
 
-VERSION = $$(git describe --tags --always --dirty)
+VERSION = $$(git describe --tags --always --dirty) ($(git name-rev --name-only HEAD | sed 's/^remotes\/origin\///'))
 
 BUILD_FLAGS = -ldflags "\
 	      -X main.Version \"$(VERSION)\" \
@@ -19,9 +19,7 @@ lint: deps testdeps
 	golint
 
 cross: deps
-	mkdir -p build
-	gox $(BUILD_FLAGS) -osarch="linux/amd64" -output build/linux/amd64/mkr
-	gox $(BUILD_FLAGS) -osarch="darwin/amd64" -output build/darwin/amd64/mkr
+	goxc -tasks='xc archive' -bc 'linux,!arm windows darwin' -d . -build-ldflags "-X main.Version \"$(VERSION)\"" -resources-include='README*'
 
 deps:
 	go get -d -v .

@@ -3,8 +3,7 @@ go:
 - 1.3
 env: PATH=/home/travis/gopath/bin:$PATH
 install:
-- go get github.com/mitchellh/gox
-- gox -build-toolchain -osarch="linux/amd64 darwin/amd64"
+- go get github.com/laher/goxc
 script:
 - make all
 deploy:
@@ -12,8 +11,12 @@ deploy:
   api_key:
     secure: LkFrlQqeNwI4ozA4I/u6CCKLc+UGE7eKdQE/+I3cQAkxZM05t0FaPCkO+TkPhNhPWqIO9lxKnH571CKaR11mQhll14otEiPFJrACkgN0+KUYBZ7jg0cWslreS74c3yZgBlKBLjavrkmpYyuReJjZa5J7+oEiHR9eoKBDQS1xlIc=
   file:
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/build/linux/amd64/mkr"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/build/darwin/amd64/mkr"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.zip"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.zip"
   skip_cleanup: true
   on:
     repo: mackerelio/mkr
