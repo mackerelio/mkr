@@ -1,6 +1,6 @@
 BIN = mkr
 
-VERSION = $$(git describe --tags --always --dirty) ($(git name-rev --name-only HEAD | sed 's/^remotes\/origin\///'))
+VERSION = $$(git describe --tags --always --dirty)
 
 BUILD_FLAGS = -ldflags "\
 	      -X main.Version \"$(VERSION)\" \
