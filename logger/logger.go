@@ -22,10 +22,12 @@ var logger = &colorine.Logger{
 	},
 }
 
+// Log outputs `message` with `prefix` by go-colorine
 func Log(prefix, message string) {
 	logger.Log(prefix, message)
 }
 
+// ErrorIf outputs log if `err` occurs.
 func ErrorIf(err error) bool {
 	if err != nil {
 		Log("error", err.Error())
@@ -35,6 +37,7 @@ func ErrorIf(err error) bool {
 	return false
 }
 
+// DieIf outputs log and exit(1) if `err` occurs.
 func DieIf(err error) {
 	if err != nil {
 		Log("error", err.Error())
@@ -42,6 +45,7 @@ func DieIf(err error) {
 	}
 }
 
+// PanicIf raise panic if `err` occurs.
 func PanicIf(err error) {
 	if err != nil {
 		panic(err)
