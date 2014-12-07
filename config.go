@@ -16,7 +16,7 @@ func LoadApikeyFromConfig() string {
 	return conf.Apikey
 }
 
-// LoadApikeyFromEnvOrConfig is similar to LoadApikeyFromConfig. return MACKEREL_APIKEY environment value if defined MACKEREL_APIKEY 
+// LoadApikeyFromEnvOrConfig is similar to LoadApikeyFromConfig. return MACKEREL_APIKEY environment value if defined MACKEREL_APIKEY
 func LoadApikeyFromEnvOrConfig() string {
 	if apiKey := os.Getenv("MACKEREL_APIKEY"); apiKey != "" {
 		return apiKey

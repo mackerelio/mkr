@@ -10,8 +10,8 @@ import (
 	"sync"
 
 	"github.com/codegangsta/cli"
-	"github.com/mackerelio/mkr/logger"
 	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/logger"
 )
 
 // cli.Commad object list

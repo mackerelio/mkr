@@ -14,11 +14,11 @@ var logger = &colorine.Logger{
 
 		"error": colorine.Error,
 
-		"": colorine.Info,
-		"created":  colorine.Info,
-		"updated":  colorine.Info,
+		"":        colorine.Info,
+		"created": colorine.Info,
+		"updated": colorine.Info,
 		"thrown":  colorine.Info,
-		"retired":  colorine.Info,
+		"retired": colorine.Info,
 	},
 }
 
