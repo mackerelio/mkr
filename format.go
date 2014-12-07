@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mackerelio/mkr/utils"
+	"github.com/mackerelio/mkr/logger"
 )
 
 type HostFormat struct {
@@ -21,6 +21,6 @@ type HostFormat struct {
 
 func PrettyPrintJson(src interface{}) {
 	data, err := json.MarshalIndent(src, "", "    ")
-	utils.DieIf(err)
+	logger.DieIf(err)
 	fmt.Fprintln(os.Stdout, string(data))
 }

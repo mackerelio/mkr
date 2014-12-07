@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/codegangsta/cli"
-	"github.com/mackerelio/mkr/utils"
+	"github.com/mackerelio/mkr/logger"
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
 
@@ -156,7 +156,7 @@ func assert(err error) {
 func newMackerel() *mkr.Client {
 	apiKey := LoadApikeyFromConfigOrEnv()
 	if apiKey == "" {
-		utils.Log("error", `
+		logger.Log("error", `
     Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
 `)
 		os.Exit(1)
@@ -164,7 +164,7 @@ func newMackerel() *mkr.Client {
 
 	if os.Getenv("DEBUG") != "" {
 		mackerel, err := mkr.NewClientForTest(apiKey, "https://mackerel.io/api/v0", true)
-		utils.DieIf(err)
+		logger.DieIf(err)
 
 		return mackerel
 	} else {
@@ -226,7 +226,7 @@ func doStatus(c *cli.Context) {
 	}
 
 	host, err := newMackerel().FindHost(argHostId)
-	utils.DieIf(err)
+	logger.DieIf(err)
 
 	if isVerbose {
 		PrettyPrintJson(host)
@@ -254,7 +254,7 @@ func doHosts(c *cli.Context) {
 		Roles:    c.StringSlice("role"),
 		Statuses: c.StringSlice("status"),
 	})
-	utils.DieIf(err)
+	logger.DieIf(err)
 
 	if isVerbose {
 		PrettyPrintJson(hosts)
@@ -291,13 +291,13 @@ func doCreate(c *cli.Context) {
 		Name:          argHostName,
 		RoleFullnames: optRoleFullnames,
 	})
-	utils.DieIf(err)
+	logger.DieIf(err)
 
-	utils.Log("created", hostId)
+	logger.Log("created", hostId)
 
 	if optStatus != "" {
 		err := newMackerel().UpdateHostStatus(hostId, optStatus)
-		utils.DieIf(err)
+		logger.DieIf(err)
 	}
 }
 
@@ -332,7 +332,7 @@ func doUpdate(c *cli.Context) {
 
 			if needUpdateHostStatus {
 				err := newMackerel().UpdateHostStatus(hostId, optStatus)
-				utils.DieIf(err)
+				logger.DieIf(err)
 			}
 
 			if needUpdateHost {
@@ -340,10 +340,10 @@ func doUpdate(c *cli.Context) {
 					Name:          optName,
 					RoleFullnames: optRoleFullnames,
 				})
-				utils.DieIf(err)
+				logger.DieIf(err)
 			}
 
-			utils.Log("updated", hostId)
+			logger.Log("updated", hostId)
 		}(hostId)
 	}
 
@@ -368,12 +368,12 @@ func doThrow(c *cli.Context) {
 		}
 		value, err := strconv.ParseFloat(items[1], 64)
 		if err != nil {
-			utils.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
+			logger.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
 			continue
 		}
 		time, err := strconv.ParseInt(items[2], 10, 64)
 		if err != nil {
-			utils.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
+			logger.Log("warning", fmt.Sprintf("Failed to parse values: %s", err))
 			continue
 		}
 
@@ -385,21 +385,21 @@ func doThrow(c *cli.Context) {
 
 		metricValues = append(metricValues, metricValue)
 	}
-	utils.ErrorIf(scanner.Err())
+	logger.ErrorIf(scanner.Err())
 
 	if optHostId != "" {
 		err := newMackerel().PostHostMetricValuesByHostId(optHostId, metricValues)
-		utils.DieIf(err)
+		logger.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostId, metric.Name, metric.Value, metric.Time))
+			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostId, metric.Name, metric.Value, metric.Time))
 		}
 	} else if optService != "" {
 		err := newMackerel().PostServiceMetricValues(optService, metricValues)
-		utils.DieIf(err)
+		logger.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optService, metric.Name, metric.Value, metric.Time))
+			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")
@@ -417,7 +417,7 @@ func doFetch(c *cli.Context) {
 	}
 
 	metricValues, err := newMackerel().FetchLatestMetricValues(argHostIds, optMetricNames)
-	utils.DieIf(err)
+	logger.DieIf(err)
 
 	PrettyPrintJson(metricValues)
 }
@@ -441,9 +441,9 @@ func doRetire(c *cli.Context) {
 			defer wg.Done()
 
 			err := newMackerel().RetireHost(hostId)
-			utils.DieIf(err)
+			logger.DieIf(err)
 
-			utils.Log("retired", hostId)
+			logger.Log("retired", hostId)
 		}(hostId)
 	}
 

@@ -1,4 +1,4 @@
-package utils
+package logger
 
 // We borrow this code from github.com/motemen/ghq/utils
 
