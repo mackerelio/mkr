@@ -19,7 +19,7 @@ $ go install github.com/mackerelio/mkr
 ## Linux
 
 ```bash
-$ bash -e "$(curl -fsSL https://raw.githubusercontent.com/mackerelio/mkr/master/script/install_linux_amd64)"
+$ curl -fsSL https://raw.githubusercontent.com/mackerelio/mkr/master/script/install_linux_amd64 | sudo bash -ex
 ```
 
 ## Mac (Homebrew)
