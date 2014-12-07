@@ -19,7 +19,7 @@ $ go install github.com/mackerelio/mkr
 ## Linux
 
 ```bash
-$ curl --silent -L https://github.com/mackerelio/mkr/releases/latest/mkr_linux_amd64.tar.gz | sudo tar xzpf - -C /usr/local/bin --strip-components=1 --exclude=README.md
+$ bash -e "$(curl -fsSL https://raw.githubusercontent.com/mackerelio/mkr/master/script/install_linux_amd64)"
 ```
 
 ## Mac (Homebrew)
@@ -27,6 +27,14 @@ $ curl --silent -L https://github.com/mackerelio/mkr/releases/latest/mkr_linux_a
 ```bash
 $ brew tap y-uuki/mkr
 $ brew install mkr
+```
+
+## Linux (Docker)
+
+https://registry.hub.docker.com/u/mackerel/mkr/
+
+```bash
+$ docker run mackerel/mkr --rm --entrypoint="cat" /go/bin/app > /usr/local/bin/mkr && chmod +x /usr/local/bin/mkr
 ```
 
 # USAGE

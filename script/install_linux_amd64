@@ -1,0 +1,4 @@
+#!/bin/bash
+
+uri=$(curl -sI https://github.com/mackerelio/mkr/releases/latest | awk -F'/' '/^Location:/{print $NF}' | tr -d '\r')
+curl --silent -L "https://github.com/mackerelio/mkr/releases/download/${uri}/mkr_linux_amd64.tar.gz" | tar xvzpf - -C /usr/local/bin --strip-components=1 --exclude=README.md && chmod +x /usr/local/bin/mkr
