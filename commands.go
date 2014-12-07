@@ -392,14 +392,14 @@ func doThrow(c *cli.Context) {
 		utils.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostId, metric.Name, metric.Value, metric.Time))
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostId, metric.Name, metric.Value, metric.Time))
 		}
 	} else if optService != "" {
 		err := newMackerel().PostServiceMetricValues(optService, metricValues)
 		utils.DieIf(err)
 
 		for _, metric := range metricValues {
-			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
+			utils.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")

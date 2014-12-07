@@ -5,11 +5,11 @@ package utils
 import (
 	"os"
 
-	"github.com/motemen/go-colorine"
+	colorine "github.com/motemen/go-colorine"
 )
 
 var logger = &colorine.Logger{
-	colorine.Prefixes{
+	Prefixes: colorine.Prefixes{
 		"warning": colorine.Warn,
 
 		"error": colorine.Error,
