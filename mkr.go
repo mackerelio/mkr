@@ -13,7 +13,6 @@ func main() {
 	app.Version = Version
 	app.Usage = "A CLI tool for mackerel.io"
 	app.Author = "Hatena Co., Ltd."
-	app.Email = "y_uuki@hatena.ne.jp"
 	app.Commands = Commands
 
 	cpu := runtime.NumCPU()
