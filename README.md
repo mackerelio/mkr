@@ -1,4 +1,4 @@
-mkr [![Build Status](https://travis-ci.org/mackerelio/mkr.svg?branch=master)](https://travis-ci.org/mackerelio/mkr)
+mkr [![Latest Version](http://img.shields.io/github/release/mackerelio/mkr.svg?style=flat-square)][release] [![Build Status](https://travis-ci.org/mackerelio/mkr.svg?branch=master)](https://travis-ci.org/mackerelio/mkr)
 ===
 
 mkr - A fast Mackerel client in Go.
