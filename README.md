@@ -1,5 +1,12 @@
-mkr [![Latest Version](http://img.shields.io/github/release/mackerelio/mkr.svg?style=flat-square)][release] [![Build Status](https://travis-ci.org/mackerelio/mkr.svg?branch=master)](https://travis-ci.org/mackerelio/mkr) [![Go Documentation](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)][godocs]
+mkr
 ===
+[![Latest Version](http://img.shields.io/github/release/mackerelio/mkr.svg?style=flat-square)][release]
+[![Build Status](http://img.shields.io/travis/mackerelio/mkr.svg?style=flat-square)][travis]
+[![Go Documentation](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)][godocs]
+
+[release]: https://github.com/mackerelio/mkr/releases
+[travis]: http://travis-ci.org/mackerelio/mkr
+[godocs]: http://godoc.org/github.com/mackerelio/mkr
 
 mkr - A fast Mackerel client in Go.
 
