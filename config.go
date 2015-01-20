@@ -1,11 +1,26 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
+	"path/filepath"
 
-	"github.com/mackerelio/mackerel-agent/command"
 	"github.com/mackerelio/mackerel-agent/config"
 )
+
+const idFileName = "id"
+
+func idFilePath(root string) string {
+	return filepath.Join(root, idFileName)
+}
+
+func loadHostID(root string) (string, error) {
+	content, err := ioutil.ReadFile(idFilePath(root))
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
+}
 
 // LoadApikeyFromConfig gets mackerel.io apikey from mackerel-agent.conf if it's installed mackerel-agent on localhost
 func LoadApikeyFromConfig() string {
@@ -31,7 +46,7 @@ func LoadHostIDFromConfig() string {
 	if err != nil {
 		return ""
 	}
-	hostID, err := command.LoadHostId(conf.Root)
+	hostID, err := loadHostID(conf.Root)
 	if err != nil {
 		return ""
 	}
