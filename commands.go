@@ -288,7 +288,9 @@ func doCreate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	hostID, err := newMackerel().CreateHost(&mkr.CreateHostParam{
+	client := newMackerel()
+
+	hostID, err := client.CreateHost(&mkr.CreateHostParam{
 		Name:          argHostName,
 		RoleFullnames: optRoleFullnames,
 	})
@@ -297,7 +299,7 @@ func doCreate(c *cli.Context) {
 	logger.Log("created", hostID)
 
 	if optStatus != "" {
-		err := newMackerel().UpdateHostStatus(hostID, optStatus)
+		err := client.UpdateHostStatus(hostID, optStatus)
 		logger.DieIf(err)
 	}
 }
@@ -324,20 +326,21 @@ func doUpdate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	var wg sync.WaitGroup
+	client := newMackerel()
 
+	var wg sync.WaitGroup
 	for _, hostID := range argHostIDs {
 		wg.Add(1)
 		go func(hostID string) {
 			defer wg.Done()
 
 			if needUpdateHostStatus {
-				err := newMackerel().UpdateHostStatus(hostID, optStatus)
+				err := client.UpdateHostStatus(hostID, optStatus)
 				logger.DieIf(err)
 			}
 
 			if needUpdateHost {
-				_, err := newMackerel().UpdateHost(hostID, &mkr.UpdateHostParam{
+				_, err := client.UpdateHost(hostID, &mkr.UpdateHostParam{
 					Name:          optName,
 					RoleFullnames: optRoleFullnames,
 				})
@@ -388,15 +391,17 @@ func doThrow(c *cli.Context) {
 	}
 	logger.ErrorIf(scanner.Err())
 
+	client := newMackerel()
+
 	if optHostID != "" {
-		err := newMackerel().PostHostMetricValuesByHostId(optHostID, metricValues)
+		err := client.PostHostMetricValuesByHostId(optHostID, metricValues)
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostID, metric.Name, metric.Value, metric.Time))
 		}
 	} else if optService != "" {
-		err := newMackerel().PostServiceMetricValues(optService, metricValues)
+		err := client.PostServiceMetricValues(optService, metricValues)
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
@@ -434,14 +439,15 @@ func doRetire(c *cli.Context) {
 		}
 	}
 
-	var wg sync.WaitGroup
+	client := newMackerel()
 
+	var wg sync.WaitGroup
 	for _, hostID := range argHostIDs {
 		wg.Add(1)
 		go func(hostID string) {
 			defer wg.Done()
 
-			err := newMackerel().RetireHost(hostID)
+			err := client.RetireHost(hostID)
 			logger.DieIf(err)
 
 			logger.Log("retired", hostID)
