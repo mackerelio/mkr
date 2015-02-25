@@ -301,6 +301,7 @@ func doCreate(c *cli.Context) {
 	if optStatus != "" {
 		err := client.UpdateHostStatus(hostID, optStatus)
 		logger.DieIf(err)
+		logger.Log("updated", fmt.Sprintf("%s %s", hostID, optStatus))
 	}
 }
 
