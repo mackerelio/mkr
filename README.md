@@ -8,7 +8,7 @@ mkr
 [travis]: http://travis-ci.org/mackerelio/mkr
 [godocs]: http://godoc.org/github.com/mackerelio/mkr
 
-mkr - A fast Mackerel client in Go.
+mkr - Command Line Tool For Mackerel in Go.
 
 # DESCRIPTION
 
