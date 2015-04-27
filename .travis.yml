@@ -12,6 +12,12 @@ deploy:
   api_key:
     secure: LkFrlQqeNwI4ozA4I/u6CCKLc+UGE7eKdQE/+I3cQAkxZM05t0FaPCkO+TkPhNhPWqIO9lxKnH571CKaR11mQhll14otEiPFJrACkgN0+KUYBZ7jg0cWslreS74c3yZgBlKBLjavrkmpYyuReJjZa5J7+oEiHR9eoKBDQS1xlIc=
   file:
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.exe"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.exe"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
