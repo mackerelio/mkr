@@ -26,14 +26,13 @@ $ go install github.com/mackerelio/mkr
 ## Linux
 
 ```bash
-$ curl -fsSL https://raw.githubusercontent.com/mackerelio/mkr/master/script/install_linux_amd64 | sudo bash -ex
+# wget -O /usr/local/bin/mkr "https://github.com/mackerelio/mkr/releases/download/$(curl -sI https://github.com/mackerelio/mkr/releases/latest | awk -F'/' '/^Location:/{print $NF}' | tr -d '\r')/mkr_linux_amd64" && chmod +x /usr/local/bin/mkr
 ```
 
-## Mac (Homebrew)
+## Mac
 
 ```bash
-$ brew tap y-uuki/mkr
-$ brew install mkr
+# wget -O /usr/local/bin/mkr "https://github.com/mackerelio/mkr/releases/download/$(curl -sI https://github.com/mackerelio/mkr/releases/latest | awk -F'/' '/^Location:/{print $NF}' | tr -d '\r')/mkr_linux_amd64" && chmod +x /usr/local/bin/mkr
 ```
 
 ## Linux (Docker)
