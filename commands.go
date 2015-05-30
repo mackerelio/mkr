@@ -164,7 +164,7 @@ func newMackerel() *mkr.Client {
 	}
 
 	if os.Getenv("DEBUG") != "" {
-		mackerel, err := mkr.NewClientForTest(apiKey, "https://mackerel.io/api/v0", true)
+		mackerel, err := mkr.NewClientWithOptions(apiKey, "https://mackerel.io/api/v0", true)
 		logger.DieIf(err)
 
 		return mackerel
