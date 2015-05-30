@@ -233,13 +233,13 @@ func doStatus(c *cli.Context) {
 		PrettyPrintJSON(host)
 	} else {
 		format := &HostFormat{
-			ID:            host.Id,
+			ID:            host.ID,
 			Name:          host.Name,
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
 			CreatedAt:     host.DateStringFromCreatedAt(),
-			IPAddresses:   host.IpAddresses(),
+			IPAddresses:   host.IPAddresses(),
 		}
 
 		PrettyPrintJSON(format)
@@ -263,13 +263,13 @@ func doHosts(c *cli.Context) {
 		var hostsFormat []*HostFormat
 		for _, host := range hosts {
 			format := &HostFormat{
-				ID:            host.Id,
+				ID:            host.ID,
 				Name:          host.Name,
 				Status:        host.Status,
 				RoleFullnames: host.GetRoleFullnames(),
 				IsRetired:     host.IsRetired,
 				CreatedAt:     host.DateStringFromCreatedAt(),
-				IPAddresses:   host.IpAddresses(),
+				IPAddresses:   host.IPAddresses(),
 			}
 			hostsFormat = append(hostsFormat, format)
 		}
@@ -395,7 +395,7 @@ func doThrow(c *cli.Context) {
 	client := newMackerel()
 
 	if optHostID != "" {
-		err := client.PostHostMetricValuesByHostId(optHostID, metricValues)
+		err := client.PostHostMetricValuesByHostID(optHostID, metricValues)
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
