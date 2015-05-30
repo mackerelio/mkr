@@ -399,14 +399,14 @@ func doThrow(c *cli.Context) {
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
-			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optHostID, metric.Name, metric.Value, metric.Time))
+			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostID, metric.Name, metric.Value, metric.Time))
 		}
 	} else if optService != "" {
 		err := client.PostServiceMetricValues(optService, metricValues)
 		logger.DieIf(err)
 
 		for _, metric := range metricValues {
-			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%f'", optService, metric.Name, metric.Value, metric.Time))
+			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")
