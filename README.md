@@ -95,7 +95,7 @@ $ mkr hosts --service My-Service --role proxy
 
 ```
 mkr create --status working -R My-Service:db-master mydb001
-mkr update --status maintenance --role My-Service:db-master <hostId>
+mkr update --status maintenance --roleFullname My-Service:db-master <hostId>
 ```
 
 ```
