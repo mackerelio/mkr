@@ -54,7 +54,7 @@ export MACKEREL_APIKEY=<Put your API key>
 ## EXAMPLES
 
 ```
-$ mkr status <hostId>
+mkr status <hostId>
 {
     "id": "2eQGEaLxiYU",
     "name": "myproxy001",
@@ -68,7 +68,7 @@ $ mkr status <hostId>
 ```
 
 ```
-$ mkr hosts --service My-Service --role proxy
+mkr hosts --service My-Service --role proxy
 [
     {
         "id": "2eQGEaLxiYU",
@@ -91,6 +91,15 @@ $ mkr hosts --service My-Service --role proxy
         "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
     },
 ]
+```
+
+`mkr hosts` command has '-f' option to format the output.
+
+```
+mkr hosts -f '{{range .}}{{if (len .Interfaces)}}{{(index .Interfaces 0).IPAddress}}{{end}}{{"\t"}}{{.Name}}{{"\n"}}{{end}}'
+10.0.1.1  myproxy001
+10.0.1.2  myproxy002
+...
 ```
 
 ```
