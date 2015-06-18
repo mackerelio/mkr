@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"text/template"
 
 	"github.com/codegangsta/cli"
 	mkr "github.com/mackerelio/mackerel-client-go"
@@ -59,6 +60,7 @@ var commandHosts = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "List hosts only matched <status>. Multiple choice allow.",
 		},
+		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
 }
@@ -257,7 +259,12 @@ func doHosts(c *cli.Context) {
 	})
 	logger.DieIf(err)
 
-	if isVerbose {
+	format := c.String("format")
+	if format != "" {
+		t := template.Must(template.New("format").Parse(format))
+		err := t.Execute(os.Stdout, hosts)
+		logger.DieIf(err)
+	} else if isVerbose {
 		PrettyPrintJSON(hosts)
 	} else {
 		var hostsFormat []*HostFormat
