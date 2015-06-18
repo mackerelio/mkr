@@ -96,9 +96,10 @@ mkr hosts --service My-Service --role proxy
 `mkr hosts` command has '-f' option to format the output.
 
 ```
-mkr hosts --service My-Service --role proxy -f '{{range .}}{{if (len .Interfaces)}}{{(index .Interfaces 0).IPAddress}}{{end}}{{"\t"}}{{.Name}}{{"\n"}}{{end}}'
+mkr hosts -f '{{range .}}{{if (len .Interfaces)}}{{(index .Interfaces 0).IPAddress}}{{end}}{{"\t"}}{{.Name}}{{"\n"}}{{end}}'
 10.0.1.1  myproxy001
 10.0.1.2  myproxy002
+...
 ```
 
 ```
