@@ -11,20 +11,21 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: C+7AfpfbfomE+k6mKatM51g/9+0FWiwVdLnNpCNpQ4ENQ2AUyudkL3qNCC95u8xB8CksMeyO6P2eATV+KKWKoEecBK36aoVMLvzRdH5k586OAdQ660Y8MVlDBeZbsyAPJwqZwxCadlrxGMzen3s6qhkjfg4RW5tAWze/ReXuuAQ=
+    secure:
+      secure: mWsTGTGxqCf1RaDja0VI7J8cspIHkdJbUyqPXbd3OcczXmC5IccIFo3E2T7uknUdy5aMLWvwsyAWXtZxGeDVjH+J8sqnJPat+FVJBKsNjusufPzGmBg2QFxufHt/3WctH1cINU6IFR2lvhAWjublNt19xzMsArVMqlMept6Rlz4=
   file:
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.exe"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.exe"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.zip"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.exe"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.exe"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.zip"
+  - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.zip"
   skip_cleanup: true
   on:
     repo: mackerelio/mkr
