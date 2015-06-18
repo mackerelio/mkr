@@ -6,6 +6,7 @@ env: PATH=/home/travis/gopath/bin:$PATH
 install:
 - go get github.com/laher/goxc
 script:
+- goxc -t
 - make all
 deploy:
   provider: releases
