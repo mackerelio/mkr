@@ -11,7 +11,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: mWsTGTGxqCf1RaDja0VI7J8cspIHkdJbUyqPXbd3OcczXmC5IccIFo3E2T7uknUdy5aMLWvwsyAWXtZxGeDVjH+J8sqnJPat+FVJBKsNjusufPzGmBg2QFxufHt/3WctH1cINU6IFR2lvhAWjublNt19xzMsArVMqlMept6Rlz4=
+    secure: ABtbzosxVH4zLZJxoDoR4wnjaH4EkZfZS2bDo8zjojELu8Jz1ydB/oPCoRSisUHtVB68AaobTDSO7NBn1myM0U3t2tfbkVL/A2VZnlCSeDE1VnssjWy/6nK3a+HZ212s+aTtlux3vDcBe12yMQJF/mwsP75T8Ktfnga1m+daUVI=
   file:
   - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
   - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
