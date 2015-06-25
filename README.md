@@ -13,7 +13,7 @@ mkr - Command Line Tool For Mackerel in Go.
 # DESCRIPTION
 
 mkr is a command-line interface tool for [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go language.
-mkr helps you to free your daily troublesome server operations and accelarates to leverage Mackerel and the Unix tools.
+mkr helps you to free your daily troublesome server operations and accelerates to leverage Mackerel and the Unix tools.
 mkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
 
 # INSTALLATION
@@ -85,7 +85,7 @@ mkr hosts --service My-Service --role proxy
         "name": "myproxy002",
         "status": "standby",
         "roleFullnames": [
-            "My-Serviceg:proxy"
+            "My-Service:proxy"
         ],
         "isRetired": false,
         "createdAt": "Nov 15, 2014 at 9:41pm (JST)"

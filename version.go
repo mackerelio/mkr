@@ -1,4 +1,4 @@
 package main
 
-// `make build` sets this automaticaly
+// `make build` sets this automatically
 var Version string
