@@ -15,7 +15,7 @@ import (
 	"github.com/mackerelio/mkr/logger"
 )
 
-// cli.Commad object list
+// cli.Command object list
 var Commands = []cli.Command{
 	commandStatus,
 	commandHosts,
@@ -69,12 +69,12 @@ var commandCreate = cli.Command{
 	Name:  "create",
 	Usage: "Create a new host",
 	Description: `
-    Create a new host with staus and/or roleFullname.
+    Create a new host with status and/or roleFullname.
     Request "POST /api/v0/hosts". See http://help-ja.mackerel.io/entry/spec/api/v0#host-create.
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'meintenance')"},
+		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'maintenance')"},
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
 			Value: &cli.StringSlice{},
@@ -107,7 +107,7 @@ var commandThrow = cli.Command{
 	Usage: "Post metric values",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
-    Output format of metric value is compatibled with that of Sensu plugin.
+    Output format of metric value is compatible with that of Sensu plugin.
     Request "POST /api/v0/tsdb". See http://help-ja.mackerel.io/entry/spec/api/v0#metric-value-post.
 `,
 	Action: doThrow,
@@ -129,7 +129,7 @@ var commandFetch = cli.Command{
 		cli.StringSliceFlag{
 			Name:  "name, n",
 			Value: &cli.StringSlice{},
-			Usage: "Fetch metric values identified with <name>. Required. Multiple choise allow. ",
+			Usage: "Fetch metric values identified with <name>. Required. Multiple choice allow. ",
 		},
 	},
 }
