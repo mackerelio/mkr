@@ -170,6 +170,12 @@ mkr retire
 $ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
 ```
 
+## HOW TO DEBUG
+
+```bash
+$ DEBUG=1 mkr ...
+```
+
 # CONTRIBUTION
 
 1. Fork ([https://github.com/mackerelio/mkr/fork](https://github.com/mackerelio/mkr/fork))
