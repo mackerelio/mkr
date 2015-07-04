@@ -352,9 +352,16 @@ func doUpdate(c *cli.Context) {
 			}
 
 			if needUpdateHost {
-				_, err := client.UpdateHost(hostID, &mkr.UpdateHostParam{
+				host, err := client.FindHost(hostID)
+				logger.DieIf(err)
+				meta := host.Meta
+				if optName == "" {
+					optName = host.Name
+				}
+				_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
 					Name:          optName,
 					RoleFullnames: optRoleFullnames,
+					Meta:          meta,
 				})
 				logger.DieIf(err)
 			}
