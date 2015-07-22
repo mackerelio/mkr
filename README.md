@@ -8,13 +8,13 @@ mkr
 [travis]: http://travis-ci.org/mackerelio/mkr
 [godocs]: http://godoc.org/github.com/mackerelio/mkr
 
-mkr - Command Line Tool For Mackerel in Go.
+mkr - Command Line Tool For Mackerel written in Go.
 
 # DESCRIPTION
 
-mkr is a command-line interface tool for [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go language.
-mkr helps you to free your daily troublesome server operations and accelerates to leverage Mackerel and the Unix tools.
-mkr output format is JSON, so you can filter it by JSON processor such as [jq](http://stedolan.github.io/jq/).
+mkr is a command-line interface tool for the [Mackerel API](http://help-ja.mackerel.io/entry/spec/api/v0) written in Go.
+mkr helps to automate tedious daily server operations to best leverage Mackerel's and Unix's tools.
+mkr output format is JSON, so it can be filtered with a JSON processor such as [jq](http://stedolan.github.io/jq/).
 
 # INSTALLATION
 
@@ -45,7 +45,7 @@ $ docker run mackerel/mkr --rm --entrypoint="cat" /go/bin/app > /usr/local/bin/m
 
 # USAGE
 
-Set MACKEREL_APIKEY environment variable, but you don't have to set MACKEREL_APIKEY on your host running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
+First the MACKEREL_APIKEY environment variable must be set. It is not necessary to set the MACKEREL_APIKEY on hosts running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
 
 ```bash
 export MACKEREL_APIKEY=<Put your API key>
@@ -93,7 +93,7 @@ mkr hosts --service My-Service --role proxy
 ]
 ```
 
-`mkr hosts` command has '-f' option to format the output.
+The `mkr hosts` command has an '-f' option to format the output.
 
 ```
 mkr hosts -f '{{range .}}{{if (len .Interfaces)}}{{(index .Interfaces 0).IPAddress}}{{end}}{{"\t"}}{{.Name}}{{"\n"}}{{end}}'
@@ -137,10 +137,9 @@ mkr fetch --name loadavg5 2eQGDXqtoXs
 mkr retire <hostId> ...
 ```
 
-### Examples (on host running mackerel-agent)
+### Examples (on hosts running mackerel-agent)
 
-You can omit specifing <hostId> and MACKEREL_APIKEY.
-mkrrefers /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifing <hostId>.
+Specifing the <hostId> and MACKEREL_APIKEY is not necessary because mkr refers to /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifying manually.
 
 ```
 mkr status
@@ -170,21 +169,15 @@ mkr retire
 $ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
 ```
 
-## HOW TO DEBUG
-
-```bash
-$ DEBUG=1 mkr ...
-```
-
 # CONTRIBUTION
 
 1. Fork ([https://github.com/mackerelio/mkr/fork](https://github.com/mackerelio/mkr/fork))
-1. Create a feature branch
-1. Commit your changes
-1. Rebase your local changes against the master branch
-1. Run test suite with the `go test ./...` command and confirm that it passes
-1. Run `gofmt -s`
-1. Create new Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Rebase your local changes against the master branch
+5. Run test suite with the `go test ./...` command and confirm that it passes
+6. Run `gofmt -s`
+7. Create new Pull Request
 
 
 License
