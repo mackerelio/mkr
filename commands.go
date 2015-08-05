@@ -24,6 +24,7 @@ var Commands = []cli.Command{
 	commandThrow,
 	commandFetch,
 	commandRetire,
+	commandMonitors,
 }
 
 var commandStatus = cli.Command{
@@ -142,6 +143,23 @@ var commandRetire = cli.Command{
     Request POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
+}
+
+var commandMonitors = cli.Command{
+	Name:  "monitors",
+	Usage: "Manipurate monitors",
+	Description: `
+    Manipurate monitor rules.
+    Request "GET /api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0#monitors.
+`,
+	Action: doMonitorsList,
+	Subcommands: []cli.Command{
+		{
+			Name:   "pull",
+			Usage:  "pull rules",
+			Action: doMonitorsPull,
+		},
+	},
 }
 
 func debug(v ...interface{}) {
@@ -477,4 +495,30 @@ func doRetire(c *cli.Context) {
 	}
 
 	wg.Wait()
+}
+
+func doMonitorsList(c *cli.Context) {
+	conffile := c.GlobalString("conf")
+
+	monitors, err := newMackerel(conffile).FindMonitors()
+	logger.DieIf(err)
+
+	PrettyPrintJSON(monitors)
+}
+
+func doMonitorsPull(c *cli.Context) {
+	conffile := c.GlobalString("conf")
+	isVerbose := c.Bool("verbose")
+
+	monitors, err := newMackerel(conffile).FindMonitors()
+	logger.DieIf(err)
+
+	format := c.String("format")
+	if format != "" {
+		t := template.Must(template.New("format").Parse(format))
+		err := t.Execute(os.Stdout, monitors)
+		logger.DieIf(err)
+	} else if isVerbose {
+		PrettyPrintJSON(monitors)
+	}
 }
