@@ -10,6 +10,7 @@ import (
 	"sync"
 	"text/template"
 
+	"github.com/Songmu/prompter"
 	"github.com/codegangsta/cli"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
@@ -142,6 +143,9 @@ var commandRetire = cli.Command{
     Request POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
+	Flags: []cli.Flag{
+		cli.BoolFlag{Name: "force", Usage: "Force retirement without confirmation."},
+	},
 }
 
 func debug(v ...interface{}) {
@@ -451,6 +455,7 @@ func doFetch(c *cli.Context) {
 
 func doRetire(c *cli.Context) {
 	conffile := c.GlobalString("conf")
+	force := c.Bool("force")
 	argHostIDs := c.Args()
 
 	if len(argHostIDs) < 1 {
@@ -459,6 +464,11 @@ func doRetire(c *cli.Context) {
 			cli.ShowCommandHelp(c, "retire")
 			os.Exit(1)
 		}
+	}
+
+	if !force && !prompter.YN("Retire following hosts.\n  "+strings.Join(argHostIDs, "\n  ")+"\nAre you sure?", true) {
+		logger.Log("", "retirement is canceled.")
+		return
 	}
 
 	client := newMackerel(conffile)
