@@ -203,6 +203,7 @@ func doMonitorsDiff(c *cli.Context) {
 	var onlyRemote []*(mkr.Monitor)
 	var onlyLocal []*(mkr.Monitor)
 	var diffs []string
+	counter := map[string]uint64{"diff": 0, "remote": 0, "local": 0}
 
 	for _, remote := range monitorsRemote {
 		found := false
@@ -215,19 +216,23 @@ func doMonitorsDiff(c *cli.Context) {
 			} else if diff != "" {
 				monitorsLocal[i] = nil
 				diffs = append(diffs, diff)
+				counter["diff"]++
 				found = true
 				break
 			}
 		}
 		if found == false {
 			onlyRemote = append(onlyRemote, remote)
+			counter["remote"]++
 		}
 	}
 	for _, local := range monitorsLocal {
 		if local != nil {
 			onlyLocal = append(onlyLocal, local)
+			counter["local"]++
 		}
 	}
+	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", counter["diff"], counter["local"], counter["remote"])
 	for _, diff := range diffs {
 		fmt.Println(diff)
 	}
