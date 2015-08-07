@@ -159,6 +159,11 @@ var commandMonitors = cli.Command{
 			Usage:  "pull rules",
 			Action: doMonitorsPull,
 		},
+		{
+			Name:   "diff",
+			Usage:  "diff rules",
+			Action: doMonitorsDiff,
+		},
 	},
 }
 
@@ -495,30 +500,4 @@ func doRetire(c *cli.Context) {
 	}
 
 	wg.Wait()
-}
-
-func doMonitorsList(c *cli.Context) {
-	conffile := c.GlobalString("conf")
-
-	monitors, err := newMackerel(conffile).FindMonitors()
-	logger.DieIf(err)
-
-	PrettyPrintJSON(monitors)
-}
-
-func doMonitorsPull(c *cli.Context) {
-	conffile := c.GlobalString("conf")
-	isVerbose := c.Bool("verbose")
-
-	monitors, err := newMackerel(conffile).FindMonitors()
-	logger.DieIf(err)
-
-	format := c.String("format")
-	if format != "" {
-		t := template.Must(template.New("format").Parse(format))
-		err := t.Execute(os.Stdout, monitors)
-		logger.DieIf(err)
-	} else if isVerbose {
-		PrettyPrintJSON(monitors)
-	}
 }
