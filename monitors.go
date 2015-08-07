@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -122,6 +123,8 @@ func printMonitor(a *mkr.Monitor, prefix string) {
 	}
 }
 
+var flagNameUniqueness bool
+
 func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 	diff := []string{"  {"}
 	diffNum := 0
@@ -133,13 +136,15 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 		sAType := sA.Type()
 		if sAType.Field(i).Type.String() != "[]string" {
 			name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
+			if name == "id" {
+				continue
+			}
 			diff = appendDiff(diff, name, fA.Interface(), fB.Interface())
 			if fA.Interface() != fB.Interface() {
 				diffNum++
 			}
 		} else {
 			name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
-			//diff = append(diff, fmt.Sprintf("    \"%s\": [", sAType.Field(i).Name))
 			diff = append(diff, fmt.Sprintf("    \"%s\": [", name))
 			sortA := fA.Interface().([]string)
 			sortB := fB.Interface().([]string)
@@ -168,7 +173,6 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 
 	if diffNum > 0 {
 		diff = append(diff, "  },")
-		//fmt.Println(strings.Join(diff, "\n"))
 		return strings.Join(diff, "\n")
 	}
 	return ""
@@ -181,7 +185,7 @@ func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor) (string, bool) {
 	if reflect.DeepEqual(*a, *b) {
 		return "", true
 	}
-	if a.ID == b.ID {
+	if a.ID == b.ID || (flagNameUniqueness == true && a.Name == b.Name) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
@@ -191,13 +195,42 @@ func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor) (string, bool) {
 	return "", false
 }
 
+func validateRules(monitors []*(mkr.Monitor), label string) error {
+
+	// check each monitor
+	for _, m := range monitors {
+		if m.Name == "" {
+			return errors.New("Monitor should have 'Name'")
+		}
+		if m.Type != "host" && m.Type != "service" && m.Type != "external" && m.Type != "passive" {
+			return fmt.Errorf("Unknown type is found: %s", m.Type)
+		}
+	}
+
+	// check name uniqueness
+	names := map[string]bool{}
+	for _, m := range monitors {
+		if names[m.Name] {
+			logger.Log("Warning: ", fmt.Sprintf("Names of %s is not unique.", label))
+			flagNameUniqueness = false
+		}
+		names[m.Name] = true
+	}
+	return nil
+}
+
 func doMonitorsDiff(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 
+	flagNameUniqueness = true
 	monitorsRemote, err := newMackerel(conffile).FindMonitors()
+	logger.DieIf(err)
+	err = validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
 
 	monitorsLocal, err := monitorLoadRules()
+	logger.DieIf(err)
+	err = validateRules(monitorsLocal, "local rules")
 	logger.DieIf(err)
 
 	var onlyRemote []*(mkr.Monitor)
@@ -209,15 +242,13 @@ func doMonitorsDiff(c *cli.Context) {
 		found := false
 		for i, local := range monitorsLocal {
 			diff, isSame := isSameMonitor(remote, local)
-			if isSame {
+			if isSame || diff != "" {
 				monitorsLocal[i] = nil
 				found = true
-				break
-			} else if diff != "" {
-				monitorsLocal[i] = nil
-				diffs = append(diffs, diff)
-				counter["diff"]++
-				found = true
+				if diff != "" {
+					diffs = append(diffs, diff)
+					counter["diff"]++
+				}
 				break
 			}
 		}
@@ -232,6 +263,7 @@ func doMonitorsDiff(c *cli.Context) {
 			counter["local"]++
 		}
 	}
+
 	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", counter["diff"], counter["local"], counter["remote"])
 	for _, diff := range diffs {
 		fmt.Println(diff)
