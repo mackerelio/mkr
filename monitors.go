@@ -16,6 +16,37 @@ import (
 	"github.com/mackerelio/mkr/logger"
 )
 
+var commandMonitors = cli.Command{
+	Name:  "monitors",
+	Usage: "Manipurate monitors",
+	Description: `
+    Manipurate monitor rules.
+    Request "GET /api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0#monitors.
+`,
+	Action: doMonitorsList,
+	Subcommands: []cli.Command{
+		{
+			Name:   "pull",
+			Usage:  "pull rules",
+			Action: doMonitorsPull,
+		},
+		{
+			Name:   "diff",
+			Usage:  "diff rules",
+			Action: doMonitorsDiff,
+		},
+		{
+			Name:   "push",
+			Usage:  "pull rules",
+			Action: doMonitorsPush,
+			Flags: []cli.Flag{
+				cli.BoolFlag{Name: "dryRun, d", Usage: "Dry Run."},
+				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+			},
+		},
+	},
+}
+
 func monitorSaveRules(rules []*(mkr.Monitor)) error {
 	file, err := os.Create("monitors.json")
 	if err != nil {
