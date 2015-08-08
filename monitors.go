@@ -24,10 +24,12 @@ func monitorSaveRules(rules []*(mkr.Monitor)) error {
 	defer file.Close()
 
 	monitors := map[string]interface{}{"monitors": rules}
-	data, err := json.MarshalIndent(monitors, "", "    ")
+	dataRaw, err := json.MarshalIndent(monitors, "", "    ")
 	logger.DieIf(err)
+	data := strings.Replace(string(dataRaw), "\\u003c", "<", -1)
+	data = strings.Replace(data, "\\u003e", ">", -1)
 
-	_, err = file.WriteString(string(data))
+	_, err = file.WriteString(data)
 	if err != nil {
 		return err
 	}
@@ -123,8 +125,6 @@ func printMonitor(a *mkr.Monitor, prefix string) {
 	}
 }
 
-var flagNameUniqueness bool
-
 func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 	diff := []string{"  {"}
 	diffNum := 0
@@ -178,7 +178,7 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 	return ""
 }
 
-func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor) (string, bool) {
+func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor, flagNameUniqueness bool) (string, bool) {
 	if a == nil || b == nil {
 		return "", false
 	}
@@ -195,15 +195,16 @@ func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor) (string, bool) {
 	return "", false
 }
 
-func validateRules(monitors []*(mkr.Monitor), label string) error {
+func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 
+	flagNameUniqueness := true
 	// check each monitor
 	for _, m := range monitors {
 		if m.Name == "" {
-			return errors.New("Monitor should have 'Name'")
+			return false, errors.New("Monitor should have 'Name'")
 		}
 		if m.Type != "host" && m.Type != "service" && m.Type != "external" && m.Type != "passive" {
-			return fmt.Errorf("Unknown type is found: %s", m.Type)
+			return false, fmt.Errorf("Unknown type is found: %s", m.Type)
 		}
 	}
 
@@ -216,62 +217,80 @@ func validateRules(monitors []*(mkr.Monitor), label string) error {
 		}
 		names[m.Name] = true
 	}
-	return nil
+	return flagNameUniqueness, nil
 }
 
-func doMonitorsDiff(c *cli.Context) {
+type monitorDiffPair struct {
+	remote *mkr.Monitor
+	local  *mkr.Monitor
+}
+
+type monitorDiff struct {
+	onlyRemote []*(mkr.Monitor)
+	onlyLocal  []*(mkr.Monitor)
+	diff       []*monitorDiffPair
+}
+
+func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	conffile := c.GlobalString("conf")
 
-	flagNameUniqueness = true
+	var monitorDiff monitorDiff
+
 	monitorsRemote, err := newMackerel(conffile).FindMonitors()
 	logger.DieIf(err)
-	err = validateRules(monitorsRemote, "remote rules")
+	flagNameUniquenessRemote, err := validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
 
 	monitorsLocal, err := monitorLoadRules()
 	logger.DieIf(err)
-	err = validateRules(monitorsLocal, "local rules")
+	flagNameUniquenessLocal, err := validateRules(monitorsLocal, "local rules")
 	logger.DieIf(err)
 
-	var onlyRemote []*(mkr.Monitor)
-	var onlyLocal []*(mkr.Monitor)
-	var diffs []string
-	counter := map[string]uint64{"diff": 0, "remote": 0, "local": 0}
+	flagNameUniqueness := flagNameUniquenessLocal && flagNameUniquenessRemote
 
 	for _, remote := range monitorsRemote {
 		found := false
 		for i, local := range monitorsLocal {
-			diff, isSame := isSameMonitor(remote, local)
+			diff, isSame := isSameMonitor(remote, local, flagNameUniqueness)
 			if isSame || diff != "" {
 				monitorsLocal[i] = nil
 				found = true
 				if diff != "" {
-					diffs = append(diffs, diff)
-					counter["diff"]++
+					monitorDiff.diff = append(monitorDiff.diff, &monitorDiffPair{remote, local})
 				}
 				break
 			}
 		}
 		if found == false {
-			onlyRemote = append(onlyRemote, remote)
-			counter["remote"]++
+			monitorDiff.onlyRemote = append(monitorDiff.onlyRemote, remote)
 		}
 	}
 	for _, local := range monitorsLocal {
 		if local != nil {
-			onlyLocal = append(onlyLocal, local)
-			counter["local"]++
+			monitorDiff.onlyLocal = append(monitorDiff.onlyLocal, local)
 		}
 	}
 
-	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", counter["diff"], counter["local"], counter["remote"])
+	return monitorDiff
+}
+
+func doMonitorsDiff(c *cli.Context) {
+	monitorDiff := checkMonitorsDiff(c)
+
+	var diffs []string
+	for _, d := range monitorDiff.diff {
+		diffs = append(diffs, diffMonitor(d.remote, d.local))
+	}
+
+	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", len(monitorDiff.diff), len(monitorDiff.onlyLocal), len(monitorDiff.onlyRemote))
 	for _, diff := range diffs {
 		fmt.Println(diff)
 	}
-	for _, m := range onlyRemote {
+	for _, m := range monitorDiff.onlyRemote {
 		printMonitor(m, "-")
 	}
-	for _, m := range onlyLocal {
+	for _, m := range monitorDiff.onlyLocal {
 		printMonitor(m, "+")
 	}
+
 }
