@@ -292,5 +292,42 @@ func doMonitorsDiff(c *cli.Context) {
 	for _, m := range monitorDiff.onlyLocal {
 		printMonitor(m, "+")
 	}
+}
+
+func doMonitorsPush(c *cli.Context) {
+	monitorDiff := checkMonitorsDiff(c)
+	isDryRun := c.Bool("dryRun")
+	isVerbose := c.Bool("verbose")
+
+	conffile := c.GlobalString("conf")
+	client := newMackerel(conffile)
+	if isVerbose {
+		client.Verbose = true
+	}
+
+	for _, m := range monitorDiff.onlyLocal {
+		logger.Log("info", "Create a new rule.")
+		printMonitor(m, "")
+		if !isDryRun {
+			_, err := client.CreateMonitor(m)
+			logger.DieIf(err)
+		}
+	}
+	for _, m := range monitorDiff.onlyRemote {
+		logger.Log("info", "Delete a rule.")
+		printMonitor(m, "")
+		if !isDryRun {
+			_, err := client.DeleteMonitor(m.ID)
+			logger.DieIf(err)
+		}
+	}
+	for _, d := range monitorDiff.diff {
+		logger.Log("info", "Update a rule.")
+		printMonitor(d.local, "")
+		if !isDryRun {
+			_, err := client.UpdateMonitor(d.remote.ID, d.local)
+			logger.DieIf(err)
+		}
+	}
 
 }

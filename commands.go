@@ -164,6 +164,15 @@ var commandMonitors = cli.Command{
 			Usage:  "diff rules",
 			Action: doMonitorsDiff,
 		},
+		{
+			Name:   "push",
+			Usage:  "pull rules",
+			Action: doMonitorsPush,
+			Flags: []cli.Flag{
+				cli.BoolFlag{Name: "dryRun, d", Usage: "Dry Run."},
+				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+			},
+		},
 	},
 }
 
