@@ -29,26 +29,38 @@ var commandMonitors = cli.Command{
 			Name:   "pull",
 			Usage:  "pull rules",
 			Action: doMonitorsPull,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+			},
 		},
 		{
 			Name:   "diff",
 			Usage:  "diff rules",
 			Action: doMonitorsDiff,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+			},
 		},
 		{
 			Name:   "push",
 			Usage:  "pull rules",
 			Action: doMonitorsPush,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "dryRun, d", Usage: "Dry Run."},
+				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.BoolFlag{Name: "dryrun, d", Usage: "Dry Run."},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
 	},
 }
 
-func monitorSaveRules(rules []*(mkr.Monitor)) error {
-	file, err := os.Create("monitors.json")
+func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
+	filePath := "monitors.json"
+	if optFilePath != "" {
+		filePath = optFilePath
+	}
+	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,8 +79,13 @@ func monitorSaveRules(rules []*(mkr.Monitor)) error {
 	return nil
 }
 
-func monitorLoadRules() ([]*(mkr.Monitor), error) {
-	buff, err := ioutil.ReadFile("monitors.json")
+func monitorLoadRules(optFilePath string) ([]*(mkr.Monitor), error) {
+	filePath := "monitors.json"
+	if optFilePath != "" {
+		filePath = optFilePath
+	}
+
+	buff, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -96,11 +113,12 @@ func doMonitorsList(c *cli.Context) {
 func doMonitorsPull(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
+	filePath := c.String("filepath")
 
 	monitors, err := newMackerel(conffile).FindMonitors()
 	logger.DieIf(err)
 
-	monitorSaveRules(monitors)
+	monitorSaveRules(monitors, filePath)
 
 	if isVerbose {
 		PrettyPrintJSON(monitors)
@@ -264,6 +282,7 @@ type monitorDiff struct {
 
 func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	conffile := c.GlobalString("conf")
+	filePath := c.String("filepath")
 
 	var monitorDiff monitorDiff
 
@@ -272,7 +291,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	flagNameUniquenessRemote, err := validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
 
-	monitorsLocal, err := monitorLoadRules()
+	monitorsLocal, err := monitorLoadRules(filePath)
 	logger.DieIf(err)
 	flagNameUniquenessLocal, err := validateRules(monitorsLocal, "local rules")
 	logger.DieIf(err)
