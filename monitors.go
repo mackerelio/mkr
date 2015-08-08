@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -249,10 +248,30 @@ func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 	flagNameUniqueness := true
 	// check each monitor
 	for _, m := range monitors {
-		if m.Name == "" {
-			return false, errors.New("Monitor should have 'Name'")
+		v := reflect.ValueOf(m).Elem()
+		for _, f := range []string{"Name", "Type"} {
+			vf := v.FieldByName(f)
+			if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
+				return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+			}
 		}
-		if m.Type != "host" && m.Type != "service" && m.Type != "external" && m.Type != "passive" {
+		switch m.Type {
+		case "host", "service":
+			for _, f := range []string{"Metric"} {
+				vf := v.FieldByName(f)
+				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
+					return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+				}
+			}
+		case "external":
+			for _, f := range []string{"URL"} {
+				vf := v.FieldByName(f)
+				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
+					return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+				}
+			}
+		case "passive":
+		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.Type)
 		}
 	}
