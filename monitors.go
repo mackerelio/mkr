@@ -185,7 +185,7 @@ func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor, flagNameUniqueness bool) (str
 	if reflect.DeepEqual(*a, *b) {
 		return "", true
 	}
-	if a.ID == b.ID || (flagNameUniqueness == true && a.Name == b.Name) {
+	if a.ID == b.ID || (flagNameUniqueness == true && b.ID == "" && a.Name == b.Name) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
