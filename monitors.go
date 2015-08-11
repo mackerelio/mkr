@@ -125,6 +125,11 @@ func doMonitorsPull(c *cli.Context) {
 	if isVerbose {
 		PrettyPrintJSON(monitors)
 	}
+
+	if filePath == "" {
+		filePath = "monitors.json"
+	}
+	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
 }
 
 func appendDiff(src []string, name string, a interface{}, b interface{}) []string {
