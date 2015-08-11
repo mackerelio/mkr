@@ -20,34 +20,37 @@ var commandMonitors = cli.Command{
 	Usage: "Manipurate monitors",
 	Description: `
     Manipurate monitor rules.
-    Request "GET /api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0#monitors.
+    Request APIs under "/api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0 .
 `,
 	Action: doMonitorsList,
 	Subcommands: []cli.Command{
 		{
-			Name:   "pull",
-			Usage:  "pull rules",
-			Action: doMonitorsPull,
+			Name:        "pull",
+			Usage:       "pull rules",
+			Description: "Pull monitor rules from Mackerel server and save them to a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
+			Action:      doMonitorsPull,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
 		{
-			Name:   "diff",
-			Usage:  "diff rules",
-			Action: doMonitorsDiff,
+			Name:        "diff",
+			Usage:       "diff rules",
+			Description: "Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
+			Action:      doMonitorsDiff,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 			},
 		},
 		{
-			Name:   "push",
-			Usage:  "pull rules",
-			Action: doMonitorsPush,
+			Name:        "push",
+			Usage:       "push rules",
+			Description: "Push monitor rules, which are stored in a file, to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
+			Action:      doMonitorsPush,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "dryrun, d", Usage: "Dry Run."},
+				cli.BoolFlag{Name: "dryrun, d", Usage: "Show which apis are called, but not execute."},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},

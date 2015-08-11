@@ -182,13 +182,14 @@ type commandDoc struct {
 }
 
 var commandDocs = map[string]commandDoc{
-	"status": {"", "[-v|verbose] <hostId>"},
-	"hosts":  {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
-	"create": {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update": {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
-	"throw":  {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
-	"fetch":  {"", "[--name | -n <metricName>] hostIds..."},
-	"retire": {"", "hostIds..."},
+	"status":   {"", "[-v|verbose] <hostId>"},
+	"hosts":    {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
+	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
+	"update":   {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
+	"throw":    {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
+	"fetch":    {"", "[--name | -n <metricName>] hostIds..."},
+	"retire":   {"", "hostIds..."},
+	"monitors": {"", "[push [--dryRun | -d] [--filepath | -F <file>] [--verbose | -v] | diff [--filepath | -F <file>] | pull [--filepath | -F <file>]]"},
 }
 
 // Makes template conditionals to generate per-command documents.
@@ -211,6 +212,14 @@ USAGE:
     mkr ` + parentTemplate + `{{.Name}} ` + argsTemplate + `
 {{if (len .Description)}}
 DESCRIPTION: {{.Description}}
+{{end}}{{if (len .Subcommands)}}
+COMMANDS:
+    {{range .Subcommands}}{{.Name}}
+      {{.Description}}{{if (len .Flags)}}
+
+        {{range .Flags}}{{.}}
+        {{end}}{{end}}
+    {{end}}
 {{end}}{{if (len .Flags)}}
 OPTIONS:
     {{range .Flags}}{{.}}
