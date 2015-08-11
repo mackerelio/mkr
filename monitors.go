@@ -270,7 +270,7 @@ func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 					return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
 				}
 			}
-		case "passive":
+		case "connectivity":
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.Type)
 		}
