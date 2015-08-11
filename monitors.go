@@ -40,6 +40,7 @@ var commandMonitors = cli.Command{
 			Description: "Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsDiff,
 			Flags: []cli.Flag{
+				cli.BoolFlag{Name: "exitcode, e", Usage: "Make the mkr exit with codes of 1 if there are differences and 0 if no differences. This similar to diff(1)"},
 				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 			},
 		},
@@ -353,6 +354,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 
 func doMonitorsDiff(c *cli.Context) {
 	monitorDiff := checkMonitorsDiff(c)
+	isExitCode := c.Bool("exitcode")
 
 	var diffs []string
 	for _, d := range monitorDiff.diff {
@@ -360,14 +362,21 @@ func doMonitorsDiff(c *cli.Context) {
 	}
 
 	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", len(monitorDiff.diff), len(monitorDiff.onlyLocal), len(monitorDiff.onlyRemote))
+	noDiff := true
 	for _, diff := range diffs {
 		fmt.Println(diff)
+		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyRemote {
 		printMonitor(m, "-")
+		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyLocal {
 		printMonitor(m, "+")
+		noDiff = false
+	}
+	if isExitCode == true && noDiff == false {
+		os.Exit(1)
 	}
 }
 
