@@ -17,14 +17,10 @@ deploy:
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.exe"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.exe"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_amd64.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_windows_386.zip"
   skip_cleanup: true
   on:
     repo: mackerelio/mkr
