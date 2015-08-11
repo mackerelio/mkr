@@ -30,7 +30,7 @@ var commandMonitors = cli.Command{
 			Description: "Pull monitor rules from Mackerel server and save them to a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsPull,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
@@ -40,8 +40,8 @@ var commandMonitors = cli.Command{
 			Description: "Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsDiff,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "exitcode, e", Usage: "Make the mkr exit with codes of 1 if there are differences and 0 if no differences. This similar to diff(1)"},
-				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.BoolFlag{Name: "exit-code, e", Usage: "Make the mkr exit with codes of 1 if there are differences and 0 if no differences. This similar to diff(1)"},
+				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 			},
 		},
 		{
@@ -50,8 +50,8 @@ var commandMonitors = cli.Command{
 			Description: "Push monitor rules, which are stored in a file, to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsPush,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "filepath, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "dryrun, d", Usage: "Show which apis are called, but not execute."},
+				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.BoolFlag{Name: "dry-run, d", Usage: "Show which apis are called, but not execute."},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
@@ -116,7 +116,7 @@ func doMonitorsList(c *cli.Context) {
 func doMonitorsPull(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
-	filePath := c.String("filepath")
+	filePath := c.String("file-path")
 
 	monitors, err := newMackerel(conffile).FindMonitors()
 	logger.DieIf(err)
@@ -310,7 +310,7 @@ type monitorDiff struct {
 
 func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	conffile := c.GlobalString("conf")
-	filePath := c.String("filepath")
+	filePath := c.String("file-path")
 
 	var monitorDiff monitorDiff
 
@@ -354,7 +354,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 
 func doMonitorsDiff(c *cli.Context) {
 	monitorDiff := checkMonitorsDiff(c)
-	isExitCode := c.Bool("exitcode")
+	isExitCode := c.Bool("exit-code")
 
 	var diffs []string
 	for _, d := range monitorDiff.diff {
@@ -382,7 +382,7 @@ func doMonitorsDiff(c *cli.Context) {
 
 func doMonitorsPush(c *cli.Context) {
 	monitorDiff := checkMonitorsDiff(c)
-	isDryRun := c.Bool("dryrun")
+	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
 
 	conffile := c.GlobalString("conf")
