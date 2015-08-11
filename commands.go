@@ -189,7 +189,7 @@ var commandDocs = map[string]commandDoc{
 	"throw":    {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
 	"fetch":    {"", "[--name | -n <metricName>] hostIds..."},
 	"retire":   {"", "hostIds..."},
-	"monitors": {"", "[push [--dryRun | -d] [--filepath | -F <file>] [--verbose | -v] | diff [--filepath | -F <file>] | pull [--filepath | -F <file>]]"},
+	"monitors": {"", "[push [--dryrun | -d] [--filepath | -F <file>] [--verbose | -v] | diff [--filepath | -F <file>] | pull [--filepath | -F <file>]]"},
 }
 
 // Makes template conditionals to generate per-command documents.
