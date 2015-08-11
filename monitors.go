@@ -368,7 +368,7 @@ func doMonitorsDiff(c *cli.Context) {
 
 func doMonitorsPush(c *cli.Context) {
 	monitorDiff := checkMonitorsDiff(c)
-	isDryRun := c.Bool("dryRun")
+	isDryRun := c.Bool("dryrun")
 	isVerbose := c.Bool("verbose")
 
 	conffile := c.GlobalString("conf")
