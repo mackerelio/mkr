@@ -252,25 +252,25 @@ func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 	// check each monitor
 	for _, m := range monitors {
 		v := reflect.ValueOf(m).Elem()
-		for _, f := range []string{"Name", "Type"} {
+		for _, f := range []string{"Type"} {
 			vf := v.FieldByName(f)
 			if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-				return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+				return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 			}
 		}
 		switch m.Type {
 		case "host", "service":
-			for _, f := range []string{"Metric"} {
+			for _, f := range []string{"Name", "Metric"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 		case "external":
-			for _, f := range []string{"URL"} {
+			for _, f := range []string{"Name", "URL"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor should have '%s': %s", f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 		case "connectivity":
