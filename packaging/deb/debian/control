@@ -1,0 +1,11 @@
+Source: mkr
+Section: admin
+Priority: extra
+Maintainer: Hatena
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.4
+Homepage: https://mackerel.io
+
+Package: mkr
+Architecture: all
+Description: macekrel.io api client tool
