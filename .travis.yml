@@ -10,6 +10,8 @@ install:
 script:
 - goxc -t
 - make all
+after_success:
+- script/travis/autotag.sh
 before_deploy:
 - make rpm deb
 deploy:
