@@ -13,4 +13,4 @@ chmod 600 $deploykey
 git config --global user.email "mackerel-developers@hatena.ne.jp"
 git config --global user.name  "mackerel"
 git remote set-url origin git@github.com:mackerelio/mkr.git
-tool/autotag
+script/autotag
