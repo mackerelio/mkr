@@ -40,8 +40,11 @@ deps:
 testdeps:
 	go get -d -v -t .
 
+release:
+	script/releng
+
 clean:
 	rm -fr build
 	go clean
 
-.PHONY: test build cross lint deps testdeps clean deb rpm
+.PHONY: test build cross lint deps testdeps clean deb rpm release
