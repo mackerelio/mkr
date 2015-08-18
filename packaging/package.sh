@@ -14,7 +14,7 @@ IMAGE_RPM="hatena/mkr_rpm"
 NAME="mkr"
 REPOSITORY_DIR="/go/src/github.com/mackerelio/mkr"
 
-# UNIXTIMEつけて Data volume コンテナを使いまわさないようにする
+# UNIXTIME to ignore cache
 UNIXTIME=$(date '+%s')
 DATA_VOLUME_CONTAINER=${DATA_VOLUME_CONTAINER:-"$PACKAGE-src-$UNIXTIME"}
 
