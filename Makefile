@@ -25,14 +25,26 @@ cross: deps
 	cp -p $(PWD)/snapshot/darwin_amd64/mkr $(PWD)/snapshot/mkr_darwin_amd64
 	cp -p $(PWD)/snapshot/darwin_386/mkr $(PWD)/snapshot/mkr_darwin_386
 
+rpm:
+	GOOS=linux GOARCH=386 make build
+	rpmbuild --define "_builddir `pwd`" -ba packaging/rpm/mkr.spec
+
+deb:
+	GOOS=linux GOARCH=386 make build
+	cp $(BIN) packaging/deb/debian/$(BIN).bin
+	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
+
 deps:
 	go get -d -v .
 
 testdeps:
 	go get -d -v -t .
 
+release:
+	script/releng
+
 clean:
 	rm -fr build
 	go clean
 
-.PHONY: test build cross lint deps testdeps clean
+.PHONY: test build cross lint deps testdeps clean deb rpm release

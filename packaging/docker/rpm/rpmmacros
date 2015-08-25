@@ -1,0 +1,6 @@
+%_topdir    /rpm
+%_builddir  %{_topdir}/BUILD
+%_rpmdir    %{_topdir}/RPMS
+%_sourcedir %{_topdir}/SOURCES
+%_specdir   %{_topdir}/SPECS
+%_srcrpmdir %{_topdir}/SRPMS
