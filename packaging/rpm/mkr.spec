@@ -42,5 +42,8 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Fri Aug 28 2015 <tomohiro68@gmail.com> - 0.4.1-1
+- Create deb/rpm package for Linux release (by Sixeight)
+
 * Fri Aug 14 2015 <sixeight@hatena.ne.jp> - 0.4.0-1
 - first release for rpm

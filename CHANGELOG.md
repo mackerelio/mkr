@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 (2015-08-28)
+
+* Create deb/rpm package for Linux release #11 (Sixeight)
+
+
 ## 0.3.0 (2015-07-05)
 
 * [feature] add --conf option to specify conf file path #4 (Sixeight)
