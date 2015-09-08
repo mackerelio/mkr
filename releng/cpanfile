@@ -1,0 +1,13 @@
+requires "Carp";
+requires "Exporter";
+requires "ExtUtils::MakeMaker";
+requires "File::Temp";
+requires "HTTP::Tiny";
+requires "IO::Socket::SSL";
+requires "JSON::PP";
+requires "POSIX";
+requires "Term::ANSIColor";
+requires "Test::Exception";
+requires "Test::Mock::Guard";
+requires "Test::More";
+requires "Time::Piece";
