@@ -1,8 +1,8 @@
 mkr
 ===
-[![Latest Version](https://img.shields.io/github/release/mackerelio/mkr.svg)][release]
-[![Build Status](https://img.shields.io/travis/mackerelio/mkr.svg)][travis]
-[![Go Documentation](https://img.shields.io/badge/go-documentation-blue.svg)][godocs]
+[![Latest Version](https://img.shields.io/github/release/mackerelio/mkr.svg?style=flat-square)][release]
+[![Build Status](https://img.shields.io/travis/mackerelio/mkr.svg?style=flat-square)][travis]
+[![Go Documentation](https://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)][godocs]
 
 [release]: https://github.com/mackerelio/mkr/releases
 [travis]: http://travis-ci.org/mackerelio/mkr
