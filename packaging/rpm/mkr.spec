@@ -42,6 +42,8 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Sep 14 2015 <itchyny@hatena.ne.jp> - 0.5.0-1
+
 * Fri Aug 28 2015 <tomohiro68@gmail.com> - 0.4.1-1
 - Create deb/rpm package for Linux release (by Sixeight)
 
