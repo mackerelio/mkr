@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0 (2015-09-14)
+
+ * add fields for external URL monitors (stanaka)
+
 ## 0.4.1 (2015-08-28)
 
 * Create deb/rpm package for Linux release #11 (Sixeight)

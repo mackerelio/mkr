@@ -1,3 +1,10 @@
+mkr (0.5.0-1) stable; urgency=low
+
+ * add fields for external URL monitors (by stanaka)
+   <https://github.com/mackerelio/mackerel-client-go/pull/7>
+
+ -- itchyny <itchyny@hatena.ne.jp>  Mon, 14 Sep 2015 11:36:46 +0900
+
 mkr (0.4.1-1) stable; urgency=low
 
   * Create deb/rpm package for Linux release (by Sixeight)

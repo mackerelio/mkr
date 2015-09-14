@@ -5,7 +5,7 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.4.1
+Version:   0.5.0
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Sep 14 2015 <itchyny@hatena.ne.jp> - 0.5.0-1
+- add fields for external URL monitors (by stanaka)
+
 * Fri Aug 28 2015 <tomohiro68@gmail.com> - 0.4.1-1
 - Create deb/rpm package for Linux release (by Sixeight)
 

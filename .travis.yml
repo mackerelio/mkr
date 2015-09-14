@@ -19,8 +19,8 @@ deploy:
   api_key:
     secure: K7cIFoRCn4DrmSysTtyul14WJdY858y6MQM5hzTcIZrQnCXZZUVaBoNt7U7IiS/5rj41hiDT4635SiSxl/BIgahsUVVgzL7VRieMb5DRzjiWc8VfqmYlLwkGudaUt2FidlbuRuAHJF2PpdOTrMELJnTq4/Pva2/LkObrTAG2uok=
   file:
-    - "/home/travis/rpmbuild/RPMS/noarch/mkr-0.4.1-1.noarch.rpm"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/packaging/mkr_0.4.1-1_all.deb"
+    - "/home/travis/rpmbuild/RPMS/noarch/mkr-0.5.0-1.noarch.rpm"
+    - "/home/travis/gopath/src/github.com/mackerelio/mkr/packaging/mkr_0.5.0-1_all.deb"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
