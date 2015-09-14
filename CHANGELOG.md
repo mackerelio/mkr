@@ -2,7 +2,7 @@
 
 ## 0.5.0 (2015-09-14)
 
-
+ * add fields for external monitors (stanaka)
 
 ## 0.4.1 (2015-08-28)
 
