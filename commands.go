@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"text/template"
 
 	"github.com/Songmu/prompter"
@@ -354,12 +353,7 @@ func doUpdate(c *cli.Context) {
 
 	client := newMackerel(conffile)
 
-	var wg sync.WaitGroup
 	for _, hostID := range argHostIDs {
-		wg.Add(1)
-		go func(hostID string) {
-			defer wg.Done()
-
 			if needUpdateHostStatus {
 				err := client.UpdateHostStatus(hostID, optStatus)
 				logger.DieIf(err)
@@ -384,10 +378,7 @@ func doUpdate(c *cli.Context) {
 			}
 
 			logger.Log("updated", hostID)
-		}(hostID)
 	}
-
-	wg.Wait()
 }
 
 func doThrow(c *cli.Context) {
@@ -486,18 +477,10 @@ func doRetire(c *cli.Context) {
 
 	client := newMackerel(conffile)
 
-	var wg sync.WaitGroup
 	for _, hostID := range argHostIDs {
-		wg.Add(1)
-		go func(hostID string) {
-			defer wg.Done()
+		err := client.RetireHost(hostID)
+		logger.DieIf(err)
 
-			err := client.RetireHost(hostID)
-			logger.DieIf(err)
-
-			logger.Log("retired", hostID)
-		}(hostID)
+		logger.Log("retired", hostID)
 	}
-
-	wg.Wait()
 }
