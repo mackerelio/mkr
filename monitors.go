@@ -135,16 +135,20 @@ func doMonitorsPull(c *cli.Context) {
 
 func isEmpty(a interface{}) bool {
 	switch a.(type) {
-	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		if a.(uint64) == 0 {
+	case int, int8, int16, int32, int64:
+		if reflect.ValueOf(a).Int() == 0 {
+			return true
+		}
+	case uint, uint8, uint16, uint32, uint64:
+		if reflect.ValueOf(a).Uint() == 0 {
 			return true
 		}
 	case float32, float64:
-		if a.(float64) == 0.0 {
+		if reflect.ValueOf(a).Float() == 0.0 {
 			return true
 		}
 	case string:
-		if a.(string) == "" {
+		if reflect.ValueOf(a).String() == "" {
 			return true
 		}
 	}
