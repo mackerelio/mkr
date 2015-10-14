@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0 (2015-10-14)
+
+* Fix update command bug about overwriting hostname #17 (y_uuki) 
+* Stop the parallel request sending temporarily #18 (y_uuki)
+
 ## 0.5.0 (2015-09-14)
 
  * add fields for external URL monitors (stanaka)
