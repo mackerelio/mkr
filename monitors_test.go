@@ -38,7 +38,7 @@ func TestDiffMonitors(t *testing.T) {
 
 	ret := diffMonitor(a, b)
 
-	zz := []string{
+	correct := strings.Join([]string{
 		"  {",
 		"   \"name\": \"foo\",",
 		"   \"type\": \"external\",",
@@ -47,10 +47,10 @@ func TestDiffMonitors(t *testing.T) {
 		"-  \"responseTimeCritical\": 1000.000000,",
 		"+  \"responseTimeCritical\": 0.000000,",
 		"  },",
-	}
+	}, "\n")
 
-	if ret != strings.Join(zz, "\n") {
-		t.Errorf("should validate the rule: %s\n%s", ret, strings.Join(zz, "\n"))
+	if ret != correct {
+		t.Errorf("should validate the rule: %s\nbut result: %s", correct, ret)
 	}
 
 }
