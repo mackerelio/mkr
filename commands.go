@@ -369,11 +369,14 @@ func doUpdate(c *cli.Context) {
 				host, err := client.FindHost(hostID)
 				logger.DieIf(err)
 				meta := host.Meta
+				name := ""
 				if optName == "" {
-					optName = host.Name
+					name = host.Name
+				} else {
+					name = optName
 				}
 				_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
-					Name:          optName,
+					Name:          name,
 					RoleFullnames: optRoleFullnames,
 					Meta:          meta,
 				})
