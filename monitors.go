@@ -133,21 +133,47 @@ func doMonitorsPull(c *cli.Context) {
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
 }
 
+func isEmpty(a interface{}) bool {
+	switch a.(type) {
+	case int, int8, int16, int32, int64:
+		if reflect.ValueOf(a).Int() == 0 {
+			return true
+		}
+	case uint, uint8, uint16, uint32, uint64:
+		if reflect.ValueOf(a).Uint() == 0 {
+			return true
+		}
+	case float32, float64:
+		if reflect.ValueOf(a).Float() == 0.0 {
+			return true
+		}
+	case string:
+		if reflect.ValueOf(a).String() == "" {
+			return true
+		}
+	}
+	return false
+}
+
 func appendDiff(src []string, name string, a interface{}, b interface{}) []string {
-	diff := []string{}
+	diff := src
 	aType := reflect.TypeOf(a).String()
 	format := "\"%s\""
+	isAEmpty := isEmpty(a)
+	isBEmpty := isEmpty(b)
 	switch aType {
 	case "uint64":
 		format = "%d"
 	case "float64":
 		format = "%f"
 	}
-	if b != nil && a != b {
-		diff = append(src, fmt.Sprintf("-  \"%s\": "+format+",", name, a))
-		diff = append(diff, fmt.Sprintf("+  \"%s\": "+format+",", name, b))
-	} else {
-		diff = append(src, fmt.Sprintf("   \"%s\": "+format+",", name, a))
+	if isAEmpty == false || isBEmpty == false {
+		if a != b {
+			diff = append(diff, fmt.Sprintf("-  \"%s\": "+format+",", name, a))
+			diff = append(diff, fmt.Sprintf("+  \"%s\": "+format+",", name, b))
+		} else {
+			diff = append(diff, fmt.Sprintf("   \"%s\": "+format+",", name, a))
+		}
 	}
 	return diff
 }
@@ -201,6 +227,9 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 				diffNum++
 			}
 		} else {
+			if len(fA.Interface().([]string)) == 0 && len(fB.Interface().([]string)) == 0 {
+				continue
+			}
 			name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
 			diff = append(diff, fmt.Sprintf("    \"%s\": [", name))
 			sortA := fA.Interface().([]string)
