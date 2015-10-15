@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0 (2015-10-14)
+## 0.6.0 (2015-10-15)
 
 * Fix update command bug about overwriting hostname #17 (y_uuki) 
 * Stop the parallel request sending temporarily #18 (y_uuki)
