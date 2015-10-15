@@ -1,3 +1,14 @@
+mkr (0.6.0-1) stable; urgency=low
+
+ * Fix update command bug about overwriting hostname (by y_uuki)
+   <https://github.com/mackerelio/mkr/pull/17>
+ * Stop the parallel request sending temporarily (by y_uuki)
+   <https://github.com/mackerelio/mkr/pull/18>
+ * Suppress to display empty fields when mkr monitors diff (by stanaka)
+   <https://github.com/mackerelio/mkr/pull/20>
+
+ -- itchyny <itchyny@hatena.ne.jp>  Thu, 15 Oct 2015 12:40:00 +0900
+
 mkr (0.5.0-1) stable; urgency=low
 
  * add fields for external URL monitors (by stanaka)
