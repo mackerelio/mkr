@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -52,5 +53,16 @@ func TestDiffMonitors(t *testing.T) {
 	if ret != correct {
 		t.Errorf("should validate the rule: %s\nbut result: %s", correct, ret)
 	}
+
+}
+
+func TestStringifyMonitor(t *testing.T) {
+	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
+
+	if false {
+		t.Errorf("somthing went wrong")
+	}
+
+	fmt.Println(stringifyMonitor(a, "+"))
 
 }
