@@ -178,7 +178,7 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 	return diff
 }
 
-func printMonitor(a *mkr.Monitor, prefix string) {
+func stringifyMonitor(a *mkr.Monitor, prefix string) string {
 	sA := reflect.ValueOf(a).Elem()
 	diff := []string{" {"}
 	for i := 0; i < sA.NumField(); i++ {
@@ -203,9 +203,12 @@ func printMonitor(a *mkr.Monitor, prefix string) {
 		}
 	}
 	diff = append(diff, " },")
-	for _, d := range diff {
-		fmt.Println(prefix + d)
+
+	result := make([]string, len(diff))
+	for i, d := range diff {
+		result[i] = prefix + d
 	}
+	return strings.Join(result, "\n")
 }
 
 func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
@@ -397,11 +400,11 @@ func doMonitorsDiff(c *cli.Context) {
 		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyRemote {
-		printMonitor(m, "-")
+		fmt.Println(stringifyMonitor(m, "-"))
 		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyLocal {
-		printMonitor(m, "+")
+		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
 	if isExitCode == true && noDiff == false {
@@ -422,7 +425,7 @@ func doMonitorsPush(c *cli.Context) {
 
 	for _, m := range monitorDiff.onlyLocal {
 		logger.Log("info", "Create a new rule.")
-		printMonitor(m, "")
+		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
 			_, err := client.CreateMonitor(m)
 			logger.DieIf(err)
@@ -430,7 +433,7 @@ func doMonitorsPush(c *cli.Context) {
 	}
 	for _, m := range monitorDiff.onlyRemote {
 		logger.Log("info", "Delete a rule.")
-		printMonitor(m, "")
+		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
 			_, err := client.DeleteMonitor(m.ID)
 			logger.DieIf(err)
@@ -438,7 +441,7 @@ func doMonitorsPush(c *cli.Context) {
 	}
 	for _, d := range monitorDiff.diff {
 		logger.Log("info", "Update a rule.")
-		printMonitor(d.local, "")
+		fmt.Println(stringifyMonitor(d.local, ""))
 		if !isDryRun {
 			_, err := client.UpdateMonitor(d.remote.ID, d.local)
 			logger.DieIf(err)
