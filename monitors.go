@@ -186,16 +186,29 @@ func stringifyMonitor(a *mkr.Monitor, prefix string) string {
 		sAType := sA.Type()
 		name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
 		if sAType.Field(i).Type.String() != "[]string" {
-			if name == "id" && fA.Interface() == "" {
+			v := fA.Interface()
+			if (name == "id" && v == "") || isEmpty(v) {
 				continue
 			}
-			diff = appendDiff(diff, name, fA.Interface(), nil)
+			format := "\"%s\""
+			aType := reflect.TypeOf(v).String()
+			switch aType {
+			case "uint64":
+				format = "%d"
+			case "float64":
+				format = "%f"
+			}
+			diff = append(diff, fmt.Sprintf("   \"%s\": "+format+",", name, v))
 		} else {
-			diff = append(diff, fmt.Sprintf("   \"%s\": [", name))
 			sortA := fA.Interface().([]string)
+			l := len(sortA)
+			if l <= 0 {
+				continue
+			}
+			diff = append(diff, fmt.Sprintf("   \"%s\": [", name))
 			sort.Strings(sortA)
 			i := 0
-			for i < len(sortA) {
+			for i < l {
 				diff = append(diff, fmt.Sprintf("     \"%s\",", sortA[i]))
 				i++
 			}
