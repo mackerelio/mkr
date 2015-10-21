@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -58,11 +57,14 @@ func TestDiffMonitors(t *testing.T) {
 
 func TestStringifyMonitor(t *testing.T) {
 	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
+	expected := `+ {
++   "id": "12345",
++   "name": "foo",
++   "type": "connectivity",
++ },`
 
-	if false {
-		t.Errorf("somthing went wrong")
+	r := stringifyMonitor(a, "+")
+	if r != expected {
+		t.Errorf("stringifyMonitor should be:\n%s, but:\n%s", expected, r)
 	}
-
-	fmt.Println(stringifyMonitor(a, "+"))
-
 }
