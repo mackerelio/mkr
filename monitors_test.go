@@ -103,3 +103,29 @@ func TestStringifyMonitor(t *testing.T) {
 		t.Errorf("stringifyMonitor should be:\n%s\nbut:\n%s", expected, r)
 	}
 }
+
+func TestDiffMonitorsWithScopes(t *testing.T) {
+	a := &mkr.Monitor{
+		ID:   "12345",
+		Name: "foo",
+		Type: "connectivity",
+	}
+	b := &mkr.Monitor{
+		ID:     "12345",
+		Name:   "foo",
+		Type:   "connectivity",
+		Scopes: []string{"sss: notebook"},
+	}
+	diff := diffMonitor(a, b)
+	expected := `  {
+    "name": "foo",
+    "type": "connectivity",
+    "scopes": [
++     "sss: notebook",
+    ],
+  },`
+	if diff != expected {
+		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
+	}
+
+}
