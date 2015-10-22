@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"strings"
 	"testing"
 
@@ -52,5 +53,39 @@ func TestDiffMonitors(t *testing.T) {
 	if ret != correct {
 		t.Errorf("should validate the rule: %s\nbut result: %s", correct, ret)
 	}
+}
 
+func TestMonitorSaveRules(t *testing.T) {
+	tmpFile, err := ioutil.TempFile("", "")
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	a := &mkr.Monitor{
+		ID:                   "12345",
+		Name:                 "foo",
+		Type:                 "external",
+		URL:                  "http://example.com",
+		Service:              "bar",
+		ResponseTimeCritical: 1000,
+	}
+	monitorSaveRules([]*mkr.Monitor{a}, tmpFile.Name())
+
+	byt, _ := ioutil.ReadFile(tmpFile.Name())
+	content := string(byt)
+	expected := `{
+    "monitors": [
+        {
+            "id": "12345",
+            "name": "foo",
+            "type": "external",
+            "url": "http://example.com",
+            "service": "bar",
+            "responseTimeCritical": 1000
+        }
+    ]
+}
+`
+	if content != expected {
+		t.Errorf("content should be:\n %s, but:\n %s", expected, content)
+	}
 }

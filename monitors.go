@@ -74,6 +74,7 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	logger.DieIf(err)
 	data := strings.Replace(string(dataRaw), "\\u003c", "<", -1)
 	data = strings.Replace(data, "\\u003e", ">", -1)
+	data += "\n"
 
 	_, err = file.WriteString(data)
 	if err != nil {
