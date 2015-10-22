@@ -72,8 +72,7 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	monitors := map[string]interface{}{"monitors": rules}
 	dataRaw, err := json.MarshalIndent(monitors, "", "    ")
 	logger.DieIf(err)
-	data := strings.Replace(string(dataRaw), "\\u003c", "<", -1)
-	data = strings.Replace(data, "\\u003e", ">", -1)
+	data := replaceAngleBrackets(string(dataRaw))
 
 	_, err = file.WriteString(data)
 	if err != nil {
@@ -179,49 +178,15 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 }
 
 func stringifyMonitor(a *mkr.Monitor, prefix string) string {
-	sA := reflect.ValueOf(a).Elem()
-	diff := []string{" {"}
-	for i := 0; i < sA.NumField(); i++ {
-		fA := sA.Field(i)
-		sAType := sA.Type()
-		name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
-		if sAType.Field(i).Type.String() != "[]string" {
-			v := fA.Interface()
-			if (name == "id" && v == "") || isEmpty(v) {
-				continue
-			}
-			format := "\"%s\""
-			aType := reflect.TypeOf(v).String()
-			switch aType {
-			case "uint64":
-				format = "%d"
-			case "float64":
-				format = "%f"
-			}
-			diff = append(diff, fmt.Sprintf("   \"%s\": "+format+",", name, v))
-		} else {
-			sortA := fA.Interface().([]string)
-			l := len(sortA)
-			if l <= 0 {
-				continue
-			}
-			diff = append(diff, fmt.Sprintf("   \"%s\": [", name))
-			sort.Strings(sortA)
-			i := 0
-			for i < l {
-				diff = append(diff, fmt.Sprintf("     \"%s\",", sortA[i]))
-				i++
-			}
-			diff = append(diff, "   ],")
-		}
-	}
-	diff = append(diff, " },")
+	dataRaw, err := json.MarshalIndent(a, prefix+" ", "  ")
+	logger.DieIf(err)
+	data := replaceAngleBrackets(string(dataRaw))
+	return prefix + " " + data + ","
+}
 
-	result := make([]string, len(diff))
-	for i, d := range diff {
-		result[i] = prefix + d
-	}
-	return strings.Join(result, "\n")
+func replaceAngleBrackets(s string) string {
+	s = strings.Replace(s, "\\u003c", "<", -1)
+	return strings.Replace(s, "\\u003e", ">", -1)
 }
 
 func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {

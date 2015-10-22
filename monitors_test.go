@@ -60,11 +60,11 @@ func TestStringifyMonitor(t *testing.T) {
 	expected := `+ {
 +   "id": "12345",
 +   "name": "foo",
-+   "type": "connectivity",
++   "type": "connectivity"
 + },`
 
 	r := stringifyMonitor(a, "+")
 	if r != expected {
-		t.Errorf("stringifyMonitor should be:\n%s, but:\n%s", expected, r)
+		t.Errorf("stringifyMonitor should be:\n%s\nbut:\n%s", expected, r)
 	}
 }
