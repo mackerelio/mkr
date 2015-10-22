@@ -219,19 +219,19 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 			sort.Strings(sortB)
 			i := 0
 			j := 0
-			for i < len(sortA) && j < len(sortB) {
-				if sortA[i] == sortB[j] {
-					diff = append(diff, fmt.Sprintf("      \"%s\",", sortA[i]))
-					i++
-					j++
-				} else if sortA[i] < sortB[j] {
+			for i < len(sortA) || j < len(sortB) {
+				if j >= len(sortB) || (i < len(sortA) && sortA[i] < sortB[j]) {
 					diff = append(diff, fmt.Sprintf("-     \"%s\",", sortA[i]))
 					i++
 					diffNum++
-				} else if sortB[j] < sortA[i] {
+				} else if i >= len(sortA) || sortB[j] < sortA[i] {
 					diff = append(diff, fmt.Sprintf("+     \"%s\",", sortB[j]))
 					j++
 					diffNum++
+				} else {
+					diff = append(diff, fmt.Sprintf("      \"%s\",", sortA[i]))
+					i++
+					j++
 				}
 			}
 			diff = append(diff, "    ],")

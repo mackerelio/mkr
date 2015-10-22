@@ -103,3 +103,79 @@ func TestStringifyMonitor(t *testing.T) {
 		t.Errorf("stringifyMonitor should be:\n%s\nbut:\n%s", expected, r)
 	}
 }
+
+func TestDiffMonitorsWithScopes(t *testing.T) {
+	a := &mkr.Monitor{
+		ID:   "12345",
+		Name: "foo",
+		Type: "connectivity",
+	}
+	b := &mkr.Monitor{
+		ID:     "12345",
+		Name:   "foo",
+		Type:   "connectivity",
+		Scopes: []string{"sss: notebook"},
+	}
+	diff := diffMonitor(a, b)
+	expected := `  {
+    "name": "foo",
+    "type": "connectivity",
+    "scopes": [
++     "sss: notebook",
+    ],
+  },`
+	if diff != expected {
+		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
+	}
+
+	diff = diffMonitor(b, a)
+	expected = `  {
+    "name": "foo",
+    "type": "connectivity",
+    "scopes": [
+-     "sss: notebook",
+    ],
+  },`
+	if diff != expected {
+		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
+	}
+
+	c := &mkr.Monitor{
+		ID:     "12345",
+		Name:   "foo",
+		Type:   "connectivity",
+		Scopes: []string{"sss: notebook", "ttt: notebook"},
+	}
+
+	diff = diffMonitor(b, c)
+	expected = `  {
+    "name": "foo",
+    "type": "connectivity",
+    "scopes": [
+      "sss: notebook",
++     "ttt: notebook",
+    ],
+  },`
+	if diff != expected {
+		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
+	}
+
+	d := &mkr.Monitor{
+		ID:     "12345",
+		Name:   "foo",
+		Type:   "connectivity",
+		Scopes: []string{"ttt: notebook"},
+	}
+	diff = diffMonitor(b, d)
+	expected = `  {
+    "name": "foo",
+    "type": "connectivity",
+    "scopes": [
+-     "sss: notebook",
++     "ttt: notebook",
+    ],
+  },`
+	if diff != expected {
+		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
+	}
+}
