@@ -72,9 +72,7 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	monitors := map[string]interface{}{"monitors": rules}
 	dataRaw, err := json.MarshalIndent(monitors, "", "    ")
 	logger.DieIf(err)
-	data := strings.Replace(string(dataRaw), "\\u003c", "<", -1)
-	data = strings.Replace(data, "\\u003e", ">", -1)
-	data += "\n"
+	data := replaceAngleBrackets(string(dataRaw)) + "\n"
 
 	_, err = file.WriteString(data)
 	if err != nil {
@@ -170,43 +168,25 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 	}
 	if isAEmpty == false || isBEmpty == false {
 		if a != b {
-			diff = append(diff, fmt.Sprintf("-  \"%s\": "+format+",", name, a))
-			diff = append(diff, fmt.Sprintf("+  \"%s\": "+format+",", name, b))
+			diff = append(diff, fmt.Sprintf("-   \"%s\": "+format+",", name, a))
+			diff = append(diff, fmt.Sprintf("+   \"%s\": "+format+",", name, b))
 		} else {
-			diff = append(diff, fmt.Sprintf("   \"%s\": "+format+",", name, a))
+			diff = append(diff, fmt.Sprintf("    \"%s\": "+format+",", name, a))
 		}
 	}
 	return diff
 }
 
-func printMonitor(a *mkr.Monitor, prefix string) {
-	sA := reflect.ValueOf(a).Elem()
-	diff := []string{" {"}
-	for i := 0; i < sA.NumField(); i++ {
-		fA := sA.Field(i)
-		sAType := sA.Type()
-		name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
-		if sAType.Field(i).Type.String() != "[]string" {
-			if name == "id" && fA.Interface() == "" {
-				continue
-			}
-			diff = appendDiff(diff, name, fA.Interface(), nil)
-		} else {
-			diff = append(diff, fmt.Sprintf("   \"%s\": [", name))
-			sortA := fA.Interface().([]string)
-			sort.Strings(sortA)
-			i := 0
-			for i < len(sortA) {
-				diff = append(diff, fmt.Sprintf("     \"%s\",", sortA[i]))
-				i++
-			}
-			diff = append(diff, "   ],")
-		}
-	}
-	diff = append(diff, " },")
-	for _, d := range diff {
-		fmt.Println(prefix + d)
-	}
+func stringifyMonitor(a *mkr.Monitor, prefix string) string {
+	dataRaw, err := json.MarshalIndent(a, prefix+" ", "  ")
+	logger.DieIf(err)
+	data := replaceAngleBrackets(string(dataRaw))
+	return prefix + " " + data + ","
+}
+
+func replaceAngleBrackets(s string) string {
+	s = strings.Replace(s, "\\u003c", "<", -1)
+	return strings.Replace(s, "\\u003e", ">", -1)
 }
 
 func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
@@ -398,11 +378,11 @@ func doMonitorsDiff(c *cli.Context) {
 		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyRemote {
-		printMonitor(m, "-")
+		fmt.Println(stringifyMonitor(m, "-"))
 		noDiff = false
 	}
 	for _, m := range monitorDiff.onlyLocal {
-		printMonitor(m, "+")
+		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
 	if isExitCode == true && noDiff == false {
@@ -423,7 +403,7 @@ func doMonitorsPush(c *cli.Context) {
 
 	for _, m := range monitorDiff.onlyLocal {
 		logger.Log("info", "Create a new rule.")
-		printMonitor(m, "")
+		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
 			_, err := client.CreateMonitor(m)
 			logger.DieIf(err)
@@ -431,7 +411,7 @@ func doMonitorsPush(c *cli.Context) {
 	}
 	for _, m := range monitorDiff.onlyRemote {
 		logger.Log("info", "Delete a rule.")
-		printMonitor(m, "")
+		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
 			_, err := client.DeleteMonitor(m.ID)
 			logger.DieIf(err)
@@ -439,7 +419,7 @@ func doMonitorsPush(c *cli.Context) {
 	}
 	for _, d := range monitorDiff.diff {
 		logger.Log("info", "Update a rule.")
-		printMonitor(d.local, "")
+		fmt.Println(stringifyMonitor(d.local, ""))
 		if !isDryRun {
 			_, err := client.UpdateMonitor(d.remote.ID, d.local)
 			logger.DieIf(err)

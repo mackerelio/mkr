@@ -41,12 +41,12 @@ func TestDiffMonitors(t *testing.T) {
 
 	correct := strings.Join([]string{
 		"  {",
-		"   \"name\": \"foo\",",
-		"   \"type\": \"external\",",
-		"   \"url\": \"http://example.com\",",
-		"   \"service\": \"bar\",",
-		"-  \"responseTimeCritical\": 1000.000000,",
-		"+  \"responseTimeCritical\": 0.000000,",
+		"    \"name\": \"foo\",",
+		"    \"type\": \"external\",",
+		"    \"url\": \"http://example.com\",",
+		"    \"service\": \"bar\",",
+		"-   \"responseTimeCritical\": 1000.000000,",
+		"+   \"responseTimeCritical\": 0.000000,",
 		"  },",
 	}, "\n")
 
@@ -87,5 +87,19 @@ func TestMonitorSaveRules(t *testing.T) {
 `
 	if content != expected {
 		t.Errorf("content should be:\n %s, but:\n %s", expected, content)
+	}
+}
+
+func TestStringifyMonitor(t *testing.T) {
+	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
+	expected := `+ {
++   "id": "12345",
++   "name": "foo",
++   "type": "connectivity"
++ },`
+
+	r := stringifyMonitor(a, "+")
+	if r != expected {
+		t.Errorf("stringifyMonitor should be:\n%s\nbut:\n%s", expected, r)
 	}
 }
