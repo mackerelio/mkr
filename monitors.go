@@ -168,10 +168,10 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 	}
 	if isAEmpty == false || isBEmpty == false {
 		if a != b {
-			diff = append(diff, fmt.Sprintf("-  \"%s\": "+format+",", name, a))
-			diff = append(diff, fmt.Sprintf("+  \"%s\": "+format+",", name, b))
+			diff = append(diff, fmt.Sprintf("-   \"%s\": "+format+",", name, a))
+			diff = append(diff, fmt.Sprintf("+   \"%s\": "+format+",", name, b))
 		} else {
-			diff = append(diff, fmt.Sprintf("   \"%s\": "+format+",", name, a))
+			diff = append(diff, fmt.Sprintf("    \"%s\": "+format+",", name, a))
 		}
 	}
 	return diff

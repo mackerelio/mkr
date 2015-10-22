@@ -40,12 +40,12 @@ func TestDiffMonitors(t *testing.T) {
 
 	correct := strings.Join([]string{
 		"  {",
-		"   \"name\": \"foo\",",
-		"   \"type\": \"external\",",
-		"   \"url\": \"http://example.com\",",
-		"   \"service\": \"bar\",",
-		"-  \"responseTimeCritical\": 1000.000000,",
-		"+  \"responseTimeCritical\": 0.000000,",
+		"    \"name\": \"foo\",",
+		"    \"type\": \"external\",",
+		"    \"url\": \"http://example.com\",",
+		"    \"service\": \"bar\",",
+		"-   \"responseTimeCritical\": 1000.000000,",
+		"+   \"responseTimeCritical\": 0.000000,",
 		"  },",
 	}, "\n")
 
