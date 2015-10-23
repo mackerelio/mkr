@@ -6,7 +6,7 @@ BUILD_FLAGS = -ldflags "\
 	      -X main.Version \"$(VERSION)\" \
 	      "
 
-all: clean cross test
+all: clean cross lint test
 
 test: testdeps
 	go test -v ./...
@@ -14,9 +14,12 @@ test: testdeps
 build: deps
 	go build $(BUILD_FLAGS) -o $(BIN) .
 
-lint: deps testdeps
+LINT_RET = .golint.txt
+lint: testdeps
 	go vet
-	golint
+	rm -f $(LINT_RET)
+	golint ./... | tee .golint.txt
+	test ! -s $(LINT_RET)
 
 cross: deps
 	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version \"$(VERSION)\"" -resources-include='README*'
@@ -39,6 +42,11 @@ deps:
 
 testdeps:
 	go get -d -v -t .
+	go get golang.org/x/tools/cmd/vet
+	go get github.com/golang/lint/golint
+	go get golang.org/x/tools/cmd/cover
+	go get github.com/axw/gocov/gocov
+	go get github.com/mattn/goveralls
 
 release:
 	script/releng
@@ -47,4 +55,7 @@ clean:
 	rm -fr build
 	go clean
 
-.PHONY: test build cross lint deps testdeps clean deb rpm release
+cover: testdeps
+	goveralls
+
+.PHONY: test build cross lint deps testdeps clean deb rpm release cover

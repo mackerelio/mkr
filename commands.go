@@ -15,7 +15,7 @@ import (
 	"github.com/mackerelio/mkr/logger"
 )
 
-// cli.Command object list
+// Commands cli.Command object list
 var Commands = []cli.Command{
 	commandStatus,
 	commandHosts,
