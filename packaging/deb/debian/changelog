@@ -1,3 +1,14 @@
+mkr (0.7.0-1) stable; urgency=low
+
+  * append newline to the end of monitors.json (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/23>
+  * fix printMonitor (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/24>
+  * fix diff output between slices (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/25>
+
+ -- daiksy <daiksy@hatena.ne.jp>  Mon, 26 Oct 2015 15:42:07 +0900
+
 mkr (0.6.0-1) stable; urgency=low
 
  * Fix update command bug about overwriting hostname (by y_uuki)
