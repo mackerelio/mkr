@@ -5,7 +5,7 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.6.0
+Version:   0.7.0
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
@@ -42,6 +42,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Oct 26 2015 <daiksy@hatena.ne.jp> - 0.7.0-1
+- append newline to the end of monitors.json (by Songmu)
+- fix printMonitor (by Songmu)
+- fix diff output between slices (by Songmu)
+
 * Thu Oct 15 2015 <itchyny@hatena.ne.jp> - 0.6.0-1
 - Fix update command bug about overwriting hostname (by y_uuki)
 - Stop the parallel request sending temporarily (by y_uuki)
