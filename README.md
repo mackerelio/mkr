@@ -18,21 +18,31 @@ mkr output format is JSON, so it can be filtered with a JSON processor such as [
 
 # INSTALLATION
 
+Install the plugin package from either the yum or the apt repository.
+
+## CentOS 5/6
+
+```bash
+yum install mkr
+```
+
+## Debian 6/7
+
+```bash
+apt-get install mkr
+```
+
+## Homebrew
+You can also install from the brew rule we maintain, but we don't officially support the environment.
+```bash
+brew tap mackerelio/mackerel-agent
+brew install mkr
+```
+
+## Build from source
 ```bash
 $ go get github.com/mackerelio/mkr
 $ go install github.com/mackerelio/mkr
-```
-
-## Linux
-
-```bash
-# wget -O /usr/local/bin/mkr "https://github.com/mackerelio/mkr/releases/download/$(curl -sI https://github.com/mackerelio/mkr/releases/latest | awk -F'/' '/^Location:/{print $NF}' | tr -d '\r')/mkr_linux_amd64" && chmod +x /usr/local/bin/mkr
-```
-
-## Mac
-
-```bash
-# wget -O /usr/local/bin/mkr "https://github.com/mackerelio/mkr/releases/download/$(curl -sI https://github.com/mackerelio/mkr/releases/latest | awk -F'/' '/^Location:/{print $NF}' | tr -d '\r')/mkr_darwin_amd64" && chmod +x /usr/local/bin/mkr
 ```
 
 ## Linux (Docker)
