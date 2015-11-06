@@ -23,12 +23,14 @@ Install the plugin package from either the yum or the apt repository.
 ## CentOS 5/6
 
 ```bash
+curl -fsSL https://mackerel.io/assets/files/scripts/setup-yum.sh | sh
 yum install mkr
 ```
 
 ## Debian 6/7
 
 ```bash
+curl -fsSL https://mackerel.io/assets/files/scripts/setup-apt.sh | sh
 apt-get install mkr
 ```
 
