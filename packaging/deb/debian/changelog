@@ -1,5 +1,9 @@
 mkr (0.7.1-1) stable; urgency=low
 
+  * support `notificationIntervai` field in monitors (by stanaka)
+    <https://github.com/mackerelio/mackerel-client-go/pull/9>
+  * [bug] fix json parameter s/hostID/hostId/g (by Songmu)
+    <https://github.com/mackerelio/mackerel-client-go/pull/10>
 
  -- Songmu <y.songmu@gmail.com>  Thu, 12 Nov 2015 12:15:11 +0900
 

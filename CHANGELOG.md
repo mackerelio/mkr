@@ -2,7 +2,8 @@
 
 ## 0.7.1 (2015-11-12)
 
-
+* support `notificationIntervai` field in monitors (stanaka)
+* [bug] fix json parameter s/hostID/hostId/g (Songmu)
 
 ## 0.7.0 (2015-10-26)
 
@@ -10,10 +11,9 @@
 * fix printMonitor #24 (Songmu)
 * fix diff output between slices #25 (Songmu)
 
-
 ## 0.6.0 (2015-10-15)
 
-* Fix update command bug about overwriting hostname #17 (y_uuki) 
+* Fix update command bug about overwriting hostname #17 (y_uuki)
 * Stop the parallel request sending temporarily #18 (y_uuki)
 * Suppress to display empty fields when mkr monitors diff #20 (by stanaka)
 
