@@ -5,7 +5,7 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.7.0
+Version:   0.7.1
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Nov 12 2015 <y.songmu@gmail.com> - 0.7.1-1
+- support `notificationIntervai` field in monitors (stanaka)
+- [bug] fix json parameter s/hostID/hostId/g (Songmu)
+
 * Mon Oct 26 2015 <daiksy@hatena.ne.jp> - 0.7.0-1
 - append newline to the end of monitors.json (by Songmu)
 - fix printMonitor (by Songmu)
