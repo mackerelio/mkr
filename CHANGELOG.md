@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (2015-11-12)
+
+
+
 ## 0.7.0 (2015-10-26)
 
 * append newline to the end of monitors.json #23 (Songmu)

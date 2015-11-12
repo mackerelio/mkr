@@ -42,6 +42,8 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Nov 12 2015 <y.songmu@gmail.com> - 0.7.1-1
+
 * Mon Oct 26 2015 <daiksy@hatena.ne.jp> - 0.7.0-1
 - append newline to the end of monitors.json (by Songmu)
 - fix printMonitor (by Songmu)

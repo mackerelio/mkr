@@ -1,3 +1,8 @@
+mkr (0.7.1-1) stable; urgency=low
+
+
+ -- Songmu <y.songmu@gmail.com>  Thu, 12 Nov 2015 12:15:11 +0900
+
 mkr (0.7.0-1) stable; urgency=low
 
   * append newline to the end of monitors.json (by Songmu)
