@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/codegangsta/cli"
@@ -35,6 +36,79 @@ var commandAlerts = cli.Command{
 	},
 }
 
+type alertSet struct {
+	Alert   *mkr.Alert
+	Host    *mkr.Host
+	Monitor *mkr.Monitor
+}
+
+func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
+	hostsJSON, err := client.FindHosts(&mkr.FindHostsParam{
+		Statuses: []string{"working", "standby", "poweroff", "maintenance"},
+	})
+	logger.DieIf(err)
+
+	hosts := map[string]*mkr.Host{}
+	for _, host := range hostsJSON {
+		hosts[host.ID] = host
+	}
+
+	monitorsJSON, err := client.FindMonitors()
+	logger.DieIf(err)
+
+	monitors := map[string]*mkr.Monitor{}
+	for _, monitor := range monitorsJSON {
+		monitors[monitor.ID] = monitor
+	}
+
+	alertSets := []*alertSet{}
+	for _, alert := range alerts {
+		alertSets = append(
+			alertSets,
+			&alertSet{Alert: alert, Host: hosts[alert.HostID], Monitor: monitors[alert.MonitorID]},
+		)
+	}
+	return alertSets
+}
+
+func formatJoinedAlert(alertSet *alertSet) string {
+	const layout = "2006-01-02 15:04:05"
+
+	host := alertSet.Host
+	monitor := alertSet.Monitor
+	alert := alertSet.Alert
+
+	hostMsg := ""
+	if host != nil {
+		hostMsg = fmt.Sprintf("%s %s", host.Name, host.Status)
+		roleMsgs := []string{}
+		for service, roles := range host.Roles {
+			roleMsgs = append(roleMsgs, fmt.Sprintf("%s:%s", service, strings.Join(roles, ",")))
+		}
+		hostMsg += " [" + strings.Join(roleMsgs, ", ") + "]"
+	}
+
+	monitorMsg := ""
+	if monitor != nil {
+		switch monitor.Type {
+		case "connectivity":
+			monitorMsg = fmt.Sprintf("%s", monitor.Type)
+		case "host":
+			switch alert.Status {
+			case "CRITICAL":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+			case "WARNING":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
+			default:
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+			}
+		default:
+			monitorMsg = fmt.Sprintf("%s", monitor.Type)
+		}
+	}
+	return fmt.Sprintf("%s %s %8s %s %s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), alert.Status, monitorMsg, hostMsg)
+}
+
 func doAlertsList(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	client := newMackerel(conffile)
@@ -46,56 +120,10 @@ func doAlertsList(c *cli.Context) {
 		return
 	}
 
-	hostsJSON, err := client.FindHosts(&mkr.FindHostsParam{
-		Statuses: []string{"working", "standby", "poweroff", "maintenance"},
-	})
-	hosts := map[string]*HostFormat{}
-	for _, host := range hostsJSON {
-		format := &HostFormat{
-			ID:            host.ID,
-			Name:          host.Name,
-			Status:        host.Status,
-			RoleFullnames: host.GetRoleFullnames(),
-			IsRetired:     host.IsRetired,
-			CreatedAt:     host.DateStringFromCreatedAt(),
-			IPAddresses:   host.IPAddresses(),
-		}
-		hosts[host.ID] = format
-	}
+	joinedAlerts := joinMonitorsAndHosts(client, alerts)
 
-	monitorsJSON, err := client.FindMonitors()
-	monitors := map[string]*mkr.Monitor{}
-	for _, monitor := range monitorsJSON {
-		monitors[monitor.ID] = monitor
-	}
-
-	const layout = "2006-01-02 15:04:05"
-	for _, alert := range alerts {
-		host := hosts[alert.HostID]
-		hostMsg := ""
-		if host != nil {
-			hostMsg = fmt.Sprintf("%s %s %s", host.Name, host.Status, host.RoleFullnames)
-		}
-		monitor := monitors[alert.MonitorID]
-		monitorMsg := ""
-		if monitor != nil {
-			switch monitor.Type {
-			case "connectivity":
-				monitorMsg = fmt.Sprintf("%s", monitor.Type)
-			case "host":
-				switch alert.Status {
-				case "CRITICAL":
-					monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
-				case "WARNING":
-					monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
-				default:
-					monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
-				}
-			default:
-				monitorMsg = fmt.Sprintf("%s", monitor.Type)
-			}
-		}
-		fmt.Printf("%s %s %8s %s %s\n", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), alert.Status, monitorMsg, hostMsg)
+	for _, joinAlert := range joinedAlerts {
+		fmt.Println(formatJoinedAlert(joinAlert))
 	}
 }
 
