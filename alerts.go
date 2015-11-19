@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/color"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 )
@@ -21,6 +22,7 @@ var commandAlerts = cli.Command{
 	Action: doAlertsList,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format. (human/json)"},
+		cli.BoolFlag{Name: "color, c", Usage: "Colorized output. default: true"},
 	},
 	Subcommands: []cli.Command{
 		{
@@ -71,7 +73,7 @@ func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
 	return alertSets
 }
 
-func formatJoinedAlert(alertSet *alertSet) string {
+func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	const layout = "2006-01-02 15:04:05"
 
 	host := alertSet.Host
@@ -80,7 +82,23 @@ func formatJoinedAlert(alertSet *alertSet) string {
 
 	hostMsg := ""
 	if host != nil {
-		hostMsg = fmt.Sprintf("%s %s", host.Name, host.Status)
+		statusMsg := host.Status
+		if host.IsRetired == true {
+			statusMsg = "retired"
+		}
+		if colorize {
+			switch statusMsg {
+			case "working":
+				statusMsg = color.BlueString("working")
+			case "standby":
+				statusMsg = color.GreenString("standby")
+			case "poweroff":
+				statusMsg = "poweroff"
+			case "maintenance":
+				statusMsg = color.YellowString("maintenance")
+			}
+		}
+		hostMsg = fmt.Sprintf("%s %s", host.Name, statusMsg)
 		roleMsgs := []string{}
 		for service, roles := range host.Roles {
 			roleMsgs = append(roleMsgs, fmt.Sprintf("%s:%s", service, strings.Join(roles, ",")))
@@ -106,7 +124,16 @@ func formatJoinedAlert(alertSet *alertSet) string {
 			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		}
 	}
-	return fmt.Sprintf("%s %s %8s %s %s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), alert.Status, monitorMsg, hostMsg)
+	statusMsg := alert.Status
+	if colorize {
+		switch alert.Status {
+		case "CRITICAL":
+			statusMsg = color.RedString("CRITICAL")
+		case "WARNING":
+			statusMsg = color.YellowString("WARNING ")
+		}
+	}
+	return fmt.Sprintf("%s %s %s %s %s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
 func doAlertsList(c *cli.Context) {
@@ -123,7 +150,7 @@ func doAlertsList(c *cli.Context) {
 	joinedAlerts := joinMonitorsAndHosts(client, alerts)
 
 	for _, joinAlert := range joinedAlerts {
-		fmt.Println(formatJoinedAlert(joinAlert))
+		fmt.Println(formatJoinedAlert(joinAlert, c.Bool("color")))
 	}
 }
 
