@@ -25,6 +25,7 @@ var Commands = []cli.Command{
 	commandFetch,
 	commandRetire,
 	commandMonitors,
+	commandAlerts,
 }
 
 var commandStatus = cli.Command{
@@ -354,30 +355,30 @@ func doUpdate(c *cli.Context) {
 	client := newMackerel(conffile)
 
 	for _, hostID := range argHostIDs {
-			if needUpdateHostStatus {
-				err := client.UpdateHostStatus(hostID, optStatus)
-				logger.DieIf(err)
-			}
+		if needUpdateHostStatus {
+			err := client.UpdateHostStatus(hostID, optStatus)
+			logger.DieIf(err)
+		}
 
-			if needUpdateHost {
-				host, err := client.FindHost(hostID)
-				logger.DieIf(err)
-				meta := host.Meta
-				name := ""
-				if optName == "" {
-					name = host.Name
-				} else {
-					name = optName
-				}
-				_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
-					Name:          name,
-					RoleFullnames: optRoleFullnames,
-					Meta:          meta,
-				})
-				logger.DieIf(err)
+		if needUpdateHost {
+			host, err := client.FindHost(hostID)
+			logger.DieIf(err)
+			meta := host.Meta
+			name := ""
+			if optName == "" {
+				name = host.Name
+			} else {
+				name = optName
 			}
+			_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
+				Name:          name,
+				RoleFullnames: optRoleFullnames,
+				Meta:          meta,
+			})
+			logger.DieIf(err)
+		}
 
-			logger.Log("updated", hostID)
+		logger.Log("updated", hostID)
 	}
 }
 
