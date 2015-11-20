@@ -167,7 +167,7 @@ mkr fetch -n loadavg5
 
 ```bash
 cat <<EOF | mkr throw --host <hostId>
-<name>  <time>  <value>
+<name>  <value> <time>
 EOF
 ```
 
