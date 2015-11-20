@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -22,7 +23,17 @@ var commandAlerts = cli.Command{
 	Action: doAlertsList,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format. (human/json)"},
-		cli.BoolFlag{Name: "color, c", Usage: "Colorized output. default: true"},
+		cli.StringSliceFlag{
+			Name:  "service, s",
+			Value: &cli.StringSlice{},
+			Usage: "Filter alerts by service. Multiple choice allow. ",
+		},
+		cli.StringSliceFlag{
+			Name:  "status, S",
+			Value: &cli.StringSlice{},
+			Usage: "Filter alerts by status of each host. Multiple choice allow. ",
+		},
+		cli.BoolFlag{Name: "color, c", Usage: "Colorize output. default: true"},
 	},
 	Subcommands: []cli.Command{
 		{
@@ -120,6 +131,24 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			default:
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
 			}
+		case "external":
+			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
+			switch alert.Status {
+			case "CRITICAL":
+				if statusRegexp.MatchString(alert.Message) {
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
+				} else {
+					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", monitor.Name, alert.Value, alert.Message)
+				}
+			case "WARNING":
+				if statusRegexp.MatchString(alert.Message) {
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeWarning, alert.Message)
+				} else {
+					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", monitor.Name, alert.Value, alert.Message)
+				}
+			default:
+				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
+			}
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		}
@@ -138,6 +167,8 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 
 func doAlertsList(c *cli.Context) {
 	conffile := c.GlobalString("conf")
+	filterServices := c.StringSlice("service")
+	filterStatuses := c.StringSlice("status")
 	client := newMackerel(conffile)
 
 	alerts, err := client.FindAlerts()
@@ -150,6 +181,30 @@ func doAlertsList(c *cli.Context) {
 	joinedAlerts := joinMonitorsAndHosts(client, alerts)
 
 	for _, joinAlert := range joinedAlerts {
+		if len(filterServices) > 0 {
+			found := false
+			for _, filterService := range filterServices {
+				if joinAlert.Host != nil {
+					if _, ok := joinAlert.Host.Roles[filterService]; ok {
+						found = true
+					}
+				}
+			}
+			if found == false {
+				continue
+			}
+		}
+		if len(filterStatuses) > 0 {
+			found := false
+			for _, filterStatus := range filterStatuses {
+				if joinAlert.Host != nil && joinAlert.Host.Status == filterStatus {
+					found = true
+				}
+			}
+			if found == false {
+				continue
+			}
+		}
 		fmt.Println(formatJoinedAlert(joinAlert, c.Bool("color")))
 	}
 }
