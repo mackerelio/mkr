@@ -121,14 +121,14 @@ mkr update --status maintenance --roleFullname My-Service:db-master <hostId>
 
 ```
 cat <<EOF | mkr throw --host <hostId>
-<name>  <time>  <value>
-<name>  <time>  <value>
+<name>  <value> <time>
+<name>  <value> <time>
 EOF
 ...
 
 cat <<EOF | mkr throw --service My-Service
-<name>  <time>  <value>
-<name>  <time>  <value>
+<name>  <value> <time>
+<name>  <value> <time>
 EOF
 ...
 ```
@@ -167,7 +167,7 @@ mkr fetch -n loadavg5
 
 ```bash
 cat <<EOF | mkr throw --host <hostId>
-<name>  <time>  <value>
+<name>  <value> <time>
 EOF
 ```
 
