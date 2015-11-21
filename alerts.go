@@ -20,22 +20,27 @@ var commandAlerts = cli.Command{
     Retrieve/Close alerts. Without subcommand, show all alerts.
     Request APIs under "/api/v0/alerts". See http://help-ja.mackerel.io/entry/spec/api/v0 .
 `,
-	Action: doAlertsList,
-	Flags: []cli.Flag{
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format. (human/json)"},
-		cli.StringSliceFlag{
-			Name:  "service, s",
-			Value: &cli.StringSlice{},
-			Usage: "Filter alerts by service. Multiple choice allow. ",
-		},
-		cli.StringSliceFlag{
-			Name:  "status, S",
-			Value: &cli.StringSlice{},
-			Usage: "Filter alerts by status of each host. Multiple choice allow. ",
-		},
-		cli.BoolFlag{Name: "color, c", Usage: "Colorize output. default: true"},
-	},
+	Action: doAlertsRetrieve,
 	Subcommands: []cli.Command{
+		{
+			Name:        "list",
+			Usage:       "list alerts",
+			Description: "Show alerts with human-readable format.",
+			Action:      doAlertsList,
+			Flags: []cli.Flag{
+				cli.StringSliceFlag{
+					Name:  "service, s",
+					Value: &cli.StringSlice{},
+					Usage: "Filter alerts by service. Multiple choice allow. ",
+				},
+				cli.StringSliceFlag{
+					Name:  "status, S",
+					Value: &cli.StringSlice{},
+					Usage: "Filter alerts by status of each host. Multiple choice allow. ",
+				},
+				cli.BoolFlag{Name: "color, c", Usage: "Colorize output. default: true"},
+			},
+		},
 		{
 			Name:        "close",
 			Usage:       "close alerts",
@@ -149,6 +154,8 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			default:
 				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
 			}
+		case "check":
+			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		}
@@ -165,6 +172,16 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	return fmt.Sprintf("%s %s %s %s %s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
+func doAlertsRetrieve(c *cli.Context) {
+	conffile := c.GlobalString("conf")
+	client := newMackerel(conffile)
+
+	alerts, err := client.FindAlerts()
+	logger.DieIf(err)
+	PrettyPrintJSON(alerts)
+	return
+}
+
 func doAlertsList(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	filterServices := c.StringSlice("service")
@@ -173,11 +190,6 @@ func doAlertsList(c *cli.Context) {
 
 	alerts, err := client.FindAlerts()
 	logger.DieIf(err)
-	if c.String("format") == "json" {
-		PrettyPrintJSON(alerts)
-		return
-	}
-
 	joinedAlerts := joinMonitorsAndHosts(client, alerts)
 
 	for _, joinAlert := range joinedAlerts {
