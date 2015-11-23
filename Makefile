@@ -3,7 +3,7 @@ BIN = mkr
 VERSION = $$(git describe --tags --always --dirty)
 
 BUILD_FLAGS = -ldflags "\
-	      -X main.Version \"$(VERSION)\" \
+	      -X main.Version=$(VERSION) \
 	      "
 
 all: clean cross lint test
@@ -22,7 +22,7 @@ lint: testdeps
 	test ! -s $(LINT_RET)
 
 cross: deps
-	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version \"$(VERSION)\"" -resources-include='README*'
+	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version=$(VERSION)" -resources-include='README*'
 	cp -p $(PWD)/snapshot/linux_amd64/mkr $(PWD)/snapshot/mkr_linux_amd64
 	cp -p $(PWD)/snapshot/linux_386/mkr $(PWD)/snapshot/mkr_linux_386
 	cp -p $(PWD)/snapshot/darwin_amd64/mkr $(PWD)/snapshot/mkr_darwin_amd64
