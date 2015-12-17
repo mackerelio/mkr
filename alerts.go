@@ -141,9 +141,9 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			switch alert.Status {
 			case "CRITICAL":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %s %.2f > %.2f msec, status:%s", monitor.Name, monitor.URL, alert.Value, monitor.ResponseTimeCritical, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", monitor.Name, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %s %.2f msec, %s", monitor.Name, monitor.URL, alert.Value, alert.Message)
 				}
 			case "WARNING":
 				if statusRegexp.MatchString(alert.Message) {
