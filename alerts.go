@@ -44,7 +44,7 @@ var commandAlerts = cli.Command{
 		{
 			Name:        "close",
 			Usage:       "close alerts",
-			Description: "Pull monitor rules from Mackerel server and save them to a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
+			Description: "Close alerts. Multiple alert IDs can be specified.",
 			Action:      doAlertsClose,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "reason, r", Value: "", Usage: "Reason of closing alert."},
