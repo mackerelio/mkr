@@ -34,7 +34,7 @@ var commandAlerts = cli.Command{
 					Usage: "Filter alerts by service. Multiple choice allow. ",
 				},
 				cli.StringSliceFlag{
-					Name:  "status, S",
+					Name:  "host-status, S",
 					Value: &cli.StringSlice{},
 					Usage: "Filter alerts by status of each host. Multiple choice allow. ",
 				},
