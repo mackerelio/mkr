@@ -38,7 +38,7 @@ var commandAlerts = cli.Command{
 					Value: &cli.StringSlice{},
 					Usage: "Filter alerts by status of each host. Multiple choice allow. ",
 				},
-				cli.BoolFlag{Name: "color, c", Usage: "Colorize output. default: true"},
+				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
 			},
 		},
 		{
@@ -217,7 +217,7 @@ func doAlertsList(c *cli.Context) {
 				continue
 			}
 		}
-		fmt.Println(formatJoinedAlert(joinAlert, c.Bool("color")))
+		fmt.Println(formatJoinedAlert(joinAlert, c.BoolT("color")))
 	}
 }
 
