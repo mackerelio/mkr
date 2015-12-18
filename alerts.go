@@ -114,7 +114,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 				statusMsg = color.YellowString("maintenance")
 			}
 		}
-		hostMsg = fmt.Sprintf("%s %s", host.Name, statusMsg)
+		hostMsg = fmt.Sprintf(" %s %s", host.Name, statusMsg)
 		roleMsgs := []string{}
 		for service, roles := range host.Roles {
 			roleMsgs = append(roleMsgs, fmt.Sprintf("%s:%s", service, strings.Join(roles, ",")))
@@ -135,6 +135,15 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
 			default:
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+			}
+		case "service":
+			switch alert.Status {
+			case "CRITICAL":
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+			case "WARNING":
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
+			default:
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
 			}
 		case "external":
 			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
@@ -169,7 +178,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			statusMsg = color.YellowString("WARNING ")
 		}
 	}
-	return fmt.Sprintf("%s %s %s %s %s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
+	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
 func doAlertsRetrieve(c *cli.Context) {
