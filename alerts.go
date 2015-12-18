@@ -31,12 +31,12 @@ var commandAlerts = cli.Command{
 				cli.StringSliceFlag{
 					Name:  "service, s",
 					Value: &cli.StringSlice{},
-					Usage: "Filter alerts by service. Multiple choice allow. ",
+					Usage: "Filter alerts by service. Multiple choice allow.",
 				},
 				cli.StringSliceFlag{
 					Name:  "host-status, S",
 					Value: &cli.StringSlice{},
-					Usage: "Filter alerts by status of each host. Multiple choice allow. ",
+					Usage: "Filter alerts by status of each host. Multiple choice allow.",
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
 			},
