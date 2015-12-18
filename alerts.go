@@ -209,9 +209,11 @@ func doAlertsList(c *cli.Context) {
 					if _, ok := joinAlert.Host.Roles[filterService]; ok {
 						found = true
 					}
+				} else if joinAlert.Monitor.Service == filterService {
+					found = true
 				}
 			}
-			if found == false {
+			if !found {
 				continue
 			}
 		}
