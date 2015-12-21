@@ -224,7 +224,7 @@ func doAlertsList(c *cli.Context) {
 					found = true
 				}
 			}
-			if found == false {
+			if !found {
 				continue
 			}
 		}
