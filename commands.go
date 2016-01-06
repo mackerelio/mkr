@@ -33,7 +33,7 @@ var commandStatus = cli.Command{
 	Usage: "Show the host",
 	Description: `
     Show the information of the host identified with <hostId>.
-    Request "GET /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-get.
+    Requests "GET /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-get.
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
@@ -46,21 +46,21 @@ var commandHosts = cli.Command{
 	Usage: "List hosts",
 	Description: `
     List the information of the hosts refined by host name, service name, role name and/or status.
-    Request "GET /api/v0/hosts.json". See http://help-ja.mackerel.io/entry/spec/api/v0#hosts-list.
+    Requests "GET /api/v0/hosts.json". See http://help-ja.mackerel.io/entry/spec/api/v0#hosts-list.
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "List hosts only matched with <name>"},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belongs to <service>"},
+		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belonging to <service>"},
 		cli.StringSliceFlag{
 			Name:  "role, r",
 			Value: &cli.StringSlice{},
-			Usage: "List hosts only belongs to <role>. Multiple choice allow. Required --service",
+			Usage: "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
 		},
 		cli.StringSliceFlag{
 			Name:  "status, st",
 			Value: &cli.StringSlice{},
-			Usage: "List hosts only matched <status>. Multiple choice allow.",
+			Usage: "List hosts only matched <status>. Multiple choices are allowed.",
 		},
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
@@ -72,7 +72,7 @@ var commandCreate = cli.Command{
 	Usage: "Create a new host",
 	Description: `
     Create a new host with status and/or roleFullname.
-    Request "POST /api/v0/hosts". See http://help-ja.mackerel.io/entry/spec/api/v0#host-create.
+    Requests "POST /api/v0/hosts". See http://help-ja.mackerel.io/entry/spec/api/v0#host-create.
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
@@ -80,7 +80,7 @@ var commandCreate = cli.Command{
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
 			Value: &cli.StringSlice{},
-			Usage: "Multiple choice allow. ex. My-Service:proxy, My-Service:db-master",
+			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
 	},
 }
@@ -89,8 +89,8 @@ var commandUpdate = cli.Command{
 	Name:  "update",
 	Usage: "Update the host",
 	Description: `
-    Update the hosts identified with <hostIds>.
-    Request "PUT /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-update.
+    Update the host identified with <hostId>.
+    Requests "PUT /api/v0/hosts/<hostId>". See http://help-ja.mackerel.io/entry/spec/api/v0#host-update.
 `,
 	Action: doUpdate,
 	Flags: []cli.Flag{
@@ -109,8 +109,8 @@ var commandThrow = cli.Command{
 	Usage: "Post metric values",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
-    Output format of metric value is compatible with that of Sensu plugin.
-    Request "POST /api/v0/tsdb". See http://help-ja.mackerel.io/entry/spec/api/v0#metric-value-post.
+    Output format of metric values are compatible with that of a Sensu plugin.
+    Requests "POST /api/v0/tsdb". See http://help-ja.mackerel.io/entry/spec/api/v0#metric-value-post.
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
@@ -124,14 +124,14 @@ var commandFetch = cli.Command{
 	Usage: "Fetch latest metric values",
 	Description: `
     Fetch latest metric values about the hosts.
-    Request "GET /api/v0/tsdb/latest". See http://help-ja.mackerel.io/entry/spec/api/v0#tsdb-latest.
+    Requests "GET /api/v0/tsdb/latest". See http://help-ja.mackerel.io/entry/spec/api/v0#tsdb-latest.
 `,
 	Action: doFetch,
 	Flags: []cli.Flag{
 		cli.StringSliceFlag{
 			Name:  "name, n",
 			Value: &cli.StringSlice{},
-			Usage: "Fetch metric values identified with <name>. Required. Multiple choice allow. ",
+			Usage: "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
 	},
 }
@@ -140,8 +140,8 @@ var commandRetire = cli.Command{
 	Name:  "retire",
 	Usage: "Retire hosts",
 	Description: `
-    Retire host identified by hostIds. Be careful because this is a irreversible operation.
-    Request POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
+    Retire host identified by <hostId>. Be careful because this is an irreversible operation.
+    Requests POST /api/v0/hosts/<hostId>/retire parallelly. See http://help-ja.mackerel.io/entry/spec/api/v0#host-retire.
 `,
 	Action: doRetire,
 	Flags: []cli.Flag{
@@ -165,7 +165,7 @@ func newMackerel(conffile string) *mkr.Client {
 	apiKey := LoadApikeyFromEnvOrConfig(conffile)
 	if apiKey == "" {
 		logger.Log("error", `
-    Not set MACKEREL_APIKEY environment variable. (Try "export MACKEREL_APIKEY='<Your apikey>'")
+    MACKEREL_APIKEY environment variable is not set. (Try "export MACKEREL_APIKEY='<Your apikey>'")
 `)
 		os.Exit(1)
 	}

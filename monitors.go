@@ -17,10 +17,10 @@ import (
 
 var commandMonitors = cli.Command{
 	Name:  "monitors",
-	Usage: "Manipurate monitors",
+	Usage: "Manipulate monitors",
 	Description: `
-    Manipurate monitor rules. Without subcommand, show all monitor rules.
-    Request APIs under "/api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0 .
+    Manipulate monitor rules. With no subcommand specified, this will show all monitor rules.
+    Requests APIs under "/api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0 .
 `,
 	Action: doMonitorsList,
 	Subcommands: []cli.Command{
@@ -40,14 +40,14 @@ var commandMonitors = cli.Command{
 			Description: "Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsDiff,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "exit-code, e", Usage: "Make the mkr exit with codes of 1 if there are differences and 0 if no differences. This similar to diff(1)"},
+				cli.BoolFlag{Name: "exit-code, e", Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)"},
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 			},
 		},
 		{
 			Name:        "push",
 			Usage:       "push rules",
-			Description: "Push monitor rules, which are stored in a file, to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
+			Description: "Push monitor rules stored in a file to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
 			Action:      doMonitorsPush,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
@@ -299,7 +299,7 @@ func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 	names := map[string]bool{}
 	for _, m := range monitors {
 		if names[m.Name] {
-			logger.Log("Warning: ", fmt.Sprintf("Names of %s is not unique.", label))
+			logger.Log("Warning: ", fmt.Sprintf("Names of %s are not unique.", label))
 			flagNameUniqueness = false
 		}
 		names[m.Name] = true

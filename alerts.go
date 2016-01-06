@@ -17,26 +17,26 @@ var commandAlerts = cli.Command{
 	Name:  "alerts",
 	Usage: "Retrieve/Close alerts",
 	Description: `
-    Retrieve/Close alerts. Without subcommand, show all alerts.
-    Request APIs under "/api/v0/alerts". See http://help-ja.mackerel.io/entry/spec/api/v0 .
+    Retrieve/Close alerts. With no subcommand specified, this will show all alerts.
+    Requests APIs under "/api/v0/alerts". See http://help-ja.mackerel.io/entry/spec/api/v0 .
 `,
 	Action: doAlertsRetrieve,
 	Subcommands: []cli.Command{
 		{
 			Name:        "list",
 			Usage:       "list alerts",
-			Description: "Show alerts with human-readable format.",
+			Description: "Shows alerts in human-readable format.",
 			Action:      doAlertsList,
 			Flags: []cli.Flag{
 				cli.StringSliceFlag{
 					Name:  "service, s",
 					Value: &cli.StringSlice{},
-					Usage: "Filter alerts by service. Multiple choice allow.",
+					Usage: "Filters alerts by service. Multiple choices are allowed.",
 				},
 				cli.StringSliceFlag{
 					Name:  "host-status, S",
 					Value: &cli.StringSlice{},
-					Usage: "Filter alerts by status of each host. Multiple choice allow.",
+					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
 			},
@@ -44,7 +44,7 @@ var commandAlerts = cli.Command{
 		{
 			Name:        "close",
 			Usage:       "close alerts",
-			Description: "Close alerts. Multiple alert IDs can be specified.",
+			Description: "Closes alerts. Multiple alert IDs can be specified.",
 			Action:      doAlertsClose,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "reason, r", Value: "", Usage: "Reason of closing alert."},
