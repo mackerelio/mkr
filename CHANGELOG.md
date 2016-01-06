@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (2016-01-06)
+
+* support alerts subcommand #31 (stanaka)
+* Fix README example about mkr throw #32 (yuuki1)
+* Build with Go 1.5 #33 (itchyny)
+* Fixed the english used in the command descriptions #35 (stefafafan)
+
+
 ## 0.7.1 (2015-11-12)
 
 * support `notificationIntervai` field in monitors (stanaka)

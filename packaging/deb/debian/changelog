@@ -1,3 +1,16 @@
+mkr (0.8.0-1) stable; urgency=low
+
+  * support alerts subcommand (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/31>
+  * Fix README example about mkr throw (by yuuki1)
+    <https://github.com/mackerelio/mkr/pull/32>
+  * Build with Go 1.5 (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/33>
+  * Fixed the english used in the command descriptions (by stefafafan)
+    <https://github.com/mackerelio/mkr/pull/35>
+
+ -- Songmu <y.songmu@gmail.com>  Wed, 06 Jan 2016 20:38:20 +0900
+
 mkr (0.7.1-1) stable; urgency=low
 
   * support `notificationIntervai` field in monitors (by stanaka)

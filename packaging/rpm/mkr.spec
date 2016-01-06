@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jan 06 2016 <y.songmu@gmail.com> - 0.8.0-1
+- support alerts subcommand (by stanaka)
+- Fix README example about mkr throw (by yuuki1)
+- Build with Go 1.5 (by itchyny)
+- Fixed the english used in the command descriptions (by stefafafan)
+
 * Thu Nov 12 2015 <y.songmu@gmail.com> - 0.7.1-1
 - support `notificationIntervai` field in monitors (stanaka)
 - [bug] fix json parameter s/hostID/hostId/g (Songmu)
