@@ -1,3 +1,10 @@
+mkr (0.8.1-1) stable; urgency=low
+
+  * fix handling host-status option (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/37>
+
+ -- Songmu <y.songmu@gmail.com>  Thu, 07 Jan 2016 18:48:54 +0900
+
 mkr (0.8.0-1) stable; urgency=low
 
   * support alerts subcommand (by stanaka)

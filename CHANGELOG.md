@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1 (2016-01-07)
+
+* fix handling host-status option #37 (stanaka)
+
+
 ## 0.8.0 (2016-01-06)
 
 * support alerts subcommand #31 (stanaka)

@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jan 07 2016 <y.songmu@gmail.com> - 0.8.1-1
+- fix handling host-status option (by stanaka)
+
 * Wed Jan 06 2016 <y.songmu@gmail.com> - 0.8.0-1
 - support alerts subcommand (by stanaka)
 - Fix README example about mkr throw (by yuuki1)
