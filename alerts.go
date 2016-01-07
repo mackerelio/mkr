@@ -194,7 +194,7 @@ func doAlertsRetrieve(c *cli.Context) {
 func doAlertsList(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	filterServices := c.StringSlice("service")
-	filterStatuses := c.StringSlice("status")
+	filterStatuses := c.StringSlice("host-status")
 	client := newMackerel(conffile)
 
 	alerts, err := client.FindAlerts()
