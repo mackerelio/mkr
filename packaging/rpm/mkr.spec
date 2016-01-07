@@ -5,7 +5,7 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.8.0
+Version:   0.8.1
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jan 07 2016 <y.songmu@gmail.com> - 0.8.1-1
+- fix handling host-status option (by stanaka)
+
 * Wed Jan 06 2016 <y.songmu@gmail.com> - 0.8.0-1
 - support alerts subcommand (by stanaka)
 - Fix README example about mkr throw (by yuuki1)
