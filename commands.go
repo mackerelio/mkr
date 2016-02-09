@@ -253,6 +253,8 @@ func doStatus(c *cli.Context) {
 		format := &HostFormat{
 			ID:            host.ID,
 			Name:          host.Name,
+			Nickname:      host.Nickname,
+			DisplayName:   host.DisplayName,
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
@@ -289,6 +291,8 @@ func doHosts(c *cli.Context) {
 			format := &HostFormat{
 				ID:            host.ID,
 				Name:          host.Name,
+				Nickname:      host.Nickname,
+				DisplayName:   host.DisplayName,
 				Status:        host.Status,
 				RoleFullnames: host.GetRoleFullnames(),
 				IsRetired:     host.IsRetired,
