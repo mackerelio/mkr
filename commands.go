@@ -95,7 +95,7 @@ var commandUpdate = cli.Command{
 	Action: doUpdate,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update hostname."},
-		cli.StringFlag{Name: "displayname", Value: "", Usage: "Update displayname."},
+		cli.StringFlag{Name: "displayName", Value: "", Usage: "Update displayName."},
 		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update status."},
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
@@ -190,7 +190,7 @@ var commandDocs = map[string]commandDoc{
 	"status":   {"", "[-v|verbose] <hostId>"},
 	"hosts":    {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
 	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update":   {"", "[--name | -n <name>] [--displayname <displayname>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
+	"update":   {"", "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
 	"throw":    {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
 	"fetch":    {"", "[--name | -n <metricName>] hostIds..."},
 	"retire":   {"", "hostIds..."},
@@ -337,7 +337,7 @@ func doUpdate(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optName := c.String("name")
-	optDisplayName := c.String("displayname")
+	optDisplayName := c.String("displayName")
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 
