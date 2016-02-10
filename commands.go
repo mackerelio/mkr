@@ -95,6 +95,7 @@ var commandUpdate = cli.Command{
 	Action: doUpdate,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update hostname."},
+		cli.StringFlag{Name: "displayname", Value: "", Usage: "Update displayname."},
 		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update status."},
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
@@ -189,7 +190,7 @@ var commandDocs = map[string]commandDoc{
 	"status":   {"", "[-v|verbose] <hostId>"},
 	"hosts":    {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
 	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update":   {"", "[--name | -n <name>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
+	"update":   {"", "[--name | -n <name>] [--displayname <displayname>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
 	"throw":    {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
 	"fetch":    {"", "[--name | -n <metricName>] hostIds..."},
 	"retire":   {"", "hostIds..."},
@@ -253,7 +254,6 @@ func doStatus(c *cli.Context) {
 		format := &HostFormat{
 			ID:            host.ID,
 			Name:          host.Name,
-			Nickname:      host.Nickname,
 			DisplayName:   host.DisplayName,
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
@@ -291,7 +291,6 @@ func doHosts(c *cli.Context) {
 			format := &HostFormat{
 				ID:            host.ID,
 				Name:          host.Name,
-				Nickname:      host.Nickname,
 				DisplayName:   host.DisplayName,
 				Status:        host.Status,
 				RoleFullnames: host.GetRoleFullnames(),
@@ -338,6 +337,7 @@ func doUpdate(c *cli.Context) {
 	conffile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optName := c.String("name")
+	optDisplayName := c.String("displayname")
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 
@@ -350,9 +350,10 @@ func doUpdate(c *cli.Context) {
 	}
 
 	needUpdateHostStatus := optStatus != ""
-	needUpdateHost := (optName != "" || len(optRoleFullnames) > 0)
+	needUpdateHost := (optName != "" || optDisplayName != "" || len(optRoleFullnames) > 0)
 
 	if !needUpdateHostStatus && !needUpdateHost {
+		logger.Log("update", "at least one argumet is required.")
 		cli.ShowCommandHelp(c, "update")
 		os.Exit(1)
 	}
@@ -375,8 +376,15 @@ func doUpdate(c *cli.Context) {
 			} else {
 				name = optName
 			}
+			displayname := ""
+			if optDisplayName == "" {
+				displayname = host.DisplayName
+			} else {
+				displayname = optDisplayName
+			}
 			_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
 				Name:          name,
+				DisplayName:   displayname,
 				RoleFullnames: optRoleFullnames,
 				Meta:          meta,
 			})
