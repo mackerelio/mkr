@@ -12,6 +12,7 @@ import (
 type HostFormat struct {
 	ID            string            `json:"id,omitempty"`
 	Name          string            `json:"name,omitempty"`
+	DisplayName   string            `json:"displayName,omitempty"`
 	Status        string            `json:"status,omitempty"`
 	Memo          string            `json:"memo,omitempty"`
 	RoleFullnames []string          `json:"roleFullnames,omitempty"`
