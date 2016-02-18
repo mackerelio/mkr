@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Feb 18 2016 <stefafafan@hatena.ne.jp> - 0.9.0-1
+- Support displayName of host's json (by stanaka)
+
 * Thu Jan 07 2016 <y.songmu@gmail.com> - 0.8.1-1
 - fix handling host-status option (by stanaka)
 

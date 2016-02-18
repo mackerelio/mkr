@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0 (2016-02-18)
+
+* Support displayName of host's json #39 (stanaka)
+
+
 ## 0.8.1 (2016-01-07)
 
 * fix handling host-status option #37 (stanaka)
