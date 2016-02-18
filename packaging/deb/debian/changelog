@@ -1,3 +1,10 @@
+mkr (0.9.0-1) stable; urgency=low
+
+  * Support displayName of host's json (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/39>
+
+ -- Stefan Utamaru <stefafafan@hatena.ne.jp>  Thu, 18 Feb 2016 17:01:23 +0900
+
 mkr (0.8.1-1) stable; urgency=low
 
   * fix handling host-status option (by stanaka)
