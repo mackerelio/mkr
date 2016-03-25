@@ -29,11 +29,11 @@ cross: deps
 	cp -p $(PWD)/snapshot/darwin_386/mkr $(PWD)/snapshot/mkr_darwin_386
 
 rpm:
-	GOOS=linux GOARCH=386 make build
+	GOOS=linux GOARCH=amd64 make build
 	rpmbuild --define "_builddir `pwd`" -ba packaging/rpm/mkr.spec
 
 deb:
-	GOOS=linux GOARCH=386 make build
+	GOOS=linux GOARCH=amd64 make build
 	cp $(BIN) packaging/deb/debian/$(BIN).bin
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
 
