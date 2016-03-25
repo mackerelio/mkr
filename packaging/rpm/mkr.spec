@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Fri Mar 25 2016 <y.songmu@gmail.com> - 0.9.1-1
+- use GOARCH=amd64 for now (by Songmu)
+
 * Thu Feb 18 2016 <stefafafan@hatena.ne.jp> - 0.9.0-1
 - Support displayName of host's json (by stanaka)
 
