@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.1 (2016-03-25)
+
+* use GOARCH=amd64 for now #41 (Songmu)
+
+
 ## 0.9.0 (2016-02-18)
 
 * Support displayName of host's json #39 (stanaka)
