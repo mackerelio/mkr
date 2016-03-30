@@ -2,9 +2,6 @@
 
 set -xeu
 
-go get github.com/aktau/github-release
-
-
 #VERSION=$(cat ruby-version)
 VERSION=0.9.1
 USER="stanaka"

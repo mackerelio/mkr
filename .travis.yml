@@ -12,6 +12,7 @@ script:
 before_deploy:
 - make rpm deb
 - pwd
+- go get github.com/aktau/github-release
 deploy:
   - provider: script
     script: script/travis/github-releases.sh
