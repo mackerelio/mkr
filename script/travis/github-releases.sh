@@ -15,12 +15,13 @@ github-release release \
   --repo $REPO \
   --tag $VERSION \
   --name "$REPO-$VERSION" \
-  --description "not release"
+  --description "not release" \
+  --pre-release
 
 # upload files
 echo "Use at your own risk!" >> description.md
 echo "" >> description.md
-for i in $(ls -1 *.rpm)
+for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*)
 do
   echo "* $i" >> description.md
   echo "  * $(openssl sha256 $i)" >> description.md
