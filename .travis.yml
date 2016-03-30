@@ -33,4 +33,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: stanaka/mkr
-    branch: /^bump-version-.*$/
+    all_branches: true
+    condition: "$TRAVIS_BRANCH =~ ^bump-version-.*$""
