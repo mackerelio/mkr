@@ -3,5 +3,5 @@
 set -xeu
 
 # create pull request
-echo $PATH
-~/bin/hub pull-request -m 'test' -b stanaka/mkr:master
+pwd
+~/bin/hub pull-request -m 'test' -b stanaka/mkr:master -h stanaka/mkr:$TRAVIS_BRANCH
