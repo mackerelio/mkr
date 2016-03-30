@@ -14,7 +14,7 @@ before_deploy:
 - pwd
 deploy:
   - provider: script
-    script: /home/travis/gopath/src/github.com/stanaka/mkr/scripts/travis/github-releases.sh
+    script: script/travis/github-releases.sh
     on:
       repo: stanaka/mkr
       all_branches: true
