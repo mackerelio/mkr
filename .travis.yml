@@ -18,7 +18,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: Rzt3UJJnYi51r53yVpvg+5McqPEV+qLig6VPW+2V9hrSzd+25bJtoOesuWdKneHeeEkTivTzH3SillWdEDFlQdr+HBh/Th3n0M9GHKYMtI+b9z5BeqZWqJ8lSCICdTRmOwarUWSIV33JwgQ3og/bxVEGTRmqMpYMrPHWSBWGGeQ=
+    secure: ZYf/jX3CzO3FqLzmC2p0NrSLPeTe9j2aPrQCqYwrTpU2VsTdjweEoJOt7g+1EORN8MRWb96hn9a4qBwAAGy/k53kBWplBfzQH/8Ms/hkUkBVkbslx3eJ+5DdLVX2zE6W2n/jhQHTxjc4PgzLtz5Hu98NQlbtGD76qioQMESKhkWpgNVaQtjk+qUtgB6HCsN+DZuhgJxZwaUGy4r11ceVI5eMOHNnyrShu7CKT2vOcEWGuM3XOvB8bhTjjzbrko9AwxlueZS2LeULrfgyaCxKcAOTHADE9r3WG1RYqwjOU/qYFa/eUPIeXOexOAyiu3d4YOV2YwTK1fB/CJdYRBBNav1bHrAGvp9yXl6I6lUnAok8emqovmqUfCthiWPa1ULGOBWFREbzC34md28nMwCWHORLZmCEJ8Xrf+mUheHNXPd6aNpM17R4NliaIYASXrmhuIUfde8pljnFSpkCH78KH/QRM5EwKH9QCyNansD0cIzR5uHtVgQpJSgcvdrGV2kvEL2zpFUeGm/add9v3Yy1lqYW7y38cB1SuspZDpu1OoNbqMyUnNbizXcX28TjaYUo3ogh11r1OV2mQy0MF0XNGGjfGbiIkdvH8ykWV4vR9n+CZREP6Qg72f1tJ+WwWeQeYMGBFH2eQyhLx9P3wGlEm+BO74mgH/AYE/NZaLS9atk=
   file:
     - "/home/travis/rpmbuild/RPMS/noarch/mkr-0.9.1-1.noarch.rpm"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/packaging/mkr_0.9.1-1_all.deb"
@@ -30,8 +30,5 @@ deploy:
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
     - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
-  skip_cleanup: true
   on:
-    repo: mackerelio/mkr
-    tags: true
-    all_branches: true
+    repo: stanaka/mkr
