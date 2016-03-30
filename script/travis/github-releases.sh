@@ -8,13 +8,6 @@ USER="stanaka"
 REPO="mkr"
 pwd
 # create description
-ls ~/gopath/src/github.com/stanaka/mkr/packaging/
-ls -R ~/gopath/src/github.com/stanaka/mkr/
-for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 ~/gopath/src/github.com/stanaka/mkr/packaging/*.deb) $(ls -1 snapshot/mkr_*)
-do
-  name=$(basename "$path" ".php")
-  echo $name
-done
 
 # create release
 github-release release \

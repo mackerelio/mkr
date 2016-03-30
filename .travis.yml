@@ -24,11 +24,13 @@ before_deploy:
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
+  skip_cleanup: true
   on:
     repo: stanaka/mkr
     all_branches: master
 - provider: script
   script: script/travis/create-pullrequest.sh
+  skip_cleanup: true
   on:
     repo: stanaka/mkr
     branch: /bump-version-*/
