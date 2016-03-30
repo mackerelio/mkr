@@ -18,9 +18,15 @@ after_success:
 before_deploy:
 - make rpm deb
 - go get github.com/aktau/github-release
+- go get github.com/github/hub
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
   on:
     repo: stanaka/mkr
-    all_branches: true
+    all_branches: master
+- provider: script
+  script: script/travis/create-pullrequest.sh
+  on:
+    repo: stanaka/mkr
+    branch: /bump-version-*/
