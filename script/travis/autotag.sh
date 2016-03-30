@@ -12,5 +12,5 @@ openssl aes-256-cbc -K $encrypted_e192d40ccb57_key -iv $encrypted_e192d40ccb57_i
 chmod 600 $deploykey
 git config --global user.email "mackerel-developers@hatena.ne.jp"
 git config --global user.name  "mackerel"
-git remote set-url origin git@github.com:mackerelio/mkr.git
+git remote set-url origin git@github.com:stanaka/mkr.git
 script/autotag

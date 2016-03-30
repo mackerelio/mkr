@@ -1,7 +1,10 @@
 language: go
 go:
 - 1.5
-env: PATH=/home/travis/gopath/bin:$PATH
+env:
+  global:
+  - PATH=~/bin:~/gopath/bin:$PATH
+  - secure: "Ffv0t508yBkuWsee2mRAE3ngW7BoOJ9hSvRDCmfNbvINO+u81SrqKBmsXRY3ip0pZxFkf0842WYG1ZdPes74YZUKCcrDp4MwcAKkMaNX8iYiRfFDtGSvMfHRrHzTb+QsiCeuEsMKCllqO6Vpqfb+ZlZ8VfvZYm4vOx4mR76dX4GYR6Ze60ac+6RRAeqQxe1q8/96kvyNmVuHLxuGTPSyCOe3rnHxcfdQHJcJt7GThI8/tZbSyl65u7p1/TDnfIwFjrrFcNsdPrp45fYO6Z8e1hxH8bdn6O5pGrmvpIB5Ykx6eupP6I4tpRp6z8t7gMlanGJNLAzgarr509bAE/zzeD2Y8KE38vlT9LgBzy1r4gyMaCMn5CNXaDgBEXTD2Ufnn+pSl495QCz4Ux5x/1jwA1q5hDVMZvJ0FZJBZzSwOwgQTGewoyE0smoOG5SgKvy/NZUce6xZ2fDKl7gC/80NBHXszNiq5wneJD855z05WgbhwX036ctgsm+xdO8eWxp8PzP+dmKUMXUtv6sAPgd6qkmOMpfU+OHYEK/IKNIcDnqJXWO+/CLWcUEQltuCBVU5anhIYgMbjwGDch6kpWYm+k/ySsG7C7Dr1pmDvFtwkZap3otUc78Oi6afC7155o3TweNb0YjAXtDlP+mbopeL3/ekOa/RKc5V0Qatq4jYouk="
 install:
 - go get github.com/laher/goxc
 - sudo apt-get update
@@ -15,23 +18,21 @@ after_success:
 - script/travis/autotag.sh
 before_deploy:
 - make rpm deb
+- go get github.com/aktau/github-release
+- mkdir -p ~/bin
+- git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
+- echo $TRAVIS_BRANCH
 deploy:
-  provider: releases
-  api_key:
-    secure: Rzt3UJJnYi51r53yVpvg+5McqPEV+qLig6VPW+2V9hrSzd+25bJtoOesuWdKneHeeEkTivTzH3SillWdEDFlQdr+HBh/Th3n0M9GHKYMtI+b9z5BeqZWqJ8lSCICdTRmOwarUWSIV33JwgQ3og/bxVEGTRmqMpYMrPHWSBWGGeQ=
-  file:
-    - "/home/travis/rpmbuild/RPMS/noarch/mkr-0.9.1-1.noarch.rpm"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/packaging/mkr_0.9.1-1_all.deb"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
+- provider: script
+  script: script/travis/github-releases.sh
   skip_cleanup: true
   on:
-    repo: mackerelio/mkr
-    tags: true
+    repo: stanaka/mkr
+    branch: master
+- provider: script
+  script: script/travis/create-pullrequest.sh
+  skip_cleanup: true
+  on:
+    repo: stanaka/mkr
     all_branches: true
+    condition: "$TRAVIS_BRANCH =~ ^bump-version-.*$"
