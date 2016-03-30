@@ -15,6 +15,8 @@ after_success:
 - script/travis/autotag.sh
 before_deploy:
 - make rpm deb
+- pwd
+- ls -lR
 deploy:
   provider: releases
   api_key:
