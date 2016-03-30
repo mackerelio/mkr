@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xeu
+
 go get github.com/aktau/github-release
 
 
