@@ -3,4 +3,5 @@
 set -xeu
 
 # create pull request
-git pull-request -m 'test'
+echo $PATH
+~/bin/hub pull-request -m 'test'
