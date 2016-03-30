@@ -21,6 +21,7 @@ before_deploy:
 - go get github.com/aktau/github-release
 - mkdir -p ~/bin
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
+- echo $TRAVIS_BRANCH
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
