@@ -3,4 +3,7 @@
 set -xeu
 
 # create pull request
-git pull-request -m 'test'
+pwd
+git branch
+git checkout $TRAVIS_BRANCH
+~/bin/hub pull-request -m 'test' -b stanaka/mkr:master
