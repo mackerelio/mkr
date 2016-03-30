@@ -33,4 +33,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: stanaka/mkr
-    branch: /bump-version-*/
+    branch: /^bump-version-.*$/
