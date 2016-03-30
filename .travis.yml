@@ -20,13 +20,15 @@ deploy:
   api_key:
     secure: ZYf/jX3CzO3FqLzmC2p0NrSLPeTe9j2aPrQCqYwrTpU2VsTdjweEoJOt7g+1EORN8MRWb96hn9a4qBwAAGy/k53kBWplBfzQH/8Ms/hkUkBVkbslx3eJ+5DdLVX2zE6W2n/jhQHTxjc4PgzLtz5Hu98NQlbtGD76qioQMESKhkWpgNVaQtjk+qUtgB6HCsN+DZuhgJxZwaUGy4r11ceVI5eMOHNnyrShu7CKT2vOcEWGuM3XOvB8bhTjjzbrko9AwxlueZS2LeULrfgyaCxKcAOTHADE9r3WG1RYqwjOU/qYFa/eUPIeXOexOAyiu3d4YOV2YwTK1fB/CJdYRBBNav1bHrAGvp9yXl6I6lUnAok8emqovmqUfCthiWPa1ULGOBWFREbzC34md28nMwCWHORLZmCEJ8Xrf+mUheHNXPd6aNpM17R4NliaIYASXrmhuIUfde8pljnFSpkCH78KH/QRM5EwKH9QCyNansD0cIzR5uHtVgQpJSgcvdrGV2kvEL2zpFUeGm/add9v3Yy1lqYW7y38cB1SuspZDpu1OoNbqMyUnNbizXcX28TjaYUo3ogh11r1OV2mQy0MF0XNGGjfGbiIkdvH8ykWV4vR9n+CZREP6Qg72f1tJ+WwWeQeYMGBFH2eQyhLx9P3wGlEm+BO74mgH/AYE/NZaLS9atk=
   file:
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_amd64.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_linux_386.tar.gz"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_amd64.zip"
-    - "/home/travis/gopath/src/github.com/mackerelio/mkr/snapshot/mkr_darwin_386.zip"
+    - "/home/travis/rpmbuild/RPMS/noarch/mkr-0.9.1-1.noarch.rpm"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/packaging/mkr_0.9.1-1_all.deb"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_linux_amd64"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_linux_386"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_darwin_amd64"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_darwin_386"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_linux_amd64.tar.gz"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_linux_386.tar.gz"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_darwin_amd64.zip"
+    - "/home/travis/gopath/src/github.com/stanaka/mkr/snapshot/mkr_darwin_386.zip"
   on:
     repo: stanaka/mkr
