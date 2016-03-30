@@ -34,4 +34,4 @@ deploy:
   on:
     repo: stanaka/mkr
     all_branches: true
-    condition: "$TRAVIS_BRANCH =~ ^bump-version-.*$""
+    condition: "$TRAVIS_BRANCH =~ ^bump-version-.*$"
