@@ -2,7 +2,7 @@
 
 set -xeu
 
-NEW_VERSION=0.9.2
+NEW_VERSION=0.9.3
 
 # create pull request
 git checkout $TRAVIS_BRANCH
