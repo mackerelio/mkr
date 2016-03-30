@@ -14,9 +14,9 @@ script:
 - make all
 be fore_deploy:
 - make rpm deb
-- echo $GITHUB_TEST
 - pwd
 - go get github.com/aktau/github-release
+- echo $GITHUB_TEST
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
