@@ -24,7 +24,7 @@ echo "" >> description.md
 
 for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*)
 do
-  name=$(basename "$path" ".php")
+  name=$(basename "$i")
   echo "* $name" >> description.md
   echo "  * $(openssl sha256 $i)" >> description.md
   github-release upload --user $USER \
