@@ -21,7 +21,7 @@ use warnings;
 use HTTP::Tiny;
 use JSON::PP;
 
-my $OWNER = 'mackerelio';
+my $OWNER = 'stanaka';
 my $REPO  = 'mkr';
 
 sub get_branch_from_msg {
