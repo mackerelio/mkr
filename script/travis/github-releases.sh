@@ -6,7 +6,7 @@ set -xeu
 VERSION=v0.9.1
 USER="stanaka"
 REPO="mkr"
-pwd
+
 # create description
 
 # create release
@@ -22,7 +22,7 @@ github-release release \
 echo "Use at your own risk!" >> description.md
 echo "" >> description.md
 
-for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*)
+for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*.zip)
 do
   name=$(basename "$i")
   echo "* $name" >> description.md
