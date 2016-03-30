@@ -8,6 +8,11 @@ USER="stanaka"
 REPO="mkr"
 pwd
 # create description
+for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 ~/gopath/src/github.com/stanaka/mkr/packaging/*.deb) $(ls -1 snapshot/mkr_*)
+do
+  name=$(basename "$path" ".php")
+  echo $name
+done
 
 # create release
 github-release release \
@@ -22,7 +27,7 @@ github-release release \
 echo "Use at your own risk!" >> description.md
 echo "" >> description.md
 
-for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*)
+for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 ~/gopath/src/github.com/stanaka/mkr/packaging/*.deb) $(ls -1 snapshot/mkr_*)
 do
   name=$(basename "$path" ".php")
   echo "* $name" >> description.md
