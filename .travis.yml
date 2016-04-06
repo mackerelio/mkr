@@ -23,8 +23,8 @@ before_deploy:
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
 - echo $TRAVIS_BRANCH
 - git branch -a
-- git checkout --track -b origin/master
-- git fetch
+- git branch -r
+- git fetch --all --prune
 - git branch -a
 - git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
