@@ -1,3 +1,10 @@
+mkr (0.9.4-1) stable; urgency=low
+
+  * add dummy (by stanaka)
+    <https://github.com/stanaka/mkr/pull/4>
+
+ -- travis@localhost <travis@localhost>  Wed, 06 Apr 2016 14:29:05 +0000
+
 mkr (0.9.1-1) stable; urgency=low
 
   * use GOARCH=amd64 for now (by Songmu)
