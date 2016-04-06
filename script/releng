@@ -192,7 +192,9 @@ sub merged_prs {
     my $current_tag = shift;
     say `git log v$current_tag... --merges --oneline`;
     say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    my @pull_nums = sort {$a <=> $b} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    print join("\n", @a);
+    my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
 
     my @releases;
     for my $pull_num (@pull_nums) {
