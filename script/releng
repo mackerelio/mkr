@@ -332,7 +332,6 @@ sub create_pull_request {
   git qw/config user.name/, "Travis-CI";
   say "https://github.com/$REPO_NAME.git";
   git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
-  git qw/push/;
 
   #git qw/diff/, qw/--word-diff/, "master..".current_branch();
   my $pr_body = build_pull_request_body($next_version, @releases);
