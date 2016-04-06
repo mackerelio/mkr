@@ -309,7 +309,7 @@ sub create_pull_request {
   # check
   #chomp(my $email = `git config user.email`);
   #chomp(my $name  = `git config user.name`);
-  git qw/checkout/ $TRAVIS_BRANCH
+  git qw/checkout/, $TRAVIS_BRANCH
 
   my $current_version = last_release;
   my $next_version    = next_release;
