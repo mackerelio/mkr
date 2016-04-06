@@ -22,13 +22,8 @@ before_deploy:
 - mkdir -p ~/bin
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
 - echo $TRAVIS_BRANCH
-- git branch -a
-- git branch -r
-- git fetch --all --prune
-- git branch -a
-- git checkout -b master origin/master
-- git checkout $TRAVIS_BRANCH
-- git branch
+- git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master
+- git fetch
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
