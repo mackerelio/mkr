@@ -326,7 +326,7 @@ sub create_pull_request {
   infof "update changelogs\n";
   my @releases = merged_prs $current_version;
   update_changelog($next_version, @releases);
-  #git qw/commit -am/, "update changelogs";
+  git qw/commit -am/, "update changelogs";
 
   git qw/diff/, qw/--word-diff/, "master..".current_branch();
   my $pr_body = build_pull_request_body($next_version, @releases);
@@ -334,18 +334,10 @@ sub create_pull_request {
   say $pr_body;
 
   infof "push changes\n";
-  #git qw/push --set-upstream origin/, $branch_name;
-  #hub qw/pull-request -m/, $pr_body;
-
-
-  my $body = "Release version $next_version\n\n";
-  # git checkout $TRAVIS_BRANCH
-  # ~/bin/hub pull-request -m "Release version $NEW_VERSION" -b stanaka/mkr:master
-  hub qw/pull-request -m/, $body, qq/-b/, qq/$REPO_NAME:master/;
+  hub qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
 
   infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
 }
-
 
 ### main process
 
