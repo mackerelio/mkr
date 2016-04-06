@@ -326,9 +326,8 @@ sub create_pull_request {
   infof "update changelogs\n";
   my @releases = merged_prs $current_version;
   update_changelog($next_version, @releases);
-  git qw/diff/;
   git qw/commit -am/, "update changelogs";
-  git qw/log/;
+  git qw/push/;
 
   #git qw/diff/, qw/--word-diff/, "master..".current_branch();
   my $pr_body = build_pull_request_body($next_version, @releases);
