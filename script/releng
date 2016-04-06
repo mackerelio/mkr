@@ -328,10 +328,10 @@ sub create_pull_request {
   update_changelog($next_version, @releases);
   git qw/commit -am/, "update changelogs";
   git qw/config --global push.default matching/;
-  git qw/config user.email/, "example@example.com";
+  git qw/config user.email/, "example\@example.com";
   git qw/config user.name/, "Travis-CI";
   say "https://github.com/$REPO_NAME.git";
-  git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}@github.com/$REPO_NAME.git";
+  git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
   git qw/push/;
 
   #git qw/diff/, qw/--word-diff/, "master..".current_branch();
