@@ -22,7 +22,7 @@ before_deploy:
 - mkdir -p ~/bin
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
 - echo $TRAVIS_BRANCH
-- git checkout master
+- git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
 - git branch
 deploy:
