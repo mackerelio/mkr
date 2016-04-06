@@ -22,6 +22,7 @@ before_deploy:
 - mkdir -p ~/bin
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
 - echo $TRAVIS_BRANCH
+- git branch
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
