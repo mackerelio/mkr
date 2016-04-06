@@ -3,6 +3,13 @@ mkr (0.9.4-1) stable; urgency=low
   * add dummy (by stanaka)
     <https://github.com/stanaka/mkr/pull/4>
 
+ -- travis@localhost <travis@localhost>  Wed, 06 Apr 2016 17:03:03 +0000
+
+mkr (0.9.4-1) stable; urgency=low
+
+  * add dummy (by stanaka)
+    <https://github.com/stanaka/mkr/pull/4>
+
  -- travis@localhost <travis@localhost>  Wed, 06 Apr 2016 16:57:55 +0000
 
 mkr (0.9.4-1) stable; urgency=low
