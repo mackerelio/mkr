@@ -190,6 +190,7 @@ sub diff {
 
 sub merged_prs {
     my $current_tag = shift;
+    say `git log v$current_tag... --merges --oneline`;
     my @pull_nums = sort {$a <=> $b} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
 
     my @releases;
@@ -343,7 +344,8 @@ sub create_pull_request {
 
   infof "update changelogs\n";
   my @releases = merged_prs $current_version;
-  update_changelog($next_version, @releases);
+  say @releases;
+  update_changelog($next_version, @releases) if @releases;
   if(git_with_exit_code qw/diff --exit-code/){
     git qw/commit -am/, "update changelogs";
     git qw/config --global push.default matching/;
