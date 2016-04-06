@@ -162,7 +162,7 @@ sub last_release {
 }
 
 sub current_branch {
-  return `git symbolic-ref --short HEAD`;
+  return chomp(`git symbolic-ref --short HEAD`);
 }
 
 sub next_release {
