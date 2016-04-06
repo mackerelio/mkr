@@ -341,7 +341,7 @@ sub create_pull_request {
   my $body = "Release version $next_version\n\n";
   # git checkout $TRAVIS_BRANCH
   # ~/bin/hub pull-request -m "Release version $NEW_VERSION" -b stanaka/mkr:master
-  hub qw/pull-request -m/, $body, qw/-b/, qw/$REPO_NAME:master/;
+  hub qw/pull-request -m/, $body, qq/-b/, qq/$REPO_NAME:master/;
 
   infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
 }
