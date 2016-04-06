@@ -24,6 +24,8 @@ before_deploy:
 - echo $TRAVIS_BRANCH
 - git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master
 - git fetch
+- git checkout -b master origin/master
+- git diff --word-diff origin/master..bump-version-0.9.4
 deploy:
 - provider: script
   script: script/travis/github-releases.sh
