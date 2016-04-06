@@ -290,7 +290,11 @@ sub update_changelog {
             $update .= sprintf "  * %s (by %s)\n    <%s>\n", $rel->{title}, $rel->{user}, $rel->{url};
         }
         $update .= sprintf "\n -- %s <%s>  %s\n\n", $name, $email, $now->strftime("%a, %d %b %Y %H:%M:%S %z");
-        $update . $content;
+        if($content !~ m/$update/){
+          $update . $content;
+        } else {
+          $content;
+        }
     };
 
     replace 'packaging/rpm/mkr.spec' => sub {
@@ -300,7 +304,9 @@ sub update_changelog {
         for my $rel (@releases) {
             $update .= sprintf "- %s (by %s)\n", $rel->{title}, $rel->{user};
         }
-        $content =~ s/%changelog/%changelog\n$update/;
+        if($content !~ m/$update/){
+          $content =~ s/%changelog/%changelog\n$update/;
+        }
         $content;
     };
 
@@ -311,7 +317,9 @@ sub update_changelog {
         for my $rel (@releases) {
             $update .= sprintf "* %s #%d (%s)\n", $rel->{title}, $rel->{num}, $rel->{user};
         }
-        $content =~ s/\A# Changelog/# Changelog$update/;
+        if($content !~ m/$update/){
+          $content =~ s/\A# Changelog/# Changelog$update/;
+        }
         $content;
     };
 }
