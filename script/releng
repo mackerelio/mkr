@@ -193,8 +193,9 @@ sub merged_prs {
     say `git log v$current_tag... --merges --oneline`;
     say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    print join("\n", @a);
+    say "1.---\n".join("\n", @a)."\n1----";
     my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    say "---\n".join(",", @pull_nums)."\n---";
 
     my @releases;
     for my $pull_num (@pull_nums) {
@@ -352,8 +353,8 @@ sub create_pull_request {
   if(git_with_exit_code qw/diff --exit-code/){
     git qw/commit -am/, "update changelogs";
     git qw/config --global push.default matching/;
-    git qw/config user.email/, "example\@example.com";
-    git qw/config user.name/, "Travis-CI";
+    git qw/config user.email/, 'mackerel-developers@hatena.ne.jp';
+    git qw/config user.name/, 'mackerel';
     say "https://github.com/$REPO_NAME.git";
     git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
   }
