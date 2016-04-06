@@ -37,6 +37,7 @@ my $verbose;
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
 
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
+sub command_with_exit_code {say('+ '. join ' ', @_) if DEBUG; system(@_)}
 sub _git {
     if($dry_run){
         return
@@ -53,6 +54,14 @@ sub git {
     }
     unshift  @_, _git; goto \&command
 }
+
+sub git_with_exit_code {
+    if($dry_run){
+        return
+    }
+    unshift  @_, _git; goto \&command_with_exit_code
+}
+
 
 sub _hub {
     if($dry_run){
@@ -174,6 +183,11 @@ sub next_release {
     }
 }
 
+sub diff {
+  git qw/diff --exit-code/
+
+}
+
 sub merged_prs {
     my $current_tag = shift;
     my @pull_nums = sort {$a <=> $b} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
@@ -219,6 +233,7 @@ sub is_valid_version {
     my ($major) = parse_version($ver);
     defined $major;
 }
+
 
 sub decide_next_version {
     my $current_version = shift;
@@ -321,17 +336,22 @@ sub create_pull_request {
 
   infof "bump versions and update readme\n";
   update_versions($current_version, $next_version);
-  #git qw/commit -am/, "ready for next release. version: $next_version";
+  if !git_with_exit_code qw/diff --exit-code/ {
+    say "do commit"
+    git qw/commit -am/, "ready for next release. version: $next_version";
+  }
 
   infof "update changelogs\n";
   my @releases = merged_prs $current_version;
   update_changelog($next_version, @releases);
-  git qw/commit -am/, "update changelogs";
-  git qw/config --global push.default matching/;
-  git qw/config user.email/, "example\@example.com";
-  git qw/config user.name/, "Travis-CI";
-  say "https://github.com/$REPO_NAME.git";
-  git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
+  if !git_with_exit_code qw/diff --exit-code/ {
+    git qw/commit -am/, "update changelogs";
+    git qw/config --global push.default matching/;
+    git qw/config user.email/, "example\@example.com";
+    git qw/config user.name/, "Travis-CI";
+    say "https://github.com/$REPO_NAME.git";
+    git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
+  }
 
   #git qw/diff/, qw/--word-diff/, "master..".current_branch();
   my $pr_body = build_pull_request_body($next_version, @releases);
