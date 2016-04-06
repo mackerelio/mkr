@@ -29,7 +29,7 @@ use POSIX qw(setlocale LC_TIME);
 use version;
 use Getopt::Long;
 
-my $REPO_NAME = `git rev-parse --show-toplevel`;
+chomp(my $REPO_NAME = `git rev-parse --show-toplevel`);
 $REPO_NAME =~ s|^.+/(\w+/\w+)$|$1|;
 my $dry_run;
 my $verbose;
@@ -309,7 +309,7 @@ sub create_pull_request {
   # check
   #chomp(my $email = `git config user.email`);
   #chomp(my $name  = `git config user.name`);
-  git qw/checkout/, $TRAVIS_BRANCH
+  git qw/checkout/, $current_branch;
 
   my $current_version = last_release;
   my $next_version    = next_release;
@@ -327,7 +327,7 @@ sub create_pull_request {
   update_changelog($next_version, @releases);
   #git qw/commit -am/, "update changelogs";
 
-  git qw/diff/, qw/--word-diff/, "master..".branch_name();
+  git qw/diff/, qw/--word-diff/, "master..".current_branch();
   my $pr_body = build_pull_request_body($next_version, @releases);
   say "Pull Request\n--------";
   say $pr_body;
