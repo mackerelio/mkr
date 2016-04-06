@@ -30,7 +30,7 @@ deploy:
     repo: stanaka/mkr
     branch: master
 - provider: script
-  script: script/travis/create-pullrequest.sh
+  script: script/releng2 --task=create-pullrequest --current-branch=$TRAVIS_BRANCH
   skip_cleanup: true
   on:
     repo: stanaka/mkr

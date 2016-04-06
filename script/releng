@@ -27,24 +27,37 @@ use ExtUtils::MakeMaker qw/prompt/;
 use Time::Piece;
 use POSIX qw(setlocale LC_TIME);
 use version;
+use Getopt::Long;
 
-my $REPO_NAME = "mackerelio/mkr";
+my $REPO_NAME = `git rev-parse --show-toplevel`;
+$REPO_NAME =~ s|^.+/(\w+/\w+)$|$1|;
+my $dry_run;
+my $verbose;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
 
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
 sub _git {
-     state $com = do {
+    if($dry_run){
+        return
+    }
+    state $com = do {
         chomp(my $c = `which git`);
         die "git command is required\n" unless $c;
         $c;
     };
 }
 sub git {
+    if($dry_run){
+        return
+    }
     unshift  @_, _git; goto \&command
 }
 
 sub _hub {
+    if($dry_run){
+        return
+    }
     state $com = do {
         chomp(my $c = `which hub`);
         unless ($c) {
@@ -55,6 +68,9 @@ sub _hub {
     };
 }
 sub hub {
+    if($dry_run){
+      return
+    }
     unshift @_, _hub; goto \&command;
 }
 
@@ -145,6 +161,18 @@ sub last_release {
     $tag;
 }
 
+sub current_branch {
+  return `git symbolic-ref --short HEAD`;
+}
+
+sub next_release {
+    if(current_branch() =~ /^bump-version-([\d\.]+)$/){
+      return $1;
+    } else {
+      return "";
+    }
+}
+
 sub merged_prs {
     my $current_tag = shift;
     my @pull_nums = sort {$a <=> $b} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
@@ -210,13 +238,6 @@ sub update_versions {
 
     ### update versions
     my $cur_ver_reg = quotemeta $current_version;
-    # update .travis.yml
-    replace '.travis.yml' => sub {
-        my $content = shift;
-        $content =~ s/$cur_ver_reg/$next_version/msg;
-        $content;
-    };
-
     # update rpm spec
     replace 'packaging/rpm/mkr.spec' => sub {
         my $content = shift;
@@ -283,8 +304,50 @@ sub build_pull_request_body {
     $body;
 }
 
+sub create_pull_request {
+  my($current_branch) = @_;
+  # check
+  #chomp(my $email = `git config user.email`);
+  #chomp(my $name  = `git config user.name`);
+  git qw/checkout/ $TRAVIS_BRANCH
+
+  my $current_version = last_release;
+  my $next_version    = next_release;
+  if(!$next_version) {
+    warnf("current branch should be 'bump-version-x.y.z'.\n");
+    return;
+  }
+
+  infof "bump versions and update readme\n";
+  update_versions($current_version, $next_version);
+  #git qw/commit -am/, "ready for next release. version: $next_version";
+
+  infof "update changelogs\n";
+  my @releases = merged_prs $current_version;
+  update_changelog($next_version, @releases);
+  #git qw/commit -am/, "update changelogs";
+
+  git qw/diff/, qw/--word-diff/, "master..".branch_name();
+  my $pr_body = build_pull_request_body($next_version, @releases);
+  say "Pull Request\n--------";
+  say $pr_body;
+
+  infof "push changes\n";
+  #git qw/push --set-upstream origin/, $branch_name;
+  #hub qw/pull-request -m/, $pr_body;
+
+
+  my $body = "Release version $next_version\n\n";
+  # git checkout $TRAVIS_BRANCH
+  # ~/bin/hub pull-request -m "Release version $NEW_VERSION" -b stanaka/mkr:master
+  hub qw/pull-request -m/, $body, qw/-b/, qw/$REPO_NAME:master/;
+
+  infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
+}
+
 
 ### main process
+
 if (!$ENV{HARNESS_ACTIVE}) {
     main();
 } else {
@@ -292,28 +355,65 @@ if (!$ENV{HARNESS_ACTIVE}) {
     run_tests();
 }
 
+sub help {
+  print <<EOS;
+$0
+--help
+--task=<task> # create-pullrequest, github-release
+--verbose
+--dry-run
+EOS
+
+}
+
 sub main {
+    my $help;
+    my $task;
+    my $current_branch;
+    GetOptions ("help" => \$help,
+        "task=s"   => \$task,  # create-pullrequest, github-release
+        "verbose"  => \$verbose,
+        "dry-run" => \$dry_run,
+        "current-branch=s" => \$current_branch,
+        );
+
+    if($help){
+      help();
+      exit 0;
+    }
     # check command
     _git;_hub;
 
-    git qw/checkout master/;
-    git qw/pull/;
+    #git qw/checkout master/;
+    #git qw/pull/;
+
+    if($task eq "create-pullrequest"){
+        create_pull_request($current_branch);
+        return;
+    }
+
 
     my $current_version = last_release;
-    my $next_version    = decide_next_version($current_version);
+    #my $current_version = "0.9.1";
+    #my $next_version    = decide_next_version($current_version);
+    my $next_version    = next_release;
+    if(!$next_version) {
+      warnf('current branch should be "bump-version-x.y.z".');
+      return;
+    }
 
     my $branch_name = "bump-version-$next_version";
-    infof "checkout new releasing branch [$branch_name]\n";
-    git qw/checkout -b/, $branch_name;
+    #infof "checkout new releasing branch [$branch_name]\n";
+    #git qw/checkout -b/, $branch_name;
 
     infof "bump versions and update readme\n";
     update_versions($current_version, $next_version);
-    git qw/commit -am/, "ready for next release. version: $next_version";
+    #git qw/commit -am/, "ready for next release. version: $next_version";
 
     infof "update changelogs\n";
     my @releases = merged_prs $current_version;
     update_changelog($next_version, @releases);
-    git qw/commit -am/, "update changelogs";
+    #git qw/commit -am/, "update changelogs";
 
     git qw/diff/, qw/--word-diff/, "master..$branch_name";
     my $pr_body = build_pull_request_body($next_version, @releases);
@@ -325,8 +425,8 @@ sub main {
     }
 
     infof "push changes\n";
-    git qw/push --set-upstream origin/, $branch_name;
-    hub qw/pull-request -m/, $pr_body;
+    #git qw/push --set-upstream origin/, $branch_name;
+    #hub qw/pull-request -m/, $pr_body;
 
     infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
 }
