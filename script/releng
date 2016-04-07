@@ -108,6 +108,13 @@ sub github_release {
     unshift  @_, _github_release; goto \&command
 }
 
+sub github_release_with_exit_code {
+    if($dry_run){
+        return
+    }
+    unshift  @_, _github_release; goto \&command_with_exit_code
+}
+
 
 sub http_get {
     my $url = shift;
@@ -318,7 +325,7 @@ sub update_changelog {
         if(index($content, $update) != -1){
           $update . $content;
         } else {
-          say "skip to update 'packaging/deb/debian/changelog'.";
+          infof "skip to update 'packaging/deb/debian/changelog'.\n";
           $content;
         }
     };
@@ -333,7 +340,7 @@ sub update_changelog {
         if(index($content, $update) != -1){
           $content =~ s/%changelog/%changelog\n$update/;
         } else {
-          say "skip to update 'packaging/rpm/mkr.spec'";
+          infof "skip to update 'packaging/rpm/mkr.spec'\n";
         }
         $content;
     };
@@ -348,7 +355,7 @@ sub update_changelog {
         if(index($content, $update) != -1){
           $content =~ s/\A# Changelog/# Changelog$update/;
         } else {
-          say "skip to update 'CHANGELOG.md'";
+          infof "skip to update 'CHANGELOG.md'\n";
         }
         $content;
     };
@@ -366,110 +373,88 @@ sub build_pull_request_body {
 sub upload_to_github_release {
     $REPO_NAME =~ m!/([^/]+)$!;
     my $REPO = $1;
-    github_release qw/release --user/, "stanaka",
+    my $ret = github_release_with_exit_code qw/release --user/, "stanaka",
         qw/--repo/, $REPO,
         qw/--tag/, "v". next_release(),
         qw/--name/, $REPO ."-" . next_release(),
         qw/--description/, "pre-release",
         qw/--pre-release/;
-    # github-release release \
-    #    --user $USER \
-    #    --repo $REPO \
-    #    --tag $VERSION \
-    #    --name "$REPO-$VERSION" \
-    #    --description "not release" \
-    #    --pre-release
 
-  # # upload files
-  my $description = "Use at your own risk!\n\n";
+    if($ret != 0){
+        infof "The release of this version already seems to exist at GitHub Release, so skip the process.\n";
+        return;
+    }
 
-  my @filepaths = glob("~/rpmbuild/RPMS/*/*.rpm packaging/*.deb snapshot/mkr_*.zip");
-  say "uploading following files:\n" . join("\n", @filepaths);
-  for my $path (@filepaths){
-      my $filename = basename($path);
-      $description .= "* $filename\n";
-      github_release qw/upload --user/, "stanaka",
-          qw/--repo/, $REPO,
-          qw/--tag/, "v". next_release(),
-          qw/--name/, $filename,
-          qw/--file/, $path;
-  }
-  github_release qw/edit --user/, "stanaka",
-      qw/--repo/, $REPO,
-      qw/--tag/, "v". next_release(),
-      qw/--description/, $description;
+    # # upload files
+    my $description = "Use at your own risk!\n\n";
 
-  #for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*.zip)
-    # do
-    #   name=$(basename "$i")
-    #   echo "* $name" >> description.md
-    #   echo "  * $(openssl sha256 $i)" >> description.md
-    #   github-release upload --user $USER \
-    #     --repo $REPO \
-    #     --tag $VERSION \
-    #     --name "$name" \
-    #     --file $i
-    # done
-    #
-    # # edit description
-    # github-release edit \
-    #   --user $USER \
-    #   --repo $REPO \
-    #   --tag $VERSION \
-    #   --description "$(cat description.md)"
-
+    my @filepaths = glob("~/rpmbuild/RPMS/*/*.rpm packaging/*.deb snapshot/mkr_*.zip");
+    say "uploading following files:\n" . join("\n", @filepaths);
+    for my $path (@filepaths){
+        my $filename = basename($path);
+        $description .= "* $filename\n";
+        github_release qw/upload --user/, "stanaka",
+            qw/--repo/, $REPO,
+            qw/--tag/, "v". next_release(),
+            qw/--name/, $filename,
+            qw/--file/, $path;
+    }
+    github_release qw/edit --user/, "stanaka",
+        qw/--repo/, $REPO,
+        qw/--tag/, "v". next_release(),
+        qw/--description/, $description;
 }
 
 sub create_pull_request {
-  my($current_branch) = @_;
-  # check
-  #chomp(my $email = `git config user.email`);
-  #chomp(my $name  = `git config user.name`);
-  git qw/checkout/, $current_branch;
+    my($current_branch) = @_;
+    # check
+    #chomp(my $email = `git config user.email`);
+    #chomp(my $name  = `git config user.name`);
+    git qw/checkout/, $current_branch;
 
-  my $current_version = last_release;
-  my $next_version    = next_release;
-  if(!$next_version) {
-    warnf("current branch should be 'bump-version-x.y.z'.\n");
-    return;
-  }
+    my $current_version = last_release;
+    my $next_version    = next_release;
+    if(!$next_version) {
+        warnf("current branch should be 'bump-version-x.y.z'.\n");
+        return;
+    }
 
-  # return if last commit is updating specs and changelogs
-  my $last_commitlog = `git log -1 --oneline | cut -d ' ' -f2-`;
-  if($last_commitlog =~ /update changelogs/){
-    return;
-  }
+    # return if last commit is updating specs and changelogs
+    my $last_commitlog = `git log -1 --oneline | cut -d ' ' -f2-`;
+    if($last_commitlog =~ /update changelogs/){
+        return;
+    }
 
-  infof "bump versions, and update readme and changelogs\n";
-  #update_versions($current_version, $next_version);
-  #if(git_with_exit_code qw/diff --exit-code/){
-  #  say "do commit";
-  #  git qw/commit -am/, "ready for next release. version: $next_version";
-  #}
+    infof "bump versions, and update readme and changelogs\n";
+    #update_versions($current_version, $next_version);
+    #if(git_with_exit_code qw/diff --exit-code/){
+    #  say "do commit";
+    #  git qw/commit -am/, "ready for next release. version: $next_version";
+    #}
 
-  my @releases = merged_prs $current_version;
-  update_changelog($next_version, @releases) if @releases;
-  if(git_with_exit_code qw/diff --exit-code/){
-    git qw/commit -am/, "update changelogs";
-    git qw/config --global push.default matching/;
-    git qw/config user.email/, 'mackerel-developers@hatena.ne.jp';
-    git qw/config user.name/, 'mackerel';
-    say "https://github.com/$REPO_NAME.git";
-    git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
-  }
+    my @releases = merged_prs $current_version;
+    update_changelog($next_version, @releases) if @releases;
+    if(git_with_exit_code qw/diff --exit-code/){
+        git qw/commit -am/, "update changelogs";
+        git qw/config --global push.default matching/;
+        git qw/config user.email/, 'mackerel-developers@hatena.ne.jp';
+        git qw/config user.name/, 'mackerel';
+        say "https://github.com/$REPO_NAME.git";
+        git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
+    }
 
-  #git qw/diff/, qw/--word-diff/, "master..".current_branch();
-  my $pr_body = build_pull_request_body($next_version, @releases);
-  say "Pull Request\n--------";
-  say $pr_body;
+    #git qw/diff/, qw/--word-diff/, "master..".current_branch();
+    my $pr_body = build_pull_request_body($next_version, @releases);
+    say "Pull Request\n--------";
+    say $pr_body;
 
-  infof "push changes\n";
-  my $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
-  if($ret == 0){
-    infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
-  } else {
-    infof "Pull Request already seems to exist."
-  }
+    infof "push changes\n";
+    my $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
+    if($ret == 0){
+        infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
+    } else {
+        infof "Pull Request already seems to exist."
+    }
 }
 
 ### main process
@@ -504,8 +489,8 @@ sub main {
         );
 
     if($help){
-      help();
-      exit 0;
+        help();
+        exit 0;
     }
     # check command
     _git;_hub;
