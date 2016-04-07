@@ -1,9 +1,6 @@
 BIN = mkr
 
 VERSION = $$(git describe --tags --always --dirty)
-#CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request #[0-9]+ from .+/bump-version-([0-9\.]+)$/){print $1;exit}')
-#CURRENT_VERSION = $(shell git log --merges --oneline | perl -pne 'if(m/([0-9\.]+)$/){print $1}')
-#CURRENT_VERSION = $(shell git log --merges --oneline | head -1)
 CURRENT_VERSION = $$(git describe --abbrev=0 --tags | cut -d v -f 2)
 
 BUILD_FLAGS = -ldflags "\
@@ -52,7 +49,6 @@ deps:
 
 testdeps:
 	go get -d -v -t .
-	#go get golang.org/x/tools/cmd/vet
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/axw/gocov/gocov
