@@ -1,3 +1,10 @@
+mkr (0.9.5-1) stable; urgency=low
+
+  * Feature some (by stanaka)
+    <https://github.com/stanaka/mkr/pull/16>
+
+ -- travis@localhost <travis@localhost>  Thu, 07 Apr 2016 10:01:55 +0000
+
 mkr (0.9.4-1) stable; urgency=low
 
   * add dummy (by stanaka)
