@@ -28,7 +28,7 @@ before_deploy:
 - make rpm deb
 deploy:
 - provider: script
-  script: script/travis/github-releases.sh
+  script: script/releng --task=upload-to-github-release
   skip_cleanup: true
   on:
     repo: stanaka/mkr
