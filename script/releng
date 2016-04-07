@@ -204,7 +204,8 @@ sub merged_prs {
     my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     say "3.---";
     say join("\n", @a);
-    my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    #my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {if(m/Merge pull request #([0-9]+) /){$1} else {()} } `git log v$current_tag... --merges --oneline`;
     say "4.---";
     say join(",", @pull_nums);
     say "5.---";
