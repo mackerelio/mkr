@@ -355,10 +355,10 @@ sub create_pull_request {
 
   infof "bump versions and update readme\n";
   update_versions($current_version, $next_version);
-  if(git_with_exit_code qw/diff --exit-code/){
-    say "do commit";
-    git qw/commit -am/, "ready for next release. version: $next_version";
-  }
+  #if(git_with_exit_code qw/diff --exit-code/){
+  #  say "do commit";
+  #  git qw/commit -am/, "ready for next release. version: $next_version";
+  #}
 
   infof "update changelogs\n";
   my @releases = merged_prs $current_version;
