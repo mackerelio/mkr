@@ -507,9 +507,11 @@ sub main {
     #git qw/pull/;
 
     if($task eq "create-pullrequest"){
+        infof "Create a Pull Request for version up.\n";
         create_pull_request($current_branch);
         return;
-    } elsif($task eq "github-release"){
+    } elsif($task eq "upload-to-github-release"){
+        infof "Upload files to GitHub Release.\n";
         upload_to_github_release();
         return;
     }
