@@ -384,7 +384,7 @@ sub upload_to_github_release {
   my $description = "Use at your own risk!\n\n";
 
   my @filepaths = glob("~/rpmbuild/RPMS/*/*.rpm packaging/*.deb snapshot/mkr_*.zip");
-  say "uploading following files:\n" . join("\n", @filepaths)
+  say "uploading following files:\n" . join("\n", @filepaths);
   for my $path (@filepaths){
       my $filename = basename($path);
       $description .= "* $filename\n";
