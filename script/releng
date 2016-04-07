@@ -364,10 +364,12 @@ sub build_pull_request_body {
 }
 
 sub upload_to_github_release {
+    $REPO_NAME =~ m!/([^/]+)$!;
+    my $REPO = $1;
     github_release qw/release --user/, "stanaka",
-        qw/--repo/, $REPO_NAME,
+        qw/--repo/, $REPO,
         qw/--tag/, "v". next_release(),
-        qw/--name/, $REPO_NAME ."-" . next_release(),
+        qw/--name/, $REPO ."-" . next_release(),
         qw/--description/, "pre-release",
         qw/--pre-release/;
     # github-release release \
