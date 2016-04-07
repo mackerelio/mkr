@@ -26,7 +26,6 @@ before_deploy:
 - git fetch --depth=1000
 - git fetch --tags --depth=1000 || true
 - make rpm deb
-- ls -lR ~/rpmbuild/RPMS
 deploy:
 - provider: script
   script: script/releng --task=upload-to-github-release -v
