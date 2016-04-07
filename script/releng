@@ -190,11 +190,17 @@ sub diff {
 sub merged_prs {
     my $current_tag = shift;
     say `git log v$current_tag... --merges --oneline`;
+    say "1.---";
     say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    say "2.---";
+    say map {m/Merge pull request #([0-9]+) /; $1 || ()  } split("\n",`git log v$current_tag... --merges --oneline`);
     my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    say "1.---\n".join("\n", @a)."\n1----";
+    say "3.---";
+    say join("\n", @a);
     my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    say "---\n".join(",", @pull_nums)."\n---";
+    say "4.---";
+    say join(",", @pull_nums);
+    say "5.---";
 
     my @releases;
     for my $pull_num (@pull_nums) {
@@ -292,6 +298,7 @@ sub update_changelog {
         if(index($content, $update) != -1){
           $update . $content;
         } else {
+          say "skip to update 'packaging/deb/debian/changelog'.";
           $content;
         }
     };
@@ -305,6 +312,8 @@ sub update_changelog {
         }
         if(index($content, $update) != -1){
           $content =~ s/%changelog/%changelog\n$update/;
+        } else {
+          say "skip to update 'packaging/rpm/mkr.spec'";
         }
         $content;
     };
@@ -318,6 +327,8 @@ sub update_changelog {
         }
         if(index($content, $update) != -1){
           $content =~ s/\A# Changelog/# Changelog$update/;
+        } else {
+          say "skip to update 'CHANGELOG.md'";
         }
         $content;
     };
