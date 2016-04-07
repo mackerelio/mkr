@@ -52,7 +52,7 @@ deps:
 
 testdeps:
 	go get -d -v -t .
-	go get golang.org/x/tools/cmd/vet
+	#go get golang.org/x/tools/cmd/vet
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/axw/gocov/gocov
