@@ -15,6 +15,7 @@ script:
 after_script:
 - make cover
 before_deploy:
+- make aa
 - make rpm deb
 - go get github.com/aktau/github-release
 - mkdir -p ~/bin
