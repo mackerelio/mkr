@@ -412,7 +412,7 @@ sub create_pull_request {
         git qw/config --global push.default matching/;
         git qw/config user.email/, 'mackerel-developers@hatena.ne.jp';
         git qw/config user.name/, 'mackerel';
-        git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
+        git qw/push/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
         infof "Difference is pushed to GitHub.\n";
     }
 

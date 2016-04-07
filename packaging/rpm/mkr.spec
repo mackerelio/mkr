@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Apr 07 2016 <travis@localhost> - 0.9.7-1
+- fix (by stanaka)
+
 * Thu Apr 07 2016 <travis@localhost> - 0.9.5-1
 - Feature some (by stanaka)
 
