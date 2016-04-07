@@ -35,7 +35,7 @@ $REPO_NAME =~ s|^.+/(\w+/\w+)$|$1|;
 my $dry_run;
 my $verbose;
 
-sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
+sub DEBUG() { $ENV{MC_RELENG_DEBUG} || $verbose }
 
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
 sub command_with_exit_code {say('+ '. join ' ', @_) if DEBUG; system(@_)}

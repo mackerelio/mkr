@@ -28,13 +28,13 @@ before_deploy:
 - make rpm deb
 deploy:
 - provider: script
-  script: script/releng --task=upload-to-github-release
+  script: script/releng --task=upload-to-github-release -v
   skip_cleanup: true
   on:
     repo: stanaka/mkr
     branch: master
 - provider: script
-  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH
+  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH -v
   skip_cleanup: true
   on:
     repo: stanaka/mkr
