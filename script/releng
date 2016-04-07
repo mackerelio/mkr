@@ -364,7 +364,7 @@ sub upload_to_github_release {
         qw/--repo/, $REPO_NAME,
         qw/--tag/, next_release(),
         qw/--name/, $REPO_NAME ."-" . next_release(),
-        qw/--description "not release"/,
+        qw/--description/, "not release",
         qw/--pre-release/;
     # github-release release \
     #    --user $USER \
