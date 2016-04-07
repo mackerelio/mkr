@@ -5,7 +5,7 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   %{version}
+Version:   %{_version}
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool

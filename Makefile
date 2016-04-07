@@ -10,6 +10,9 @@ BUILD_FLAGS = -ldflags "\
 	      -X main.Version=$(VERSION) \
 	      "
 
+aa:
+	echo "aa${CURRENT_VERSION}"
+
 #all: clean cross lint test
 all: clean
 
@@ -35,9 +38,9 @@ cross: deps
 
 rpm:
 	GOOS=linux GOARCH=386 make build
-	rpmbuild --define "_builddir `pwd`" --define "version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" --define "version ${CURRENT_VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
 
 deb:
 	GOOS=linux GOARCH=386 make build
