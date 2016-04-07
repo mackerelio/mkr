@@ -4,7 +4,7 @@ VERSION = $$(git describe --tags --always --dirty)
 #CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request #[0-9]+ from .+/bump-version-([0-9\.]+)$/){print $1;exit}')
 #CURRENT_VERSION = $(shell git log --merges --oneline | perl -pne 'if(m/([0-9\.]+)$/){print $1}')
 #CURRENT_VERSION = $(shell git log --merges --oneline | head -1)
-CURRENT_VERSION = $$(git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request \#[0-9]+ from .+\/bump-version-([0-9\.]+)$$/){print $$1;exit}')
+CURRENT_VERSION = $$(git describe --abbrev=0 --tags | cut -d v -f 2)
 
 BUILD_FLAGS = -ldflags "\
 	      -X main.Version=$(VERSION) \
