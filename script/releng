@@ -83,6 +83,13 @@ sub hub {
     unshift @_, _hub; goto \&command;
 }
 
+sub hub_with_exit_code {
+    if($dry_run){
+      return
+    }
+    unshift @_, _hub; goto \&command_with_exit_code;
+}
+
 sub http_get {
     my $url = shift;
     my ($ok, $err, undef, $stdout) = run(command => [qw{curl -sf}, $url]);
@@ -193,7 +200,7 @@ sub merged_prs {
     say "1.---";
     say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     say "2.---";
-    say map {m/Merge pull request #([0-9]+) /; $1 || ()  } split("\n",`git log v$current_tag... --merges --oneline`);
+    say map {say $_; m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     say "3.---";
     say join("\n", @a);
@@ -363,16 +370,14 @@ sub create_pull_request {
     return;
   }
 
-  infof "bump versions and update readme\n";
+  infof "bump versions, and update readme and changelogs\n";
   update_versions($current_version, $next_version);
   #if(git_with_exit_code qw/diff --exit-code/){
   #  say "do commit";
   #  git qw/commit -am/, "ready for next release. version: $next_version";
   #}
 
-  infof "update changelogs\n";
   my @releases = merged_prs $current_version;
-  say @releases;
   update_changelog($next_version, @releases) if @releases;
   if(git_with_exit_code qw/diff --exit-code/){
     git qw/commit -am/, "update changelogs";
@@ -389,9 +394,11 @@ sub create_pull_request {
   say $pr_body;
 
   infof "push changes\n";
-  hub qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
-
-  infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
+  if(hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/){
+    infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
+  } else {
+    infof "Pull Request already seems to exist."
+  }
 }
 
 ### main process
