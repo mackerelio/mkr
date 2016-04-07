@@ -203,10 +203,14 @@ sub current_branch {
 
 sub next_release {
     if(current_branch() =~ /^bump-version-([\d\.]+)$/){
-      return $1;
-    } else {
-      return "";
+        return $1;
+    } elsif(current_branch() =~ /^master$/){
+        my $next = `git log --merges --oneline`;
+        if($next =~ /^.+Merge pull request #[0-9]+ from .+\/bump-version-([0-9\.]+)$/m){
+            return $1;
+        }
     }
+    return "";
 }
 
 sub diff {
