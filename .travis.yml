@@ -15,16 +15,16 @@ script:
 after_script:
 - make cover
 before_deploy:
-- make aa
-- make rpm deb
 - go get github.com/aktau/github-release
 - mkdir -p ~/bin
 - git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub && cd ..
 - echo $TRAVIS_BRANCH
-- git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master
-- git fetch
+- git config --add remote.origin.fetch ''+refs/heads/*:refs/remotes/origin/*'
+- git fetch --tags --depth=10000
 - git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
+- make aa
+- make rpm deb
 deploy:
 - provider: script
   script: script/travis/github-releases.sh

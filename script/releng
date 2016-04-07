@@ -200,7 +200,7 @@ sub merged_prs {
     say "1.---";
     say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     say "2.---";
-    say map {say $_; m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    say map {say $_; m/Merge pull request #([0-9]+) /; say $1 || (); say $1 || () } `git log v$current_tag... --merges --oneline`;
     my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
     say "3.---";
     say join("\n", @a);
