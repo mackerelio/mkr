@@ -24,6 +24,8 @@ before_deploy:
 - git fetch --tags --depth=10000
 - git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
+- git fetch --depth=10000
+- git fetch --tags --depth=10000
 - git log --oneline
 - git tag
 - git describe
