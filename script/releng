@@ -395,7 +395,7 @@ sub upload_to_github_release {
   }
   github_release qw/edit --user/, "stanaka",
       qw/--repo/, $REPO,
-      qw/--tag/, next_release(),
+      qw/--tag/, "v". next_release(),
       qw/--description/, $description;
 
   #for i in $(ls -1 ~/rpmbuild/RPMS/noarch/*.rpm) $(ls -1 packaging/*.deb) $(ls -1 snapshot/mkr_*.zip)
