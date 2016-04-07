@@ -14,8 +14,7 @@ check_variable:
 	echo "VERSION: ${VERSION}"
 	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
 
-#all: clean cross lint test
-all: clean
+all: clean cross lint test
 
 test: testdeps
 	go test -v ./...
