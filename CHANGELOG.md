@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.5 (2016-04-07)
+
+* Feature some #16 (stanaka)
+
+
 ## 0.9.4 (2016-04-06)
 
 * add dummy #4 (stanaka)
