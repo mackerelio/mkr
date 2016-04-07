@@ -24,6 +24,8 @@ before_deploy:
 - git fetch --tags --depth=10000
 - git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
+- git log --oneline
+- git tag
 - git describe
 - make aa
 - make rpm deb
