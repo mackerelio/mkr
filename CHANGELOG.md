@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
+## 0.9.4 (2016-04-06)
+
+* add dummy #4 (stanaka)
+
+
 ## 0.9.1 (2016-03-25)
 
 * use GOARCH=amd64 for now #41 (Songmu)

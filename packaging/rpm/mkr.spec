@@ -5,14 +5,14 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.9.1
+Version:   %{_version}
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
 URL:       https://mackerel.io
 Group:     Hatena
 Packager:  Hatena
-BuildArch: noarch
+BuildArch: %{buildarch}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Apr 06 2016 <travis@localhost> - 0.9.4-1
+- add dummy (by stanaka)
+
 * Fri Mar 25 2016 <y.songmu@gmail.com> - 0.9.1-1
 - use GOARCH=amd64 for now (by Songmu)
 

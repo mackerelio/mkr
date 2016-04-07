@@ -1,12 +1,21 @@
 BIN = mkr
 
 VERSION = $$(git describe --tags --always --dirty)
+#CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request #[0-9]+ from .+/bump-version-([0-9\.]+)$/){print $1;exit}')
+#CURRENT_VERSION = $(shell git log --merges --oneline | perl -pne 'if(m/([0-9\.]+)$/){print $1}')
+#CURRENT_VERSION = $(shell git log --merges --oneline | head -1)
+CURRENT_VERSION = $$(git describe --abbrev=0 --tags | cut -d v -f 2)
 
 BUILD_FLAGS = -ldflags "\
 	      -X main.Version=$(VERSION) \
 	      "
 
-all: clean cross lint test
+check_variable:
+	echo "VERSION: ${VERSION}"
+	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
+
+#all: clean cross lint test
+all: clean
 
 test: testdeps
 	go test -v ./...
@@ -29,11 +38,13 @@ cross: deps
 	cp -p $(PWD)/snapshot/darwin_386/mkr $(PWD)/snapshot/mkr_darwin_386
 
 rpm:
+	GOOS=linux GOARCH=386 make build
+	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" -ba packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
 
 deb:
-	GOOS=linux GOARCH=amd64 make build
+	GOOS=linux GOARCH=386 make build
 	cp $(BIN) packaging/deb/debian/$(BIN).bin
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
 
