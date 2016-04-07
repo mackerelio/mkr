@@ -8,7 +8,7 @@ BUILD_FLAGS = -ldflags "\
 	      "
 
 #all: clean cross lint test
-all: clean cross
+all: clean
 
 test: testdeps
 	go test -v ./...
@@ -32,12 +32,12 @@ cross: deps
 
 rpm:
 	GOOS=linux GOARCH=386 make build
-	rpmbuild --define "_builddir `pwd`" --define "version $CURRENT_VERSION" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" --define "version $CURRENT_VERSION" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "version ${CURRENT_VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
 
 deb:
-	GOOS=linux GOARCH=amd64 make build
+	GOOS=linux GOARCH=386 make build
 	cp $(BIN) packaging/deb/debian/$(BIN).bin
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
 

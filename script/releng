@@ -394,7 +394,7 @@ sub create_pull_request {
   say $pr_body;
 
   infof "push changes\n";
-  if(hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/){
+  if(hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/ == 0){
     infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
   } else {
     infof "Pull Request already seems to exist."
