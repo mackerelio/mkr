@@ -184,8 +184,7 @@ sub next_release {
 }
 
 sub diff {
-  git qw/diff --exit-code/
-
+  git_with_exit_code qw/diff --exit-code/
 }
 
 sub merged_prs {

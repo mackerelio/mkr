@@ -6,7 +6,8 @@ BUILD_FLAGS = -ldflags "\
 	      -X main.Version=$(VERSION) \
 	      "
 
-all: clean cross lint test
+#all: clean cross lint test
+all: clean cross
 
 test: testdeps
 	go test -v ./...
