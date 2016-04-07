@@ -34,6 +34,7 @@ chomp(my $REPO_NAME = `git rev-parse --show-toplevel`);
 $REPO_NAME =~ s|^.+/(\w+/\w+)$|$1|;
 my $dry_run;
 my $verbose;
+my $next_version;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} || $verbose }
 
@@ -208,13 +209,14 @@ sub current_branch {
   return $branch;
 }
 
-sub next_release {
+sub next_version {
+    return $next_version if $next_version;
     if(current_branch() =~ /^bump-version-([\d\.]+)$/){
-        return $1;
+        return $next_version = $1;
     } elsif(current_branch() =~ /^master$/){
         my $next = `git log --merges --oneline`;
         if($next =~ /^.+Merge pull request #[0-9]+ from .+\/bump-version-([0-9\.]+)$/m){
-            return $1;
+            return $next_version = $1;
         }
     }
     return "";
@@ -273,6 +275,7 @@ sub update_changelog {
     };
 
     my $now = localtime;
+    my $ret = 0;
 
     replace 'packaging/deb/debian/changelog' => sub {
         my $content = shift;
@@ -286,6 +289,7 @@ sub update_changelog {
         # '35' means a rough length to cut timestamp at the end of update.
         if(index($content, substr($update, 0, length($update) - 35)) == -1){
             infof "update 'packaging/deb/debian/changelog'.\n";
+            $ret = 1;
             $update . $content;
         } else {
             infof "skip to update 'packaging/deb/debian/changelog'.\n";
@@ -302,6 +306,7 @@ sub update_changelog {
         }
         if(index($content, $update) == -1){
             infof "update 'packaging/rpm/mkr.spec'\n";
+            $ret = 1;
             $content =~ s/%changelog/%changelog\n$update/;
         } else {
             infof "skip to update 'packaging/rpm/mkr.spec'\n";
@@ -318,12 +323,14 @@ sub update_changelog {
         }
         if(index($content, $update) == -1){
             infof "update 'CHANGELOG.md'\n";
+            $ret = 1;
             $content =~ s/\A# Changelog/# Changelog$update/;
         } else {
             infof "skip to update 'CHANGELOG.md'\n";
         }
         $content;
     };
+    $ret;
 }
 
 sub build_pull_request_body {
@@ -340,8 +347,8 @@ sub upload_to_github_release {
     my $REPO = $1;
     my $ret = github_release_with_exit_code qw/release --user/, "stanaka",
         qw/--repo/, $REPO,
-        qw/--tag/, "v". next_release(),
-        qw/--name/, $REPO ."-" . next_release(),
+        qw/--tag/, "v". next_version(),
+        qw/--name/, $REPO ."-" . next_version(),
         qw/--description/, "pre-release",
         qw/--pre-release/;
 
@@ -351,22 +358,22 @@ sub upload_to_github_release {
     }
 
     # # upload files
-    my $description = "Use at your own risk!\n\n";
+    my $description = "";
 
     my @filepaths = glob("~/rpmbuild/RPMS/*/*.rpm packaging/*.deb snapshot/mkr_*.zip");
-    say "uploading following files:\n" . join("\n", @filepaths);
+    infof "uploading following files:\n" . join("\n", @filepaths). "\n";
     for my $path (@filepaths){
         my $filename = basename($path);
         $description .= "* $filename\n";
         github_release qw/upload --user/, "stanaka",
             qw/--repo/, $REPO,
-            qw/--tag/, "v". next_release(),
+            qw/--tag/, "v". next_version(),
             qw/--name/, $filename,
             qw/--file/, $path;
     }
     github_release qw/edit --user/, "stanaka",
         qw/--repo/, $REPO,
-        qw/--tag/, "v". next_release(),
+        qw/--tag/, "v". next_version(),
         qw/--description/, $description;
 }
 
@@ -378,7 +385,7 @@ sub create_pull_request {
     git qw/checkout/, $current_branch;
 
     my $current_version = last_release;
-    my $next_version    = next_release;
+    my $next_version    = next_version;
     if(!$next_version) {
         warnf("current branch should be 'bump-version-x.y.z'.\n");
         return;
@@ -394,14 +401,19 @@ sub create_pull_request {
     infof "bump versions, and update readme and changelogs\n";
 
     my @releases = merged_prs $current_version;
-    update_changelog($next_version, @releases) if @releases;
-    if(git_with_exit_code qw/diff --exit-code/){
+    my $ret = 0;
+    if(@releases){
+        $ret = update_changelog($next_version, @releases);
+    } else {
+        infof "skip to update changelogs because no merged pull request is found after the last release.\n"
+    }
+    if($ret || git_with_exit_code qw/diff --exit-code/){
         git qw/commit -am/, "update changelogs";
         git qw/config --global push.default matching/;
         git qw/config user.email/, 'mackerel-developers@hatena.ne.jp';
         git qw/config user.name/, 'mackerel';
-        say "https://github.com/$REPO_NAME.git";
         git qw/push --quiet/, "https://$ENV{GITHUB_TOKEN}\@github.com/$REPO_NAME.git";
+        infof "Difference is pushed to GitHub.\n";
     }
 
     #git qw/diff/, qw/--word-diff/, "master..".current_branch();
@@ -409,8 +421,8 @@ sub create_pull_request {
     say "Pull Request\n--------";
     say $pr_body;
 
-    infof "push changes\n";
-    my $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
+    infof "Push changes\n";
+    $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
     if($ret && $ret == 0){
         infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
     } else {
@@ -431,7 +443,9 @@ sub help {
   print <<EOS;
 $0
   --help
-  --task=<task> # create-pullrequest, github-release
+  --task=<task>            # 'create-pullrequest' or 'github-release'
+  --next-version=<version> # specify next version. if not specified, a
+                           # value derived from the branch name is used.
   --verbose
   --dry-run
 EOS
@@ -447,6 +461,7 @@ sub main {
         "verbose"  => \$verbose,
         "dry-run" => \$dry_run,
         "current-branch=s" => \$current_branch,
+        "next-version=s" => \$next_version,
         );
 
     if($help){
