@@ -366,9 +366,9 @@ sub build_pull_request_body {
 sub upload_to_github_release {
     github_release qw/release --user/, "stanaka",
         qw/--repo/, $REPO_NAME,
-        qw/--tag/, next_release(),
+        qw/--tag/, "v". next_release(),
         qw/--name/, $REPO_NAME ."-" . next_release(),
-        qw/--description/, "not release",
+        qw/--description/, "pre-release",
         qw/--pre-release/;
     # github-release release \
     #    --user $USER \
@@ -387,7 +387,7 @@ sub upload_to_github_release {
       $description .= "* $filename\n";
       github_release qw/upload --user/, "stanaka",
           qw/--repo/, $REPO_NAME,
-          qw/--tag/, next_release(),
+          qw/--tag/, "v". next_release(),
           qw/--name/, $filename,
           qw/--file/, $path;
   }
