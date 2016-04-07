@@ -398,7 +398,7 @@ sub create_pull_request {
         return;
     }
 
-    infof "bump versions, and update readme and changelogs\n";
+    infof "Update changelogs.\n";
 
     my @releases = merged_prs $current_version;
     my $ret = 0;
