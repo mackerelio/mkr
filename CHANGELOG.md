@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.7 (2016-04-07)
+
+* fix #19 (stanaka)
+
+
 ## 0.9.5 (2016-04-07)
 
 * Feature some #16 (stanaka)
