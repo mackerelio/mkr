@@ -37,6 +37,7 @@ cross: deps
 	cp -p $(PWD)/snapshot/darwin_386/mkr $(PWD)/snapshot/mkr_darwin_386
 
 rpm:
+	echo "${CURRENT_VERSION}"
 	GOOS=linux GOARCH=386 make build
 	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
