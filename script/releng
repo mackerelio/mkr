@@ -322,11 +322,14 @@ sub update_changelog {
             $update .= sprintf "  * %s (by %s)\n    <%s>\n", $rel->{title}, $rel->{user}, $rel->{url};
         }
         $update .= sprintf "\n -- %s <%s>  %s\n\n", $name, $email, $now->strftime("%a, %d %b %Y %H:%M:%S %z");
-        if(index($content, $update) == -1){
-          $update . $content;
+
+        # '35' means a rough length to cut timestamp at the end of update.
+        if(index($content, substr($update, 0, length($update) - 35)) == -1){
+            infof "update 'packaging/deb/debian/changelog'.\n";
+            $update . $content;
         } else {
-          infof "skip to update 'packaging/deb/debian/changelog'.\n";
-          $content;
+            infof "skip to update 'packaging/deb/debian/changelog'.\n";
+            $content;
         }
     };
 
@@ -338,9 +341,10 @@ sub update_changelog {
             $update .= sprintf "- %s (by %s)\n", $rel->{title}, $rel->{user};
         }
         if(index($content, $update) == -1){
-          $content =~ s/%changelog/%changelog\n$update/;
+            infof "update 'packaging/rpm/mkr.spec'\n";
+            $content =~ s/%changelog/%changelog\n$update/;
         } else {
-          infof "skip to update 'packaging/rpm/mkr.spec'\n";
+            infof "skip to update 'packaging/rpm/mkr.spec'\n";
         }
         $content;
     };
@@ -353,9 +357,10 @@ sub update_changelog {
             $update .= sprintf "* %s #%d (%s)\n", $rel->{title}, $rel->{num}, $rel->{user};
         }
         if(index($content, $update) == -1){
-          $content =~ s/\A# Changelog/# Changelog$update/;
+            infof "update 'CHANGELOG.md'\n";
+            $content =~ s/\A# Changelog/# Changelog$update/;
         } else {
-          infof "skip to update 'CHANGELOG.md'\n";
+            infof "skip to update 'CHANGELOG.md'\n";
         }
         $content;
     };
@@ -422,6 +427,7 @@ sub create_pull_request {
     # return if last commit is updating specs and changelogs
     my $last_commitlog = `git log -1 --oneline | cut -d ' ' -f2-`;
     if($last_commitlog =~ /update changelogs/){
+        infof "skip to update changelogs because the last commit is 'update changelogs'.\n";
         return;
     }
 
