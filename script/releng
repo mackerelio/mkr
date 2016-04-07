@@ -226,8 +226,9 @@ sub diff {
 
 sub merged_prs {
     my $current_tag = shift;
-    #say `git log v$current_tag... --merges --oneline`;
-    my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {if(m/Merge pull request #([0-9]+) /){$1} else {()} } `git log v$current_tag... --merges --oneline`;
+    my @pull_nums = sort {$a <=> $b} map {
+        if(m/Merge pull request #([0-9]+) /){ $1 } else { () }
+    } `git log v$current_tag... --merges --oneline`;
 
     my @releases;
     for my $pull_num (@pull_nums) {
@@ -257,47 +258,6 @@ sub parse_version {
     my $ver = shift;
     my ($major, $minor, $patch) = $ver =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)$/;
     ($major, $minor, $patch)
-}
-
-sub suggest_next_version {
-    my $ver = shift;
-    my ($major, $minor, $patch) = parse_version($ver);
-    join '.', $major, ++$minor, 0;
-}
-
-sub is_valid_version {
-    my $ver = shift;
-    my ($major) = parse_version($ver);
-    defined $major;
-}
-
-
-sub decide_next_version {
-    my $current_version = shift;
-    my $next_version = suggest_next_version($current_version);
-    $next_version = prompt("next version", $next_version);
-
-    if (!is_valid_version($next_version)) {
-        die qq{"$next_version" is invalid version string\n};
-    }
-    if (version->parse($next_version) < version->parse($current_version)) {
-        die qq{"$next_version" is smaller than current version "$current_version"\n};
-    }
-    $next_version;
-}
-
-sub update_versions {
-    my ($current_version, $next_version) = @_;
-
-    ### update versions
-    my $cur_ver_reg = quotemeta $current_version;
-    # update rpm spec
-    replace 'packaging/rpm/mkr.spec' => sub {
-        my $content = shift;
-        $content =~ s/^(Version:\s+)$cur_ver_reg/$1$next_version/ms;
-        $content;
-    };
-
 }
 
 sub update_changelog {
@@ -432,11 +392,6 @@ sub create_pull_request {
     }
 
     infof "bump versions, and update readme and changelogs\n";
-    #update_versions($current_version, $next_version);
-    #if(git_with_exit_code qw/diff --exit-code/){
-    #  say "do commit";
-    #  git qw/commit -am/, "ready for next release. version: $next_version";
-    #}
 
     my @releases = merged_prs $current_version;
     update_changelog($next_version, @releases) if @releases;
@@ -456,10 +411,10 @@ sub create_pull_request {
 
     infof "push changes\n";
     my $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
-    if($ret == 0){
+    if($ret && $ret == 0){
         infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
     } else {
-        infof "Pull Request already seems to exist."
+        infof "Pull Request already seems to exist.\n"
     }
 }
 
@@ -524,7 +479,6 @@ sub run_tests {
     is($major, 0);
     is($minor, 1);
     is($patch, 2);
-    is( suggest_next_version($version), '0.2.0' );
 
     done_testing();
 }
