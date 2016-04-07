@@ -196,19 +196,8 @@ sub diff {
 
 sub merged_prs {
     my $current_tag = shift;
-    say `git log v$current_tag... --merges --oneline`;
-    say "1.---";
-    say map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    say "2.---";
-    say map {say "aa". $_; if(m/Merge pull request #([0-9]+) /){say "bb".$1; $1} else {()} } `git log v$current_tag... --merges --oneline`;
-    my @a = map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
-    say "3.---";
-    say join("\n", @a);
-    #my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {m/Merge pull request #([0-9]+) /; $1 || ()  } `git log v$current_tag... --merges --oneline`;
+    #say `git log v$current_tag... --merges --oneline`;
     my @pull_nums = sort {$a <=> $b} grep {/^\d+$/} map {if(m/Merge pull request #([0-9]+) /){$1} else {()} } `git log v$current_tag... --merges --oneline`;
-    say "4.---";
-    say join(",", @pull_nums);
-    say "5.---";
 
     my @releases;
     for my $pull_num (@pull_nums) {
@@ -395,7 +384,9 @@ sub create_pull_request {
   say $pr_body;
 
   infof "push changes\n";
-  if(hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/ == 0){
+  my $ret = hub_with_exit_code qw/pull-request -m/, $pr_body, qq/-b/, qq/$REPO_NAME:master/;
+  say $ret;
+  if($ret == 0){
     infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
   } else {
     infof "Pull Request already seems to exist."
