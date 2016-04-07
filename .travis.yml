@@ -25,6 +25,7 @@ before_deploy:
 - git checkout $TRAVIS_BRANCH
 - git fetch --depth=1000
 - git fetch --tags --depth=1000 || true
+- make check_variables
 - make rpm deb
 deploy:
 - provider: script

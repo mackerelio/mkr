@@ -1,13 +1,13 @@
 BIN = mkr
 
 VERSION = $$(git describe --tags --always --dirty)
-CURRENT_VERSION = $$(git describe --abbrev=0 --tags | cut -d v -f 2)
+CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request \#[0-9]+ from .+\/bump-version-([0-9\.]+)/){print $$1;exit}')
 
 BUILD_FLAGS = -ldflags "\
 	      -X main.Version=$(VERSION) \
 	      "
 
-check_variable:
+check_variables:
 	echo "VERSION: ${VERSION}"
 	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
 
