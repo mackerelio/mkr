@@ -413,10 +413,10 @@ if (!$ENV{HARNESS_ACTIVE}) {
 sub help {
   print <<EOS;
 $0
---help
---task=<task> # create-pullrequest, github-release
---verbose
---dry-run
+  --help
+  --task=<task> # create-pullrequest, github-release
+  --verbose
+  --dry-run
 EOS
 
 }
@@ -446,44 +446,6 @@ sub main {
         create_pull_request($current_branch);
         return;
     }
-
-
-    my $current_version = last_release;
-    #my $current_version = "0.9.1";
-    #my $next_version    = decide_next_version($current_version);
-    my $next_version    = next_release;
-    if(!$next_version) {
-      warnf('current branch should be "bump-version-x.y.z".');
-      return;
-    }
-
-    my $branch_name = "bump-version-$next_version";
-    #infof "checkout new releasing branch [$branch_name]\n";
-    #git qw/checkout -b/, $branch_name;
-
-    infof "bump versions and update readme\n";
-    update_versions($current_version, $next_version);
-    #git qw/commit -am/, "ready for next release. version: $next_version";
-
-    infof "update changelogs\n";
-    my @releases = merged_prs $current_version;
-    update_changelog($next_version, @releases);
-    #git qw/commit -am/, "update changelogs";
-
-    git qw/diff/, qw/--word-diff/, "master..$branch_name";
-    my $pr_body = build_pull_request_body($next_version, @releases);
-    say $pr_body;
-
-    if (prompt('push changes?', 'y') !~ /^y(?:es)?$/i ) {
-        warnf('releng is aborted. remove the branch [%s] before next releng', $branch_name);
-        return;
-    }
-
-    infof "push changes\n";
-    #git qw/push --set-upstream origin/, $branch_name;
-    #hub qw/pull-request -m/, $pr_body;
-
-    infof "Releasing pull request is created. Review and merge it. You can update changelogs and commit more in this branch before merging.\n";
 }
 
 sub run_tests {

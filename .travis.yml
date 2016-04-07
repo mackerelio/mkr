@@ -14,8 +14,6 @@ script:
 - make all
 after_script:
 - make cover
-after_success:
-- script/travis/autotag.sh
 before_deploy:
 - make rpm deb
 - go get github.com/aktau/github-release
@@ -25,7 +23,6 @@ before_deploy:
 - git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master
 - git fetch
 - git checkout -b master origin/master
-- git diff --word-diff origin/master..bump-version-0.9.4
 - git checkout $TRAVIS_BRANCH
 deploy:
 - provider: script
