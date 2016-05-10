@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0 (2016-05-10)
+
+* support `isMute` field of monitors #49 (Songmu)
+* support boolean at isEmpty #51 (stanaka)
+* bump up go version to 1.6.2 #52 (stanaka)
+
+
 ## 0.9.1 (2016-03-25)
 
 * use GOARCH=amd64 for now #41 (Songmu)

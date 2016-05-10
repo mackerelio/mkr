@@ -42,6 +42,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue May 10 2016 <mackerel-developers@hatena.ne.jp> - 0.10.0-1
+- support `isMute` field of monitors (by Songmu)
+- support boolean at isEmpty (by stanaka)
+- bump up go version to 1.6.2 (by stanaka)
+
 * Fri Mar 25 2016 <y.songmu@gmail.com> - 0.9.1-1
 - use GOARCH=amd64 for now (by Songmu)
 

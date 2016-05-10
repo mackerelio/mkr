@@ -4,7 +4,7 @@ go:
 env:
   global:
   - PATH=~/bin:~/gopath/bin:$PATH
-  - secure: Ffv0t508yBkuWsee2mRAE3ngW7BoOJ9hSvRDCmfNbvINO+u81SrqKBmsXRY3ip0pZxFkf0842WYG1ZdPes74YZUKCcrDp4MwcAKkMaNX8iYiRfFDtGSvMfHRrHzTb+QsiCeuEsMKCllqO6Vpqfb+ZlZ8VfvZYm4vOx4mR76dX4GYR6Ze60ac+6RRAeqQxe1q8/96kvyNmVuHLxuGTPSyCOe3rnHxcfdQHJcJt7GThI8/tZbSyl65u7p1/TDnfIwFjrrFcNsdPrp45fYO6Z8e1hxH8bdn6O5pGrmvpIB5Ykx6eupP6I4tpRp6z8t7gMlanGJNLAzgarr509bAE/zzeD2Y8KE38vlT9LgBzy1r4gyMaCMn5CNXaDgBEXTD2Ufnn+pSl495QCz4Ux5x/1jwA1q5hDVMZvJ0FZJBZzSwOwgQTGewoyE0smoOG5SgKvy/NZUce6xZ2fDKl7gC/80NBHXszNiq5wneJD855z05WgbhwX036ctgsm+xdO8eWxp8PzP+dmKUMXUtv6sAPgd6qkmOMpfU+OHYEK/IKNIcDnqJXWO+/CLWcUEQltuCBVU5anhIYgMbjwGDch6kpWYm+k/ySsG7C7Dr1pmDvFtwkZap3otUc78Oi6afC7155o3TweNb0YjAXtDlP+mbopeL3/ekOa/RKc5V0Qatq4jYouk=
+  - secure: "jHn0J9ELpBEK7pLhJDNVZa8SWD2LSx4Spxm1bVu1yZzrVwOSUuNU9iJ25/RkPN+0+KK53K5rwIisXtWGU4AM49vx7CA3kMMbqJd6X4DfzT0ZEK8dZiQX6m/YbZfVQSOPsMOYQryoH4q0hPru5UR6oDhxsyxBBerL/LzPczI+AS4="
 install:
 - go get github.com/laher/goxc
 - sudo apt-get update
