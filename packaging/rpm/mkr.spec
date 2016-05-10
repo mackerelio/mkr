@@ -43,6 +43,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 
 %changelog
 * Tue May 10 2016 <mackerel-developers@hatena.ne.jp> - 0.10.0-1
+- Refactoring release process (by stanaka)
+- support `isMute` field of monitors (by Songmu)
+- fix tests with isMute (by stanaka)
+- support boolean at isEmpty (by stanaka)
+- bump up go version to 1.6.2 (by stanaka)
+
+* Tue May 10 2016 <mackerel-developers@hatena.ne.jp> - 0.10.0-1
 - support `isMute` field of monitors (by Songmu)
 - support boolean at isEmpty (by stanaka)
 - bump up go version to 1.6.2 (by stanaka)
