@@ -2,9 +2,7 @@
 
 ## 0.10.0 (2016-05-10)
 
-* Refactoring release process #48 (stanaka)
 * support `isMute` field of monitors #49 (Songmu)
-* fix tests with isMute #50 (stanaka)
 * support boolean at isEmpty #51 (stanaka)
 * bump up go version to 1.6.2 #52 (stanaka)
 
