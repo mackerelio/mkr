@@ -1,3 +1,18 @@
+mkr (0.10.0-1) stable; urgency=low
+
+  * Refactoring release process (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/48>
+  * support `isMute` field of monitors (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/49>
+  * fix tests with isMute (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/50>
+  * support boolean at isEmpty (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/51>
+  * bump up go version to 1.6.2 (by stanaka)
+    <https://github.com/mackerelio/mkr/pull/52>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 10 May 2016 06:59:45 +0000
+
 mkr (0.9.1-1) stable; urgency=low
 
   * use GOARCH=amd64 for now (by Songmu)
