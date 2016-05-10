@@ -5,14 +5,14 @@
 %define _localbindir /usr/local/bin
 
 Name:      mkr
-Version:   0.9.1
+Version:   %{_version}
 Release:   1
 License:   Apache-2.0
 Summary:   macekrel.io api client tool
 URL:       https://mackerel.io
 Group:     Hatena
 Packager:  Hatena
-BuildArch: noarch
+BuildArch: %{buildarch}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
