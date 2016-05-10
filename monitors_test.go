@@ -43,7 +43,6 @@ func TestDiffMonitors(t *testing.T) {
 		"  {",
 		"    \"name\": \"foo\",",
 		"    \"type\": \"external\",",
-		"    \"isMute\": false,",
 		"    \"url\": \"http://example.com\",",
 		"    \"service\": \"bar\",",
 		"-   \"responseTimeCritical\": 1000.000000,",
@@ -121,7 +120,6 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	expected := `  {
     "name": "foo",
     "type": "connectivity",
-    "isMute": false,
     "scopes": [
 +     "sss: notebook",
     ],
@@ -134,7 +132,6 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	expected = `  {
     "name": "foo",
     "type": "connectivity",
-    "isMute": false,
     "scopes": [
 -     "sss: notebook",
     ],
@@ -154,7 +151,6 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	expected = `  {
     "name": "foo",
     "type": "connectivity",
-    "isMute": false,
     "scopes": [
       "sss: notebook",
 +     "ttt: notebook",
@@ -174,7 +170,6 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	expected = `  {
     "name": "foo",
     "type": "connectivity",
-    "isMute": false,
     "scopes": [
 -     "sss: notebook",
 +     "ttt: notebook",
