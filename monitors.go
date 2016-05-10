@@ -161,6 +161,8 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 	isAEmpty := isEmpty(a)
 	isBEmpty := isEmpty(b)
 	switch aType {
+	case "bool":
+		format = "%t"
 	case "uint64":
 		format = "%d"
 	case "float64":
