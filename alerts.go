@@ -181,7 +181,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
-func doAlertsRetrieve(c *cli.Context) {
+func doAlertsRetrieve(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	client := newMackerel(conffile)
 
@@ -191,7 +191,7 @@ func doAlertsRetrieve(c *cli.Context) {
 	return
 }
 
-func doAlertsList(c *cli.Context) {
+func doAlertsList(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
@@ -230,9 +230,10 @@ func doAlertsList(c *cli.Context) {
 		}
 		fmt.Println(formatJoinedAlert(joinAlert, c.BoolT("color")))
 	}
+	return nil
 }
 
-func doAlertsClose(c *cli.Context) {
+func doAlertsClose(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 	argAlertIDs := c.Args()
@@ -253,4 +254,5 @@ func doAlertsClose(c *cli.Context) {
 			PrettyPrintJSON(alert)
 		}
 	}
+	return nil
 }
