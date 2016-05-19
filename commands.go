@@ -492,7 +492,7 @@ func doRetire(c *cli.Context) error {
 
 	if !force && !prompter.YN("Retire following hosts.\n  "+strings.Join(argHostIDs, "\n  ")+"\nAre you sure?", true) {
 		logger.Log("", "retirement is canceled.")
-		return
+		return nil
 	}
 
 	client := newMackerel(conffile)
