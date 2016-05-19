@@ -188,7 +188,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 	alerts, err := client.FindAlerts()
 	logger.DieIf(err)
 	PrettyPrintJSON(alerts)
-	return
+	return nil
 }
 
 func doAlertsList(c *cli.Context) error {
