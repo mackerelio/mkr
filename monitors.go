@@ -103,16 +103,17 @@ func monitorLoadRules(optFilePath string) ([]*(mkr.Monitor), error) {
 	return data.Monitors, nil
 }
 
-func doMonitorsList(c *cli.Context) {
+func doMonitorsList(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 
 	monitors, err := newMackerel(conffile).FindMonitors()
 	logger.DieIf(err)
 
 	PrettyPrintJSON(monitors)
+	return nil
 }
 
-func doMonitorsPull(c *cli.Context) {
+func doMonitorsPull(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 	filePath := c.String("file-path")
@@ -130,6 +131,7 @@ func doMonitorsPull(c *cli.Context) {
 		filePath = "monitors.json"
 	}
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
+	return nil
 }
 
 func isEmpty(a interface{}) bool {
@@ -368,7 +370,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	return monitorDiff
 }
 
-func doMonitorsDiff(c *cli.Context) {
+func doMonitorsDiff(c *cli.Context) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isExitCode := c.Bool("exit-code")
 
@@ -394,9 +396,10 @@ func doMonitorsDiff(c *cli.Context) {
 	if isExitCode == true && noDiff == false {
 		os.Exit(1)
 	}
+	return nil
 }
 
-func doMonitorsPush(c *cli.Context) {
+func doMonitorsPush(c *cli.Context) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
@@ -431,5 +434,5 @@ func doMonitorsPush(c *cli.Context) {
 			logger.DieIf(err)
 		}
 	}
-
+	return nil
 }

@@ -233,7 +233,7 @@ OPTIONS:
 {{end}}`
 }
 
-func doStatus(c *cli.Context) {
+func doStatus(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
@@ -264,9 +264,10 @@ func doStatus(c *cli.Context) {
 
 		PrettyPrintJSON(format)
 	}
+	return nil
 }
 
-func doHosts(c *cli.Context) {
+func doHosts(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 
@@ -303,9 +304,10 @@ func doHosts(c *cli.Context) {
 
 		PrettyPrintJSON(hostsFormat)
 	}
+	return nil
 }
 
-func doCreate(c *cli.Context) {
+func doCreate(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	argHostName := c.Args().Get(0)
 	optRoleFullnames := c.StringSlice("roleFullname")
@@ -331,9 +333,10 @@ func doCreate(c *cli.Context) {
 		logger.DieIf(err)
 		logger.Log("updated", fmt.Sprintf("%s %s", hostID, optStatus))
 	}
+	return nil
 }
 
-func doUpdate(c *cli.Context) {
+func doUpdate(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optName := c.String("name")
@@ -393,9 +396,10 @@ func doUpdate(c *cli.Context) {
 
 		logger.Log("updated", hostID)
 	}
+	return nil
 }
 
-func doThrow(c *cli.Context) {
+func doThrow(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	optHostID := c.String("host")
 	optService := c.String("service")
@@ -453,9 +457,10 @@ func doThrow(c *cli.Context) {
 		cli.ShowCommandHelp(c, "throw")
 		os.Exit(1)
 	}
+	return nil
 }
 
-func doFetch(c *cli.Context) {
+func doFetch(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optMetricNames := c.StringSlice("name")
@@ -469,9 +474,10 @@ func doFetch(c *cli.Context) {
 	logger.DieIf(err)
 
 	PrettyPrintJSON(metricValues)
+	return nil
 }
 
-func doRetire(c *cli.Context) {
+func doRetire(c *cli.Context) error {
 	conffile := c.GlobalString("conf")
 	force := c.Bool("force")
 	argHostIDs := c.Args()
@@ -497,4 +503,5 @@ func doRetire(c *cli.Context) {
 
 		logger.Log("retired", hostID)
 	}
+	return nil
 }
