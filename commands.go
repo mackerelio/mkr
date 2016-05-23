@@ -26,6 +26,7 @@ var Commands = []cli.Command{
 	commandRetire,
 	commandMonitors,
 	commandAlerts,
+	commandDashboards,
 }
 
 var commandStatus = cli.Command{
@@ -196,6 +197,7 @@ var commandDocs = map[string]commandDoc{
 	"retire":   {"", "hostIds..."},
 	"monitors": {"", "[push [--dry-run | -d] [--file-path | -F <file>] [--verbose | -v] | diff [--file-path | -F <file>] | pull [--file-path | -F <file>]]"},
 	"alerts":   {"", "[list [--service | -s <service>] [--host-status | -S <file>] [--color | -c]| close <alertIds....>]"},
+	"dashboards": {"", "[generage <file> [--print | -p]]"},
 }
 
 // Makes template conditionals to generate per-command documents.
