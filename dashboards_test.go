@@ -120,7 +120,7 @@ func TestGenerateMarkDown(t *testing.T) {
 	arr := []*graphDef{
 		&graphDef{
 			ServiceName: "hoge",
-			RollName:    "api",
+			RoleName:    "api",
 			Graph:       "cpu",
 		},
 		&graphDef{

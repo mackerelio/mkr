@@ -41,7 +41,7 @@ type configYAML struct {
 type graphDef struct {
 	HostID      string `yaml:"host_id"`
 	ServiceName string `yaml:"service_name"`
-	RollName    string `yaml:"roll_name"`
+	RoleName    string `yaml:"role_name"`
 	Query       string `yaml:"query"`
 	Graph       string `yaml:"graph"`
 	GraphType   string `yaml:"graph_type"`
@@ -55,8 +55,8 @@ type graphDef struct {
 func (g graphDef) isHostGraph() bool {
 	return g.HostID != ""
 }
-func (g graphDef) isRollGraph() bool {
-	return g.ServiceName != "" && g.RollName != ""
+func (g graphDef) isRoleGraph() bool {
+	return g.ServiceName != "" && g.RoleName != ""
 }
 func (g graphDef) isExpressionGraph() bool {
 	return g.Query != ""
@@ -104,7 +104,7 @@ func (h hostGraph) getWidth() int {
 
 type roleGraph struct {
 	ServiceName string
-	RollName    string
+	RoleName    string
 	GraphType   string
 	Graph       string
 	Period      string
@@ -119,7 +119,7 @@ func (r roleGraph) getURL(orgName string, isImage bool) string {
 	if isImage {
 		extension = ".png"
 	}
-	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/services/%s/%s"+extension, orgName, r.ServiceName, r.RollName))
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/services/%s/%s"+extension, orgName, r.ServiceName, r.RoleName))
 	param := url.Values{}
 	param.Add("graph", r.Graph)
 	param.Add("stacked", strconv.FormatBool(r.Stacked))
@@ -262,14 +262,14 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 		if g.isHostGraph() {
 			graphDefCount++
 		}
-		if g.isRollGraph() {
+		if g.isRoleGraph() {
 			graphDefCount++
 		}
 		if g.isExpressionGraph() {
 			graphDefCount++
 		}
 		if graphDefCount != 1 {
-			logger.Log("error", "at least one between hostId, (service_name and roll_name) and query is required.")
+			logger.Log("error", "at least one between hostId, (service_name and role_name) and query is required.")
 			os.Exit(1)
 		}
 
@@ -309,15 +309,15 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), confColumnCount)
 		}
 
-		if g.isRollGraph() {
+		if g.isRoleGraph() {
 			if g.Graph == "" {
-				logger.Log("error", "graph is required for roll graph.")
+				logger.Log("error", "graph is required for role graph.")
 				os.Exit(1)
 			}
 
 			r := &roleGraph{
 				g.ServiceName,
-				g.RollName,
+				g.RoleName,
 				g.GraphType,
 				g.Graph,
 				g.Period,
