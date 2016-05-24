@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/codegangsta/cli"
-	"github.com/mackerelio/mackerel-client-go"
-	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/codegangsta/cli"
+	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/yaml.v2"
 )
 
 var commandDashboards = cli.Command{
