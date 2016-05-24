@@ -1,29 +1,29 @@
 package main
 
 import (
-	"github.com/codegangsta/cli"
-	"github.com/mackerelio/mkr/logger"
-	"io/ioutil"
-	"gopkg.in/yaml.v2"
-	"os"
 	"fmt"
-	"strconv"
-	"net/url"
-	"strings"
+	"github.com/codegangsta/cli"
 	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"net/url"
+	"os"
+	"strconv"
+	"strings"
 )
 
 var commandDashboards = cli.Command{
-	Name:  "dashboards",
+	Name: "dashboards",
 	Subcommands: []cli.Command{
 		{
-			Name:        "generate",
-			Usage:       "Generate custom dashboard",
+			Name:  "generate",
+			Usage: "Generate custom dashboard",
 			Description: `
     A custom dashboard is registered from a yaml file..
     Requests "POST /api/v0/dashboards". See https://mackerel.io/ja/api-docs/entry/dashboards#create.
 `,
-			Action:      doGenerateDashboards,
+			Action: doGenerateDashboards,
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "print, p", Usage: "markdown is output in standard output."},
 			},
@@ -50,6 +50,7 @@ type graphDef struct {
 	Height      int    `yaml:"height"`
 	Width       int    `yaml:"width"`
 }
+
 func (g graphDef) isHostGraph() bool {
 	return g.HostID != ""
 }
@@ -74,12 +75,13 @@ type hostGraph struct {
 	height    int
 	width     int
 }
+
 func (h hostGraph) getURL(orgName string, isImage bool) string {
 	extension := ""
-	if (isImage) {
+	if isImage {
 		extension = ".png"
 	}
-	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/hosts/%s" + extension, orgName, h.HostID))
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/hosts/%s"+extension, orgName, h.HostID))
 	param := url.Values{}
 	param.Add("graph", h.Graph)
 	param.Add("period", h.Period)
@@ -87,7 +89,7 @@ func (h hostGraph) getURL(orgName string, isImage bool) string {
 	return u.String()
 }
 func (h hostGraph) generateGraphString(orgName string) string {
-	if (h.GraphType == "iframe") {
+	if h.GraphType == "iframe" {
 		return makeIframeTag(orgName, h)
 	}
 	return makeImageMarkdown(orgName, h)
@@ -110,12 +112,13 @@ type roleGraph struct {
 	height      int
 	width       int
 }
+
 func (r roleGraph) getURL(orgName string, isImage bool) string {
 	extension := ""
-	if (isImage) {
+	if isImage {
 		extension = ".png"
 	}
-	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/services/%s/%s" + extension, orgName, r.ServiceName, r.RollName))
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/services/%s/%s"+extension, orgName, r.ServiceName, r.RollName))
 	param := url.Values{}
 	param.Add("graph", r.Graph)
 	param.Add("stacked", strconv.FormatBool(r.Stacked))
@@ -125,7 +128,7 @@ func (r roleGraph) getURL(orgName string, isImage bool) string {
 	return u.String()
 }
 func (r roleGraph) generateGraphString(orgName string) string {
-	if (r.GraphType == "iframe") {
+	if r.GraphType == "iframe" {
 		return makeIframeTag(orgName, r)
 	}
 	return makeImageMarkdown(orgName, r)
@@ -138,18 +141,19 @@ func (r roleGraph) getWidth() int {
 }
 
 type expressionGraph struct {
-	Query       string
-	GraphType   string
-	Period      string
-	height      int
-	width       int
+	Query     string
+	GraphType string
+	Period    string
+	height    int
+	width     int
 }
+
 func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	extension := ""
-	if (isImage) {
+	if isImage {
 		extension = ".png"
 	}
-	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/advanced-graph" + extension, orgName))
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/advanced-graph"+extension, orgName))
 	param := url.Values{}
 	param.Add("query", e.Query)
 	param.Add("period", e.Period)
@@ -157,7 +161,7 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	return u.String()
 }
 func (e expressionGraph) generateGraphString(orgName string) string {
-	if (e.GraphType == "iframe") {
+	if e.GraphType == "iframe" {
 		return makeIframeTag(orgName, e)
 	}
 	return makeImageMarkdown(orgName, e)
@@ -169,7 +173,7 @@ func (e expressionGraph) getWidth() int {
 	return e.width
 }
 
-func makeIframeTag(orgName string , g baseGraph) string {
+func makeIframeTag(orgName string, g baseGraph) string {
 	return fmt.Sprintf(`<iframe src="%s" height="%d" width="%d" frameborder="0"></iframe>`, g.getURL(orgName, false), g.getHeight(), g.getWidth())
 }
 
@@ -201,27 +205,27 @@ func doGenerateDashboards(c *cli.Context) error {
 	org, err := client.GetOrg()
 	logger.DieIf(err)
 
-	if (yml.Title == "") {
+	if yml.Title == "" {
 		logger.Log("error", "title is required in yaml.")
 		os.Exit(1)
 	}
-	if (yml.URLPath == "") {
+	if yml.URLPath == "" {
 		logger.Log("error", "url_path is required in yaml.")
 		os.Exit(1)
 	}
-	if (yml.ColumnCount == 0) {
+	if yml.ColumnCount == 0 {
 		yml.ColumnCount = 1
 	}
 
 	markdown := generateMarkDown(org.Name, yml.Graphs, yml.ColumnCount)
 
-	if (isStdout) {
+	if isStdout {
 		fmt.Println(markdown)
 	} else {
 		updateDashboard := &mackerel.Dashboard{
-			Title: yml.Title,
+			Title:        yml.Title,
 			BodyMarkDown: markdown,
-			URLPath: yml.URLPath,
+			URLPath:      yml.URLPath,
 		}
 
 		dashboards, fetchError := client.FindDashboards()
@@ -229,12 +233,12 @@ func doGenerateDashboards(c *cli.Context) error {
 
 		dashboardID := ""
 		for _, ds := range dashboards {
-			if (ds.URLPath == yml.URLPath) {
+			if ds.URLPath == yml.URLPath {
 				dashboardID = ds.ID
 			}
 		}
 
-		if (dashboardID == "") {
+		if dashboardID == "" {
 			_, createError := client.CreateDashboard(updateDashboard)
 			logger.DieIf(createError)
 		} else {
@@ -246,7 +250,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	return nil
 }
 
-func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) string{
+func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) string {
 
 	var markdown string
 	var currentColumnCount = 0
@@ -254,41 +258,41 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 	for i, g := range graphs {
 
 		var graphDefCount = 0
-		if (g.isHostGraph()) {
+		if g.isHostGraph() {
 			graphDefCount++
 		}
-		if (g.isRollGraph()) {
+		if g.isRollGraph() {
 			graphDefCount++
 		}
-		if (g.isExpressionGraph()) {
+		if g.isExpressionGraph() {
 			graphDefCount++
 		}
-		if (graphDefCount != 1) {
+		if graphDefCount != 1 {
 			logger.Log("error", "at least one between hostId, (service_name and roll_name) and query is required.")
 			os.Exit(1)
 		}
 
-		if (g.GraphType == "") {
+		if g.GraphType == "" {
 			g.GraphType = "iframe"
 		}
-		if (g.GraphType != "iframe" && g.GraphType != "image") {
+		if g.GraphType != "iframe" && g.GraphType != "image" {
 			logger.Log("error", "graph_type should 'iframe' or 'image'.")
 			os.Exit(1)
 		}
 
-		if (g.Height == 0) {
+		if g.Height == 0 {
 			g.Height = 200
 		}
-		if (g.Width == 0) {
+		if g.Width == 0 {
 			g.Width = 400
 		}
 
-		if (g.Period == "") {
+		if g.Period == "" {
 			g.Period = "1h"
 		}
 
-		if (g.isHostGraph()) {
-			if (g.Graph == "") {
+		if g.isHostGraph() {
+			if g.Graph == "" {
 				logger.Log("error", "graph is required for host graph.")
 				os.Exit(1)
 			}
@@ -304,8 +308,8 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), confColumnCount)
 		}
 
-		if (g.isRollGraph()) {
-			if (g.Graph == "") {
+		if g.isRollGraph() {
+			if g.Graph == "" {
 				logger.Log("error", "graph is required for roll graph.")
 				os.Exit(1)
 			}
@@ -324,7 +328,7 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 			markdown = appendMarkdown(markdown, r.generateGraphString(orgName), confColumnCount)
 		}
 
-		if (g.isExpressionGraph()) {
+		if g.isExpressionGraph() {
 			e := &expressionGraph{
 				g.Query,
 				g.GraphType,
@@ -336,8 +340,8 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 		}
 
 		currentColumnCount++
-		if (currentColumnCount >= confColumnCount || i >= len(graphs) - 1) {
-			if (strings.HasPrefix(markdown, "|")) {
+		if currentColumnCount >= confColumnCount || i >= len(graphs)-1 {
+			if strings.HasPrefix(markdown, "|") {
 				markdown += "|"
 			}
 			markdown += "\n"
@@ -349,15 +353,15 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 }
 
 func appendMarkdown(markdown string, addItem string, confColumnCount int) string {
-	if (confColumnCount == 1) {
+	if confColumnCount == 1 {
 		return markdown + addItem
 	}
-	return  markdown + "|" + addItem
+	return markdown + "|" + addItem
 }
 
 func generateTableHeader(confColumnCount int) string {
 	header := ""
-	if (confColumnCount > 1) {
+	if confColumnCount > 1 {
 		for i := 0; i < confColumnCount; i++ {
 			header += "|:-:"
 		}

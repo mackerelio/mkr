@@ -188,15 +188,15 @@ type commandDoc struct {
 }
 
 var commandDocs = map[string]commandDoc{
-	"status":   {"", "[-v|verbose] <hostId>"},
-	"hosts":    {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
-	"create":   {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update":   {"", "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
-	"throw":    {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
-	"fetch":    {"", "[--name | -n <metricName>] hostIds..."},
-	"retire":   {"", "hostIds..."},
-	"monitors": {"", "[push [--dry-run | -d] [--file-path | -F <file>] [--verbose | -v] | diff [--file-path | -F <file>] | pull [--file-path | -F <file>]]"},
-	"alerts":   {"", "[list [--service | -s <service>] [--host-status | -S <file>] [--color | -c]| close <alertIds....>]"},
+	"status":     {"", "[-v|verbose] <hostId>"},
+	"hosts":      {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
+	"create":     {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
+	"update":     {"", "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
+	"throw":      {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
+	"fetch":      {"", "[--name | -n <metricName>] hostIds..."},
+	"retire":     {"", "hostIds..."},
+	"monitors":   {"", "[push [--dry-run | -d] [--file-path | -F <file>] [--verbose | -v] | diff [--file-path | -F <file>] | pull [--file-path | -F <file>]]"},
+	"alerts":     {"", "[list [--service | -s <service>] [--host-status | -S <file>] [--color | -c]| close <alertIds....>]"},
 	"dashboards": {"", "[generage <file> [--print | -p]]"},
 }
 
