@@ -30,13 +30,12 @@ before_deploy:
 - make rpm deb
 deploy:
 - provider: script
-  script: script/releng --task=upload-to-github-release -v
+  script: script/releng --task=upload-to-github-release -v && script/releng --task=upload-master-to-github-release -v
   skip_cleanup: true
   on:
     branch: master
 - provider: script
-  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH
-    -v
+  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH -v
   skip_cleanup: true
   on:
     all_branches: true
