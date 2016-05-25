@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.1 (2016-05-25)
+
+* fix signnatures. codegangsta/cli #54 (tknzk)
+
+
 ## 0.10.0 (2016-05-10)
 
 * support `isMute` field of monitors #49 (Songmu)

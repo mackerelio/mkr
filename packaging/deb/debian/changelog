@@ -1,3 +1,10 @@
+mkr (0.10.1-1) stable; urgency=low
+
+  * fix signnatures. codegangsta/cli (by tknzk)
+    <https://github.com/mackerelio/mkr/pull/54>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 25 May 2016 04:09:33 +0000
+
 mkr (0.10.0-1) stable; urgency=low
 
   * support `isMute` field of monitors (by Songmu)
