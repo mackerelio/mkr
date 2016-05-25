@@ -32,7 +32,7 @@ var commandDashboards = cli.Command{
 	},
 }
 
-type configYAML struct {
+type graphsConfig struct {
 	Title       string      `yaml:"title"`
 	URLPath     string      `yaml:"url_path"`
 	ColumnCount int         `yaml:"column_count"`
@@ -197,7 +197,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	buf, err := ioutil.ReadFile(argFilePath[0])
 	logger.DieIf(err)
 
-	yml := configYAML{}
+	yml := graphsConfig{}
 	err = yaml.Unmarshal(buf, &yml)
 	logger.DieIf(err)
 
