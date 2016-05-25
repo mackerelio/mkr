@@ -361,12 +361,8 @@ func appendMarkdown(markdown string, addItem string, confColumnCount int) string
 }
 
 func generateTableHeader(confColumnCount int) string {
-	header := ""
 	if confColumnCount > 1 {
-		for i := 0; i < confColumnCount; i++ {
-			header += "|:-:"
-		}
-		return header + "|\n"
+		return strings.Repeat("|:-:", confColumnCount) + "|\n"
 	}
-	return header
+	return ""
 }
