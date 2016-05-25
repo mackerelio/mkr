@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed May 25 2016 <mackerel-developers@hatena.ne.jp> - 0.10.1-1
+- fix signnatures. codegangsta/cli (by tknzk)
+
 * Tue May 10 2016 <mackerel-developers@hatena.ne.jp> - 0.10.0-1
 - support `isMute` field of monitors (by Songmu)
 - support boolean at isEmpty (by stanaka)
