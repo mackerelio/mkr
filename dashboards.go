@@ -324,7 +324,15 @@ func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) st
 	for _, hostID := range hostIDs {
 		host, err := client.FindHost(hostID)
 		logger.DieIf(err)
-		header += "|" + host.DisplayName
+
+		var hostName string
+		if host.DisplayName != "" {
+			hostName = host.DisplayName
+		} else {
+			hostName = host.Name
+		}
+
+		header += "|" + hostName
 	}
 
 	header += "|\n" + generateGraphTableHeader(len(hostIDs))
