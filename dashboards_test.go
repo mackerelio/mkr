@@ -71,7 +71,7 @@ func TestHostImageGraph(t *testing.T) {
 	}
 
 	actual := h.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)]()`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -92,7 +92,7 @@ func TestServiceImageGraph(t *testing.T) {
 	}
 
 	actual := r.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)]()`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -109,7 +109,7 @@ func TestExpressionImageGraph(t *testing.T) {
 	}
 
 	actual := e.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)]()`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -117,24 +117,30 @@ func TestExpressionImageGraph(t *testing.T) {
 }
 
 func TestGenerateMarkDown(t *testing.T) {
-	arr := []*graphDef{
+	defs := []*graphDef{
 		&graphDef{
 			ServiceName: "hoge",
 			RoleName:    "api",
-			Graph:       "cpu",
+			GraphName:   "cpu",
 		},
 		&graphDef{
-			HostID: "abcde",
-			Graph:  "cpu",
+			HostID:    "abcde",
+			GraphName: "cpu",
 		},
 		&graphDef{
-			Query: "max(roleSlots('hoge:api','loadavg5'))",
-			Graph: "cpu",
+			Query:     "max(roleSlots('hoge:api','loadavg5'))",
+			GraphName: "cpu",
 		},
 	}
+	g := &graphFormat{
+		Headline:    "headline",
+		ColumnCount: 2,
+		GraphDefs:   defs,
+	}
 
-	actual := generateMarkDown("orgname", arr, 2)
-	expected := "|:-:|:-:|\n" +
+	actual := generateGraphsMarkDown("orgname", g, "iframe", 200, 400)
+	expected := "## headline\n" +
+		"|:-:|:-:|\n" +
 		`|<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=cpu&period=1h&simplified=false&stacked=false" height="200" width="400" frameborder="0"></iframe>|<iframe src="https://mackerel.io/embed/orgs/orgname/hosts/abcde?graph=cpu&period=1h" height="200" width="400" frameborder="0"></iframe>|` + "\n" +
 		`|<iframe src="https://mackerel.io/embed/orgs/orgname/advanced-graph?period=1h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29" height="200" width="400" frameborder="0"></iframe>|` + "\n"
 

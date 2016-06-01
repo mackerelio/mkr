@@ -33,23 +33,35 @@ var commandDashboards = cli.Command{
 }
 
 type graphsConfig struct {
-	Title       string      `yaml:"title"`
-	URLPath     string      `yaml:"url_path"`
+	Title           string             `yaml:"title"`
+	URLPath         string             `yaml:"url_path"`
+	GraphType       string             `yaml:"graph_type"`
+	Height          int                `yaml:"height"`
+	Width           int                `yaml:"width"`
+	HostGraphFormat []*hostGraphFormat `yaml:"host_graphs"`
+	GraphFormat     []*graphFormat     `yaml:"graphs"`
+}
+
+type hostGraphFormat struct {
+	Headline   string   `yaml:"headline"`
+	HostIDs    []string `yaml:"host_ids"`
+	GraphNames []string `yaml:"graph_names"`
+	Period     string   `yaml:"period"`
+}
+type graphFormat struct {
+	Headline    string      `yaml:"headline"`
 	ColumnCount int         `yaml:"column_count"`
-	Graphs      []*graphDef `yaml:"graphs"`
+	GraphDefs   []*graphDef `yaml:"graph_def"`
 }
 type graphDef struct {
 	HostID      string `yaml:"host_id"`
 	ServiceName string `yaml:"service_name"`
 	RoleName    string `yaml:"role_name"`
 	Query       string `yaml:"query"`
-	Graph       string `yaml:"graph"`
-	GraphType   string `yaml:"graph_type"`
+	GraphName   string `yaml:"graph_name"`
 	Period      string `yaml:"period"`
 	Stacked     bool   `yaml:"stacked"`
 	Simplified  bool   `yaml:"simplified"`
-	Height      int    `yaml:"height"`
-	Width       int    `yaml:"width"`
 }
 
 func (g graphDef) isHostGraph() bool {
@@ -179,7 +191,7 @@ func makeIframeTag(orgName string, g baseGraph) string {
 }
 
 func makeImageMarkdown(orgName string, g baseGraph) string {
-	return fmt.Sprintf("[![graph](%s)]()", g.getURL(orgName, true))
+	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getURL(orgName, true))
 }
 
 func doGenerateDashboards(c *cli.Context) error {
@@ -214,11 +226,31 @@ func doGenerateDashboards(c *cli.Context) error {
 		logger.Log("error", "url_path is required in yaml.")
 		os.Exit(1)
 	}
-	if yml.ColumnCount == 0 {
-		yml.ColumnCount = 1
+	if yml.GraphType == "" {
+		yml.GraphType = "iframe"
+	}
+	if yml.GraphType != "iframe" && yml.GraphType != "image" {
+		logger.Log("error", "graph_type should 'iframe' or 'image'.")
+		os.Exit(1)
+	}
+	if yml.Height == 0 {
+		yml.Height = 200
+	}
+	if yml.Width == 0 {
+		yml.Width = 400
 	}
 
-	markdown := generateMarkDown(org.Name, yml.Graphs, yml.ColumnCount)
+	if yml.HostGraphFormat != nil && yml.GraphFormat != nil {
+		logger.Log("error", "graph should 'graphs' or 'host_graphs'.")
+	}
+
+	var markdown string
+	for _, h := range yml.HostGraphFormat {
+		markdown += generateHostGraphsMarkDown(org.Name, h, yml.GraphType, yml.Height, yml.Width, client)
+	}
+	for _, g := range yml.GraphFormat {
+		markdown += generateGraphsMarkDown(org.Name, g, yml.GraphType, yml.Height, yml.Width)
+	}
 
 	if isStdout {
 		fmt.Println(markdown)
@@ -251,21 +283,77 @@ func doGenerateDashboards(c *cli.Context) error {
 	return nil
 }
 
-func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) string {
+func generateHostGraphsMarkDown(orgName string, hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) string {
 
 	var markdown string
-	var currentColumnCount = 0
 
-	for i, g := range graphs {
+	if hostGraphs.Headline != "" {
+		markdown += fmt.Sprintf("## %s\n", hostGraphs.Headline)
+	}
+	markdown += generateHostGraphsTableHeader(hostGraphs.HostIDs, client)
 
+	if hostGraphs.Period == "" {
+		hostGraphs.Period = "1h"
+	}
+
+	for _, graphName := range hostGraphs.GraphNames {
+		currentColumnCount := 0
+		for _, hostID := range hostGraphs.HostIDs {
+			h := &hostGraph{
+				hostID,
+				graphType,
+				graphName,
+				hostGraphs.Period,
+				height,
+				width,
+			}
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), len(hostGraphs.HostIDs))
+			currentColumnCount++
+			if currentColumnCount >= len(hostGraphs.HostIDs) {
+				markdown += "|\n"
+				currentColumnCount = 0
+			}
+		}
+	}
+
+	return markdown
+}
+
+func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) string {
+	var header string
+	for _, hostID := range hostIDs {
+		host, err := client.FindHost(hostID)
+		logger.DieIf(err)
+		header += "|" + host.DisplayName
+	}
+
+	header += "|\n" + generateGraphTableHeader(len(hostIDs))
+
+	return header
+}
+
+func generateGraphsMarkDown(orgName string, graphs *graphFormat, graphType string, height int, width int) string {
+
+	var markdown string
+	if graphs.ColumnCount == 0 {
+		graphs.ColumnCount = 1
+	}
+	currentColumnCount := 0
+
+	if graphs.Headline != "" {
+		markdown += fmt.Sprintf("## %s\n", graphs.Headline)
+	}
+	markdown += generateGraphTableHeader(graphs.ColumnCount)
+
+	for i, gd := range graphs.GraphDefs {
 		var graphDefCount = 0
-		if g.isHostGraph() {
+		if gd.isHostGraph() {
 			graphDefCount++
 		}
-		if g.isRoleGraph() {
+		if gd.isRoleGraph() {
 			graphDefCount++
 		}
-		if g.isExpressionGraph() {
+		if gd.isExpressionGraph() {
 			graphDefCount++
 		}
 		if graphDefCount != 1 {
@@ -273,96 +361,72 @@ func generateMarkDown(orgName string, graphs []*graphDef, confColumnCount int) s
 			os.Exit(1)
 		}
 
-		if g.GraphType == "" {
-			g.GraphType = "iframe"
-		}
-		if g.GraphType != "iframe" && g.GraphType != "image" {
-			logger.Log("error", "graph_type should 'iframe' or 'image'.")
-			os.Exit(1)
+		if gd.Period == "" {
+			gd.Period = "1h"
 		}
 
-		if g.Height == 0 {
-			g.Height = 200
-		}
-		if g.Width == 0 {
-			g.Width = 400
-		}
-
-		if g.Period == "" {
-			g.Period = "1h"
-		}
-
-		if g.isHostGraph() {
-			if g.Graph == "" {
-				logger.Log("error", "graph is required for host graph.")
+		if gd.isHostGraph() {
+			if gd.GraphName == "" {
+				logger.Log("error", "graph_name is required for host graph.")
 				os.Exit(1)
 			}
 
 			h := &hostGraph{
-				g.HostID,
-				g.GraphType,
-				g.Graph,
-				g.Period,
-				g.Height,
-				g.Width,
+				gd.HostID,
+				graphType,
+				gd.GraphName,
+				gd.Period,
+				height,
+				width,
 			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), confColumnCount)
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), graphs.ColumnCount)
 		}
 
-		if g.isRoleGraph() {
-			if g.Graph == "" {
-				logger.Log("error", "graph is required for role graph.")
+		if gd.isRoleGraph() {
+			if gd.GraphName == "" {
+				logger.Log("error", "graph_name is required for role graph.")
 				os.Exit(1)
 			}
 
 			r := &roleGraph{
-				g.ServiceName,
-				g.RoleName,
-				g.GraphType,
-				g.Graph,
-				g.Period,
-				g.Stacked,
-				g.Simplified,
-				g.Height,
-				g.Width,
+				gd.ServiceName,
+				gd.RoleName,
+				graphType,
+				gd.GraphName,
+				gd.Period,
+				gd.Stacked,
+				gd.Simplified,
+				height,
+				width,
 			}
-			markdown = appendMarkdown(markdown, r.generateGraphString(orgName), confColumnCount)
+			markdown = appendMarkdown(markdown, r.generateGraphString(orgName), graphs.ColumnCount)
 		}
 
-		if g.isExpressionGraph() {
+		if gd.isExpressionGraph() {
 			e := &expressionGraph{
-				g.Query,
-				g.GraphType,
-				g.Period,
-				g.Height,
-				g.Width,
+				gd.Query,
+				graphType,
+				gd.Period,
+				height,
+				width,
 			}
-			markdown = appendMarkdown(markdown, e.generateGraphString(orgName), confColumnCount)
+			markdown = appendMarkdown(markdown, e.generateGraphString(orgName), graphs.ColumnCount)
 		}
 
 		currentColumnCount++
-		if currentColumnCount >= confColumnCount || i >= len(graphs)-1 {
-			if strings.HasPrefix(markdown, "|") {
-				markdown += "|"
-			}
-			markdown += "\n"
+		if currentColumnCount >= graphs.ColumnCount || i >= len(graphs.GraphDefs)-1 {
+			markdown += "|\n"
 			currentColumnCount = 0
 		}
 	}
 
-	return generateTableHeader(confColumnCount) + markdown
+	return markdown
+}
+
+func generateGraphTableHeader(confColumnCount int) string {
+	return strings.Repeat("|:-:", confColumnCount) + "|\n"
 }
 
 func appendMarkdown(markdown string, addItem string, confColumnCount int) string {
-	if confColumnCount == 1 {
-		return markdown + addItem
-	}
 	return markdown + "|" + addItem
-}
-
-func generateTableHeader(confColumnCount int) string {
-	if confColumnCount > 1 {
-		return strings.Repeat("|:-:", confColumnCount) + "|\n"
-	}
-	return ""
 }
