@@ -23,11 +23,29 @@ func TestHostIFrameGraph(t *testing.T) {
 }
 
 func TestServiceIFrameGraph(t *testing.T) {
+	r := &serviceGraph{
+		"hoge",
+		"iframe",
+		"cpu",
+		"6h",
+		200,
+		600,
+	}
+
+	actual := r.generateGraphString("orgname")
+	expected := `<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge?graph=cpu&period=6h" height="200" width="600" frameborder="0"></iframe>`
+
+	if actual != expected {
+		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
+	}
+}
+
+func TestRoleIFrameGraph(t *testing.T) {
 	r := &roleGraph{
 		"hoge",
 		"api",
 		"iframe",
-		"cpu",
+		"custom.fuga.*",
 		"6h",
 		true,
 		true,
@@ -36,7 +54,7 @@ func TestServiceIFrameGraph(t *testing.T) {
 	}
 
 	actual := r.generateGraphString("orgname")
-	expected := `<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=cpu&period=6h&simplified=true&stacked=true" height="200" width="600" frameborder="0"></iframe>`
+	expected := `<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=custom.fuga.%2A&period=6h&simplified=true&stacked=true" height="200" width="600" frameborder="0"></iframe>`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -79,6 +97,24 @@ func TestHostImageGraph(t *testing.T) {
 }
 
 func TestServiceImageGraph(t *testing.T) {
+	r := &serviceGraph{
+		"hoge",
+		"image",
+		"custom.fuga.*",
+		"6h",
+		200,
+		600,
+	}
+
+	actual := r.generateGraphString("orgname")
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge.png?graph=custom.fuga.%2A&period=6h)](https://mackerel.io/embed/orgs/orgname/services/hoge.png?graph=custom.fuga.%2A&period=6h)`
+
+	if actual != expected {
+		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
+	}
+}
+
+func TestRoleImageGraph(t *testing.T) {
 	r := &roleGraph{
 		"hoge",
 		"api",

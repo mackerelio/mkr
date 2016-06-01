@@ -67,6 +67,9 @@ type graphDef struct {
 func (g graphDef) isHostGraph() bool {
 	return g.HostID != ""
 }
+func (g graphDef) isServiceGraph() bool {
+	return g.ServiceName != "" && g.RoleName == ""
+}
 func (g graphDef) isRoleGraph() bool {
 	return g.ServiceName != "" && g.RoleName != ""
 }
@@ -112,6 +115,40 @@ func (h hostGraph) getHeight() int {
 }
 func (h hostGraph) getWidth() int {
 	return h.width
+}
+
+type serviceGraph struct {
+	ServiceName string
+	GraphType   string
+	Graph       string
+	Period      string
+	height      int
+	width       int
+}
+
+func (s serviceGraph) getURL(orgName string, isImage bool) string {
+	extension := ""
+	if isImage {
+		extension = ".png"
+	}
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/embed/orgs/%s/services/%s"+extension, orgName, s.ServiceName))
+	param := url.Values{}
+	param.Add("graph", s.Graph)
+	param.Add("period", s.Period)
+	u.RawQuery = param.Encode()
+	return u.String()
+}
+func (s serviceGraph) generateGraphString(orgName string) string {
+	if s.GraphType == "iframe" {
+		return makeIframeTag(orgName, s)
+	}
+	return makeImageMarkdown(orgName, s)
+}
+func (s serviceGraph) getHeight() int {
+	return s.height
+}
+func (s serviceGraph) getWidth() int {
+	return s.width
 }
 
 type roleGraph struct {
@@ -358,6 +395,9 @@ func generateGraphsMarkDown(orgName string, graphs *graphFormat, graphType strin
 		if gd.isHostGraph() {
 			graphDefCount++
 		}
+		if gd.isServiceGraph() {
+			graphDefCount++
+		}
 		if gd.isRoleGraph() {
 			graphDefCount++
 		}
@@ -365,7 +405,7 @@ func generateGraphsMarkDown(orgName string, graphs *graphFormat, graphType strin
 			graphDefCount++
 		}
 		if graphDefCount != 1 {
-			logger.Log("error", "at least one between hostId, (service_name and role_name) and query is required.")
+			logger.Log("error", "at least one between hostId, service_name and query is required.")
 			os.Exit(1)
 		}
 
@@ -381,6 +421,23 @@ func generateGraphsMarkDown(orgName string, graphs *graphFormat, graphType strin
 
 			h := &hostGraph{
 				gd.HostID,
+				graphType,
+				gd.GraphName,
+				gd.Period,
+				height,
+				width,
+			}
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), graphs.ColumnCount)
+		}
+
+		if gd.isServiceGraph() {
+			if gd.GraphName == "" {
+				logger.Log("error", "graph_name is required for service graph.")
+				os.Exit(1)
+			}
+
+			h := &serviceGraph{
+				gd.ServiceName,
 				graphType,
 				gd.GraphName,
 				gd.Period,
