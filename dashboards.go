@@ -489,7 +489,7 @@ func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) st
 		header += "|" + hostName
 	}
 
-	header += "|\n" + generateGraphTableHeader(len(hostIDs))
+	header += "|\n" + generateAlignmentLine(len(hostIDs))
 
 	return header
 }
@@ -500,7 +500,7 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 		graphs.ColumnCount = 1
 	}
 
-	tableHeader := generateGraphTableHeader(graphs.ColumnCount)
+	tableHeader := generateAlignmentLine(graphs.ColumnCount)
 
 	var baseGraphs []baseGraph
 	for _, gd := range graphs.GraphDefs {
@@ -519,6 +519,6 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 	}
 }
 
-func generateGraphTableHeader(confColumnCount int) string {
-	return strings.Repeat("|:-:", confColumnCount) + "|\n"
+func generateAlignmentLine(count int) string {
+	return strings.Repeat("|:-:", count) + "|\n"
 }
