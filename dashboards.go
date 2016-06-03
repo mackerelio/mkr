@@ -267,7 +267,7 @@ func doGenerateDashboards(c *cli.Context) error {
 		yml.GraphType = "iframe"
 	}
 	if yml.GraphType != "iframe" && yml.GraphType != "image" {
-		logger.Log("error", "graph_type should 'iframe' or 'image'.")
+		logger.Log("error", "graph_type should be 'iframe' or 'image'.")
 		os.Exit(1)
 	}
 	if yml.Height == 0 {
@@ -278,7 +278,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	}
 
 	if yml.HostGraphFormat != nil && yml.GraphFormat != nil {
-		logger.Log("error", "graph should 'graphs' or 'host_graphs'.")
+		logger.Log("error", "you cannot specify both 'graphs' and host_graphs'.")
 	}
 
 	var markdown string
