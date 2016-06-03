@@ -21,7 +21,7 @@ var commandDashboards = cli.Command{
 			Name:  "generate",
 			Usage: "Generate custom dashboard",
 			Description: `
-    A custom dashboard is registered from a yaml file..
+    A custom dashboard is registered from a yaml file.
     Requests "POST /api/v0/dashboards". See https://mackerel.io/ja/api-docs/entry/dashboards#create.
 `,
 			Action: doGenerateDashboards,
@@ -141,7 +141,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 		}
 	}
 
-	logger.Log("error", "at least one between hostId, service_name and query is required.")
+	logger.Log("error", "either host_id, service_name or query should be specified.")
 	os.Exit(1)
 
 	return nil
@@ -359,7 +359,7 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	argFilePath := c.Args()
 	if len(argFilePath) < 1 {
-		logger.Log("error", "at least one argumet is required.")
+		logger.Log("error", "specify a yaml file.")
 		cli.ShowCommandHelp(c, "generate")
 		os.Exit(1)
 	}
