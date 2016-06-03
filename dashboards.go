@@ -344,7 +344,7 @@ func generateHostGraphsMarkdown(orgName string, hostGraphs *hostGraphFormat, gra
 				height,
 				width,
 			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), len(hostGraphs.HostIDs))
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
 			currentColumnCount++
 			if currentColumnCount >= len(hostGraphs.HostIDs) {
 				markdown += "|\n"
@@ -427,7 +427,7 @@ func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType strin
 				height,
 				width,
 			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), graphs.ColumnCount)
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
 		}
 
 		if gd.isServiceGraph() {
@@ -444,7 +444,7 @@ func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType strin
 				height,
 				width,
 			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName), graphs.ColumnCount)
+			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
 		}
 
 		if gd.isRoleGraph() {
@@ -464,7 +464,7 @@ func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType strin
 				height,
 				width,
 			}
-			markdown = appendMarkdown(markdown, r.generateGraphString(orgName), graphs.ColumnCount)
+			markdown = appendMarkdown(markdown, r.generateGraphString(orgName))
 		}
 
 		if gd.isExpressionGraph() {
@@ -475,7 +475,7 @@ func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType strin
 				height,
 				width,
 			}
-			markdown = appendMarkdown(markdown, e.generateGraphString(orgName), graphs.ColumnCount)
+			markdown = appendMarkdown(markdown, e.generateGraphString(orgName))
 		}
 
 		currentColumnCount++
@@ -492,6 +492,6 @@ func generateGraphTableHeader(confColumnCount int) string {
 	return strings.Repeat("|:-:", confColumnCount) + "|\n"
 }
 
-func appendMarkdown(markdown string, addItem string, confColumnCount int) string {
+func appendMarkdown(markdown string, addItem string) string {
 	return markdown + "|" + addItem
 }
