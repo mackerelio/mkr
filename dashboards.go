@@ -335,8 +335,8 @@ func (mdf markdownFactory) generate(orgName string) string {
 
 	markdown += mdf.TableHeader
 
-	for i, h := range mdf.BaseGraphs {
-		markdown += "|" + h.generateGraphString(orgName)
+	for i, g := range mdf.BaseGraphs {
+		markdown += "|" + g.generateGraphString(orgName)
 		if i% mdf.ColumnCount >= mdf.ColumnCount-1 || i >= len(mdf.BaseGraphs)-1 {
 			markdown += "|\n"
 		}
