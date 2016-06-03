@@ -149,7 +149,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 
 type baseGraph interface {
 	getURL(string, bool) string
-	getImageLinkURL(string) string
+	getPermalink(string) string
 	getHeight() int
 	getWidth() int
 	generateGraphString(orgName string) string
@@ -176,7 +176,7 @@ func (h hostGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
-func (h hostGraph) getImageLinkURL(orgName string) string {
+func (h hostGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/hosts/%s/-/graphs/%s", orgName, h.HostID, url.QueryEscape(h.Graph)))
 	return u.String()
 }
@@ -214,7 +214,7 @@ func (s serviceGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
-func (s serviceGraph) getImageLinkURL(orgName string) string {
+func (s serviceGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/services/%s/-/graphs", orgName, s.ServiceName))
 	param := url.Values{}
 	param.Add("name", s.Graph)
@@ -260,7 +260,7 @@ func (r roleGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
-func (r roleGraph) getImageLinkURL(orgName string) string {
+func (r roleGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/services/%s/%s/-/graph", orgName, r.ServiceName, r.RoleName))
 	param := url.Values{}
 	param.Add("name", r.Graph)
@@ -300,7 +300,7 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
-func (e expressionGraph) getImageLinkURL(orgName string) string {
+func (e expressionGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/advanced-graph", orgName))
 	param := url.Values{}
 	param.Add("query", e.Query)
@@ -349,7 +349,7 @@ func makeIframeTag(orgName string, g baseGraph) string {
 }
 
 func makeImageMarkdown(orgName string, g baseGraph) string {
-	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getImageLinkURL(orgName))
+	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getPermalink(orgName))
 }
 
 func doGenerateDashboards(c *cli.Context) error {
