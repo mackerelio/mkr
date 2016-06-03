@@ -174,7 +174,7 @@ func TestGenerateMarkDown(t *testing.T) {
 		GraphDefs:   defs,
 	}
 
-	actual := generateGraphsMarkDown("orgname", g, "iframe", 200, 400)
+	actual := generateGraphsMarkdown("orgname", g, "iframe", 200, 400)
 	expected := "## headline\n" +
 		"|:-:|:-:|\n" +
 		`|<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=cpu&period=1h&simplified=false&stacked=false" height="200" width="400" frameborder="0"></iframe>|<iframe src="https://mackerel.io/embed/orgs/orgname/hosts/abcde?graph=cpu&period=1h" height="200" width="400" frameborder="0"></iframe>|` + "\n" +

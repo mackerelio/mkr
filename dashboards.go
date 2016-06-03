@@ -283,10 +283,10 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	var markdown string
 	for _, h := range yml.HostGraphFormat {
-		markdown += generateHostGraphsMarkDown(org.Name, h, yml.GraphType, yml.Height, yml.Width, client)
+		markdown += generateHostGraphsMarkdown(org.Name, h, yml.GraphType, yml.Height, yml.Width, client)
 	}
 	for _, g := range yml.GraphFormat {
-		markdown += generateGraphsMarkDown(org.Name, g, yml.GraphType, yml.Height, yml.Width)
+		markdown += generateGraphsMarkdown(org.Name, g, yml.GraphType, yml.Height, yml.Width)
 	}
 
 	if isStdout {
@@ -320,7 +320,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	return nil
 }
 
-func generateHostGraphsMarkDown(orgName string, hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) string {
+func generateHostGraphsMarkdown(orgName string, hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) string {
 
 	var markdown string
 
@@ -377,7 +377,7 @@ func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) st
 	return header
 }
 
-func generateGraphsMarkDown(orgName string, graphs *graphFormat, graphType string, height int, width int) string {
+func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType string, height int, width int) string {
 
 	var markdown string
 	if graphs.ColumnCount == 0 {
