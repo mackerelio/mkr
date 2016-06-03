@@ -48,11 +48,13 @@ type hostGraphFormat struct {
 	GraphNames []string `yaml:"graph_names"`
 	Period     string   `yaml:"period"`
 }
+
 type graphFormat struct {
 	Headline    string      `yaml:"headline"`
 	ColumnCount int         `yaml:"column_count"`
 	GraphDefs   []*graphDef `yaml:"graph_def"`
 }
+
 type graphDef struct {
 	HostID      string `yaml:"host_id"`
 	ServiceName string `yaml:"service_name"`
@@ -77,10 +79,80 @@ func (g graphDef) isExpressionGraph() bool {
 	return g.Query != ""
 }
 
+func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGraph {
+	if g.isHostGraph() {
+		if g.GraphName == "" {
+			logger.Log("error", "graph_name is required for host graph.")
+			os.Exit(1)
+		}
+
+		return hostGraph{
+			g.HostID,
+			graphType,
+			g.GraphName,
+			g.Period,
+			height,
+			width,
+		}
+	}
+
+	if g.isServiceGraph() {
+		if g.GraphName == "" {
+			logger.Log("error", "graph_name is required for service graph.")
+			os.Exit(1)
+		}
+
+		return serviceGraph{
+			g.ServiceName,
+			graphType,
+			g.GraphName,
+			g.Period,
+			height,
+			width,
+		}
+	}
+
+	if g.isRoleGraph() {
+		if g.GraphName == "" {
+			logger.Log("error", "graph_name is required for role graph.")
+			os.Exit(1)
+		}
+
+		return roleGraph{
+			g.ServiceName,
+			g.RoleName,
+			graphType,
+			g.GraphName,
+			g.Period,
+			g.Stacked,
+			g.Simplified,
+			height,
+			width,
+		}
+	}
+
+	if g.isExpressionGraph() {
+		return expressionGraph{
+			g.Query,
+			graphType,
+			g.Period,
+			height,
+			width,
+		}
+	}
+
+	logger.Log("error", "at least one between hostId, service_name and query is required.")
+	os.Exit(1)
+
+	return nil
+}
+
 type baseGraph interface {
 	getURL(string, bool) string
+	getImageLinkURL(string) string
 	getHeight() int
 	getWidth() int
+	generateGraphString(orgName string) string
 }
 
 type hostGraph struct {
@@ -102,6 +174,10 @@ func (h hostGraph) getURL(orgName string, isImage bool) string {
 	param.Add("graph", h.Graph)
 	param.Add("period", h.Period)
 	u.RawQuery = param.Encode()
+	return u.String()
+}
+func (h hostGraph) getImageLinkURL(orgName string) string {
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/hosts/%s/-/graphs/%s", orgName, h.HostID, url.QueryEscape(h.Graph)))
 	return u.String()
 }
 func (h hostGraph) generateGraphString(orgName string) string {
@@ -135,6 +211,13 @@ func (s serviceGraph) getURL(orgName string, isImage bool) string {
 	param := url.Values{}
 	param.Add("graph", s.Graph)
 	param.Add("period", s.Period)
+	u.RawQuery = param.Encode()
+	return u.String()
+}
+func (s serviceGraph) getImageLinkURL(orgName string) string {
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/services/%s/-/graphs", orgName, s.ServiceName))
+	param := url.Values{}
+	param.Add("name", s.Graph)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
@@ -177,6 +260,13 @@ func (r roleGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
+func (r roleGraph) getImageLinkURL(orgName string) string {
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/services/%s/%s/-/graph", orgName, r.ServiceName, r.RoleName))
+	param := url.Values{}
+	param.Add("name", r.Graph)
+	u.RawQuery = param.Encode()
+	return u.String()
+}
 func (r roleGraph) generateGraphString(orgName string) string {
 	if r.GraphType == "iframe" {
 		return makeIframeTag(orgName, r)
@@ -210,6 +300,13 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	u.RawQuery = param.Encode()
 	return u.String()
 }
+func (e expressionGraph) getImageLinkURL(orgName string) string {
+	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/advanced-graph", orgName))
+	param := url.Values{}
+	param.Add("query", e.Query)
+	u.RawQuery = param.Encode()
+	return u.String()
+}
 func (e expressionGraph) generateGraphString(orgName string) string {
 	if e.GraphType == "iframe" {
 		return makeIframeTag(orgName, e)
@@ -223,12 +320,36 @@ func (e expressionGraph) getWidth() int {
 	return e.width
 }
 
+type markdownFactory struct {
+	Headline    string
+	TableHeader string
+	BaseGraphs  []baseGraph
+	ColumnCount int
+}
+
+func (mdf markdownFactory) generate(orgName string) string {
+	markdown := ""
+	if mdf.Headline != "" {
+		markdown += fmt.Sprintf("## %s\n", mdf.Headline)
+	}
+
+	markdown += mdf.TableHeader
+
+	for i, h := range mdf.BaseGraphs {
+		markdown += "|" + h.generateGraphString(orgName)
+		if i% mdf.ColumnCount >= mdf.ColumnCount-1 || i >= len(mdf.BaseGraphs)-1 {
+			markdown += "|\n"
+		}
+	}
+	return markdown
+}
+
 func makeIframeTag(orgName string, g baseGraph) string {
 	return fmt.Sprintf(`<iframe src="%s" height="%d" width="%d" frameborder="0"></iframe>`, g.getURL(orgName, false), g.getHeight(), g.getWidth())
 }
 
 func makeImageMarkdown(orgName string, g baseGraph) string {
-	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getURL(orgName, true))
+	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getImageLinkURL(orgName))
 }
 
 func doGenerateDashboards(c *cli.Context) error {
@@ -283,10 +404,12 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	var markdown string
 	for _, h := range yml.HostGraphFormat {
-		markdown += generateHostGraphsMarkdown(org.Name, h, yml.GraphType, yml.Height, yml.Width, client)
+		mdf := generateHostGraphsMarkdownFactory(h, yml.GraphType, yml.Height, yml.Width, client)
+		markdown += mdf.generate(org.Name)
 	}
 	for _, g := range yml.GraphFormat {
-		markdown += generateGraphsMarkdown(org.Name, g, yml.GraphType, yml.Height, yml.Width)
+		mdf := generateGraphsMarkdownFactory(g, yml.GraphType, yml.Height, yml.Width)
+		markdown += mdf.generate(org.Name)
 	}
 
 	if isStdout {
@@ -320,40 +443,34 @@ func doGenerateDashboards(c *cli.Context) error {
 	return nil
 }
 
-func generateHostGraphsMarkdown(orgName string, hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) string {
+func generateHostGraphsMarkdownFactory(hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) *markdownFactory {
 
-	var markdown string
-
-	if hostGraphs.Headline != "" {
-		markdown += fmt.Sprintf("## %s\n", hostGraphs.Headline)
-	}
-	markdown += generateHostGraphsTableHeader(hostGraphs.HostIDs, client)
+	tableHeader := generateHostGraphsTableHeader(hostGraphs.HostIDs, client)
 
 	if hostGraphs.Period == "" {
 		hostGraphs.Period = "1h"
 	}
 
+	var baseGraphs []baseGraph
 	for _, graphName := range hostGraphs.GraphNames {
-		currentColumnCount := 0
 		for _, hostID := range hostGraphs.HostIDs {
-			h := &hostGraph{
+			baseGraphs = append(baseGraphs, hostGraph{
 				hostID,
 				graphType,
 				graphName,
 				hostGraphs.Period,
 				height,
 				width,
-			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
-			currentColumnCount++
-			if currentColumnCount >= len(hostGraphs.HostIDs) {
-				markdown += "|\n"
-				currentColumnCount = 0
-			}
+			})
 		}
 	}
 
-	return markdown
+	return &markdownFactory{
+		Headline:    hostGraphs.Headline,
+		TableHeader: tableHeader,
+		BaseGraphs:  baseGraphs,
+		ColumnCount: len(hostGraphs.HostIDs),
+	}
 }
 
 func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) string {
@@ -377,121 +494,31 @@ func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) st
 	return header
 }
 
-func generateGraphsMarkdown(orgName string, graphs *graphFormat, graphType string, height int, width int) string {
+func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height int, width int) *markdownFactory {
 
-	var markdown string
 	if graphs.ColumnCount == 0 {
 		graphs.ColumnCount = 1
 	}
-	currentColumnCount := 0
 
-	if graphs.Headline != "" {
-		markdown += fmt.Sprintf("## %s\n", graphs.Headline)
-	}
-	markdown += generateGraphTableHeader(graphs.ColumnCount)
+	tableHeader := generateGraphTableHeader(graphs.ColumnCount)
 
-	for i, gd := range graphs.GraphDefs {
-		var graphDefCount = 0
-		if gd.isHostGraph() {
-			graphDefCount++
-		}
-		if gd.isServiceGraph() {
-			graphDefCount++
-		}
-		if gd.isRoleGraph() {
-			graphDefCount++
-		}
-		if gd.isExpressionGraph() {
-			graphDefCount++
-		}
-		if graphDefCount != 1 {
-			logger.Log("error", "at least one between hostId, service_name and query is required.")
-			os.Exit(1)
-		}
-
+	var baseGraphs []baseGraph
+	for _, gd := range graphs.GraphDefs {
 		if gd.Period == "" {
 			gd.Period = "1h"
 		}
 
-		if gd.isHostGraph() {
-			if gd.GraphName == "" {
-				logger.Log("error", "graph_name is required for host graph.")
-				os.Exit(1)
-			}
-
-			h := &hostGraph{
-				gd.HostID,
-				graphType,
-				gd.GraphName,
-				gd.Period,
-				height,
-				width,
-			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
-		}
-
-		if gd.isServiceGraph() {
-			if gd.GraphName == "" {
-				logger.Log("error", "graph_name is required for service graph.")
-				os.Exit(1)
-			}
-
-			h := &serviceGraph{
-				gd.ServiceName,
-				graphType,
-				gd.GraphName,
-				gd.Period,
-				height,
-				width,
-			}
-			markdown = appendMarkdown(markdown, h.generateGraphString(orgName))
-		}
-
-		if gd.isRoleGraph() {
-			if gd.GraphName == "" {
-				logger.Log("error", "graph_name is required for role graph.")
-				os.Exit(1)
-			}
-
-			r := &roleGraph{
-				gd.ServiceName,
-				gd.RoleName,
-				graphType,
-				gd.GraphName,
-				gd.Period,
-				gd.Stacked,
-				gd.Simplified,
-				height,
-				width,
-			}
-			markdown = appendMarkdown(markdown, r.generateGraphString(orgName))
-		}
-
-		if gd.isExpressionGraph() {
-			e := &expressionGraph{
-				gd.Query,
-				graphType,
-				gd.Period,
-				height,
-				width,
-			}
-			markdown = appendMarkdown(markdown, e.generateGraphString(orgName))
-		}
-
-		currentColumnCount++
-		if currentColumnCount >= graphs.ColumnCount || i >= len(graphs.GraphDefs)-1 {
-			markdown += "|\n"
-			currentColumnCount = 0
-		}
+		baseGraphs = append(baseGraphs, gd.getBaseGraph(graphType, height, width))
 	}
 
-	return markdown
+	return &markdownFactory{
+		Headline:    graphs.Headline,
+		TableHeader: tableHeader,
+		BaseGraphs:  baseGraphs,
+		ColumnCount: graphs.ColumnCount,
+	}
 }
 
 func generateGraphTableHeader(confColumnCount int) string {
 	return strings.Repeat("|:-:", confColumnCount) + "|\n"
-}
-
-func appendMarkdown(markdown string, addItem string) string {
-	return markdown + "|" + addItem
 }

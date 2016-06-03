@@ -89,7 +89,7 @@ func TestHostImageGraph(t *testing.T) {
 	}
 
 	actual := h.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/hosts/hostid.png?graph=loadavg5&period=30m)](https://mackerel.io/orgs/orgname/hosts/hostid/-/graphs/loadavg5)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -107,7 +107,7 @@ func TestServiceImageGraph(t *testing.T) {
 	}
 
 	actual := r.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge.png?graph=custom.fuga.%2A&period=6h)](https://mackerel.io/embed/orgs/orgname/services/hoge.png?graph=custom.fuga.%2A&period=6h)`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge.png?graph=custom.fuga.%2A&period=6h)](https://mackerel.io/orgs/orgname/services/hoge/-/graphs?name=custom.fuga.%2A)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -128,7 +128,7 @@ func TestRoleImageGraph(t *testing.T) {
 	}
 
 	actual := r.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/services/hoge/api.png?graph=cpu&period=6h&simplified=true&stacked=true)](https://mackerel.io/orgs/orgname/services/hoge/api/-/graph?name=cpu)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -145,7 +145,7 @@ func TestExpressionImageGraph(t *testing.T) {
 	}
 
 	actual := e.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)](https://mackerel.io/orgs/orgname/advanced-graph?query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -174,7 +174,8 @@ func TestGenerateMarkDown(t *testing.T) {
 		GraphDefs:   defs,
 	}
 
-	actual := generateGraphsMarkdown("orgname", g, "iframe", 200, 400)
+	md := generateGraphsMarkdownFactory(g, "iframe", 200, 400)
+	actual := md.generate("orgname")
 	expected := "## headline\n" +
 		"|:-:|:-:|\n" +
 		`|<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=cpu&period=1h&simplified=false&stacked=false" height="200" width="400" frameborder="0"></iframe>|<iframe src="https://mackerel.io/embed/orgs/orgname/hosts/abcde?graph=cpu&period=1h" height="200" width="400" frameborder="0"></iframe>|` + "\n" +
