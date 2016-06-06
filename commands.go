@@ -102,6 +102,7 @@ var commandUpdate = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "Update rolefullname.",
 		},
+		cli.BoolFlag{Name: "overwriteRoles, o", Usage: "Overwrite roles instead of adding specified roles."},
 	},
 }
 
@@ -343,6 +344,7 @@ func doUpdate(c *cli.Context) error {
 	optDisplayName := c.String("displayName")
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
+	overwriteRoles := c.Bool("overwriteRoles")
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
@@ -353,7 +355,8 @@ func doUpdate(c *cli.Context) error {
 	}
 
 	needUpdateHostStatus := optStatus != ""
-	needUpdateHost := (optName != "" || optDisplayName != "" || len(optRoleFullnames) > 0)
+	needUpdateRolesInHostUpdate := !overwriteRoles && len(optRoleFullnames) > 0
+	needUpdateHost := (optName != "" || optDisplayName != "" || overwriteRoles || needUpdateRolesInHostUpdate)
 
 	if !needUpdateHostStatus && !needUpdateHost {
 		logger.Log("update", "at least one argumet is required.")
@@ -366,6 +369,11 @@ func doUpdate(c *cli.Context) error {
 	for _, hostID := range argHostIDs {
 		if needUpdateHostStatus {
 			err := client.UpdateHostStatus(hostID, optStatus)
+			logger.DieIf(err)
+		}
+
+		if overwriteRoles {
+			err := client.UpdateHostRoleFullnames(hostID, optRoleFullnames)
 			logger.DieIf(err)
 		}
 
@@ -385,12 +393,15 @@ func doUpdate(c *cli.Context) error {
 			} else {
 				displayname = optDisplayName
 			}
-			_, err = client.UpdateHost(hostID, &mkr.UpdateHostParam{
-				Name:          name,
-				DisplayName:   displayname,
-				RoleFullnames: optRoleFullnames,
-				Meta:          meta,
-			})
+			param := &mkr.UpdateHostParam{
+				Name:        name,
+				DisplayName: displayname,
+				Meta:        meta,
+			}
+			if needUpdateRolesInHostUpdate {
+				param.RoleFullnames = optRoleFullnames
+			}
+			_, err = client.UpdateHost(hostID, param)
 			logger.DieIf(err)
 		}
 
