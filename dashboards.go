@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 
@@ -79,11 +78,10 @@ func (g graphDef) isExpressionGraph() bool {
 	return g.Query != ""
 }
 
-func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGraph {
+func (g graphDef) getBaseGraph(graphType string, height int, width int) (baseGraph baseGraph, err error) {
 	if g.isHostGraph() {
 		if g.GraphName == "" {
-			logger.Log("error", "graph_name is required for host graph.")
-			os.Exit(1)
+			return nil, cli.NewExitError("graph_name is required for host graph.", 1)
 		}
 
 		return hostGraph{
@@ -93,13 +91,12 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 			g.Period,
 			height,
 			width,
-		}
+		}, nil
 	}
 
 	if g.isServiceGraph() {
 		if g.GraphName == "" {
-			logger.Log("error", "graph_name is required for service graph.")
-			os.Exit(1)
+			return nil, cli.NewExitError("graph_name is required for service graph.", 1)
 		}
 
 		return serviceGraph{
@@ -109,13 +106,12 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 			g.Period,
 			height,
 			width,
-		}
+		}, nil
 	}
 
 	if g.isRoleGraph() {
 		if g.GraphName == "" {
-			logger.Log("error", "graph_name is required for role graph.")
-			os.Exit(1)
+			return nil, cli.NewExitError("graph_name is required for role graph.", 1)
 		}
 
 		return roleGraph{
@@ -128,7 +124,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 			g.Simplified,
 			height,
 			width,
-		}
+		}, nil
 	}
 
 	if g.isExpressionGraph() {
@@ -138,13 +134,10 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) baseGrap
 			g.Period,
 			height,
 			width,
-		}
+		}, nil
 	}
 
-	logger.Log("error", "either host_id, service_name or query should be specified.")
-	os.Exit(1)
-
-	return nil
+	return nil, cli.NewExitError("either host_id, service_name or query should be specified.", 1)
 }
 
 type baseGraph interface {
@@ -359,9 +352,8 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	argFilePath := c.Args()
 	if len(argFilePath) < 1 {
-		logger.Log("error", "specify a yaml file.")
 		cli.ShowCommandHelp(c, "generate")
-		os.Exit(1)
+		return cli.NewExitError("specify a yaml file.", 1)
 	}
 
 	buf, err := ioutil.ReadFile(argFilePath[0])
@@ -377,19 +369,16 @@ func doGenerateDashboards(c *cli.Context) error {
 	logger.DieIf(err)
 
 	if yml.Title == "" {
-		logger.Log("error", "title is required in yaml.")
-		os.Exit(1)
+		return cli.NewExitError("title is required in yaml.", 1)
 	}
 	if yml.URLPath == "" {
-		logger.Log("error", "url_path is required in yaml.")
-		os.Exit(1)
+		return cli.NewExitError("url_path is required in yaml.", 1)
 	}
 	if yml.GraphType == "" {
 		yml.GraphType = "iframe"
 	}
 	if yml.GraphType != "iframe" && yml.GraphType != "image" {
-		logger.Log("error", "graph_type should be 'iframe' or 'image'.")
-		os.Exit(1)
+		return cli.NewExitError("graph_type should be 'iframe' or 'image'.", 1)
 	}
 	if yml.Height == 0 {
 		yml.Height = 200
@@ -399,7 +388,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	}
 
 	if yml.HostGraphFormat != nil && yml.GraphFormat != nil {
-		logger.Log("error", "you cannot specify both 'graphs' and host_graphs'.")
+		return cli.NewExitError("you cannot specify both 'graphs' and host_graphs'.", 1)
 	}
 
 	var markdown string
@@ -408,7 +397,10 @@ func doGenerateDashboards(c *cli.Context) error {
 		markdown += mdf.generate(org.Name)
 	}
 	for _, g := range yml.GraphFormat {
-		mdf := generateGraphsMarkdownFactory(g, yml.GraphType, yml.Height, yml.Width)
+		mdf, err := generateGraphsMarkdownFactory(g, yml.GraphType, yml.Height, yml.Width)
+		if err != nil {
+			return err
+		}
 		markdown += mdf.generate(org.Name)
 	}
 
@@ -494,7 +486,7 @@ func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) st
 	return header
 }
 
-func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height int, width int) *markdownFactory {
+func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height int, width int) (mdf *markdownFactory, err error) {
 
 	if graphs.ColumnCount == 0 {
 		graphs.ColumnCount = 1
@@ -508,7 +500,12 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 			gd.Period = "1h"
 		}
 
-		baseGraphs = append(baseGraphs, gd.getBaseGraph(graphType, height, width))
+		bg, err := gd.getBaseGraph(graphType, height, width)
+		if err != nil {
+			return nil, err
+		}
+
+		baseGraphs = append(baseGraphs, bg)
 	}
 
 	return &markdownFactory{
@@ -516,7 +513,7 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 		TableHeader: tableHeader,
 		BaseGraphs:  baseGraphs,
 		ColumnCount: graphs.ColumnCount,
-	}
+	}, nil
 }
 
 func generateAlignmentLine(count int) string {

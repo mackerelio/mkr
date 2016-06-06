@@ -174,7 +174,7 @@ func TestGenerateMarkDown(t *testing.T) {
 		GraphDefs:   defs,
 	}
 
-	md := generateGraphsMarkdownFactory(g, "iframe", 200, 400)
+	md, _ := generateGraphsMarkdownFactory(g, "iframe", 200, 400)
 	actual := md.generate("orgname")
 	expected := "## headline\n" +
 		"|:-:|:-:|\n" +
