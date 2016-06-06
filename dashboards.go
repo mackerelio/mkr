@@ -34,7 +34,7 @@ var commandDashboards = cli.Command{
 type graphsConfig struct {
 	Title           string             `yaml:"title"`
 	URLPath         string             `yaml:"url_path"`
-	GraphType       string             `yaml:"graph_type"`
+	Format          string             `yaml:"format"`
 	Height          int                `yaml:"height"`
 	Width           int                `yaml:"width"`
 	HostGraphFormat []*hostGraphFormat `yaml:"host_graphs"`
@@ -374,10 +374,10 @@ func doGenerateDashboards(c *cli.Context) error {
 	if yml.URLPath == "" {
 		return cli.NewExitError("url_path is required in yaml.", 1)
 	}
-	if yml.GraphType == "" {
-		yml.GraphType = "iframe"
+	if yml.Format == "" {
+		yml.Format = "iframe"
 	}
-	if yml.GraphType != "iframe" && yml.GraphType != "image" {
+	if yml.Format != "iframe" && yml.Format != "image" {
 		return cli.NewExitError("graph_type should be 'iframe' or 'image'.", 1)
 	}
 	if yml.Height == 0 {
@@ -393,11 +393,11 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	var markdown string
 	for _, h := range yml.HostGraphFormat {
-		mdf := generateHostGraphsMarkdownFactory(h, yml.GraphType, yml.Height, yml.Width)
+		mdf := generateHostGraphsMarkdownFactory(h, yml.Format, yml.Height, yml.Width)
 		markdown += mdf.generate(org.Name)
 	}
 	for _, g := range yml.GraphFormat {
-		mdf, err := generateGraphsMarkdownFactory(g, yml.GraphType, yml.Height, yml.Width)
+		mdf, err := generateGraphsMarkdownFactory(g, yml.Format, yml.Height, yml.Width)
 		if err != nil {
 			return err
 		}
