@@ -393,7 +393,7 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	var markdown string
 	for _, h := range yml.HostGraphFormat {
-		mdf := generateHostGraphsMarkdownFactory(h, yml.GraphType, yml.Height, yml.Width, client)
+		mdf := generateHostGraphsMarkdownFactory(h, yml.GraphType, yml.Height, yml.Width)
 		markdown += mdf.generate(org.Name)
 	}
 	for _, g := range yml.GraphFormat {
@@ -435,17 +435,18 @@ func doGenerateDashboards(c *cli.Context) error {
 	return nil
 }
 
-func generateHostGraphsMarkdownFactory(hostGraphs *hostGraphFormat, graphType string, height int, width int, client *mackerel.Client) *markdownFactory {
-
-	tableHeader := generateHostGraphsTableHeader(hostGraphs.HostIDs, client)
+func generateHostGraphsMarkdownFactory(hostGraphs *hostGraphFormat, graphType string, height int, width int) *markdownFactory {
 
 	if hostGraphs.Period == "" {
 		hostGraphs.Period = "1h"
 	}
 
 	var baseGraphs []baseGraph
-	for _, graphName := range hostGraphs.GraphNames {
-		for _, hostID := range hostGraphs.HostIDs {
+
+	tableHeader := generateHostGraphsTableHeader(hostGraphs.GraphNames)
+
+	for _, hostID := range hostGraphs.HostIDs {
+		for _, graphName := range hostGraphs.GraphNames {
 			baseGraphs = append(baseGraphs, hostGraph{
 				hostID,
 				graphType,
@@ -461,27 +462,17 @@ func generateHostGraphsMarkdownFactory(hostGraphs *hostGraphFormat, graphType st
 		Headline:    hostGraphs.Headline,
 		TableHeader: tableHeader,
 		BaseGraphs:  baseGraphs,
-		ColumnCount: len(hostGraphs.HostIDs),
+		ColumnCount: len(hostGraphs.GraphNames),
 	}
 }
 
-func generateHostGraphsTableHeader(hostIDs []string, client *mackerel.Client) string {
+func generateHostGraphsTableHeader(graphNames []string) string {
 	var header string
-	for _, hostID := range hostIDs {
-		host, err := client.FindHost(hostID)
-		logger.DieIf(err)
-
-		var hostName string
-		if host.DisplayName != "" {
-			hostName = host.DisplayName
-		} else {
-			hostName = host.Name
-		}
-
-		header += "|" + hostName
+	for _, graphName := range graphNames {
+		header += "|" + graphName
 	}
 
-	header += "|\n" + generateAlignmentLine(len(hostIDs))
+	header += "|\n" + generateAlignmentLine(len(graphNames))
 
 	return header
 }
