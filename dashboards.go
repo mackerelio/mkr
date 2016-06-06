@@ -32,6 +32,7 @@ var commandDashboards = cli.Command{
 }
 
 type graphsConfig struct {
+	ConfigVersion   string             `yaml:"config_version"`
 	Title           string             `yaml:"title"`
 	URLPath         string             `yaml:"url_path"`
 	Format          string             `yaml:"format"`
@@ -368,6 +369,12 @@ func doGenerateDashboards(c *cli.Context) error {
 	org, err := client.GetOrg()
 	logger.DieIf(err)
 
+	if yml.ConfigVersion == "" {
+		return cli.NewExitError("config_version is required in yaml.", 1)
+	}
+	if yml.ConfigVersion != "0.9" {
+		return cli.NewExitError(fmt.Sprintf("config_version %s is not suport.", yml.ConfigVersion), 1)
+	}
 	if yml.Title == "" {
 		return cli.NewExitError("title is required in yaml.", 1)
 	}
