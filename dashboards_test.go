@@ -154,16 +154,16 @@ func TestExpressionImageGraph(t *testing.T) {
 
 func TestGenerateMarkDown(t *testing.T) {
 	defs := []*graphDef{
-		&graphDef{
+		{
 			ServiceName: "hoge",
 			RoleName:    "api",
 			GraphName:   "cpu",
 		},
-		&graphDef{
+		{
 			HostID:    "abcde",
 			GraphName: "cpu",
 		},
-		&graphDef{
+		{
 			Query:     "max(roleSlots('hoge:api','loadavg5'))",
 			GraphName: "cpu",
 		},
