@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jun 09 2016 <mackerel-developers@hatena.ne.jp> - 0.11.0-1
+- add dashboard generator (by daiksy)
+- Add flag to overwrite host's roles  (by haya14busa)
+
 * Wed May 25 2016 <mackerel-developers@hatena.ne.jp> - 0.10.1-1
 - fix signnatures. codegangsta/cli (by tknzk)
 

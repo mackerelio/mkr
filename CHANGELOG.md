@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.0 (2016-06-09)
+
+* add dashboard generator #56 (daiksy)
+* Add flag to overwrite host's roles  #58 (haya14busa)
+
+
 ## 0.10.1 (2016-05-25)
 
 * fix signnatures. codegangsta/cli #54 (tknzk)
