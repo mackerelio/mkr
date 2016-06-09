@@ -1,3 +1,12 @@
+mkr (0.11.0-1) stable; urgency=low
+
+  * add dashboard generator (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/56>
+  * Add flag to overwrite host's roles  (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/58>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 09 Jun 2016 03:43:35 +0000
+
 mkr (0.10.1-1) stable; urgency=low
 
   * fix signnatures. codegangsta/cli (by tknzk)
