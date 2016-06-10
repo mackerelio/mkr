@@ -1,14 +1,12 @@
 BIN = mkr
 
-VERSION = $$(git describe --tags --always --dirty)
 CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request \#[0-9]+ from .+\/bump-version-([0-9\.]+)/){print $$1;exit}')
 
 BUILD_FLAGS = -ldflags "\
-	      -X main.Version=$(VERSION) \
+	      -X main.Version=$(CURRENT_VERSION) \
 	      "
 
 check_variables:
-	echo "VERSION: ${VERSION}"
 	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
 
 all: clean cross lint test
@@ -27,7 +25,7 @@ lint: testdeps
 	test ! -s $(LINT_RET)
 
 cross: deps
-	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version=$(VERSION)" -resources-include='README*'
+	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version=$(CURRENT_VERSION)" -resources-include='README*'
 	cp -p $(PWD)/snapshot/linux_amd64/mkr $(PWD)/snapshot/mkr_linux_amd64
 	cp -p $(PWD)/snapshot/linux_386/mkr $(PWD)/snapshot/mkr_linux_386
 	cp -p $(PWD)/snapshot/darwin_amd64/mkr $(PWD)/snapshot/mkr_darwin_amd64
