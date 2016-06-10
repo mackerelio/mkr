@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Fri Jun 10 2016 <mackerel-developers@hatena.ne.jp> - 0.11.1-1
+- fix version number (by stanaka)
+
 * Thu Jun 09 2016 <mackerel-developers@hatena.ne.jp> - 0.11.0-1
 - add dashboard generator (by daiksy)
 - Add flag to overwrite host's roles  (by haya14busa)

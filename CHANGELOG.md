@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.1 (2016-06-10)
+
+* fix version number #61 (stanaka)
+
+
 ## 0.11.0 (2016-06-09)
 
 * add dashboard generator #56 (daiksy)
