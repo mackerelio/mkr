@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/mackerelio/mkr/logger"
 )
@@ -25,5 +26,10 @@ type HostFormat struct {
 func PrettyPrintJSON(src interface{}) {
 	data, err := json.MarshalIndent(src, "", "    ")
 	logger.DieIf(err)
-	fmt.Fprintln(os.Stdout, string(data))
+	fmt.Fprintln(os.Stdout, ReplaceAngleBrackets(string(data)))
+}
+
+func ReplaceAngleBrackets(s string) string {
+	s = strings.Replace(s, "\\u003c", "<", -1)
+	return strings.Replace(s, "\\u003e", ">", -1)
 }
