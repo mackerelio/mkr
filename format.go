@@ -29,6 +29,7 @@ func PrettyPrintJSON(src interface{}) {
 	fmt.Fprintln(os.Stdout, ReplaceAngleBrackets(string(data)))
 }
 
+// ReplaceAngleBrackets replace encoded angle brackets
 func ReplaceAngleBrackets(s string) string {
 	s = strings.Replace(s, "\\u003c", "<", -1)
 	return strings.Replace(s, "\\u003e", ">", -1)
