@@ -70,7 +70,7 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	defer file.Close()
 
 	monitors := map[string]interface{}{"monitors": rules}
-	data := JsonMarshalIndentWithReplaceAngleBrackets(monitors, "", "    ") + "\n"
+	data := JSONMarshalIndentWithReplaceAngleBrackets(monitors, "", "    ") + "\n"
 
 	_, err = file.WriteString(data)
 	if err != nil {
@@ -184,7 +184,7 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 }
 
 func stringifyMonitor(a *mkr.Monitor, prefix string) string {
-	data := JsonMarshalIndentWithReplaceAngleBrackets(a, prefix+" ", "  ")
+	data := JSONMarshalIndentWithReplaceAngleBrackets(a, prefix+" ", "  ")
 	return prefix + " " + data + ","
 }
 
