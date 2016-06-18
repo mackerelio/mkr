@@ -72,7 +72,6 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	monitors := map[string]interface{}{"monitors": rules}
 	data := JsonMarshalIndentWithReplaceAngleBrackets(monitors, "", "    ") + "\n"
 
-
 	_, err = file.WriteString(data)
 	if err != nil {
 		return err
