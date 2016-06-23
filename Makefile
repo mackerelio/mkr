@@ -9,7 +9,7 @@ BUILD_FLAGS = -ldflags "\
 check_variables:
 	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
 
-all: clean cross lint test
+all: clean cross lint gofmt test
 
 test: testdeps
 	go test -v ./...
@@ -21,8 +21,14 @@ LINT_RET = .golint.txt
 lint: testdeps
 	go vet
 	rm -f $(LINT_RET)
-	golint ./... | tee .golint.txt
+	golint ./... | tee $(LINT_RET)
 	test ! -s $(LINT_RET)
+
+GOFMT_RET = .gofmt.txt
+gofmt: testdeps
+	rm -f $(GOFMT_RET)
+	gofmt -s -d *.go | tee $(GOFMT_RET)
+	test ! -s $(GOFMT_RET)
 
 cross: deps
 	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version=$(CURRENT_VERSION)" -resources-include='README*'
@@ -62,4 +68,4 @@ clean:
 cover: testdeps
 	goveralls
 
-.PHONY: test build cross lint deps testdeps clean deb rpm release cover
+.PHONY: test build cross lint gofmt deps testdeps clean deb rpm release cover
