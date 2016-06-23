@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.2 (2016-06-23)
+
+* replace angle brackets for json #63 (daiksy)
+
+
 ## 0.11.1 (2016-06-10)
 
 * fix version number #61 (stanaka)

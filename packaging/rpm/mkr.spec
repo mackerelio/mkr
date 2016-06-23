@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jun 23 2016 <mackerel-developers@hatena.ne.jp> - 0.11.2-1
+- replace angle brackets for json (by daiksy)
+
 * Fri Jun 10 2016 <mackerel-developers@hatena.ne.jp> - 0.11.1-1
 - fix version number (by stanaka)
 

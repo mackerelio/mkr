@@ -1,3 +1,10 @@
+mkr (0.11.2-1) stable; urgency=low
+
+  * replace angle brackets for json (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/63>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 23 Jun 2016 05:32:41 +0000
+
 mkr (0.11.1-1) stable; urgency=low
 
   * fix version number (by stanaka)
