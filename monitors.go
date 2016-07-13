@@ -288,6 +288,13 @@ func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
+		case "expression":
+			for _, f := range []string{"Name", "Expression"} {
+				vf := v.FieldByName(f)
+				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+				}
+			}
 		case "connectivity":
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.Type)
