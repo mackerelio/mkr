@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.3 (2016-07-14)
+
+* fix `validateRules()`,  when monitor has rule of "expression". #66 (daiksy)
+
+
 ## 0.11.2 (2016-06-23)
 
 * replace angle brackets for json #63 (daiksy)

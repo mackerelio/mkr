@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jul 14 2016 <mackerel-developers@hatena.ne.jp> - 0.11.3-1
+- fix `validateRules()`,  when monitor has rule of "expression". (by daiksy)
+
 * Thu Jun 23 2016 <mackerel-developers@hatena.ne.jp> - 0.11.2-1
 - replace angle brackets for json (by daiksy)
 
