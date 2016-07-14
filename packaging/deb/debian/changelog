@@ -1,3 +1,10 @@
+mkr (0.11.3-1) stable; urgency=low
+
+  * fix `validateRules()`,  when monitor has rule of "expression". (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/66>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 14 Jul 2016 05:24:17 +0000
+
 mkr (0.11.2-1) stable; urgency=low
 
   * replace angle brackets for json (by daiksy)
