@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"gopkg.in/urfave/cli.v1"
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/urfave/cli.v1"
 	"gopkg.in/yaml.v2"
 )
 

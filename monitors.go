@@ -10,9 +10,9 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/urfave/cli.v1"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/urfave/cli.v1"
 )
 
 var commandMonitors = cli.Command{

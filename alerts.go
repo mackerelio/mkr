@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/urfave/cli.v1"
 	"github.com/fatih/color"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/urfave/cli.v1"
 )
 
 var commandAlerts = cli.Command{
