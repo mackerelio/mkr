@@ -4,7 +4,7 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v1"
 	"github.com/mackerelio/mackerel-agent/config"
 )
 

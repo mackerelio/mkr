@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v1"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 )
