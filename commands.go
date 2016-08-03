@@ -10,9 +10,9 @@ import (
 	"text/template"
 
 	"github.com/Songmu/prompter"
-	"github.com/codegangsta/cli"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"gopkg.in/urfave/cli.v1"
 )
 
 // Commands cli.Command object list

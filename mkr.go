@@ -4,8 +4,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/codegangsta/cli"
 	"github.com/mackerelio/mackerel-agent/config"
+	"gopkg.in/urfave/cli.v1"
 )
 
 func main() {
