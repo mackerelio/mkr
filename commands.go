@@ -166,6 +166,7 @@ func assert(err error) {
 
 func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	conffile := c.GlobalString("conf")
+	apiBase := c.GlobalString("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(conffile)
 	if apiKey == "" {
 		logger.Log("error", `
@@ -174,8 +175,12 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 		os.Exit(1)
 	}
 
+	if apiBase == "" {
+		apiBase = LoadApibaseFromConfig(conffile)
+	}
+
 	if os.Getenv("DEBUG") != "" {
-		mackerel, err := mkr.NewClientWithOptions(apiKey, "https://mackerel.io/api/v0", true)
+		mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, true)
 		logger.DieIf(err)
 
 		return mackerel

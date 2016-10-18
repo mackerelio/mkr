@@ -21,6 +21,11 @@ func main() {
 			Value: config.DefaultConfig.Conffile,
 			Usage: "Config file path",
 		},
+		cli.StringFlag{
+			Name:  "apibase",
+			Value: config.DefaultConfig.Apibase,
+			Usage: "API Base",
+		},
 	}
 
 	cpu := runtime.NumCPU()
