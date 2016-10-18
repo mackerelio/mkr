@@ -6,6 +6,16 @@ import (
 	"testing"
 )
 
+func TestLoadApibaseFromConfig(t *testing.T) {
+	conffile := "test/mackerel-agent.conf"
+
+	apiBase := LoadApibaseFromConfig(conffile)
+
+	if apiBase != "https://example.com/" {
+		t.Error("should be https://example.com/")
+	}
+}
+
 func TestLoadApikeyFromConfig(t *testing.T) {
 	conffile := "test/mackerel-agent.conf"
 

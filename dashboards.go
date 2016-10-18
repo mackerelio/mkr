@@ -347,8 +347,6 @@ func makeImageMarkdown(orgName string, g baseGraph) string {
 }
 
 func doGenerateDashboards(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
-
 	isStdout := c.Bool("print")
 
 	argFilePath := c.Args()
@@ -364,7 +362,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	err = yaml.Unmarshal(buf, &yml)
 	logger.DieIf(err)
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	org, err := client.GetOrg()
 	logger.DieIf(err)

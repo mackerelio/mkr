@@ -164,7 +164,9 @@ func assert(err error) {
 	}
 }
 
-func newMackerel(conffile string) *mkr.Client {
+func newMackerelFromContext(c *cli.Context) *mkr.Client {
+	conffile := c.GlobalString("conf")
+	apiBase := c.GlobalString("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(conffile)
 	if apiKey == "" {
 		logger.Log("error", `
@@ -173,14 +175,14 @@ func newMackerel(conffile string) *mkr.Client {
 		os.Exit(1)
 	}
 
-	if os.Getenv("DEBUG") != "" {
-		mackerel, err := mkr.NewClientWithOptions(apiKey, "https://mackerel.io/api/v0", true)
-		logger.DieIf(err)
-
-		return mackerel
+	if apiBase == "" {
+		apiBase = LoadApibaseFromConfig(conffile)
 	}
 
-	return mkr.NewClient(apiKey)
+	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
+	logger.DieIf(err)
+
+	return mackerel
 }
 
 type commandDoc struct {
@@ -248,7 +250,7 @@ func doStatus(c *cli.Context) error {
 		}
 	}
 
-	host, err := newMackerel(conffile).FindHost(argHostID)
+	host, err := newMackerelFromContext(c).FindHost(argHostID)
 	logger.DieIf(err)
 
 	if isVerbose {
@@ -271,10 +273,9 @@ func doStatus(c *cli.Context) error {
 }
 
 func doHosts(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 
-	hosts, err := newMackerel(conffile).FindHosts(&mkr.FindHostsParam{
+	hosts, err := newMackerelFromContext(c).FindHosts(&mkr.FindHostsParam{
 		Name:     c.String("name"),
 		Service:  c.String("service"),
 		Roles:    c.StringSlice("role"),
@@ -311,7 +312,6 @@ func doHosts(c *cli.Context) error {
 }
 
 func doCreate(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	argHostName := c.Args().Get(0)
 	optRoleFullnames := c.StringSlice("roleFullname")
 	optStatus := c.String("status")
@@ -321,7 +321,7 @@ func doCreate(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	hostID, err := client.CreateHost(&mkr.CreateHostParam{
 		Name:          argHostName,
@@ -366,7 +366,7 @@ func doUpdate(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	for _, hostID := range argHostIDs {
 		if needUpdateHostStatus {
@@ -413,7 +413,6 @@ func doUpdate(c *cli.Context) error {
 }
 
 func doThrow(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	optHostID := c.String("host")
 	optService := c.String("service")
 
@@ -450,7 +449,7 @@ func doThrow(c *cli.Context) error {
 	}
 	logger.ErrorIf(scanner.Err())
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	if optHostID != "" {
 		err := client.PostHostMetricValuesByHostID(optHostID, metricValues)
@@ -474,7 +473,6 @@ func doThrow(c *cli.Context) error {
 }
 
 func doFetch(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optMetricNames := c.StringSlice("name")
 
@@ -483,7 +481,7 @@ func doFetch(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	metricValues, err := newMackerel(conffile).FetchLatestMetricValues(argHostIDs, optMetricNames)
+	metricValues, err := newMackerelFromContext(c).FetchLatestMetricValues(argHostIDs, optMetricNames)
 	logger.DieIf(err)
 
 	PrettyPrintJSON(metricValues)
@@ -508,7 +506,7 @@ func doRetire(c *cli.Context) error {
 		return nil
 	}
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	for _, hostID := range argHostIDs {
 		err := client.RetireHost(hostID)

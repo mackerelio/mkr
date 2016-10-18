@@ -22,6 +22,15 @@ func loadHostID(root string) (string, error) {
 	return string(content), nil
 }
 
+// LoadApibaseFromConfig gets mackerel api Base URL (usually https://mackerel.io/) from mackerel-agent.conf if it's installed mackerel-agent on localhost
+func LoadApibaseFromConfig(conffile string) string {
+	conf, err := config.LoadConfig(conffile)
+	if err != nil {
+		return ""
+	}
+	return conf.Apibase
+}
+
 // LoadApikeyFromConfig gets mackerel.io apikey from mackerel-agent.conf if it's installed mackerel-agent on localhost
 func LoadApikeyFromConfig(conffile string) string {
 	conf, err := config.LoadConfig(conffile)

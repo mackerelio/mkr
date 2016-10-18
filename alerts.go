@@ -182,8 +182,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	alerts, err := client.FindAlerts()
 	logger.DieIf(err)
@@ -192,10 +191,9 @@ func doAlertsRetrieve(c *cli.Context) error {
 }
 
 func doAlertsList(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 
 	alerts, err := client.FindAlerts()
 	logger.DieIf(err)
@@ -234,7 +232,6 @@ func doAlertsList(c *cli.Context) error {
 }
 
 func doAlertsClose(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 	argAlertIDs := c.Args()
 	reason := c.String("reason")
@@ -244,7 +241,7 @@ func doAlertsClose(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 	for _, alertID := range argAlertIDs {
 		alert, err := client.CloseAlert(alertID, reason)
 		logger.DieIf(err)
