@@ -11,8 +11,8 @@ func TestLoadApibaseFromConfig(t *testing.T) {
 
 	apiBase := LoadApibaseFromConfig(conffile)
 
-	if apiBase != "https://OVERRIDE/" {
-		t.Error("should be https://OVERRIDE/")
+	if apiBase != "https://example.com/" {
+		t.Error("should be https://example.com/")
 	}
 }
 
