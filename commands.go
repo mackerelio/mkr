@@ -164,13 +164,8 @@ func assert(err error) {
 	}
 }
 
-// Utility
 func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	conffile := c.GlobalString("conf")
-	return newMackerel(conffile)
-}
-
-func newMackerel(conffile string) *mkr.Client {
 	apiKey := LoadApikeyFromEnvOrConfig(conffile)
 	if apiKey == "" {
 		logger.Log("error", `
