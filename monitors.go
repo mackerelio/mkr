@@ -102,9 +102,7 @@ func monitorLoadRules(optFilePath string) ([]*(mkr.Monitor), error) {
 }
 
 func doMonitorsList(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
-
-	monitors, err := newMackerel(conffile).FindMonitors()
+	monitors, err := newMackerelFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
 	PrettyPrintJSON(monitors)
@@ -112,11 +110,10 @@ func doMonitorsList(c *cli.Context) error {
 }
 
 func doMonitorsPull(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
 	isVerbose := c.Bool("verbose")
 	filePath := c.String("file-path")
 
-	monitors, err := newMackerel(conffile).FindMonitors()
+	monitors, err := newMackerelFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
 	monitorSaveRules(monitors, filePath)
@@ -325,12 +322,11 @@ type monitorDiff struct {
 }
 
 func checkMonitorsDiff(c *cli.Context) monitorDiff {
-	conffile := c.GlobalString("conf")
 	filePath := c.String("file-path")
 
 	var monitorDiff monitorDiff
 
-	monitorsRemote, err := newMackerel(conffile).FindMonitors()
+	monitorsRemote, err := newMackerelFromContext(c).FindMonitors()
 	logger.DieIf(err)
 	flagNameUniquenessRemote, err := validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
@@ -402,8 +398,7 @@ func doMonitorsPush(c *cli.Context) error {
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
 
-	conffile := c.GlobalString("conf")
-	client := newMackerel(conffile)
+	client := newMackerelFromContext(c)
 	if isVerbose {
 		client.Verbose = true
 	}
