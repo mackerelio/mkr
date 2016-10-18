@@ -179,14 +179,10 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 		apiBase = LoadApibaseFromConfig(conffile)
 	}
 
-	if os.Getenv("DEBUG") != "" {
-		mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, true)
-		logger.DieIf(err)
+	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
+	logger.DieIf(err)
 
-		return mackerel
-	}
-
-	return mkr.NewClient(apiKey)
+	return mackerel
 }
 
 type commandDoc struct {
