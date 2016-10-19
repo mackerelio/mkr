@@ -439,8 +439,13 @@ func doThrow(c *cli.Context) error {
 			continue
 		}
 
+		name := items[0]
+		if optHostID != "" && !strings.HasPrefix(name, "custom.") {
+			name = "custom." + name
+		}
+
 		metricValue := &mkr.MetricValue{
-			Name:  items[0],
+			Name:  name,
 			Value: value,
 			Time:  time,
 		}
