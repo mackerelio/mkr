@@ -119,7 +119,6 @@ var commandThrow = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
-		cli.BoolFlag{Name: "keep-metric-name", Usage: "Don't append 'custom.' prefix to host metric name. Ignored on posting service metric values."},
 	},
 }
 
@@ -416,7 +415,6 @@ func doUpdate(c *cli.Context) error {
 func doThrow(c *cli.Context) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
-	optKeepMetricName := c.Bool("keep-metric-name")
 
 	var metricValues []*(mkr.MetricValue)
 
@@ -442,7 +440,7 @@ func doThrow(c *cli.Context) error {
 		}
 
 		name := items[0]
-		if optHostID != "" && !optKeepMetricName {
+		if optHostID != "" && !strings.HasPrefix(name, "custom.") {
 			name = "custom." + name
 		}
 
