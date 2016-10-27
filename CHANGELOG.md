@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.0 (2016-10-27)
+
+* Rename a dependent package #68 (usk81)
+* Support `-apibase` option #69 (astj)
+* [breaking change] Prepend `custom.` prefix to host metric name by default #70 (astj)
+
+
 ## 0.11.3 (2016-07-14)
 
 * fix `validateRules()`,  when monitor has rule of "expression". #66 (daiksy)
