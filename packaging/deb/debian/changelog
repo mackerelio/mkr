@@ -1,3 +1,14 @@
+mkr (0.12.0-1) stable; urgency=low
+
+  * Rename a dependent package (by usk81)
+    <https://github.com/mackerelio/mkr/pull/68>
+  * Support `-apibase` option (by astj)
+    <https://github.com/mackerelio/mkr/pull/69>
+  * [breaking change] Prepend `custom.` prefix to host metric name by default (by astj)
+    <https://github.com/mackerelio/mkr/pull/70>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 27 Oct 2016 02:19:28 +0000
+
 mkr (0.11.3-1) stable; urgency=low
 
   * fix `validateRules()`,  when monitor has rule of "expression". (by daiksy)

@@ -42,6 +42,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Oct 27 2016 <mackerel-developers@hatena.ne.jp> - 0.12.0-1
+- Rename a dependent package (by usk81)
+- Support `-apibase` option (by astj)
+- [breaking change] Prepend `custom.` prefix to host metric name by default (by astj)
+
 * Thu Jul 14 2016 <mackerel-developers@hatena.ne.jp> - 0.11.3-1
 - fix `validateRules()`,  when monitor has rule of "expression". (by daiksy)
 
