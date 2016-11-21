@@ -163,8 +163,6 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			default:
 				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
 			}
-		case "check":
-			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.Type)
 		}
