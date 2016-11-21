@@ -9,8 +9,8 @@ import (
 )
 
 func TestIsSameMonitor(t *testing.T) {
-	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
-	b := &mkr.Monitor{Name: "foo", Type: "connectivity"}
+	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
+	b := &mkr.MonitorConnectivity{Name: "foo", Type: "connectivity"}
 
 	_, ret := isSameMonitor(a, b, true)
 	if ret != true {
@@ -24,9 +24,9 @@ func TestIsSameMonitor(t *testing.T) {
 }
 
 func TestValidateRoles(t *testing.T) {
-	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
+	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 
-	ret, err := validateRules([](*mkr.Monitor){a}, "test monitor")
+	ret, err := validateRules([](mkr.Monitor){a}, "test monitor")
 	if ret != true {
 		t.Errorf("should validate the rule: %s", err.Error())
 	}
@@ -34,8 +34,8 @@ func TestValidateRoles(t *testing.T) {
 }
 
 func TestDiffMonitors(t *testing.T) {
-	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000}
-	b := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar"}
+	a := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000}
+	b := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar"}
 
 	ret := diffMonitor(a, b)
 
@@ -60,7 +60,7 @@ func TestMonitorSaveRules(t *testing.T) {
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
-	a := &mkr.Monitor{
+	a := &mkr.MonitorExternalHTTP{
 		ID:                   "12345",
 		Name:                 "foo",
 		Type:                 "external",
@@ -68,7 +68,7 @@ func TestMonitorSaveRules(t *testing.T) {
 		Service:              "bar",
 		ResponseTimeCritical: 1000,
 	}
-	monitorSaveRules([]*mkr.Monitor{a}, tmpFile.Name())
+	monitorSaveRules([]mkr.Monitor{a}, tmpFile.Name())
 
 	byt, _ := ioutil.ReadFile(tmpFile.Name())
 	content := string(byt)
@@ -91,7 +91,7 @@ func TestMonitorSaveRules(t *testing.T) {
 }
 
 func TestStringifyMonitor(t *testing.T) {
-	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
+	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 	expected := `+ {
 +   "id": "12345",
 +   "name": "foo",
@@ -105,12 +105,12 @@ func TestStringifyMonitor(t *testing.T) {
 }
 
 func TestDiffMonitorsWithScopes(t *testing.T) {
-	a := &mkr.Monitor{
+	a := &mkr.MonitorConnectivity{
 		ID:   "12345",
 		Name: "foo",
 		Type: "connectivity",
 	}
-	b := &mkr.Monitor{
+	b := &mkr.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",
@@ -140,7 +140,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
-	c := &mkr.Monitor{
+	c := &mkr.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",
@@ -160,7 +160,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
-	d := &mkr.Monitor{
+	d := &mkr.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",

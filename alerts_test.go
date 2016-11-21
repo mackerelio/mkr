@@ -19,7 +19,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 
 	a := &mkr.Alert{ID: "123", Type: "connectivity", Status: "critical", HostID: "1234", MonitorID: "12345", OpenedAt: 100}
 	h := &mkr.Host{ID: "1234", Name: "foo", Roles: mkr.Roles{}, Status: "working"}
-	m := &mkr.Monitor{ID: "12345", Type: "connectivity", URL: "http://example.com", Service: "bar"}
+	m := &mkr.MonitorConnectivity{ID: "12345", Type: "connectivity"}
 	as := alertSet{a, h, m}
 	answer := "123 1970-01-01 00:01:40 critical connectivity foo working []"
 
