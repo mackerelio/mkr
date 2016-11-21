@@ -20,7 +20,7 @@ var commandMonitors = cli.Command{
 	Usage: "Manipulate monitors",
 	Description: `
     Manipulate monitor rules. With no subcommand specified, this will show all monitor rules.
-    Requests APIs under "/api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0 .
+    Requests APIs under "/api/v0/monitors". See https://mackerel.io/api-docs/entry/monitors .
 `,
 	Action: doMonitorsList,
 	Subcommands: []cli.Command{
