@@ -39,7 +39,7 @@ func TestDiffMonitors(t *testing.T) {
    "service": "bar",
    "type": "external",
    "url": "http://example.com"
- }`
+ },`
 	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000}
 	b := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar"}
 	if got := diffMonitor(a, b); got != want {
@@ -84,11 +84,11 @@ func TestMonitorSaveRules(t *testing.T) {
 
 func TestStringifyMonitor(t *testing.T) {
 	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "connectivity"}
-	expected := `+ {
-+   "id": "12345",
-+   "name": "foo",
-+   "type": "connectivity"
-+ },`
+	expected := `+{
++  "id": "12345",
++  "name": "foo",
++  "type": "connectivity"
++},`
 
 	r := stringifyMonitor(a, "+")
 	if r != expected {
@@ -115,7 +115,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 +  "scopes": [
 +    "sss: notebook"
 +  ]
- }`
+ },`
 	if diff != expected {
 		// t.Error(debugdiff.Diff(expected, diff))
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
@@ -128,7 +128,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 -    "sss: notebook"
 -  ],
    "type": "connectivity"
- }`
+ },`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
@@ -148,7 +148,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 +    "ttt: notebook"
    ],
    "type": "connectivity"
- }`
+ },`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
@@ -167,7 +167,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 +    "ttt: notebook"
    ],
    "type": "connectivity"
- }`
+ },`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}

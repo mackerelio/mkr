@@ -182,8 +182,7 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 }
 
 func stringifyMonitor(a *mkr.Monitor, prefix string) string {
-	data := JSONMarshalIndent(a, prefix+" ", "  ")
-	return prefix + " " + data + ","
+	return prefix + JSONMarshalIndent(a, prefix, "  ") + ","
 }
 
 // diffMonitor returns JSON diff between monitors.
@@ -202,7 +201,7 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 	if err != nil {
 		return ""
 	}
-	return strings.TrimRight(result, "\n")
+	return strings.TrimRight(result, "\n") + ","
 }
 
 func filterIDLine(s string) string {
