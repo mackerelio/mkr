@@ -117,7 +117,6 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 +  ]
  },`
 	if diff != expected {
-		// t.Error(debugdiff.Diff(expected, diff))
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
