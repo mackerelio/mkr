@@ -202,7 +202,7 @@ func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
 	if err != nil {
 		return ""
 	}
-	return result
+	return strings.TrimRight(result, "\n")
 }
 
 func filterIDLine(s string) string {
