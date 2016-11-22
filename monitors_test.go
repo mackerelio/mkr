@@ -2,7 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"strings"
 	"testing"
 
 	mkr "github.com/mackerelio/mackerel-client-go"
@@ -34,24 +33,18 @@ func TestValidateRoles(t *testing.T) {
 }
 
 func TestDiffMonitors(t *testing.T) {
+	const want = ` {
+   "name": "foo",
+-  "responseTimeCritical": 1000,
+   "service": "bar",
+   "type": "external",
+   "url": "http://example.com"
+ }
+`
 	a := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000}
 	b := &mkr.Monitor{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar"}
-
-	ret := diffMonitor(a, b)
-
-	correct := strings.Join([]string{
-		"  {",
-		"    \"name\": \"foo\",",
-		"    \"type\": \"external\",",
-		"    \"url\": \"http://example.com\",",
-		"    \"service\": \"bar\",",
-		"-   \"responseTimeCritical\": 1000.000000,",
-		"+   \"responseTimeCritical\": 0.000000,",
-		"  },",
-	}, "\n")
-
-	if ret != correct {
-		t.Errorf("should validate the rule: %s\nbut result: %s", correct, ret)
+	if got := diffMonitor(a, b); got != want {
+		t.Errorf("diffMonitor: got\n%s\nwant \n%s", got, want)
 	}
 }
 
@@ -117,25 +110,28 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		Scopes: []string{"sss: notebook"},
 	}
 	diff := diffMonitor(a, b)
-	expected := `  {
-    "name": "foo",
-    "type": "connectivity",
-    "scopes": [
-+     "sss: notebook",
-    ],
-  },`
+	expected := ` {
+   "name": "foo",
+   "type": "connectivity"
++  "scopes": [
++    "sss: notebook"
++  ]
+ }
+`
 	if diff != expected {
+		// t.Error(debugdiff.Diff(expected, diff))
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
 	diff = diffMonitor(b, a)
-	expected = `  {
-    "name": "foo",
-    "type": "connectivity",
-    "scopes": [
--     "sss: notebook",
-    ],
-  },`
+	expected = ` {
+   "name": "foo",
+-  "scopes": [
+-    "sss: notebook"
+-  ],
+   "type": "connectivity"
+ }
+`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
@@ -148,14 +144,15 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	}
 
 	diff = diffMonitor(b, c)
-	expected = `  {
-    "name": "foo",
-    "type": "connectivity",
-    "scopes": [
-      "sss: notebook",
-+     "ttt: notebook",
-    ],
-  },`
+	expected = ` {
+   "name": "foo",
+   "scopes": [
+     "sss: notebook"
++    "ttt: notebook"
+   ],
+   "type": "connectivity"
+ }
+`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
@@ -167,14 +164,15 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		Scopes: []string{"ttt: notebook"},
 	}
 	diff = diffMonitor(b, d)
-	expected = `  {
-    "name": "foo",
-    "type": "connectivity",
-    "scopes": [
--     "sss: notebook",
-+     "ttt: notebook",
-    ],
-  },`
+	expected = ` {
+   "name": "foo",
+   "scopes": [
+-    "sss: notebook"
++    "ttt: notebook"
+   ],
+   "type": "connectivity"
+ }
+`
 	if diff != expected {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
