@@ -57,7 +57,7 @@ var commandAlerts = cli.Command{
 type alertSet struct {
 	Alert   *mkr.Alert
 	Host    *mkr.Host
-	Monitor *mkr.Monitor
+	Monitor mkr.Monitor
 }
 
 func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
@@ -74,9 +74,9 @@ func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
 	monitorsJSON, err := client.FindMonitors()
 	logger.DieIf(err)
 
-	monitors := map[string]*mkr.Monitor{}
+	monitors := map[string]mkr.Monitor{}
 	for _, monitor := range monitorsJSON {
-		monitors[monitor.ID] = monitor
+		monitors[monitor.MonitorID()] = monitor
 	}
 
 	alertSets := []*alertSet{}
@@ -124,47 +124,47 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 
 	monitorMsg := ""
 	if monitor != nil {
-		switch monitor.Type {
-		case "connectivity":
-			monitorMsg = fmt.Sprintf("%s", monitor.Type)
-		case "host":
+		switch m := monitor.(type) {
+		case *mkr.MonitorConnectivity:
+			monitorMsg = fmt.Sprintf("%s", m.Type)
+		case *mkr.MonitorHostMetric:
 			switch alert.Status {
 			case "CRITICAL":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Critical)
 			case "WARNING":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Warning)
 			default:
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Critical)
 			}
-		case "service":
+		case *mkr.MonitorServiceMetric:
 			switch alert.Status {
 			case "CRITICAL":
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Critical)
 			case "WARNING":
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Warning)
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Warning)
 			default:
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", monitor.Service, monitor.Metric, alert.Value, monitor.Operator, monitor.Critical)
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Critical)
 			}
-		case "external":
+		case *mkr.MonitorExternalHTTP:
 			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
 			switch alert.Status {
 			case "CRITICAL":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %s %.2f > %.2f msec, status:%s", monitor.Name, monitor.URL, alert.Value, monitor.ResponseTimeCritical, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %s %.2f > %.2f msec, status:%s", m.Name, m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %s %.2f msec, %s", monitor.Name, monitor.URL, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %s %.2f msec, %s", m.Name, m.URL, alert.Value, alert.Message)
 				}
 			case "WARNING":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeWarning, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeWarning, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", monitor.Name, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.Name, alert.Value, alert.Message)
 				}
 			default:
-				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", monitor.Name, alert.Value, monitor.ResponseTimeCritical, alert.Message)
+				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeCritical, alert.Message)
 			}
 		default:
-			monitorMsg = fmt.Sprintf("%s", monitor.Type)
+			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
 		}
 	}
 	statusMsg := alert.Status
@@ -205,8 +205,14 @@ func doAlertsList(c *cli.Context) error {
 					if _, ok := joinAlert.Host.Roles[filterService]; ok {
 						found = true
 					}
-				} else if joinAlert.Monitor.Service == filterService {
-					found = true
+				} else {
+					var service string
+					if m, ok := joinAlert.Monitor.(*mkr.MonitorServiceMetric); ok {
+						service = m.Service
+					} else if m, ok := joinAlert.Monitor.(*mkr.MonitorExternalHTTP); ok {
+						service = m.Service
+					}
+					found = service == filterService
 				}
 			}
 			if !found {

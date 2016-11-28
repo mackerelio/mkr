@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"reflect"
@@ -59,7 +59,7 @@ var commandMonitors = cli.Command{
 	},
 }
 
-func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
+func monitorSaveRules(rules []mkr.Monitor, optFilePath string) error {
 	filePath := "monitors.json"
 	if optFilePath != "" {
 		filePath = optFilePath
@@ -80,26 +80,67 @@ func monitorSaveRules(rules []*(mkr.Monitor), optFilePath string) error {
 	return nil
 }
 
-func monitorLoadRules(optFilePath string) ([]*(mkr.Monitor), error) {
+func monitorLoadRules(optFilePath string) ([]mkr.Monitor, error) {
 	filePath := "monitors.json"
 	if optFilePath != "" {
 		filePath = optFilePath
 	}
 
-	buff, err := ioutil.ReadFile(filePath)
+	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
 	}
+	return decodeMonitors(f)
+}
 
+// decodeMonitors decodes monitors JSON.
+//
+// There are almost same code in mackerel-client-go.
+func decodeMonitors(r io.Reader) ([]mkr.Monitor, error) {
 	var data struct {
-		Monitors []*(mkr.Monitor) `json:"monitors"`
+		Monitors []json.RawMessage `json:"monitors"`
 	}
-
-	err = json.Unmarshal(buff, &data)
-	if err != nil {
+	if err := json.NewDecoder(r).Decode(&data); err != nil {
 		return nil, err
 	}
-	return data.Monitors, nil
+	ms := make([]mkr.Monitor, 0, len(data.Monitors))
+	for _, rawmes := range data.Monitors {
+		m, err := decodeMonitor(rawmes)
+		if err != nil {
+			return nil, err
+		}
+		ms = append(ms, m)
+	}
+	return ms, nil
+}
+
+// decodeMonitor decodes json.RawMessage and returns monitor.
+//
+// There are almost same code in mackerel-client-go.
+func decodeMonitor(mes json.RawMessage) (mkr.Monitor, error) {
+	var typeData struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(mes, &typeData); err != nil {
+		return nil, err
+	}
+	var m mkr.Monitor
+	switch typeData.Type {
+	case "connectivity":
+		m = &mkr.MonitorConnectivity{}
+	case "host":
+		m = &mkr.MonitorHostMetric{}
+	case "service":
+		m = &mkr.MonitorServiceMetric{}
+	case "external":
+		m = &mkr.MonitorExternalHTTP{}
+	case "expression":
+		m = &mkr.MonitorExpression{}
+	}
+	if err := json.Unmarshal(mes, m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func doMonitorsList(c *cli.Context) error {
@@ -181,14 +222,14 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 	return diff
 }
 
-func stringifyMonitor(a *mkr.Monitor, prefix string) string {
+func stringifyMonitor(a mkr.Monitor, prefix string) string {
 	return prefix + JSONMarshalIndent(a, prefix, "  ") + ","
 }
 
 // diffMonitor returns JSON diff between monitors.
 // In order to use `mkr monitors` without pull and to manage monitors by name
 // only, it skips top level "id" field
-func diffMonitor(a *mkr.Monitor, b *mkr.Monitor) string {
+func diffMonitor(a mkr.Monitor, b mkr.Monitor) string {
 	as := filterIDLine(JSONMarshalIndent(a, " ", "  "))
 	bs := filterIDLine(JSONMarshalIndent(b, " ", "  "))
 	diff, err := gojsondiff.New().Compare([]byte(as), []byte(bs))
@@ -216,14 +257,16 @@ func filterIDLine(s string) string {
 	return strings.Join(filtered, "\n")
 }
 
-func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor, flagNameUniqueness bool) (string, bool) {
+func isSameMonitor(a mkr.Monitor, b mkr.Monitor, flagNameUniqueness bool) (string, bool) {
 	if a == nil || b == nil {
 		return "", false
 	}
-	if reflect.DeepEqual(*a, *b) {
+	if reflect.DeepEqual(a, b) {
 		return "", true
 	}
-	if a.ID == b.ID || (flagNameUniqueness == true && b.ID == "" && a.Name == b.Name) {
+	aID := a.MonitorID()
+	bID := b.MonitorID()
+	if aID == bID || (flagNameUniqueness == true && bID == "" && a.MonitorName() == b.MonitorName()) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
@@ -233,66 +276,67 @@ func isSameMonitor(a *mkr.Monitor, b *mkr.Monitor, flagNameUniqueness bool) (str
 	return "", false
 }
 
-func validateRules(monitors []*(mkr.Monitor), label string) (bool, error) {
+func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 
 	flagNameUniqueness := true
 	// check each monitor
-	for _, m := range monitors {
-		v := reflect.ValueOf(m).Elem()
+	for _, monitor := range monitors {
+		v := reflect.ValueOf(monitor).Elem()
 		for _, f := range []string{"Type"} {
 			vf := v.FieldByName(f)
 			if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 				return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 			}
 		}
-		switch m.Type {
-		case "host", "service":
+		switch m := monitor.(type) {
+		case *mkr.MonitorHostMetric, *mkr.MonitorServiceMetric:
 			for _, f := range []string{"Name", "Metric"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case "external":
+		case *mkr.MonitorExternalHTTP:
 			for _, f := range []string{"Name", "URL"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case "expression":
+		case *mkr.MonitorExpression:
 			for _, f := range []string{"Name", "Expression"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case "connectivity":
+		case *mkr.MonitorConnectivity:
 		default:
-			return false, fmt.Errorf("Unknown type is found: %s", m.Type)
+			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
 		}
 	}
 
 	// check name uniqueness
 	names := map[string]bool{}
 	for _, m := range monitors {
-		if names[m.Name] {
+		name := m.MonitorName()
+		if names[name] {
 			logger.Log("Warning: ", fmt.Sprintf("Names of %s are not unique.", label))
 			flagNameUniqueness = false
 		}
-		names[m.Name] = true
+		names[name] = true
 	}
 	return flagNameUniqueness, nil
 }
 
 type monitorDiffPair struct {
-	remote *mkr.Monitor
-	local  *mkr.Monitor
+	remote mkr.Monitor
+	local  mkr.Monitor
 }
 
 type monitorDiff struct {
-	onlyRemote []*(mkr.Monitor)
-	onlyLocal  []*(mkr.Monitor)
+	onlyRemote []mkr.Monitor
+	onlyLocal  []mkr.Monitor
 	diff       []*monitorDiffPair
 }
 
@@ -390,7 +434,7 @@ func doMonitorsPush(c *cli.Context) error {
 		logger.Log("info", "Delete a rule.")
 		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
-			_, err := client.DeleteMonitor(m.ID)
+			_, err := client.DeleteMonitor(m.MonitorID())
 			logger.DieIf(err)
 		}
 	}
@@ -398,7 +442,7 @@ func doMonitorsPush(c *cli.Context) error {
 		logger.Log("info", "Update a rule.")
 		fmt.Println(stringifyMonitor(d.local, ""))
 		if !isDryRun {
-			_, err := client.UpdateMonitor(d.remote.ID, d.local)
+			_, err := client.UpdateMonitor(d.remote.MonitorID(), d.local)
 			logger.DieIf(err)
 		}
 	}
