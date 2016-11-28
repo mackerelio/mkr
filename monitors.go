@@ -289,9 +289,9 @@ func isSameMonitor(a mkr.Monitor, b mkr.Monitor, flagNameUniqueness bool) (strin
 	if reflect.DeepEqual(a, b) {
 		return "", true
 	}
-	aID := monitorID(a)
-	bID := monitorID(b)
-	if aID == bID || (flagNameUniqueness == true && bID == "" && monitorName(a) == monitorName(b)) {
+	aID := a.MonitorID()
+	bID := b.MonitorID()
+	if aID == bID || (flagNameUniqueness == true && bID == "" && a.MonitorName() == b.MonitorName()) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
@@ -344,7 +344,7 @@ func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 	// check name uniqueness
 	names := map[string]bool{}
 	for _, m := range monitors {
-		name := monitorName(m)
+		name := m.MonitorName()
 		if names[name] {
 			logger.Log("Warning: ", fmt.Sprintf("Names of %s are not unique.", label))
 			flagNameUniqueness = false
@@ -459,7 +459,7 @@ func doMonitorsPush(c *cli.Context) error {
 		logger.Log("info", "Delete a rule.")
 		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
-			_, err := client.DeleteMonitor(monitorID(m))
+			_, err := client.DeleteMonitor(m.MonitorID())
 			logger.DieIf(err)
 		}
 	}
@@ -467,41 +467,9 @@ func doMonitorsPush(c *cli.Context) error {
 		logger.Log("info", "Update a rule.")
 		fmt.Println(stringifyMonitor(d.local, ""))
 		if !isDryRun {
-			_, err := client.UpdateMonitor(monitorID(d.remote), d.local)
+			_, err := client.UpdateMonitor(d.remote.MonitorID(), d.local)
 			logger.DieIf(err)
 		}
 	}
 	return nil
-}
-
-func monitorID(monitor mkr.Monitor) string {
-	switch m := monitor.(type) {
-	case *mkr.MonitorConnectivity:
-		return m.ID
-	case *mkr.MonitorHostMetric:
-		return m.ID
-	case *mkr.MonitorServiceMetric:
-		return m.ID
-	case *mkr.MonitorExternalHTTP:
-		return m.ID
-	case *mkr.MonitorExpression:
-		return m.ID
-	}
-	return ""
-}
-
-func monitorName(monitor mkr.Monitor) string {
-	switch m := monitor.(type) {
-	case *mkr.MonitorConnectivity:
-		return m.Name
-	case *mkr.MonitorHostMetric:
-		return m.Name
-	case *mkr.MonitorServiceMetric:
-		return m.Name
-	case *mkr.MonitorExternalHTTP:
-		return m.Name
-	case *mkr.MonitorExpression:
-		return m.Name
-	}
-	return ""
 }

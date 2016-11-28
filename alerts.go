@@ -76,7 +76,7 @@ func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
 
 	monitors := map[string]mkr.Monitor{}
 	for _, monitor := range monitorsJSON {
-		monitors[monitorID(monitor)] = monitor
+		monitors[monitor.MonitorID()] = monitor
 	}
 
 	alertSets := []*alertSet{}
