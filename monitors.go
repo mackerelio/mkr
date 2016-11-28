@@ -7,11 +7,12 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"sort"
 	"strings"
 
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"github.com/yudai/gojsondiff"
+	"github.com/yudai/gojsondiff/formatter"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -20,7 +21,7 @@ var commandMonitors = cli.Command{
 	Usage: "Manipulate monitors",
 	Description: `
     Manipulate monitor rules. With no subcommand specified, this will show all monitor rules.
-    Requests APIs under "/api/v0/monitors". See http://help-ja.mackerel.io/entry/spec/api/v0 .
+    Requests APIs under "/api/v0/monitors". See https://mackerel.io/api-docs/entry/monitors .
 `,
 	Action: doMonitorsList,
 	Subcommands: []cli.Command{
@@ -222,64 +223,38 @@ func appendDiff(src []string, name string, a interface{}, b interface{}) []strin
 }
 
 func stringifyMonitor(a mkr.Monitor, prefix string) string {
-	data := JSONMarshalIndent(a, prefix+" ", "  ")
-	return prefix + " " + data + ","
+	return prefix + JSONMarshalIndent(a, prefix, "  ") + ","
 }
 
+// diffMonitor returns JSON diff between monitors.
+// In order to use `mkr monitors` without pull and to manage monitors by name
+// only, it skips top level "id" field
 func diffMonitor(a mkr.Monitor, b mkr.Monitor) string {
-	diff := []string{"  {"}
-	diffNum := 0
-	sA := reflect.ValueOf(a).Elem()
-	sB := reflect.ValueOf(b).Elem()
-	for i := 0; i < sA.NumField(); i++ {
-		fA := sA.Field(i)
-		fB := sB.Field(i)
-		sAType := sA.Type()
-		if sAType.Field(i).Type.String() != "[]string" {
-			name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
-			if name == "id" {
-				continue
-			}
-			diff = appendDiff(diff, name, fA.Interface(), fB.Interface())
-			if fA.Interface() != fB.Interface() {
-				diffNum++
-			}
-		} else {
-			if len(fA.Interface().([]string)) == 0 && len(fB.Interface().([]string)) == 0 {
-				continue
-			}
-			name := strings.Replace(sAType.Field(i).Tag.Get("json"), ",omitempty", "", 1)
-			diff = append(diff, fmt.Sprintf("    \"%s\": [", name))
-			sortA := fA.Interface().([]string)
-			sortB := fB.Interface().([]string)
-			sort.Strings(sortA)
-			sort.Strings(sortB)
-			i := 0
-			j := 0
-			for i < len(sortA) || j < len(sortB) {
-				if j >= len(sortB) || (i < len(sortA) && sortA[i] < sortB[j]) {
-					diff = append(diff, fmt.Sprintf("-     \"%s\",", sortA[i]))
-					i++
-					diffNum++
-				} else if i >= len(sortA) || sortB[j] < sortA[i] {
-					diff = append(diff, fmt.Sprintf("+     \"%s\",", sortB[j]))
-					j++
-					diffNum++
-				} else {
-					diff = append(diff, fmt.Sprintf("      \"%s\",", sortA[i]))
-					i++
-					j++
-				}
-			}
-			diff = append(diff, "    ],")
-		}
+	as := filterIDLine(JSONMarshalIndent(a, " ", "  "))
+	bs := filterIDLine(JSONMarshalIndent(b, " ", "  "))
+	diff, err := gojsondiff.New().Compare([]byte(as), []byte(bs))
+	if err != nil || !diff.Modified() {
+		return ""
 	}
+	var left map[string]interface{}
+	json.Unmarshal([]byte(as), &left)
+	result, err := formatter.NewAsciiFormatter(left).Format(diff)
+	if err != nil {
+		return ""
+	}
+	return strings.TrimRight(result, "\n") + ","
+}
 
-	if diffNum > 0 {
-		diff = append(diff, "  },")
-		return strings.Join(diff, "\n")
+func filterIDLine(s string) string {
+	lines := strings.Split(s, "\n")
+	filtered := make([]string, 0, len(lines))
+	for _, l := range lines {
+		if strings.HasPrefix(l, `   "id":`) {
+			continue
+		}
+		filtered = append(filtered, l)
 	}
-	return ""
+	return strings.Join(filtered, "\n")
 }
 
 func isSameMonitor(a mkr.Monitor, b mkr.Monitor, flagNameUniqueness bool) (string, bool) {

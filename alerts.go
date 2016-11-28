@@ -18,7 +18,7 @@ var commandAlerts = cli.Command{
 	Usage: "Retrieve/Close alerts",
 	Description: `
     Retrieve/Close alerts. With no subcommand specified, this will show all alerts.
-    Requests APIs under "/api/v0/alerts". See http://help-ja.mackerel.io/entry/spec/api/v0 .
+    Requests APIs under "/api/v0/alerts". See https://mackerel.io/api-docs/entry/alerts .
 `,
 	Action: doAlertsRetrieve,
 	Subcommands: []cli.Command{
