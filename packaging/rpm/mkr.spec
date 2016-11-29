@@ -42,6 +42,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Nov 29 2016 <mackerel-developers@hatena.ne.jp> - 0.13.0-1
+- remove unreachable code: monitor type cannot be "check" (by haya14busa)
+- Fix the links to the api documents (by itchyny)
+- catch up monitor interface changes of mackerel-client-go (by haya14busa)
+- Introduce yudai/gojsondiff for `mkr monitors diff` (by haya14busa)
+- fix test according to mackerel-client-go changes (by haya14busa)
+
 * Thu Oct 27 2016 <mackerel-developers@hatena.ne.jp> - 0.12.0-1
 - Rename a dependent package (by usk81)
 - Support `-apibase` option (by astj)

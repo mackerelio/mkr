@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.13.0 (2016-11-29)
+
+* remove unreachable code: monitor type cannot be "check" #72 (haya14busa)
+* Fix the links to the api documents #73 (itchyny)
+* catch up monitor interface changes of mackerel-client-go #74 (haya14busa)
+* Introduce yudai/gojsondiff for `mkr monitors diff` #75 (haya14busa)
+* fix test according to mackerel-client-go changes #76 (haya14busa)
+
+
 ## 0.12.0 (2016-10-27)
 
 * Rename a dependent package #68 (usk81)

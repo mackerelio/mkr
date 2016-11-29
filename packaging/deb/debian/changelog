@@ -1,3 +1,18 @@
+mkr (0.13.0-1) stable; urgency=low
+
+  * remove unreachable code: monitor type cannot be "check" (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/72>
+  * Fix the links to the api documents (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/73>
+  * catch up monitor interface changes of mackerel-client-go (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/74>
+  * Introduce yudai/gojsondiff for `mkr monitors diff` (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/75>
+  * fix test according to mackerel-client-go changes (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/76>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 29 Nov 2016 06:01:34 +0000
+
 mkr (0.12.0-1) stable; urgency=low
 
   * Rename a dependent package (by usk81)
