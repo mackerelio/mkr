@@ -34,14 +34,16 @@ func TestValidateRoles(t *testing.T) {
 
 func TestDiffMonitors(t *testing.T) {
 	const want = ` {
+   "headers": [
+   ],
    "name": "foo",
 -  "responseTimeCritical": 1000,
    "service": "bar",
    "type": "external",
    "url": "http://example.com"
  },`
-	a := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000}
-	b := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar"}
+	a := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: 1000, Headers: []mkr.HeaderField{}}
+	b := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", Headers: []mkr.HeaderField{}}
 	if got := diffMonitor(a, b); got != want {
 		t.Errorf("diffMonitor: got\n%s\nwant \n%s", got, want)
 	}
@@ -59,6 +61,7 @@ func TestMonitorSaveRules(t *testing.T) {
 		URL:                  "http://example.com",
 		Service:              "bar",
 		ResponseTimeCritical: 1000,
+		Headers:              []mkr.HeaderField{},
 	}
 	monitorSaveRules([]mkr.Monitor{a}, tmpFile.Name())
 
@@ -72,7 +75,8 @@ func TestMonitorSaveRules(t *testing.T) {
             "type": "external",
             "url": "http://example.com",
             "service": "bar",
-            "responseTimeCritical": 1000
+            "responseTimeCritical": 1000,
+            "headers": []
         }
     ]
 }
