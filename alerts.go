@@ -163,6 +163,18 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			default:
 				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeCritical, alert.Message)
 			}
+		case *mkr.MonitorExpression:
+			expression := trimExpression(m.Expression)
+			switch alert.Status {
+			case "CRITICAL":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Critical)
+			case "WARNING":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Warning)
+			case "UNKNOWN":
+				monitorMsg = fmt.Sprintf("%s", expression)
+			default:
+				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
+			}
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
 		}
@@ -174,9 +186,17 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			statusMsg = color.RedString("CRITICAL")
 		case "WARNING":
 			statusMsg = color.YellowString("WARNING ")
+		case "UNKNOWN":
+			statusMsg = "UNKNOWN "
 		}
 	}
 	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
+}
+
+var expressionTrimmer = regexp.MustCompile(`[\r\n]+\s*`)
+
+func trimExpression(expr string) string {
+	return expressionTrimmer.ReplaceAllString(expr, " ")
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
