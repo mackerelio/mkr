@@ -198,10 +198,10 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
-var expressionTrimmer = regexp.MustCompile(`[\r\n]+\s*`)
+var expressionNewlinePattern = regexp.MustCompile(`\s*[\r\n]+\s*`)
 
 func formatExpressionOneline(expr string) string {
-	expr = strings.Trim(expressionTrimmer.ReplaceAllString(expr, " "), " ")
+	expr = strings.Trim(expressionNewlinePattern.ReplaceAllString(expr, " "), " ")
 	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
 }
 
