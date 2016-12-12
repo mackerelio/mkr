@@ -53,6 +53,14 @@ func TestFormatJoinedAlert(t *testing.T) {
 			},
 			"2tZhm 1970-01-01 00:06:40 CRITICAL Example Domain https://example.com 2500.00 > 1000.00 msec, status:200",
 		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "expression", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 500},
+				nil,
+				&mkr.MonitorExpression{ID: "5rXR3", Type: "expression", Name: "Max loadavg5 monitor", Expression: "max(\n  roleSlots(\n    'service:role',\n    'loadavg5'\n  )\n)\n", Warning: 10.0, Critical: 20.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max( roleSlots( 'service:role', 'loadavg5' ) ) 15.70 > 10.00",
+		},
 	}
 
 	for _, testCase := range testCases {
