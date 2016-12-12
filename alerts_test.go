@@ -17,14 +17,24 @@ func TestFormatJoinedAlert(t *testing.T) {
 	}
 	time.Local = loc
 
-	a := &mkr.Alert{ID: "123", Type: "connectivity", Status: "critical", HostID: "1234", MonitorID: "12345", OpenedAt: 100}
-	h := &mkr.Host{ID: "1234", Name: "foo", Roles: mkr.Roles{}, Status: "working"}
-	m := &mkr.MonitorConnectivity{ID: "12345", Type: "connectivity"}
-	as := alertSet{a, h, m}
-	answer := "123 1970-01-01 00:01:40 critical connectivity foo working []"
+	testCases := []struct {
+		alertSet *alertSet
+		want     string
+	}{
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "connectivity", Status: "critical", HostID: "3XYyG", MonitorID: "5rXR3", OpenedAt: 100},
+				&mkr.Host{ID: "3XYyG", Name: "foo", Roles: mkr.Roles{}, Status: "working"},
+				&mkr.MonitorConnectivity{ID: "5rXR3", Type: "connectivity"},
+			},
+			"2tZhm 1970-01-01 00:01:40 critical connectivity foo working []",
+		},
+	}
 
-	str := formatJoinedAlert(&as, false)
-	if str != answer {
-		t.Errorf("should be '%s' but '%s'", answer, str)
+	for _, testCase := range testCases {
+		str := formatJoinedAlert(testCase.alertSet, false)
+		if str != testCase.want {
+			t.Errorf("should be '%s' but '%s'", testCase.want, str)
+		}
 	}
 }
