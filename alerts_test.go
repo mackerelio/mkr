@@ -59,7 +59,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				nil,
 				&mkr.MonitorExpression{ID: "5rXR3", Type: "expression", Name: "Max loadavg5 monitor", Expression: "max(\n  roleSlots(\n    'service:role',\n    'loadavg5'\n  )\n)\n", Warning: 10.0, Critical: 20.0, Operator: ">"},
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max( roleSlots( 'service:role', 'loadavg5' ) ) 15.70 > 10.00",
+			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max(roleSlots('service:role', 'loadavg5')) 15.70 > 10.00",
 		},
 	}
 
