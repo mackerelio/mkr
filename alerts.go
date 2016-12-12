@@ -126,7 +126,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	if monitor != nil {
 		switch m := monitor.(type) {
 		case *mkr.MonitorConnectivity:
-			monitorMsg = fmt.Sprintf("%s", m.Type)
+			monitorMsg = ""
 		case *mkr.MonitorHostMetric:
 			switch alert.Status {
 			case "CRITICAL":
@@ -150,21 +150,38 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			switch alert.Status {
 			case "CRITICAL":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %s %.2f > %.2f msec, status:%s", m.Name, m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %s %.2f msec, %s", m.Name, m.URL, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.URL, alert.Value, alert.Message)
 				}
 			case "WARNING":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeWarning, alert.Message)
+					monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeWarning, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.Name, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%.2f msec, %s", alert.Value, alert.Message)
 				}
 			default:
-				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeCritical, alert.Message)
+				monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeCritical, alert.Message)
+			}
+		case *mkr.MonitorExpression:
+			expression := formatExpressionOneline(m.Expression)
+			switch alert.Status {
+			case "CRITICAL":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Critical)
+			case "WARNING":
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Warning)
+			case "UNKNOWN":
+				monitorMsg = fmt.Sprintf("%s", expression)
+			default:
+				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
 			}
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
+		}
+		if monitorMsg == "" {
+			monitorMsg = monitor.MonitorName()
+		} else {
+			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
 	statusMsg := alert.Status
@@ -174,9 +191,18 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			statusMsg = color.RedString("CRITICAL")
 		case "WARNING":
 			statusMsg = color.YellowString("WARNING ")
+		case "UNKNOWN":
+			statusMsg = "UNKNOWN "
 		}
 	}
 	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
+}
+
+var expressionNewlinePattern = regexp.MustCompile(`\s*[\r\n]+\s*`)
+
+func formatExpressionOneline(expr string) string {
+	expr = strings.Trim(expressionNewlinePattern.ReplaceAllString(expr, " "), " ")
+	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
 }
 
 func doAlertsRetrieve(c *cli.Context) error {

@@ -17,14 +17,56 @@ func TestFormatJoinedAlert(t *testing.T) {
 	}
 	time.Local = loc
 
-	a := &mkr.Alert{ID: "123", Type: "connectivity", Status: "critical", HostID: "1234", MonitorID: "12345", OpenedAt: 100}
-	h := &mkr.Host{ID: "1234", Name: "foo", Roles: mkr.Roles{}, Status: "working"}
-	m := &mkr.MonitorConnectivity{ID: "12345", Type: "connectivity"}
-	as := alertSet{a, h, m}
-	answer := "123 1970-01-01 00:01:40 critical connectivity foo working []"
+	testCases := []struct {
+		alertSet *alertSet
+		want     string
+	}{
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "connectivity", Status: "CRITICAL", HostID: "3XYyG", MonitorID: "5rXR3", OpenedAt: 100},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				&mkr.MonitorConnectivity{ID: "5rXR3", Type: "connectivity", Name: "connectivity"},
+			},
+			"2tZhm 1970-01-01 00:01:40 CRITICAL connectivity app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "host", Status: "CRITICAL", HostID: "3XYyG", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 200},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				&mkr.MonitorHostMetric{ID: "5rXR3", Type: "host", Name: "All::loadavg5", Metric: "loadavg5", Warning: 8.0, Critical: 12.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:03:20 CRITICAL All::loadavg5 loadavg5 15.70 > 12.00 app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "service", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 300},
+				nil,
+				&mkr.MonitorServiceMetric{ID: "5rXR3", Type: "service", Service: "ServiceFoo", Name: "bar.baz monitor", Metric: "custom.bar.baz", Warning: 10.0, Critical: 20.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:05:00 WARNING bar.baz monitor ServiceFoo custom.bar.baz 15.70 > 10.00",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "external", Status: "CRITICAL", MonitorID: "5rXR3", Value: 2500, Message: "200", OpenedAt: 400},
+				nil,
+				&mkr.MonitorExternalHTTP{ID: "5rXR3", Type: "external", Name: "Example Domain", URL: "https://example.com", ResponseTimeWarning: 500, ResponseTimeCritical: 1000, ResponseTimeDuration: 5},
+			},
+			"2tZhm 1970-01-01 00:06:40 CRITICAL Example Domain https://example.com 2500.00 > 1000.00 msec, status:200",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "expression", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 500},
+				nil,
+				&mkr.MonitorExpression{ID: "5rXR3", Type: "expression", Name: "Max loadavg5 monitor", Expression: "max(  \n  roleSlots(  \n    'service:role',\n    'loadavg5'\n  )\n)\n", Warning: 10.0, Critical: 20.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max(roleSlots('service:role', 'loadavg5')) 15.70 > 10.00",
+		},
+	}
 
-	str := formatJoinedAlert(&as, false)
-	if str != answer {
-		t.Errorf("should be '%s' but '%s'", answer, str)
+	for _, testCase := range testCases {
+		str := formatJoinedAlert(testCase.alertSet, false)
+		if str != testCase.want {
+			t.Errorf("should be '%s' but got '%s'", testCase.want, str)
+		}
 	}
 }
