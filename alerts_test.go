@@ -45,6 +45,14 @@ func TestFormatJoinedAlert(t *testing.T) {
 			},
 			"2tZhm 1970-01-01 00:05:00 WARNING bar.baz monitor ServiceFoo custom.bar.baz 15.70 > 10.00",
 		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "external", Status: "CRITICAL", MonitorID: "5rXR3", Value: 2500, Message: "200", OpenedAt: 400},
+				nil,
+				&mkr.MonitorExternalHTTP{ID: "5rXR3", Type: "external", Name: "Example Domain", URL: "https://example.com", ResponseTimeWarning: 500, ResponseTimeCritical: 1000, ResponseTimeDuration: 5},
+			},
+			"2tZhm 1970-01-01 00:06:40 CRITICAL Example Domain https://example.com 2500.00 > 1000.00 msec, status:200",
+		},
 	}
 
 	for _, testCase := range testCases {
