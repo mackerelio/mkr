@@ -201,7 +201,8 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 var expressionTrimmer = regexp.MustCompile(`[\r\n]+\s*`)
 
 func formatExpressionOneline(expr string) string {
-	return strings.Trim(expressionTrimmer.ReplaceAllString(expr, " "), " ")
+	expr = strings.Trim(expressionTrimmer.ReplaceAllString(expr, " "), " ")
+	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
