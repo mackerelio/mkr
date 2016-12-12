@@ -23,18 +23,34 @@ func TestFormatJoinedAlert(t *testing.T) {
 	}{
 		{
 			&alertSet{
-				&mkr.Alert{ID: "2tZhm", Type: "connectivity", Status: "critical", HostID: "3XYyG", MonitorID: "5rXR3", OpenedAt: 100},
-				&mkr.Host{ID: "3XYyG", Name: "foo", Roles: mkr.Roles{}, Status: "working"},
-				&mkr.MonitorConnectivity{ID: "5rXR3", Type: "connectivity"},
+				&mkr.Alert{ID: "2tZhm", Type: "connectivity", Status: "CRITICAL", HostID: "3XYyG", MonitorID: "5rXR3", OpenedAt: 100},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				&mkr.MonitorConnectivity{ID: "5rXR3", Type: "connectivity", Name: "connectivity"},
 			},
-			"2tZhm 1970-01-01 00:01:40 critical connectivity foo working []",
+			"2tZhm 1970-01-01 00:01:40 CRITICAL connectivity app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "host", Status: "CRITICAL", HostID: "3XYyG", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 200},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				&mkr.MonitorHostMetric{ID: "5rXR3", Type: "host", Name: "All::loadavg5", Metric: "loadavg5", Warning: 8.0, Critical: 12.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:03:20 CRITICAL All::loadavg5 loadavg5 15.70 > 12.00 app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "service", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 300},
+				nil,
+				&mkr.MonitorServiceMetric{ID: "5rXR3", Type: "service", Service: "ServiceFoo", Name: "bar.baz monitor", Metric: "custom.bar.baz", Warning: 10.0, Critical: 20.0, Operator: ">"},
+			},
+			"2tZhm 1970-01-01 00:05:00 WARNING bar.baz monitor ServiceFoo custom.bar.baz 15.70 > 10.00",
 		},
 	}
 
 	for _, testCase := range testCases {
 		str := formatJoinedAlert(testCase.alertSet, false)
 		if str != testCase.want {
-			t.Errorf("should be '%s' but '%s'", testCase.want, str)
+			t.Errorf("should be '%s' but got '%s'", testCase.want, str)
 		}
 	}
 }
