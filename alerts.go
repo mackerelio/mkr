@@ -164,7 +164,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 				monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeCritical, alert.Message)
 			}
 		case *mkr.MonitorExpression:
-			expression := trimExpression(m.Expression)
+			expression := formatExpressionOneline(m.Expression)
 			switch alert.Status {
 			case "CRITICAL":
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Critical)
@@ -200,8 +200,8 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 
 var expressionTrimmer = regexp.MustCompile(`[\r\n]+\s*`)
 
-func trimExpression(expr string) string {
-	return expressionTrimmer.ReplaceAllString(expr, " ")
+func formatExpressionOneline(expr string) string {
+	return strings.Trim(expressionTrimmer.ReplaceAllString(expr, " "), " ")
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
