@@ -126,7 +126,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	if monitor != nil {
 		switch m := monitor.(type) {
 		case *mkr.MonitorConnectivity:
-			monitorMsg = fmt.Sprintf("%s", m.Type)
+			monitorMsg = ""
 		case *mkr.MonitorHostMetric:
 			switch alert.Status {
 			case "CRITICAL":
@@ -150,18 +150,18 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			switch alert.Status {
 			case "CRITICAL":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %s %.2f > %.2f msec, status:%s", m.Name, m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %s %.2f msec, %s", m.Name, m.URL, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.URL, alert.Value, alert.Message)
 				}
 			case "WARNING":
 				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeWarning, alert.Message)
+					monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeWarning, alert.Message)
 				} else {
-					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.Name, alert.Value, alert.Message)
+					monitorMsg = fmt.Sprintf("%.2f msec, %s", alert.Value, alert.Message)
 				}
 			default:
-				monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.Name, alert.Value, m.ResponseTimeCritical, alert.Message)
+				monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeCritical, alert.Message)
 			}
 		case *mkr.MonitorExpression:
 			expression := trimExpression(m.Expression)
@@ -177,6 +177,11 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			}
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
+		}
+		if monitorMsg == "" {
+			monitorMsg = monitor.MonitorName()
+		} else {
+			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
 	statusMsg := alert.Status
