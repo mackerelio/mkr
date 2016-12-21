@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.0 (2016-12-21)
+
+* Support expression monitor alerts in mkr alerts list #78 (itchyny)
+
+
 ## 0.13.0 (2016-11-29)
 
 * remove unreachable code: monitor type cannot be "check" #72 (haya14busa)

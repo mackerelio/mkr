@@ -1,3 +1,10 @@
+mkr (0.14.0-1) stable; urgency=low
+
+  * Support expression monitor alerts in mkr alerts list (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/78>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 21 Dec 2016 02:24:46 +0000
+
 mkr (0.13.0-1) stable; urgency=low
 
   * remove unreachable code: monitor type cannot be "check" (by haya14busa)

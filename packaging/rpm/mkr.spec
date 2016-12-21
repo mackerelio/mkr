@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Dec 21 2016 <mackerel-developers@hatena.ne.jp> - 0.14.0-1
+- Support expression monitor alerts in mkr alerts list (by itchyny)
+
 * Tue Nov 29 2016 <mackerel-developers@hatena.ne.jp> - 0.13.0-1
 - remove unreachable code: monitor type cannot be "check" (by haya14busa)
 - Fix the links to the api documents (by itchyny)
