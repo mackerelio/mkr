@@ -238,7 +238,7 @@ func diffMonitor(a mkr.Monitor, b mkr.Monitor) string {
 	}
 	var left map[string]interface{}
 	json.Unmarshal([]byte(as), &left)
-	result, err := formatter.NewAsciiFormatter(left).Format(diff)
+	result, err := formatter.NewAsciiFormatter(left, formatter.AsciiFormatterDefaultConfig).Format(diff)
 	if err != nil {
 		return ""
 	}
