@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.1 (2017-01-11)
+
+* formatter.NewAsciiFormatter now needs config #80 (astj)
+
+
 ## 0.14.0 (2016-12-21)
 
 * Support expression monitor alerts in mkr alerts list #78 (itchyny)

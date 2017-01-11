@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jan 11 2017 <mackerel-developers@hatena.ne.jp> - 0.14.1-1
+- formatter.NewAsciiFormatter now needs config (by astj)
+
 * Wed Dec 21 2016 <mackerel-developers@hatena.ne.jp> - 0.14.0-1
 - Support expression monitor alerts in mkr alerts list (by itchyny)
 
