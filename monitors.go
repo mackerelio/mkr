@@ -43,7 +43,7 @@ var commandMonitors = cli.Command{
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "exit-code, e", Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)"},
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "to-remote", Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus"},
+				cli.BoolFlag{Name: "invert-diff", Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus"},
 			},
 		},
 		{
@@ -387,12 +387,12 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 func doMonitorsDiff(c *cli.Context) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isExitCode := c.Bool("exit-code")
-	isToRemote := c.Bool("to-remote")
+	isInvertedDiff := c.Bool("invert-diff")
 
 	var diffs []string
 	for _, d := range monitorDiff.diff {
 		var diff string
-		if isToRemote {
+		if isInvertedDiff {
 			diff = diffMonitor(d.local, d.remote)
 		} else {
 			diff = diffMonitor(d.remote, d.local)
@@ -402,7 +402,7 @@ func doMonitorsDiff(c *cli.Context) error {
 
 	var monitorOnlyFrom []mkr.Monitor
 	var monitorOnlyTo []mkr.Monitor
-	if isToRemote {
+	if isInvertedDiff {
 		monitorOnlyFrom = monitorDiff.onlyLocal
 		monitorOnlyTo = monitorDiff.onlyRemote
 	} else {
