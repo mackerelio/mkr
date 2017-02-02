@@ -43,6 +43,7 @@ var commandMonitors = cli.Command{
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "exit-code, e", Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)"},
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
+				cli.BoolFlag{Name: "reverse", Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus"},
 			},
 		},
 		{
@@ -386,23 +387,40 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 func doMonitorsDiff(c *cli.Context) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isExitCode := c.Bool("exit-code")
+	isReverse := c.Bool("reverse")
 
 	var diffs []string
 	for _, d := range monitorDiff.diff {
-		diffs = append(diffs, diffMonitor(d.remote, d.local))
+		var diff string
+		if isReverse {
+			diff = diffMonitor(d.local, d.remote)
+		} else {
+			diff = diffMonitor(d.remote, d.local)
+		}
+		diffs = append(diffs, diff)
 	}
 
-	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", len(monitorDiff.diff), len(monitorDiff.onlyLocal), len(monitorDiff.onlyRemote))
+	var monitorOnlyFrom []mkr.Monitor
+	var monitorOnlyTo []mkr.Monitor
+	if isReverse {
+		monitorOnlyFrom = monitorDiff.onlyLocal
+		monitorOnlyTo = monitorDiff.onlyRemote
+	} else {
+		monitorOnlyFrom = monitorDiff.onlyRemote
+		monitorOnlyTo = monitorDiff.onlyLocal
+	}
+
+	fmt.Printf("Summary: %d modify, %d append, %d remove\n\n", len(monitorDiff.diff), len(monitorOnlyTo), len(monitorOnlyFrom))
 	noDiff := true
 	for _, diff := range diffs {
 		fmt.Println(diff)
 		noDiff = false
 	}
-	for _, m := range monitorDiff.onlyRemote {
+	for _, m := range monitorOnlyFrom {
 		fmt.Println(stringifyMonitor(m, "-"))
 		noDiff = false
 	}
-	for _, m := range monitorDiff.onlyLocal {
+	for _, m := range monitorOnlyTo {
 		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
