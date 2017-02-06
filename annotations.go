@@ -23,8 +23,8 @@ var commandAnnotations = cli.Command{
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
 				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
-				cli.IntFlag{Name: "from"},
-				cli.IntFlag{Name: "to"},
+				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
+				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.StringSliceFlag{
 					Name:  "role, r",
@@ -40,8 +40,8 @@ var commandAnnotations = cli.Command{
 			Action:      doAnnotationsList,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
-				cli.IntFlag{Name: "from"},
-				cli.IntFlag{Name: "to"},
+				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
+				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
 			},
 		},
 		{
@@ -54,8 +54,8 @@ var commandAnnotations = cli.Command{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
 				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
-				cli.IntFlag{Name: "from"},
-				cli.IntFlag{Name: "to"},
+				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
+				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
 				cli.StringSliceFlag{
 					Name:  "role, r",
 					Value: &cli.StringSlice{},
