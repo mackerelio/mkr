@@ -10,6 +10,10 @@ import (
 
 var commandAnnotations = cli.Command{
 	Name: "annotations",
+	Description: `
+    Manipulate graph annotations. Requests APIs under "/api/v0/graph-annotations".
+    See https://mackerel.io/api-docs/entry/graph-annotations .
+`,
 	Subcommands: []cli.Command{
 		{
 			Name:        "create",
