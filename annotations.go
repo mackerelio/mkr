@@ -17,8 +17,8 @@ var commandAnnotations = cli.Command{
 	Subcommands: []cli.Command{
 		{
 			Name:        "create",
-			Usage:       "create annotation",
-			Description: "Creates an annotation.",
+			Usage:       "create a graph annotation",
+			Description: "Creates a graph annotation.",
 			Action:      doAnnotationsCreate,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "title", Value: "", Usage: "Title for annotation."},
