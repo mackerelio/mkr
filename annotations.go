@@ -21,11 +21,11 @@ var commandAnnotations = cli.Command{
 			Description: "Creates a graph annotation.",
 			Action:      doAnnotationsCreate,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "title", Value: "", Usage: "Title for annotation"},
-				cli.StringFlag{Name: "description", Value: "", Usage: "Description for annotation"},
+				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
+				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
 				cli.IntFlag{Name: "from"},
 				cli.IntFlag{Name: "to"},
-				cli.StringFlag{Name: "service, s", Value: "", Usage: "Service name for annotation"},
+				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.StringSliceFlag{
 					Name:  "role, r",
 					Value: &cli.StringSlice{},
@@ -39,7 +39,7 @@ var commandAnnotations = cli.Command{
 			Description: "Shows annotations by service name and duration(from and to)",
 			Action:      doAnnotationsList,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "service, s", Value: "", Usage: "Service name for annotation"},
+				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.IntFlag{Name: "from"},
 				cli.IntFlag{Name: "to"},
 			},
@@ -50,10 +50,10 @@ var commandAnnotations = cli.Command{
 			Description: "Updates an annotation",
 			Action:      doAnnotationsUpdate,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Value: "", Usage: "Annotation ID."},
-				cli.StringFlag{Name: "service, s", Value: "", Usage: "Service name for annotation"},
-				cli.StringFlag{Name: "title", Value: "", Usage: "Title for annotation"},
-				cli.StringFlag{Name: "description", Value: "", Usage: "Description for annotation"},
+				cli.StringFlag{Name: "id", Usage: "Annotation ID."},
+				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
+				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
+				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
 				cli.IntFlag{Name: "from"},
 				cli.IntFlag{Name: "to"},
 				cli.StringSliceFlag{
@@ -69,7 +69,7 @@ var commandAnnotations = cli.Command{
 			Description: "Delete graph annotation by annotation id",
 			Action:      doAnnotationsDelete,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Value: "", Usage: "Reason of closing alert"},
+				cli.StringFlag{Name: "id", Usage: "Reason of closing alert"},
 			},
 		},
 	},
