@@ -69,7 +69,7 @@ var commandAnnotations = cli.Command{
 			Description: "Delete graph annotation by annotation id",
 			Action:      doAnnotationsDelete,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Usage: "Reason of closing alert"},
+				cli.StringFlag{Name: "id", Usage: "Graph annotation ID"},
 			},
 		},
 	},
