@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"gopkg.in/urfave/cli.v1"
-	"os"
 )
 
 var commandAnnotations = cli.Command{
