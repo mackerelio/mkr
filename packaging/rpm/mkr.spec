@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Feb 08 2017 <mackerel-developers@hatena.ne.jp> - 0.14.2-1
+- [monitors diff] Add the "to-remote" bool flag (by yoheimuta)
+
 * Wed Jan 11 2017 <mackerel-developers@hatena.ne.jp> - 0.14.1-1
 - formatter.NewAsciiFormatter now needs config (by astj)
 
