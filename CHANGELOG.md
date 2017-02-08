@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.2 (2017-02-08)
+
+* [monitors diff] Add the "to-remote" bool flag #82 (yoheimuta)
+
+
 ## 0.14.1 (2017-01-11)
 
 * formatter.NewAsciiFormatter now needs config #80 (astj)
