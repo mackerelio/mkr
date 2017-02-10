@@ -26,13 +26,13 @@ func TestCommands_requirements(t *testing.T) {
 		if !strings.HasSuffix(c.Description, "\n") {
 			t.Errorf("%s: cli.Command.Description should end with '\\n', got:\n%s", c.Name, c.Description)
 		}
-		if c.ArgsUsage == "" {
-			t.Errorf("%s: cli.Command.ArgsUsage should not be empty", c.Name)
+		if len(c.Flags) > 0 && c.ArgsUsage == "" {
+			t.Errorf("%s: cli.Command.ArgsUsage should not be empty. Describe flag options.", c.Name)
 		}
 	}
 	for _, sc := range subcs {
 		if sc.Description == "" {
-			t.Error("%s: cli.Command.Description should not be empty", sc.Name)
+			t.Errorf("%s: cli.Command.Description should not be empty", sc.Name)
 		}
 	}
 }
