@@ -15,6 +15,9 @@ import (
 
 var commandDashboards = cli.Command{
 	Name: "dashboards",
+	Description: `
+    Generating dashboards. See https://mackerel.io/docs/entry/advanced/cli
+`,
 	Subcommands: []cli.Command{
 		{
 			Name:      "generate",
