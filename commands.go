@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -150,18 +149,6 @@ var commandRetire = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "force", Usage: "Force retirement without confirmation."},
 	},
-}
-
-func debug(v ...interface{}) {
-	if os.Getenv("DEBUG") != "" {
-		log.Println(v...)
-	}
-}
-
-func assert(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func newMackerelFromContext(c *cli.Context) *mkr.Client {

@@ -172,57 +172,6 @@ func doMonitorsPull(c *cli.Context) error {
 	return nil
 }
 
-func isEmpty(a interface{}) bool {
-	switch a.(type) {
-	case bool:
-		if reflect.ValueOf(a).Bool() == false {
-			return true
-		}
-	case int, int8, int16, int32, int64:
-		if reflect.ValueOf(a).Int() == 0 {
-			return true
-		}
-	case uint, uint8, uint16, uint32, uint64:
-		if reflect.ValueOf(a).Uint() == 0 {
-			return true
-		}
-	case float32, float64:
-		if reflect.ValueOf(a).Float() == 0.0 {
-			return true
-		}
-	case string:
-		if reflect.ValueOf(a).String() == "" {
-			return true
-		}
-	}
-	return false
-}
-
-func appendDiff(src []string, name string, a interface{}, b interface{}) []string {
-	diff := src
-	aType := reflect.TypeOf(a).String()
-	format := "\"%s\""
-	isAEmpty := isEmpty(a)
-	isBEmpty := isEmpty(b)
-	switch aType {
-	case "bool":
-		format = "%t"
-	case "uint64":
-		format = "%d"
-	case "float64":
-		format = "%f"
-	}
-	if isAEmpty == false || isBEmpty == false {
-		if a != b {
-			diff = append(diff, fmt.Sprintf("-   \"%s\": "+format+",", name, a))
-			diff = append(diff, fmt.Sprintf("+   \"%s\": "+format+",", name, b))
-		} else {
-			diff = append(diff, fmt.Sprintf("    \"%s\": "+format+",", name, a))
-		}
-	}
-	return diff
-}
-
 func stringifyMonitor(a mkr.Monitor, prefix string) string {
 	return prefix + JSONMarshalIndent(a, prefix, "  ") + ","
 }
