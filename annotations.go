@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"gopkg.in/urfave/cli.v1"
@@ -83,9 +81,16 @@ func doAnnotationsCreate(c *cli.Context) error {
 	service := c.String("service")
 	roles := c.StringSlice("role")
 
-	if service == "" || from == 0 || to == 0 {
-		_ = cli.ShowCommandHelp(c, "create")
-		os.Exit(1)
+	if service == "" {
+		return cli.NewExitError("`service` is a required field to create a graph annotation.", 1)
+	}
+
+	if from == 0 {
+		return cli.NewExitError("`from` is a required field to create a graph annotation.", 1)
+	}
+
+	if to == 0 {
+		return cli.NewExitError("`to` is a required field to create a graph annotation.", 1)
 	}
 
 	client := newMackerelFromContext(c)
@@ -107,9 +112,16 @@ func doAnnotationsList(c *cli.Context) error {
 	from := c.Int64("from")
 	to := c.Int64("to")
 
-	if service == "" || from == 0 || to == 0 {
-		_ = cli.ShowCommandHelp(c, "list")
-		os.Exit(1)
+	if service == "" {
+		return cli.NewExitError("`service` is a required field to list graph annotations.", 1)
+	}
+
+	if from == 0 {
+		return cli.NewExitError("`from` is a required field to list graph annotations.", 1)
+	}
+
+	if to == 0 {
+		return cli.NewExitError("`to` is a required field to list graph annotations.", 1)
 	}
 
 	client := newMackerelFromContext(c)
@@ -128,9 +140,20 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	service := c.String("service")
 	roles := c.StringSlice("role")
 
-	if service == "" || from == 0 || to == 0 {
-		_ = cli.ShowCommandHelp(c, "update")
-		os.Exit(1)
+	if annotationID == "" {
+		return cli.NewExitError("`id` is a required field to delete a update annotation.", 1)
+	}
+
+	if service == "" {
+		return cli.NewExitError("`service` is a required field to update a graph annotation.", 1)
+	}
+
+	if from == 0 {
+		return cli.NewExitError("`from` is a required field to update a graph annotation.", 1)
+	}
+
+	if to == 0 {
+		return cli.NewExitError("`to` is a required field to update a graph annotation.", 1)
 	}
 
 	client := newMackerelFromContext(c)
@@ -151,8 +174,7 @@ func doAnnotationsDelete(c *cli.Context) error {
 	annotationID := c.String("id")
 
 	if annotationID == "" {
-		_ = cli.ShowCommandHelp(c, "delete")
-		os.Exit(1)
+		return cli.NewExitError("`id` is a required field to delete a graph annotation.", 1)
 	}
 
 	client := newMackerelFromContext(c)
