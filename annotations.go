@@ -89,7 +89,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 	}
 
 	client := newMackerelFromContext(c)
-	err := client.CreateGraphAnnotation(&mkr.GraphAnnotation{
+	annotation, err := client.CreateGraphAnnotation(&mkr.GraphAnnotation{
 		Title:       title,
 		Description: description,
 		From:        from,
@@ -98,6 +98,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
+	PrettyPrintJSON(annotation)
 	return nil
 }
 
