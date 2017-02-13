@@ -15,10 +15,13 @@ var commandAnnotations = cli.Command{
 `,
 	Subcommands: []cli.Command{
 		{
-			Name:        "create",
-			Usage:       "create a graph annotation",
-			Description: "Creates a graph annotation.",
-			Action:      doAnnotationsCreate,
+			Name:      "create",
+			Usage:     "create a graph annotation",
+			ArgsUsage: "[--title <title>] [--description <descriptio>] [--from <from>] [--to <to>] [--service -s <service>] [--role -r <role>]",
+			Description: `
+    Creates a graph annotation.
+`,
+			Action: doAnnotationsCreate,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
 				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
@@ -33,10 +36,13 @@ var commandAnnotations = cli.Command{
 			},
 		},
 		{
-			Name:        "list",
-			Usage:       "list annotations",
-			Description: "Shows annotations by service name and duration (from and to)",
-			Action:      doAnnotationsList,
+			Name:      "list",
+			Usage:     "list annotations",
+			ArgsUsage: "[--from <from>] [--to <to>] [--service -s <service>]",
+			Description: `
+    Shows annotations by service name and duration (from and to)
+`,
+			Action: doAnnotationsList,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
@@ -44,10 +50,13 @@ var commandAnnotations = cli.Command{
 			},
 		},
 		{
-			Name:        "update",
-			Usage:       "update annotation",
-			Description: "Updates an annotation",
-			Action:      doAnnotationsUpdate,
+			Name:      "update",
+			Usage:     "update annotation",
+			ArgsUsage: "[--id <id>] [--title <title>] [--description <descriptio>] [--from <from>] [--to <to>] [--service -s <service>] [--role -r <role>]",
+			Description: `
+    Updates an annotation
+`,
+			Action: doAnnotationsUpdate,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "id", Usage: "Annotation ID."},
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
@@ -63,10 +72,13 @@ var commandAnnotations = cli.Command{
 			},
 		},
 		{
-			Name:        "delete",
-			Usage:       "delete annotation",
-			Description: "Delete graph annotation by annotation id",
-			Action:      doAnnotationsDelete,
+			Name:      "delete",
+			Usage:     "delete annotation",
+			ArgsUsage: "[--id <id>]",
+			Description: `
+    Delete graph annotation by annotation id
+`,
+			Action: doAnnotationsDelete,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "id", Usage: "Graph annotation ID"},
 			},
