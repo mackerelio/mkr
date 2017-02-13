@@ -35,7 +35,7 @@ var commandAnnotations = cli.Command{
 		{
 			Name:        "list",
 			Usage:       "list annotations",
-			Description: "Shows annotations by service name and duration(from and to)",
+			Description: "Shows annotations by service name and duration (from and to)",
 			Action:      doAnnotationsList,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
