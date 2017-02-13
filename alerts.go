@@ -23,10 +23,13 @@ var commandAlerts = cli.Command{
 	Action: doAlertsRetrieve,
 	Subcommands: []cli.Command{
 		{
-			Name:        "list",
-			Usage:       "list alerts",
-			Description: "Shows alerts in human-readable format.",
-			Action:      doAlertsList,
+			Name:      "list",
+			Usage:     "list alerts",
+			ArgsUsage: "[--service | -s <service>] [--host-status | -S <file>] [--color | -c]",
+			Description: `
+    Shows alerts in human-readable format.
+`,
+			Action: doAlertsList,
 			Flags: []cli.Flag{
 				cli.StringSliceFlag{
 					Name:  "service, s",
@@ -42,10 +45,13 @@ var commandAlerts = cli.Command{
 			},
 		},
 		{
-			Name:        "close",
-			Usage:       "close alerts",
-			Description: "Closes alerts. Multiple alert IDs can be specified.",
-			Action:      doAlertsClose,
+			Name:      "close",
+			Usage:     "close alerts",
+			ArgsUsage: "<alertIds....>",
+			Description: `
+    Closes alerts. Multiple alert IDs can be specified.
+`,
+			Action: doAlertsClose,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "reason, r", Value: "", Usage: "Reason of closing alert."},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},

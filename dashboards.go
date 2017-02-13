@@ -15,10 +15,14 @@ import (
 
 var commandDashboards = cli.Command{
 	Name: "dashboards",
+	Description: `
+    Generating dashboards. See https://mackerel.io/docs/entry/advanced/cli
+`,
 	Subcommands: []cli.Command{
 		{
-			Name:  "generate",
-			Usage: "Generate custom dashboard",
+			Name:      "generate",
+			Usage:     "Generate custom dashboard",
+			ArgsUsage: "[--print | -p] <file>",
 			Description: `
     A custom dashboard is registered from a yaml file.
     Requests "POST /api/v0/dashboards". See https://mackerel.io/ja/api-docs/entry/dashboards#create.
