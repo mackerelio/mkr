@@ -82,14 +82,17 @@ func doAnnotationsCreate(c *cli.Context) error {
 	roles := c.StringSlice("role")
 
 	if service == "" {
+		_ = cli.ShowCommandHelp(c, "create")
 		return cli.NewExitError("`service` is a required field to create a graph annotation.", 1)
 	}
 
 	if from == 0 {
+		_ = cli.ShowCommandHelp(c, "create")
 		return cli.NewExitError("`from` is a required field to create a graph annotation.", 1)
 	}
 
 	if to == 0 {
+		_ = cli.ShowCommandHelp(c, "create")
 		return cli.NewExitError("`to` is a required field to create a graph annotation.", 1)
 	}
 
@@ -113,14 +116,17 @@ func doAnnotationsList(c *cli.Context) error {
 	to := c.Int64("to")
 
 	if service == "" {
+		_ = cli.ShowCommandHelp(c, "list")
 		return cli.NewExitError("`service` is a required field to list graph annotations.", 1)
 	}
 
 	if from == 0 {
+		_ = cli.ShowCommandHelp(c, "list")
 		return cli.NewExitError("`from` is a required field to list graph annotations.", 1)
 	}
 
 	if to == 0 {
+		_ = cli.ShowCommandHelp(c, "list")
 		return cli.NewExitError("`to` is a required field to list graph annotations.", 1)
 	}
 
@@ -141,18 +147,22 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	roles := c.StringSlice("role")
 
 	if annotationID == "" {
+		_ = cli.ShowCommandHelp(c, "update")
 		return cli.NewExitError("`id` is a required field to delete a update annotation.", 1)
 	}
 
 	if service == "" {
+		_ = cli.ShowCommandHelp(c, "update")
 		return cli.NewExitError("`service` is a required field to update a graph annotation.", 1)
 	}
 
 	if from == 0 {
+		_ = cli.ShowCommandHelp(c, "update")
 		return cli.NewExitError("`from` is a required field to update a graph annotation.", 1)
 	}
 
 	if to == 0 {
+		_ = cli.ShowCommandHelp(c, "update")
 		return cli.NewExitError("`to` is a required field to update a graph annotation.", 1)
 	}
 
@@ -174,6 +184,7 @@ func doAnnotationsDelete(c *cli.Context) error {
 	annotationID := c.String("id")
 
 	if annotationID == "" {
+		_ = cli.ShowCommandHelp(c, "delete")
 		return cli.NewExitError("`id` is a required field to delete a graph annotation.", 1)
 	}
 
