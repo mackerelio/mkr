@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -14,6 +13,24 @@ import (
 	"github.com/mackerelio/mkr/logger"
 	"gopkg.in/urfave/cli.v1"
 )
+
+func init() {
+	// Requirements:
+	// - .Description: First and last line is blank.
+	// - .ArgsUsage: ArgsUsage includes flag usages (e.g. [-v|verbose] <hostId>).
+	//   All cli.Command should have ArgsUsage field.
+	cli.CommandHelpTemplate = `NAME:
+   {{.HelpName}} - {{.Usage}}
+
+USAGE:
+   {{.HelpName}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{if .Description}}
+
+DESCRIPTION:{{.Description}}{{end}}{{if .VisibleFlags}}
+OPTIONS:
+   {{range .VisibleFlags}}{{.}}
+   {{end}}{{end}}
+`
+}
 
 // Commands cli.Command object list
 var Commands = []cli.Command{
@@ -31,8 +48,9 @@ var Commands = []cli.Command{
 }
 
 var commandStatus = cli.Command{
-	Name:  "status",
-	Usage: "Show the host",
+	Name:      "status",
+	Usage:     "Show the host",
+	ArgsUsage: "[--verbose | -v] <hostId>",
 	Description: `
     Show the information of the host identified with <hostId>.
     Requests "GET /api/v0/hosts/<hostId>". See https://mackerel.io/api-docs/entry/hosts#get .
@@ -44,8 +62,9 @@ var commandStatus = cli.Command{
 }
 
 var commandHosts = cli.Command{
-	Name:  "hosts",
-	Usage: "List hosts",
+	Name:      "hosts",
+	Usage:     "List hosts",
+	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]",
 	Description: `
     List the information of the hosts refined by host name, service name, role name and/or status.
     Requests "GET /api/v0/hosts.json". See https://mackerel.io/api-docs/entry/hosts#list .
@@ -70,8 +89,9 @@ var commandHosts = cli.Command{
 }
 
 var commandCreate = cli.Command{
-	Name:  "create",
-	Usage: "Create a new host",
+	Name:      "create",
+	Usage:     "Create a new host",
+	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>",
 	Description: `
     Create a new host with status and/or roleFullname.
     Requests "POST /api/v0/hosts". See https://mackerel.io/api-docs/entry/hosts#create .
@@ -88,8 +108,9 @@ var commandCreate = cli.Command{
 }
 
 var commandUpdate = cli.Command{
-	Name:  "update",
-	Usage: "Update the host",
+	Name:      "update",
+	Usage:     "Update the host",
+	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [<hostIds...>]",
 	Description: `
     Update the host identified with <hostId>.
     Requests "PUT /api/v0/hosts/<hostId>". See https://mackerel.io/api-docs/entry/hosts#update-information .
@@ -109,8 +130,9 @@ var commandUpdate = cli.Command{
 }
 
 var commandThrow = cli.Command{
-	Name:  "throw",
-	Usage: "Post metric values",
+	Name:      "throw",
+	Usage:     "Post metric values",
+	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] stdin",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
     Output format of metric values are compatible with that of a Sensu plugin.
@@ -124,8 +146,9 @@ var commandThrow = cli.Command{
 }
 
 var commandFetch = cli.Command{
-	Name:  "fetch",
-	Usage: "Fetch latest metric values",
+	Name:      "fetch",
+	Usage:     "Fetch latest metric values",
+	ArgsUsage: "[--name | -n <metricName>] hostIds...",
 	Description: `
     Fetch latest metric values about the hosts.
     Requests "GET /api/v0/tsdb/latest". See https://mackerel.io/api-docs/entry/host-metrics#get-latest .
@@ -141,8 +164,9 @@ var commandFetch = cli.Command{
 }
 
 var commandRetire = cli.Command{
-	Name:  "retire",
-	Usage: "Retire hosts",
+	Name:      "retire",
+	Usage:     "Retire hosts",
+	ArgsUsage: "[--force] hostIds...",
 	Description: `
     Retire host identified by <hostId>. Be careful because this is an irreversible operation.
     Requests POST /api/v0/hosts/<hostId>/retire parallelly. See https://mackerel.io/api-docs/entry/hosts#retire .
@@ -151,18 +175,6 @@ var commandRetire = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "force", Usage: "Force retirement without confirmation."},
 	},
-}
-
-func debug(v ...interface{}) {
-	if os.Getenv("DEBUG") != "" {
-		log.Println(v...)
-	}
-}
-
-func assert(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func newMackerelFromContext(c *cli.Context) *mkr.Client {
@@ -184,60 +196,6 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	logger.DieIf(err)
 
 	return mackerel
-}
-
-type commandDoc struct {
-	Parent    string
-	Arguments string
-}
-
-var commandDocs = map[string]commandDoc{
-	"status":      {"", "[-v|verbose] <hostId>"},
-	"hosts":       {"", "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]"},
-	"create":      {"", "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>"},
-	"update":      {"", "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] <hostIds...> ]"},
-	"throw":       {"", "[--host | -h <hostId>] [--service | -s <service>] stdin"},
-	"fetch":       {"", "[--name | -n <metricName>] hostIds..."},
-	"retire":      {"", "hostIds..."},
-	"monitors":    {"", "[push [--dry-run | -d] [--file-path | -F <file>] [--verbose | -v] | diff [--file-path | -F <file>] | pull [--file-path | -F <file>]]"},
-	"alerts":      {"", "[list [--service | -s <service>] [--host-status | -S <file>] [--color | -c]| close <alertIds....>]"},
-	"dashboards":  {"", "[generate <file> [--print | -p]]"},
-	"annotations": {"", "[create [--title <title>] [--description <description>] [--from <from>] [--to <to>] [--service | -s <service>] [--role | -s <role>] | list [--from <from>] [--to <to>] [--service | -s <service>] | update [--title <title>] [--description <description>] [--from <from>] [--to <to>] [--service | -s <service>] [--role | -s <role>] | delete [--id <annotationID>] ]"},
-}
-
-// Makes template conditionals to generate per-command documents.
-func mkCommandsTemplate(genTemplate func(commandDoc) string) string {
-	template := "{{if false}}"
-	for _, command := range append(Commands) {
-		template = template + fmt.Sprintf("{{else if (eq .Name %q)}}%s", command.Name, genTemplate(commandDocs[command.Name]))
-	}
-	return template + "{{end}}"
-}
-
-func init() {
-	argsTemplate := mkCommandsTemplate(func(doc commandDoc) string { return doc.Arguments })
-	parentTemplate := mkCommandsTemplate(func(doc commandDoc) string { return string(strings.TrimLeft(doc.Parent+" ", " ")) })
-
-	cli.CommandHelpTemplate = `NAME:
-    {{.Name}} - {{.Usage}}
-
-USAGE:
-    mkr ` + parentTemplate + `{{.Name}} ` + argsTemplate + `
-{{if (len .Description)}}
-DESCRIPTION: {{.Description}}
-{{end}}{{if (len .Subcommands)}}
-COMMANDS:
-    {{range .Subcommands}}{{.Name}}
-      {{.Description}}{{if (len .Flags)}}
-
-        {{range .Flags}}{{.}}
-        {{end}}{{end}}
-    {{end}}
-{{end}}{{if (len .Flags)}}
-OPTIONS:
-    {{range .Flags}}{{.}}
-    {{end}}
-{{end}}`
 }
 
 func doStatus(c *cli.Context) error {

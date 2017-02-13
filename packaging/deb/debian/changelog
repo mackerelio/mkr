@@ -1,3 +1,10 @@
+mkr (0.14.2-1) stable; urgency=low
+
+  * [monitors diff] Add the "to-remote" bool flag (by yoheimuta)
+    <https://github.com/mackerelio/mkr/pull/82>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 08 Feb 2017 01:57:00 +0000
+
 mkr (0.14.1-1) stable; urgency=low
 
   * formatter.NewAsciiFormatter now needs config (by astj)

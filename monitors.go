@@ -26,20 +26,26 @@ var commandMonitors = cli.Command{
 	Action: doMonitorsList,
 	Subcommands: []cli.Command{
 		{
-			Name:        "pull",
-			Usage:       "pull rules",
-			Description: "Pull monitor rules from Mackerel server and save them to a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
-			Action:      doMonitorsPull,
+			Name:      "pull",
+			Usage:     "pull rules",
+			ArgsUsage: "[--file-path | -F <file>] [--verbose | -v]",
+			Description: `
+    Pull monitor rules from Mackerel server and save them to a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.
+`,
+			Action: doMonitorsPull,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
 		{
-			Name:        "diff",
-			Usage:       "diff rules",
-			Description: "Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
-			Action:      doMonitorsDiff,
+			Name:  "diff",
+			Usage: "diff rules",
+			Description: `
+    Show difference of monitor rules between Mackerel and a file. The file can be specified by filepath argument <file>. The default is 'monitors.json'.
+`,
+			ArgsUsage: "[--file-path | -F <file>]",
+			Action:    doMonitorsDiff,
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "exit-code, e", Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)"},
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
@@ -47,10 +53,13 @@ var commandMonitors = cli.Command{
 			},
 		},
 		{
-			Name:        "push",
-			Usage:       "push rules",
-			Description: "Push monitor rules stored in a file to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.",
-			Action:      doMonitorsPush,
+			Name:      "push",
+			Usage:     "push rules",
+			ArgsUsage: "[--dry-run | -d] [--file-path | -F <file>] [--verbose | -v]",
+			Description: `
+    Push monitor rules stored in a file to Mackerel. The file can be specified by filepath argument <file>. The default is 'monitors.json'.
+`,
+			Action: doMonitorsPush,
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
 				cli.BoolFlag{Name: "dry-run, d", Usage: "Show which apis are called, but not execute."},
@@ -170,57 +179,6 @@ func doMonitorsPull(c *cli.Context) error {
 	}
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
 	return nil
-}
-
-func isEmpty(a interface{}) bool {
-	switch a.(type) {
-	case bool:
-		if reflect.ValueOf(a).Bool() == false {
-			return true
-		}
-	case int, int8, int16, int32, int64:
-		if reflect.ValueOf(a).Int() == 0 {
-			return true
-		}
-	case uint, uint8, uint16, uint32, uint64:
-		if reflect.ValueOf(a).Uint() == 0 {
-			return true
-		}
-	case float32, float64:
-		if reflect.ValueOf(a).Float() == 0.0 {
-			return true
-		}
-	case string:
-		if reflect.ValueOf(a).String() == "" {
-			return true
-		}
-	}
-	return false
-}
-
-func appendDiff(src []string, name string, a interface{}, b interface{}) []string {
-	diff := src
-	aType := reflect.TypeOf(a).String()
-	format := "\"%s\""
-	isAEmpty := isEmpty(a)
-	isBEmpty := isEmpty(b)
-	switch aType {
-	case "bool":
-		format = "%t"
-	case "uint64":
-		format = "%d"
-	case "float64":
-		format = "%f"
-	}
-	if isAEmpty == false || isBEmpty == false {
-		if a != b {
-			diff = append(diff, fmt.Sprintf("-   \"%s\": "+format+",", name, a))
-			diff = append(diff, fmt.Sprintf("+   \"%s\": "+format+",", name, b))
-		} else {
-			diff = append(diff, fmt.Sprintf("    \"%s\": "+format+",", name, a))
-		}
-	}
-	return diff
 }
 
 func stringifyMonitor(a mkr.Monitor, prefix string) string {
