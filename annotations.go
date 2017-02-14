@@ -94,6 +94,11 @@ func doAnnotationsCreate(c *cli.Context) error {
 	service := c.String("service")
 	roles := c.StringSlice("role")
 
+	if title == "" {
+		_ = cli.ShowCommandHelp(c, "create")
+		return cli.NewExitError("`title` is a required field to create a graph annotation.", 1)
+	}
+
 	if service == "" {
 		_ = cli.ShowCommandHelp(c, "create")
 		return cli.NewExitError("`service` is a required field to create a graph annotation.", 1)
