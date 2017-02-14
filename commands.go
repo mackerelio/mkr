@@ -44,6 +44,7 @@ var Commands = []cli.Command{
 	commandMonitors,
 	commandAlerts,
 	commandDashboards,
+	commandAnnotations,
 }
 
 var commandStatus = cli.Command{
