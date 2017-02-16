@@ -1,3 +1,14 @@
+mkr (0.14.3-1) stable; urgency=low
+
+  * Support annotations command for graph annotation (by syou6162)
+    <https://github.com/mackerelio/mkr/pull/83>
+  * Improve help management and fix usage help for command (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/85>
+  * remove unused functions (by haya14busa)
+    <https://github.com/mackerelio/mkr/pull/86>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 16 Feb 2017 04:14:48 +0000
+
 mkr (0.14.2-1) stable; urgency=low
 
   * [monitors diff] Add the "to-remote" bool flag (by yoheimuta)
