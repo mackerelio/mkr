@@ -42,6 +42,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Feb 16 2017 <mackerel-developers@hatena.ne.jp> - 0.14.3-1
+- Support annotations command for graph annotation (by syou6162)
+- Improve help management and fix usage help for command (by haya14busa)
+- remove unused functions (by haya14busa)
+
 * Wed Feb 08 2017 <mackerel-developers@hatena.ne.jp> - 0.14.2-1
 - [monitors diff] Add the "to-remote" bool flag (by yoheimuta)
 

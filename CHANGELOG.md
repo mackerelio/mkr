@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.3 (2017-02-16)
+
+* Support annotations command for graph annotation #83 (syou6162)
+* Improve help management and fix usage help for command #85 (haya14busa)
+* remove unused functions #86 (haya14busa)
+
+
 ## 0.14.2 (2017-02-08)
 
 * [monitors diff] Add the "to-remote" bool flag #82 (yoheimuta)
