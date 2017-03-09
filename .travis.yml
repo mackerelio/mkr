@@ -26,8 +26,8 @@ before_deploy:
 - git fetch
 - git checkout master || git checkout -b master origin/master
 - git checkout $TRAVIS_BRANCH
-- git fetch --depth=1000
-- git fetch --tags --depth=1000 || true
+- git fetch --depth=99999
+- git fetch --tags --depth=99999 || true
 - make check_variables
 - make rpm deb
 deploy:
