@@ -4,7 +4,7 @@ go:
 env:
   global:
   - PATH=~/bin:~/gopath/bin:$PATH
-  - secure: "R2vzd4xxUwXJqXjHoCuIdF2ax6EL0AZ/23Rc3bSpnPlgEtyQDMvgH+KwCgFJodfXNCq1Gszg4Yjd09bJVIoRBgQOBINaMUV+qsCEJSKma77SEveR2lR7Y8RetqY1+WsXUEmpGAAEhnFEpXr5k5alRY9jq0wmS/brXSr0PaF/m+Q="
+  - secure: "fAZlQhDQoQzHv4YdcDBbFZ66z6ClC6BPBw/fY7SpJbmTGtgqXYh/AUC31rTyZzov8H+9rpUgXHZ2mAEDlwPCEm5md4J49nj74WtljilucSl6/JdsFEHnzN0lrVQAG/Szh0Drb7YcIIY/M8u6bJF4mlFn4MUd17BhZQCNqa5YoY4="
 install:
 - go get github.com/laher/goxc
 - sudo apt-get update
