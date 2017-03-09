@@ -4,7 +4,7 @@ go:
 env:
   global:
   - PATH=~/bin:~/gopath/bin:$PATH
-  - secure: "jHn0J9ELpBEK7pLhJDNVZa8SWD2LSx4Spxm1bVu1yZzrVwOSUuNU9iJ25/RkPN+0+KK53K5rwIisXtWGU4AM49vx7CA3kMMbqJd6X4DfzT0ZEK8dZiQX6m/YbZfVQSOPsMOYQryoH4q0hPru5UR6oDhxsyxBBerL/LzPczI+AS4="
+  - secure: "R2vzd4xxUwXJqXjHoCuIdF2ax6EL0AZ/23Rc3bSpnPlgEtyQDMvgH+KwCgFJodfXNCq1Gszg4Yjd09bJVIoRBgQOBINaMUV+qsCEJSKma77SEveR2lR7Y8RetqY1+WsXUEmpGAAEhnFEpXr5k5alRY9jq0wmS/brXSr0PaF/m+Q="
 install:
 - go get github.com/laher/goxc
 - sudo apt-get update
@@ -30,12 +30,12 @@ before_deploy:
 - make rpm deb
 deploy:
 - provider: script
-  script: script/releng --task=upload-to-github-release -v && script/releng --task=upload-master-to-github-release -v
+  script: script/releng --task=upload-to-github-release && script/releng --task=upload-master-to-github-release
   skip_cleanup: true
   on:
     branch: master
 - provider: script
-  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH -v
+  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH
   skip_cleanup: true
   on:
     all_branches: true
