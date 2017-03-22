@@ -1,3 +1,16 @@
+mkr (0.14.4-1) stable; urgency=low
+
+  * use new bot token (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/88>
+  * use new bot token (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/89>
+  * Workaround for git fetch failure (by daiksy)
+    <https://github.com/mackerelio/mkr/pull/90>
+  * Apply git fetch workaround (by astj)
+    <https://github.com/mackerelio/mkr/pull/91>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 22 Mar 2017 07:57:05 +0000
+
 mkr (0.14.3-1) stable; urgency=low
 
   * Support annotations command for graph annotation (by syou6162)

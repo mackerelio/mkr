@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.14.4 (2017-03-22)
+
+* use new bot token #88 (daiksy)
+* use new bot token #89 (daiksy)
+* Workaround for git fetch failure #90 (daiksy)
+* Apply git fetch workaround #91 (astj)
+
+
 ## 0.14.3 (2017-02-16)
 
 * Support annotations command for graph annotation #83 (syou6162)
