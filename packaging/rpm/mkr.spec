@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Mar 22 2017 <mackerel-developers@hatena.ne.jp> - 0.14.4-1
+- use new bot token (by daiksy)
+- use new bot token (by daiksy)
+- Workaround for git fetch failure (by daiksy)
+- Apply git fetch workaround (by astj)
+
 * Thu Feb 16 2017 <mackerel-developers@hatena.ne.jp> - 0.14.3-1
 - Support annotations command for graph annotation (by syou6162)
 - Improve help management and fix usage help for command (by haya14busa)
