@@ -262,7 +262,7 @@ func doAlertsList(c *cli.Context) error {
 				continue
 			}
 		}
-		fmt.Println(formatJoinedAlert(joinAlert, c.BoolT("color")))
+		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
 	}
 	return nil
 }
