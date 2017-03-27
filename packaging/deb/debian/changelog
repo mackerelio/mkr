@@ -1,3 +1,10 @@
+mkr (0.14.5-1) stable; urgency=low
+
+  * Colors on Windows (by mattn)
+    <https://github.com/mackerelio/mkr/pull/93>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 27 Mar 2017 02:03:46 +0000
+
 mkr (0.14.4-1) stable; urgency=low
 
   * use new bot token (by daiksy)

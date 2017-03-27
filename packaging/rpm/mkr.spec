@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Mar 27 2017 <mackerel-developers@hatena.ne.jp> - 0.14.5-1
+- Colors on Windows (by mattn)
+
 * Wed Mar 22 2017 <mackerel-developers@hatena.ne.jp> - 0.14.4-1
 - use new bot token (by daiksy)
 - use new bot token (by daiksy)
