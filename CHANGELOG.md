@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.5 (2017-03-27)
+
+* Colors on Windows #93 (mattn)
+
+
 ## 0.14.4 (2017-03-22)
 
 * use new bot token #88 (daiksy)
