@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Apr 06 2017 <mackerel-developers@hatena.ne.jp> - 0.15.0-1
+- bump Go to 1.8 (by astj)
+
 * Mon Mar 27 2017 <mackerel-developers@hatena.ne.jp> - 0.14.5-1
 - Colors on Windows (by mattn)
 
