@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.0 (2017-04-06)
+
+* bump Go to 1.8 #95 (astj)
+
+
 ## 0.14.5 (2017-03-27)
 
 * Colors on Windows #93 (mattn)
