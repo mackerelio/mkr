@@ -459,11 +459,8 @@ func doRetire(c *cli.Context) error {
 	argHostIDs := c.Args()
 
 	if len(argHostIDs) < 1 {
-		argHostIDs = make([]string, 1)
-		if argHostIDs[0] = LoadHostIDFromConfig(conffile); argHostIDs[0] == "" {
-			cli.ShowCommandHelp(c, "retire")
-			os.Exit(1)
-		}
+		cli.ShowCommandHelp(c, "retire")
+		os.Exit(1)
 	}
 
 	if !force && !prompter.YN("Retire following hosts.\n  "+strings.Join(argHostIDs, "\n  ")+"\nAre you sure?", true) {
