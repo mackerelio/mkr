@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue May 09 2017 <mackerel-developers@hatena.ne.jp> - 0.16.0-1
+- Add services subcommand (by yuuki)
+
 * Thu Apr 06 2017 <mackerel-developers@hatena.ne.jp> - 0.15.0-1
 - bump Go to 1.8 (by astj)
 
