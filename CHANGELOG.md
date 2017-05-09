@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.16.0 (2017-05-09)
+
+* Add services subcommand #97 (yuuki)
+
+
 ## 0.15.0 (2017-04-06)
 
 * bump Go to 1.8 #95 (astj)
