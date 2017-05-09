@@ -6,7 +6,7 @@ git:
 env:
   global:
   - PATH=~/bin:~/gopath/bin:$PATH
-  - secure: "fAZlQhDQoQzHv4YdcDBbFZ66z6ClC6BPBw/fY7SpJbmTGtgqXYh/AUC31rTyZzov8H+9rpUgXHZ2mAEDlwPCEm5md4J49nj74WtljilucSl6/JdsFEHnzN0lrVQAG/Szh0Drb7YcIIY/M8u6bJF4mlFn4MUd17BhZQCNqa5YoY4="
+  - secure: "PDv5k+Wp7fEHGN2oszqpN/7Lvcc6bY4wT9PgT0w+G8AUNOhprXzPzIHVP2qNIBfhIDjECrbw4T6h1PeumIZYXg3wqLElGe+24OfDjSPjB3nal40Sx9PLLG5h7ywsJlPMqV0bfKyYTxs0lmUhE5XaaBvHEJGv6MHNjBc2H0bVMsE="
 install:
 - go get github.com/laher/goxc
 - sudo apt-get update
