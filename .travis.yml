@@ -1,8 +1,6 @@
 language: go
 go:
 - 1.8
-git:
-  depth: 99999
 env:
   global:
   - PATH=~/bin:~/gopath/bin:$PATH
@@ -17,31 +15,15 @@ script:
 after_script:
 - make cover
 before_deploy:
-- go get github.com/aktau/github-release
-- mkdir -p ~/bin
-- git clone https://github.com/github/hub.git && cd hub && script/build -o ~/bin/hub
-  && cd ..
-- echo $TRAVIS_BRANCH
-- git config --add remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
-- git fetch
-- git checkout master || git checkout -b master origin/master
-- git checkout $TRAVIS_BRANCH
-- git fetch --depth=99999
-- git fetch --tags --depth=99999 || true
-- make check_variables
 - make rpm deb
+- go get github.com/motemen/gobump/cmd/gobump
+- go get github.com/mackerelio/golib/cmd/mackerel-github-release
 deploy:
 - provider: script
-  script: script/releng --task=upload-to-github-release && script/releng --task=upload-master-to-github-release
+  script: mackerel-github-release && mackerel-github-release -staging
   skip_cleanup: true
   on:
     branch: master
-- provider: script
-  script: script/releng --task=create-pullrequest --current-branch=$TRAVIS_BRANCH
-  skip_cleanup: true
-  on:
-    all_branches: true
-    condition: "$TRAVIS_BRANCH =~ ^bump-version-.*$"
 notifications:
   slack:
     secure: MegndYQrf9ubVA015qCORCIYows50jYmAUKNNPXZOlWRkzhIir2XVzK6m2vgZPxKmQpwcg0n1tAddmxw2lHwTC+V31UNTHaItNYo5RjRkRSC6Js1FlGeKHb/ccu0GeDy8mPo4OAiFxvQe3qY889qQ3k5Ke22fE7PGZMpC5+4/CA=
