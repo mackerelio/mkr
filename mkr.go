@@ -11,7 +11,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "mkr"
-	app.Version = Version
+	app.Version = version
 	app.Usage = "A CLI tool for mackerel.io"
 	app.Author = "Hatena Co., Ltd."
 	app.Commands = Commands
