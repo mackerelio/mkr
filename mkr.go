@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 
@@ -11,7 +12,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "mkr"
-	app.Version = Version
+	app.Version = fmt.Sprintf("%s (rev:%s)", version, gitcommit)
 	app.Usage = "A CLI tool for mackerel.io"
 	app.Author = "Hatena Co., Ltd."
 	app.Commands = Commands

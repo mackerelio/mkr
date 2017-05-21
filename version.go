@@ -1,4 +1,5 @@
 package main
 
-// Version `make build` sets this automatically
-var Version string
+const version = "0.16.0"
+
+var gitcommit string

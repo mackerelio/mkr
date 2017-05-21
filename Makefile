@@ -1,13 +1,6 @@
 BIN = mkr
-
-CURRENT_VERSION = $(shell git log --merges --oneline | perl -ne 'if(m/^.+Merge pull request \#[0-9]+ from .+\/bump-version-([0-9\.]+)/){print $$1;exit}')
-
-BUILD_FLAGS = -ldflags "\
-	      -X main.Version=$(CURRENT_VERSION) \
-	      "
-
-check_variables:
-	echo "CURRENT_VERSION: ${CURRENT_VERSION}"
+VERSION = 0.16.0
+CURRENT_REVISION = $(shell git rev-parse --short HEAD)
 
 all: clean cross lint gofmt test
 
@@ -15,14 +8,11 @@ test: testdeps
 	go test -v ./...
 
 build: deps
-	go build $(BUILD_FLAGS) -o $(BIN) .
+	go build -ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
 
-LINT_RET = .golint.txt
 lint: testdeps
-	go vet
-	rm -f $(LINT_RET)
-	golint ./... | tee $(LINT_RET)
-	test ! -s $(LINT_RET)
+	go vet ./...
+	golint -set_exit_status ./...
 
 GOFMT_RET = .gofmt.txt
 gofmt: testdeps
@@ -31,7 +21,7 @@ gofmt: testdeps
 	test ! -s $(GOFMT_RET)
 
 cross: deps
-	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.Version=$(CURRENT_VERSION)" -resources-include='README*'
+	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -resources-include='README*'
 	cp -p $(PWD)/snapshot/linux_amd64/mkr $(PWD)/snapshot/mkr_linux_amd64
 	cp -p $(PWD)/snapshot/linux_386/mkr $(PWD)/snapshot/mkr_linux_386
 	cp -p $(PWD)/snapshot/darwin_amd64/mkr $(PWD)/snapshot/mkr_darwin_amd64
@@ -39,9 +29,9 @@ cross: deps
 
 rpm:
 	GOOS=linux GOARCH=386 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${CURRENT_VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
 
 deb:
 	GOOS=linux GOARCH=386 make build
@@ -58,8 +48,19 @@ testdeps:
 	go get github.com/axw/gocov/gocov
 	go get github.com/mattn/goveralls
 
-release:
-	script/releng
+check-release-deps:
+	@have_error=0; \
+	for command in cpanm hub ghch gobump; do \
+	  if ! command -v $$command > /dev/null; then \
+	    have_error=1; \
+	    echo "\`$$command\` command is required for releasing"; \
+	  fi; \
+	done; \
+	test $$have_error = 0
+
+release: check-release-deps
+	(cd script && cpanm -qn --installdeps .)
+	perl script/create-release-pullrequest
 
 clean:
 	rm -fr build

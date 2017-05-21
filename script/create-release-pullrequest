@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+
+=head DESCRIPTION
+
+releng script for mkr
+
+=head SYNOPSIS
+
+    % tool/create-release-pullrequest
+
+=head DEPENDENCY
+
+`git`, `hub` and `gobump` command are required.
+
+=cut
+
+use 5.014;
+use strict;
+use warnings;
+use utf8;
+
+use Mackerel::ReleaseUtils qw/replace create_release_pull_request/;
+
+sub update_makefile {
+    my ($current_version, $next_version) = @_;
+    replace 'Makefile' => sub {
+        my $content = shift;
+        $content =~ s/^VERSION = .*?\n/VERSION = $next_version\n/ms;
+        $content;
+    };
+}
+
+create_release_pull_request 'mkr' => sub {
+    my ($current_version, $next_version, $releases) = @_;
+
+    update_makefile $current_version, $next_version;
+};
