@@ -1,0 +1,6 @@
+mkr (0.16.0-1.v2) stable; urgency=low
+
+  * Add services subcommand (by yuuki)
+    <https://github.com/mackerelio/mkr/pull/97>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 09 May 2017 05:58:38 +0000

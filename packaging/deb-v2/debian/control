@@ -1,0 +1,13 @@
+Source: mkr
+Maintainer: Mackerel Developers <mackerel-developers@hatena.ne.jp>
+Section: admin
+Priority: extra
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.4
+Homepage: https://mackerel.io
+
+Package: mkr
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: macekrel.io api client tool
+ api client tool for makerel.io

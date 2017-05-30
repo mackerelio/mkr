@@ -41,10 +41,17 @@ rpm-v2:
 	  --define "buildarch x86_64" --define "dist .el7.centos" \
 	  -bb packaging/rpm/mkr-v2.spec
 
-deb:
+deb: deb-v1 deb-v2
+
+deb-v1:
 	GOOS=linux GOARCH=386 make build
 	cp $(BIN) packaging/deb/debian/$(BIN).bin
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
+
+deb-v2:
+	GOOS=linux GOARCH=amd64 make build
+	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
+	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
 deps:
 	go get -d -v .
@@ -77,4 +84,4 @@ clean:
 cover: testdeps
 	goveralls
 
-.PHONY: test build cross lint gofmt deps testdeps clean deb rpm rpm-v1 rpm-v2 release cover
+.PHONY: test build cross lint gofmt deps testdeps clean deb deb-v1 deb-v2 rpm rpm-v1 rpm-v2 release cover
