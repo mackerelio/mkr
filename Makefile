@@ -2,7 +2,7 @@ BIN = mkr
 VERSION = 0.16.0
 CURRENT_REVISION = $(shell git rev-parse --short HEAD)
 
-all: clean cross lint gofmt test
+all: clean cross lint gofmt test rpm deb
 
 test: testdeps
 	go test -v ./...
