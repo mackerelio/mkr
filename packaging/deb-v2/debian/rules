@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+%:
+	dh $@
+
+package=mkr
+
+override_dh_auto_install:
+	dh_auto_install
+	install -d -m 755 debian/${package}/usr/bin/
+	install    -m 655 debian/${package}.bin debian/${package}/usr/bin/${package}

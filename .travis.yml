@@ -15,7 +15,6 @@ script:
 after_script:
 - make cover
 before_deploy:
-- make rpm deb
 - go get github.com/motemen/gobump/cmd/gobump
 - go get github.com/mackerelio/golib/cmd/mackerel-github-release
 deploy:
