@@ -36,5 +36,8 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jun 07 2017 <mackerel-developers@hatena.ne.jp> - 0.16.1
+- v2 packages (by Songmu)
+
 * Tue May 09 2017 <mackerel-developers@hatena.ne.jp> - 0.16.0-1
 - Add services subcommand (by yuuki)

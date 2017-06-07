@@ -1,5 +1,5 @@
 BIN = mkr
-VERSION = 0.16.0
+VERSION = 0.16.1
 CURRENT_REVISION = $(shell git rev-parse --short HEAD)
 
 all: clean cross lint gofmt test rpm deb

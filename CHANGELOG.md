@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.16.1 (2017-06-07)
+
+* v2 packages #102 (Songmu)
+
+
 ## 0.16.0 (2017-05-09)
 
 * Add services subcommand #97 (yuuki)
