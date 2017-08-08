@@ -65,6 +65,7 @@ type graphDef struct {
 	RoleName    string `yaml:"role_name"`
 	Query       string `yaml:"query"`
 	GraphName   string `yaml:"graph_name"`
+	GraphTitle  string `yaml:"title"`
 	Period      string `yaml:"period"`
 	Stacked     bool   `yaml:"stacked"`
 	Simplified  bool   `yaml:"simplified"`
@@ -136,6 +137,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) (baseGra
 		return expressionGraph{
 			g.Query,
 			graphType,
+			g.GraphTitle,
 			g.Period,
 			height,
 			width,
@@ -281,6 +283,7 @@ func (r roleGraph) getWidth() int {
 type expressionGraph struct {
 	Query     string
 	GraphType string
+	Title     string
 	Period    string
 	height    int
 	width     int
@@ -295,6 +298,7 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	param := url.Values{}
 	param.Add("query", e.Query)
 	param.Add("period", e.Period)
+	param.Add("title", e.Title)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
@@ -302,6 +306,7 @@ func (e expressionGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/advanced-graph", orgName))
 	param := url.Values{}
 	param.Add("query", e.Query)
+	param.Add("title", e.Title)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
