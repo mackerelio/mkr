@@ -65,6 +65,7 @@ type graphDef struct {
 	RoleName    string `yaml:"role_name"`
 	Query       string `yaml:"query"`
 	GraphName   string `yaml:"graph_name"`
+	GraphTitle  string `yaml:"title"`
 	Period      string `yaml:"period"`
 	Stacked     bool   `yaml:"stacked"`
 	Simplified  bool   `yaml:"simplified"`
@@ -136,7 +137,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) (baseGra
 		return expressionGraph{
 			g.Query,
 			graphType,
-			g.GraphName,
+			g.GraphTitle,
 			g.Period,
 			height,
 			width,
