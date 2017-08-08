@@ -282,7 +282,7 @@ func (r roleGraph) getWidth() int {
 type expressionGraph struct {
 	Query     string
 	GraphType string
-	GraphName string
+	Title     string
 	Period    string
 	height    int
 	width     int
@@ -297,7 +297,7 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	param := url.Values{}
 	param.Add("query", e.Query)
 	param.Add("period", e.Period)
-	param.Add("title", e.GraphName)
+	param.Add("title", e.Title)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
@@ -305,7 +305,7 @@ func (e expressionGraph) getPermalink(orgName string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://mackerel.io/orgs/%s/advanced-graph", orgName))
 	param := url.Values{}
 	param.Add("query", e.Query)
-	param.Add("title", e.GraphName)
+	param.Add("title", e.Title)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
