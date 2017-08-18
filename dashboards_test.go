@@ -66,13 +66,14 @@ func TestExpressionIFrameGraph(t *testing.T) {
 		"max(roleSlots('hoge:api','loadavg5'))",
 		"iframe",
 		"[test graph]hoge:api & loadavg5",
+		"percentage",
 		"6h",
 		200,
 		600,
 	}
 
 	actual := e.generateGraphString("orgname")
-	expected := `<iframe src="https://mackerel.io/embed/orgs/orgname/advanced-graph?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5" height="200" width="600" frameborder="0"></iframe>`
+	expected := `<iframe src="https://mackerel.io/embed/orgs/orgname/advanced-graph?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5&unit=percentage" height="200" width="600" frameborder="0"></iframe>`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -141,13 +142,14 @@ func TestExpressionImageGraph(t *testing.T) {
 		"max(roleSlots('hoge:api','loadavg5'))",
 		"image",
 		"[test graph]hoge:api & loadavg5",
+		"percentage",
 		"6h",
 		200,
 		600,
 	}
 
 	actual := e.generateGraphString("orgname")
-	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5)](https://mackerel.io/orgs/orgname/advanced-graph?query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5)`
+	expected := `[![graph](https://mackerel.io/embed/orgs/orgname/advanced-graph.png?period=6h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5&unit=percentage)](https://mackerel.io/orgs/orgname/advanced-graph?query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5&unit=percentage)`
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)
@@ -169,6 +171,7 @@ func TestGenerateMarkDown(t *testing.T) {
 			Query:      "max(roleSlots('hoge:api','loadavg5'))",
 			GraphName:  "cpu",
 			GraphTitle: "[test graph]hoge:api & loadavg5",
+			Unit:       "percentage",
 		},
 	}
 	g := &graphFormat{
@@ -182,7 +185,7 @@ func TestGenerateMarkDown(t *testing.T) {
 	expected := "## headline\n" +
 		"|:-:|:-:|\n" +
 		`|<iframe src="https://mackerel.io/embed/orgs/orgname/services/hoge/api?graph=cpu&period=1h&simplified=false&stacked=false" height="200" width="400" frameborder="0"></iframe>|<iframe src="https://mackerel.io/embed/orgs/orgname/hosts/abcde?graph=cpu&period=1h" height="200" width="400" frameborder="0"></iframe>|` + "\n" +
-		`|<iframe src="https://mackerel.io/embed/orgs/orgname/advanced-graph?period=1h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5" height="200" width="400" frameborder="0"></iframe>|` + "\n"
+		`|<iframe src="https://mackerel.io/embed/orgs/orgname/advanced-graph?period=1h&query=max%28roleSlots%28%27hoge%3Aapi%27%2C%27loadavg5%27%29%29&title=%5Btest+graph%5Dhoge%3Aapi+%26+loadavg5&unit=percentage" height="200" width="400" frameborder="0"></iframe>|` + "\n"
 
 	if actual != expected {
 		t.Errorf("output should be:\n%s\nbut:\n%s", expected, actual)

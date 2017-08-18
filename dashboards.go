@@ -66,6 +66,7 @@ type graphDef struct {
 	Query       string `yaml:"query"`
 	GraphName   string `yaml:"graph_name"`
 	GraphTitle  string `yaml:"title"`
+	Unit        string `yaml:"unit"`
 	Period      string `yaml:"period"`
 	Stacked     bool   `yaml:"stacked"`
 	Simplified  bool   `yaml:"simplified"`
@@ -138,6 +139,7 @@ func (g graphDef) getBaseGraph(graphType string, height int, width int) (baseGra
 			g.Query,
 			graphType,
 			g.GraphTitle,
+			g.Unit,
 			g.Period,
 			height,
 			width,
@@ -284,6 +286,7 @@ type expressionGraph struct {
 	Query     string
 	GraphType string
 	Title     string
+	Unit      string
 	Period    string
 	height    int
 	width     int
@@ -299,6 +302,7 @@ func (e expressionGraph) getURL(orgName string, isImage bool) string {
 	param.Add("query", e.Query)
 	param.Add("period", e.Period)
 	param.Add("title", e.Title)
+	param.Add("unit", e.Unit)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
@@ -307,6 +311,7 @@ func (e expressionGraph) getPermalink(orgName string) string {
 	param := url.Values{}
 	param.Add("query", e.Query)
 	param.Add("title", e.Title)
+	param.Add("unit", e.Unit)
 	u.RawQuery = param.Encode()
 	return u.String()
 }
