@@ -191,9 +191,9 @@ var commandServices = cli.Command{
 }
 
 func newMackerelFromContext(c *cli.Context) *mkr.Client {
-	conffile := c.GlobalString("conf")
+	confFile := c.GlobalString("conf")
 	apiBase := c.GlobalString("apibase")
-	apiKey := LoadApikeyFromEnvOrConfig(conffile)
+	apiKey := LoadApikeyFromEnvOrConfig(confFile)
 	if apiKey == "" {
 		logger.Log("error", `
     MACKEREL_APIKEY environment variable is not set. (Try "export MACKEREL_APIKEY='<Your apikey>'")
@@ -202,7 +202,7 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	}
 
 	if apiBase == "" {
-		apiBase = LoadApibaseFromConfig(conffile)
+		apiBase = LoadApibaseFromConfig(confFile)
 	}
 
 	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
@@ -212,12 +212,12 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 }
 
 func doStatus(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
+	confFile := c.GlobalString("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 
 	if argHostID == "" {
-		if argHostID = LoadHostIDFromConfig(conffile); argHostID == "" {
+		if argHostID = LoadHostIDFromConfig(confFile); argHostID == "" {
 			cli.ShowCommandHelp(c, "status")
 			os.Exit(1)
 		}
@@ -313,7 +313,7 @@ func doCreate(c *cli.Context) error {
 }
 
 func doUpdate(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
+	confFile := c.GlobalString("conf")
 	argHostIDs := c.Args()
 	optName := c.String("name")
 	optDisplayName := c.String("displayName")
@@ -323,7 +323,7 @@ func doUpdate(c *cli.Context) error {
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
-		if argHostIDs[0] = LoadHostIDFromConfig(conffile); argHostIDs[0] == "" {
+		if argHostIDs[0] = LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "update")
 			os.Exit(1)
 		}
@@ -467,13 +467,13 @@ func doFetch(c *cli.Context) error {
 }
 
 func doRetire(c *cli.Context) error {
-	conffile := c.GlobalString("conf")
+	confFile := c.GlobalString("conf")
 	force := c.Bool("force")
 	argHostIDs := c.Args()
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
-		if argHostIDs[0] = LoadHostIDFromConfig(conffile); argHostIDs[0] == "" {
+		if argHostIDs[0] = LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "retire")
 			os.Exit(1)
 		}
