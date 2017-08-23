@@ -36,6 +36,10 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Aug 23 2017 <mackerel-developers@hatena.ne.jp> - 0.17.0
+- [dashboards] Add unit to expression graph (by edangelion)
+- [dashboards] Add title param to expression graph (by edangelion)
+
 * Wed Jun 07 2017 <mackerel-developers@hatena.ne.jp> - 0.16.1
 - v2 packages (by Songmu)
 
