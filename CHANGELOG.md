@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0 (2017-08-23)
+
+* [dashboards] Add unit to expression graph #106 (edangelion)
+* [dashboards] Add title param to expression graph #104 (edangelion)
+
+
 ## 0.16.1 (2017-06-07)
 
 * v2 packages #102 (Songmu)

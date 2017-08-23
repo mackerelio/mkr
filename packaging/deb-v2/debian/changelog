@@ -1,3 +1,12 @@
+mkr (0.17.0-1.v2) stable; urgency=low
+
+  * [dashboards] Add unit to expression graph (by edangelion)
+    <https://github.com/mackerelio/mkr/pull/106>
+  * [dashboards] Add title param to expression graph (by edangelion)
+    <https://github.com/mackerelio/mkr/pull/104>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 23 Aug 2017 12:17:50 +0900
+
 mkr (0.16.1-1.v2) stable; urgency=low
 
   * v2 packages (by Songmu)
