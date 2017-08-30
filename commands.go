@@ -202,7 +202,7 @@ func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	}
 
 	if apiBase == "" {
-		apiBase = LoadApibaseFromConfig(confFile)
+		apiBase = LoadApibaseFromConfigWithFallback(confFile)
 	}
 
 	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")

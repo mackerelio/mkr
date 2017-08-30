@@ -16,6 +16,22 @@ func TestLoadApibaseFromConfig(t *testing.T) {
 	}
 }
 
+func TestLoadApibaseFromConfigWithFallback(t *testing.T) {
+	conffile := "test/mackerel-agent.conf"
+
+	apiBase := LoadApibaseFromConfigWithFallback(conffile)
+
+	if apiBase != "https://example.com/" {
+		t.Error("should be https://example.com/")
+	}
+
+	apiBase = LoadApibaseFromConfigWithFallback("test/mackerel-agent-no-base.conf")
+
+	if apiBase != "https://mackerel.io" {
+		t.Error("should be https://mackerel.io")
+	}
+}
+
 func TestLoadApikeyFromConfig(t *testing.T) {
 	conffile := "test/mackerel-agent.conf"
 

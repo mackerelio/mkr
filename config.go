@@ -31,6 +31,16 @@ func LoadApibaseFromConfig(conffile string) string {
 	return conf.Apibase
 }
 
+// LoadApibaseFromConfigWithFallback get mackerel api Base URL from mackerel-agent.conf,
+// and fallbacks to default (https://mackerel.io/) if not specified.
+func LoadApibaseFromConfigWithFallback(conffile string) string {
+	apiBase := LoadApibaseFromConfig(conffile)
+	if apiBase == "" {
+		return config.DefaultConfig.Apibase
+	}
+	return apiBase
+}
+
 // LoadApikeyFromConfig gets mackerel.io apikey from mackerel-agent.conf if it's installed mackerel-agent on localhost
 func LoadApikeyFromConfig(conffile string) string {
 	conf, err := config.LoadConfig(conffile)

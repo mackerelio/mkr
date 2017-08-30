@@ -23,9 +23,9 @@ func main() {
 			Usage: "Config file path",
 		},
 		cli.StringFlag{
-			Name:  "apibase",
-			Value: config.DefaultConfig.Apibase,
-			Usage: "API Base",
+			Name: "apibase",
+			// this default value is set in config.LoadApibaseFromConfigWithFallback
+			Usage: fmt.Sprintf("API Base (default: \"%s\")", config.DefaultConfig.Apibase),
 		},
 	}
 
