@@ -92,9 +92,9 @@ var commandHosts = cli.Command{
 var commandCreate = cli.Command{
 	Name:      "create",
 	Usage:     "Create a new host",
-	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] <hostName>",
+	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier | -c <customIdentifier>] <hostName>",
 	Description: `
-    Create a new host with status and/or roleFullname.
+    Create a new host with status, roleFullname and/or customIdentifier.
     Requests "POST /api/v0/hosts". See https://mackerel.io/api-docs/entry/hosts#create .
 `,
 	Action: doCreate,
@@ -105,6 +105,7 @@ var commandCreate = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
+		cli.StringFlag{Name: "customIdentifier, c", Value: "", Usage: "CustomIdentifier for the Host"},
 	},
 }
 
@@ -288,6 +289,7 @@ func doCreate(c *cli.Context) error {
 	argHostName := c.Args().Get(0)
 	optRoleFullnames := c.StringSlice("roleFullname")
 	optStatus := c.String("status")
+	optCustomIdentifier := c.String("customIdentifier")
 
 	if argHostName == "" {
 		cli.ShowCommandHelp(c, "create")
@@ -297,8 +299,9 @@ func doCreate(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 
 	hostID, err := client.CreateHost(&mkr.CreateHostParam{
-		Name:          argHostName,
-		RoleFullnames: optRoleFullnames,
+		Name:             argHostName,
+		RoleFullnames:    optRoleFullnames,
+		CustomIdentifier: optCustomIdentifier,
 	})
 	logger.DieIf(err)
 
