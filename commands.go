@@ -92,7 +92,7 @@ var commandHosts = cli.Command{
 var commandCreate = cli.Command{
 	Name:      "create",
 	Usage:     "Create a new host",
-	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier | -c <customIdentifier>] <hostName>",
+	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] <hostName>",
 	Description: `
     Create a new host with status, roleFullname and/or customIdentifier.
     Requests "POST /api/v0/hosts". See https://mackerel.io/api-docs/entry/hosts#create .
@@ -105,7 +105,7 @@ var commandCreate = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
-		cli.StringFlag{Name: "customIdentifier, c", Value: "", Usage: "CustomIdentifier for the Host"},
+		cli.StringFlag{Name: "customIdentifier", Value: "", Usage: "CustomIdentifier for the Host"},
 	},
 }
 
