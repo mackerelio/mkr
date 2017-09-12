@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.18.0 (2017-09-12)
+
+* add --customIdentifier option to mkr create #110 (astj)
+
+
 ## 0.17.0 (2017-08-23)
 
 * [dashboards] Add unit to expression graph #106 (edangelion)
