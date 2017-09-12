@@ -1,3 +1,10 @@
+mkr (0.18.0-1) stable; urgency=low
+
+  * add --customIdentifier option to mkr create (by astj)
+    <https://github.com/mackerelio/mkr/pull/110>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 12 Sep 2017 12:36:18 +0900
+
 mkr (0.17.0-1) stable; urgency=low
 
   * [dashboards] Add unit to expression graph (by edangelion)

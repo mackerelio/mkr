@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Sep 12 2017 <mackerel-developers@hatena.ne.jp> - 0.18.0
+- add --customIdentifier option to mkr create (by astj)
+
 * Wed Aug 23 2017 <mackerel-developers@hatena.ne.jp> - 0.17.0
 - [dashboards] Add unit to expression graph (by edangelion)
 - [dashboards] Add title param to expression graph (by edangelion)
