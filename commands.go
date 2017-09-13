@@ -478,8 +478,8 @@ func doFetch(c *cli.Context) error {
 	for _, hostIds := range split(argHostIDs, 100) {
 		metricValues, err := newMackerelFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)
 		logger.DieIf(err)
-		for metricName := range metricValues {
-			allMetricValues[metricName] = metricValues[metricName]
+		for key := range metricValues {
+			allMetricValues[key] = metricValues[key]
 		}
 	}
 
