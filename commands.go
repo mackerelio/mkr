@@ -453,6 +453,17 @@ func doThrow(c *cli.Context) error {
 	return nil
 }
 
+func split(ids []string, count int) [][]string {
+	xs := make([][]string, 0, (len(ids)+count-1)/count)
+	for i, name := range ids {
+		if i%count == 0 {
+			xs = append(xs, []string{})
+		}
+		xs[len(xs)-1] = append(xs[len(xs)-1], name)
+	}
+	return xs
+}
+
 func doFetch(c *cli.Context) error {
 	argHostIDs := c.Args()
 	optMetricNames := c.StringSlice("name")
@@ -462,10 +473,17 @@ func doFetch(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	metricValues, err := newMackerelFromContext(c).FetchLatestMetricValues(argHostIDs, optMetricNames)
-	logger.DieIf(err)
+	allMetricValues := make(mkr.LatestMetricValues)
+	// Fetches 100 hosts per one request (to avoid URL maximum length).
+	for _, hostIds := range split(argHostIDs, 100) {
+		metricValues, err := newMackerelFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)
+		logger.DieIf(err)
+		for key := range metricValues {
+			allMetricValues[key] = metricValues[key]
+		}
+	}
 
-	PrettyPrintJSON(metricValues)
+	PrettyPrintJSON(allMetricValues)
 	return nil
 }
 
