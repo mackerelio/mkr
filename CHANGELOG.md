@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.19.0 (2017-09-20)
+
+* Support fetch command to retrieve many hosts #112 (itchyny)
+* Prefer apibase in mackerel-agent confFile #108 (astj)
+
+
 ## 0.18.0 (2017-09-12)
 
 * add --customIdentifier option to mkr create #110 (astj)

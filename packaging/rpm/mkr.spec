@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Sep 20 2017 <mackerel-developers@hatena.ne.jp> - 0.19.0
+- Support fetch command to retrieve many hosts (by itchyny)
+- Prefer apibase in mackerel-agent confFile (by astj)
+
 * Tue Sep 12 2017 <mackerel-developers@hatena.ne.jp> - 0.18.0
 - add --customIdentifier option to mkr create (by astj)
 

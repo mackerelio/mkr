@@ -1,3 +1,12 @@
+mkr (0.19.0-1.v2) stable; urgency=low
+
+  * Support fetch command to retrieve many hosts (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/112>
+  * Prefer apibase in mackerel-agent confFile (by astj)
+    <https://github.com/mackerelio/mkr/pull/108>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 20 Sep 2017 12:30:15 +0900
+
 mkr (0.18.0-1.v2) stable; urgency=low
 
   * add --customIdentifier option to mkr create (by astj)
