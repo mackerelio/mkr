@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Sep 27 2017 <mackerel-developers@hatena.ne.jp> - 0.20.0
+- build with Go 1.9 (by astj)
+
 * Wed Sep 20 2017 <mackerel-developers@hatena.ne.jp> - 0.19.0
 - Support fetch command to retrieve many hosts (by itchyny)
 - Prefer apibase in mackerel-agent confFile (by astj)
