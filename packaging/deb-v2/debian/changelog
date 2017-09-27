@@ -1,3 +1,10 @@
+mkr (0.20.0-1.v2) stable; urgency=low
+
+  * build with Go 1.9 (by astj)
+    <https://github.com/mackerelio/mkr/pull/114>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 27 Sep 2017 12:12:18 +0900
+
 mkr (0.19.0-1.v2) stable; urgency=low
 
   * Support fetch command to retrieve many hosts (by itchyny)

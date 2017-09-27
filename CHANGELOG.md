@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.20.0 (2017-09-27)
+
+* build with Go 1.9 #114 (astj)
+
+
 ## 0.19.0 (2017-09-20)
 
 * Support fetch command to retrieve many hosts #112 (itchyny)
