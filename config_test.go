@@ -27,8 +27,8 @@ func TestLoadApibaseFromConfigWithFallback(t *testing.T) {
 
 	apiBase = LoadApibaseFromConfigWithFallback("test/mackerel-agent-no-base.conf")
 
-	if apiBase != "https://mackerel.io" {
-		t.Error("should be https://mackerel.io")
+	if apiBase != "https://api.mackerelio.com" {
+		t.Error("should be https://api.mackerelio.com")
 	}
 }
 
