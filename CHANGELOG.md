@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.21.0 (2017-10-04)
+
+* Use new API BaseURL #116 (astj)
+
+
 ## 0.20.0 (2017-09-27)
 
 * build with Go 1.9 #114 (astj)
