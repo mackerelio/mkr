@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Oct 04 2017 <mackerel-developers@hatena.ne.jp> - 0.21.0
+- Use new API BaseURL (by astj)
+
 * Wed Sep 27 2017 <mackerel-developers@hatena.ne.jp> - 0.20.0
 - build with Go 1.9 (by astj)
 

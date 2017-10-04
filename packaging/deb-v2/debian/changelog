@@ -1,3 +1,10 @@
+mkr (0.21.0-1.v2) stable; urgency=low
+
+  * Use new API BaseURL (by astj)
+    <https://github.com/mackerelio/mkr/pull/116>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 04 Oct 2017 11:37:20 +0900
+
 mkr (0.20.0-1.v2) stable; urgency=low
 
   * build with Go 1.9 (by astj)
