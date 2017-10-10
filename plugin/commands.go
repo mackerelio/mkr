@@ -37,15 +37,15 @@ var CommandPlugin = cli.Command{
 func doPluginInstall(c *cli.Context) error {
 	argInstallTarget := c.Args().First()
 	if argInstallTarget == "" {
-		return fmt.Errorf("Specify install name")
+		return fmt.Errorf("Specify install target")
 	}
 
-	_, err := parseInstallTarget(argInstallTarget)
+	err := setupPluginDir(c.String("prefix"))
 	if err != nil {
 		return errors.Wrap(err, "failed to install plugin")
 	}
 
-	err = setupPluginDir(c.String("prefix"))
+	_, err = parseInstallTarget(argInstallTarget)
 	if err != nil {
 		return errors.Wrap(err, "failed to install plugin")
 	}
@@ -64,28 +64,6 @@ func setupPluginDir(prefix string) error {
 		return errors.Wrap(err, "failed to setup plugin directory")
 	}
 	return nil
-}
-
-type installTarget struct {
-	owner      string
-	repo       string
-	pluginName string
-	releaseTag string
-}
-
-// Make artifact's download URL
-func (it *installTarget) makeDownloadURL() (string, error) {
-	if it.owner != "" && it.repo != "" {
-		if it.releaseTag == "" {
-			// TODO: Make latest release download URL by github API
-			return "", fmt.Errorf("not implemented")
-		}
-		filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
-		return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
-			it.owner, it.repo, it.releaseTag, filename), nil
-	}
-	// TODO: Make download URL by plugin registry
-	return "", fmt.Errorf("not implemented")
 }
 
 // Parse install target string passed from args
@@ -120,4 +98,26 @@ func parseInstallTarget(target string) (*installTarget, error) {
 	}
 
 	return it, nil
+}
+
+type installTarget struct {
+	owner      string
+	repo       string
+	pluginName string
+	releaseTag string
+}
+
+// Make artifact's download URL
+func (it *installTarget) makeDownloadURL() (string, error) {
+	if it.owner != "" && it.repo != "" {
+		if it.releaseTag == "" {
+			// TODO: Make latest release download URL by github API
+			return "", fmt.Errorf("not implemented")
+		}
+		filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
+		return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
+			it.owner, it.repo, it.releaseTag, filename), nil
+	}
+	// TODO: Make download URL by plugin registry
+	return "", fmt.Errorf("not implemented")
 }
