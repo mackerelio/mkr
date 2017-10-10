@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
@@ -33,10 +34,21 @@ var CommandPlugin = cli.Command{
 
 // main function for mkr plugin install
 func doPluginInstall(c *cli.Context) error {
-	err := setupPluginDir(c.String("prefix"))
+	argInstallTarget := c.Args().First()
+	if argInstallTarget == "" {
+		return fmt.Errorf("Specify install name")
+	}
+
+	_, err := parseInstallTarget(argInstallTarget)
 	if err != nil {
 		return errors.Wrap(err, "failed to install plugin")
 	}
+
+	err = setupPluginDir(c.String("prefix"))
+	if err != nil {
+		return errors.Wrap(err, "failed to install plugin")
+	}
+
 	fmt.Println("do plugin install [wip]")
 	return nil
 }
@@ -51,4 +63,45 @@ func setupPluginDir(prefix string) error {
 		return errors.Wrap(err, "failed to setup plugin directory")
 	}
 	return nil
+}
+
+type installTarget struct {
+	owner      string
+	repo       string
+	pluginName string
+	releaseTag string
+}
+
+// Parse install target string passed from args
+// example is below
+// - mackerelio/mackerel-plugin-sample
+// - mackerel-plugin-sample
+// - mackerelio/mackerel-plugin-sample@v0.0.1
+func parseInstallTarget(target string) (*installTarget, error) {
+	it := &installTarget{}
+
+	ownerRepoAndReleaseTag := strings.Split(target, "@")
+	var ownerRepo string
+	switch len(ownerRepoAndReleaseTag) {
+	case 1:
+		ownerRepo = ownerRepoAndReleaseTag[0]
+	case 2:
+		ownerRepo = ownerRepoAndReleaseTag[0]
+		it.releaseTag = ownerRepoAndReleaseTag[1]
+	default:
+		return nil, fmt.Errorf("Install target is invalid: %s", target)
+	}
+
+	ownerAndRepo := strings.Split(ownerRepo, "/")
+	switch len(ownerAndRepo) {
+	case 1:
+		it.pluginName = ownerAndRepo[0]
+	case 2:
+		it.owner = ownerAndRepo[0]
+		it.repo = ownerAndRepo[1]
+	default:
+		return nil, fmt.Errorf("Install target is invalid: %s", target)
+	}
+
+	return it, nil
 }

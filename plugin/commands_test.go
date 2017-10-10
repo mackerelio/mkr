@@ -42,3 +42,77 @@ func TestSetupPluginDir(t *testing.T) {
 		assert.NotNil(t, err, "error should be occured while manipulate unpermitted directory")
 	}
 }
+
+func TestParseInstallTarget(t *testing.T) {
+	testCases := []struct {
+		Name   string
+		Input  string
+		Output installTarget
+	}{
+		{
+			Name:  "Plugin name only",
+			Input: "mackerel-plugin-sample",
+			Output: installTarget{
+				pluginName: "mackerel-plugin-sample",
+			},
+		},
+		{
+			Name:  "Plugin name and release tag",
+			Input: "mackerel-plugin-sample@v0.0.1",
+			Output: installTarget{
+				pluginName: "mackerel-plugin-sample",
+				releaseTag: "v0.0.1",
+			},
+		},
+		{
+			Name:  "Owner and repo",
+			Input: "mackerelio/mackerel-plugin-sample",
+			Output: installTarget{
+				owner: "mackerelio",
+				repo:  "mackerel-plugin-sample",
+			},
+		},
+		{
+			Name:  "Owner and repo with release tag",
+			Input: "mackerelio/mackerel-plugin-sample@v1.0.1",
+			Output: installTarget{
+				owner:      "mackerelio",
+				repo:       "mackerel-plugin-sample",
+				releaseTag: "v1.0.1",
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Logf("testing: %s\n", tc.Name)
+		it, err := parseInstallTarget(tc.Input)
+		assert.Nil(t, err, "error does not occur while parseInstallTarget")
+		assert.Equal(t, *it, tc.Output, "Parsing result is expected")
+	}
+}
+
+func TestParseInstallTarget_error(t *testing.T) {
+	testCases := []struct {
+		Name   string
+		Input  string
+		Output string
+	}{
+		{
+			Name:   "Too many @",
+			Input:  "mackerel-plugin-sample@v0.0.1@v0.1.0",
+			Output: "Install target is invalid: mackerel-plugin-sample@v0.0.1@v0.1.0",
+		},
+		{
+			Name:   "Too many /",
+			Input:  "mackerelio/hatena/mackerel-plugin-sample",
+			Output: "Install target is invalid: mackerelio/hatena/mackerel-plugin-sample",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Logf("testing: %s\n", tc.Name)
+		_, err := parseInstallTarget(tc.Input)
+		assert.NotNil(t, err, "parseInstallTarget returns err when invalid target string is passed")
+		assert.Equal(t, err.Error(), tc.Output, "error message is expected")
+	}
+}
