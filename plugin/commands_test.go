@@ -1,9 +1,11 @@
 package plugin
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -114,5 +116,24 @@ func TestParseInstallTarget_error(t *testing.T) {
 		_, err := parseInstallTarget(tc.Input)
 		assert.NotNil(t, err, "parseInstallTarget returns err when invalid target string is passed")
 		assert.Equal(t, err.Error(), tc.Output, "error message is expected")
+	}
+}
+
+func TestInstallTargetMakeDownloadURL(t *testing.T) {
+	{
+		t.Logf("Make download URL with owner, repo and releaseTag")
+		it := &installTarget{
+			owner:      "mackerelio",
+			repo:       "mackerel-plugin-sample",
+			releaseTag: "v0.1.0",
+		}
+		url, err := it.makeDownloadURL()
+		assert.Nil(t, err, "makeDownloadURL is successful")
+		assert.Equal(
+			t,
+			url,
+			fmt.Sprintf("https://github.com/mackerelio/mackerel-plugin-sample/releases/download/v0.1.0/mackerel-plugin-sample_%s_%s.zip", runtime.GOOS, runtime.GOARCH),
+			"Download URL is made correctly",
+		)
 	}
 }

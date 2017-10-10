@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -70,6 +71,21 @@ type installTarget struct {
 	repo       string
 	pluginName string
 	releaseTag string
+}
+
+// Make artifact's download URL
+func (it *installTarget) makeDownloadURL() (string, error) {
+	if it.owner != "" && it.repo != "" {
+		if it.releaseTag == "" {
+			// TODO: Make latest release download URL by github API
+			return "", fmt.Errorf("not implemented")
+		}
+		filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
+		return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
+			it.owner, it.repo, it.releaseTag, filename), nil
+	}
+	// TODO: Make download URL by plugin registry
+	return "", fmt.Errorf("not implemented")
 }
 
 // Parse install target string passed from args
