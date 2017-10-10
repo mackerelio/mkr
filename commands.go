@@ -11,7 +11,7 @@ import (
 	"github.com/Songmu/prompter"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/mackerelio/mkr/plugin"
+	_ "github.com/mackerelio/mkr/plugin"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -47,7 +47,7 @@ var Commands = []cli.Command{
 	commandAlerts,
 	commandDashboards,
 	commandAnnotations,
-	plugin.CommandPlugin,
+	// plugin.CommandPlugin,
 }
 
 var commandStatus = cli.Command{
