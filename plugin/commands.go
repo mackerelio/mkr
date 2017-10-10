@@ -1,6 +1,8 @@
 package plugin
 
 import (
+	"fmt"
+
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -18,4 +20,10 @@ var CommandPlugin = cli.Command{
 		},
 	},
 	Hidden: true,
+}
+
+// main function for mkr plugin install
+func doPluginInstall(c *cli.Context) error {
+	fmt.Println("do plugin install")
+	return nil
 }
