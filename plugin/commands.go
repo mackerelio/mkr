@@ -2,7 +2,10 @@ package plugin
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
+	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -17,6 +20,12 @@ var CommandPlugin = cli.Command{
 			Usage:       "install mackerel plugin",
 			Description: `WIP`,
 			Action:      doPluginInstall,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "prefix",
+					Usage: "plugin install location",
+				},
+			},
 		},
 	},
 	Hidden: true,
@@ -24,6 +33,22 @@ var CommandPlugin = cli.Command{
 
 // main function for mkr plugin install
 func doPluginInstall(c *cli.Context) error {
-	fmt.Println("do plugin install")
+	err := setupPluginDir(c.String("prefix"))
+	if err != nil {
+		return errors.Wrap(err, "failed to install plugin")
+	}
+	fmt.Println("do plugin install [wip]")
+	return nil
+}
+
+// Create a directory for plugin install
+func setupPluginDir(prefix string) error {
+	if prefix == "" {
+		prefix = "/opt/mackerel-agent/plugins"
+	}
+	err := os.MkdirAll(filepath.Join(prefix, "bin"), 0755)
+	if err != nil {
+		return errors.Wrap(err, "failed to setup plugin directory")
+	}
 	return nil
 }
