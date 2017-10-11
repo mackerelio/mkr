@@ -89,7 +89,7 @@ func TestParseInstallTarget(t *testing.T) {
 		t.Logf("testing: %s\n", tc.Name)
 		it, err := parseInstallTarget(tc.Input)
 		assert.Nil(t, err, "error does not occur while parseInstallTarget")
-		assert.Equal(t, *it, tc.Output, "Parsing result is expected")
+		assert.Equal(t, tc.Output, *it, "Parsing result is expected")
 	}
 }
 
@@ -115,7 +115,7 @@ func TestParseInstallTarget_error(t *testing.T) {
 		t.Logf("testing: %s\n", tc.Name)
 		_, err := parseInstallTarget(tc.Input)
 		assert.NotNil(t, err, "parseInstallTarget returns err when invalid target string is passed")
-		assert.Equal(t, err.Error(), tc.Output, "error message is expected")
+		assert.Equal(t, tc.Output, err.Error(), "error message is expected")
 	}
 }
 
@@ -131,8 +131,8 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 		assert.Nil(t, err, "makeDownloadURL is successful")
 		assert.Equal(
 			t,
-			url,
 			fmt.Sprintf("https://github.com/mackerelio/mackerel-plugin-sample/releases/download/v0.1.0/mackerel-plugin-sample_%s_%s.zip", runtime.GOOS, runtime.GOARCH),
+			url,
 			"Download URL is made correctly",
 		)
 	}
