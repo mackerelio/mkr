@@ -3,6 +3,8 @@ package plugin
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -118,6 +120,37 @@ func TestSetupPluginDir(t *testing.T) {
 		prefix, err := setupPluginDir(tmpd)
 		assert.Equal(t, "", prefix, "returns empty string when failed")
 		assert.NotNil(t, err, "error should be occured while manipulate unpermitted directory")
+	}
+}
+
+func TestDownloadPluginArtifact(t *testing.T) {
+	ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
+	defer ts.Close()
+
+	{
+		// Response not found
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		fpath, err := downloadPluginArtifact(ts.URL+"/not_found.zip", tmpd)
+		assert.Equal(t, "", fpath, "fpath is empty")
+		assert.Contains(t, err.Error(), "http response not OK. code: 404,", "Returns correct err")
+	}
+
+	{
+		// Download is finished successfully
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		fpath, err := downloadPluginArtifact(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd)
+		assert.Equal(t, tmpd+"/mackerel-plugin-sample_linux_amd64.zip", fpath, "Returns fpath correctly")
+
+		_, err = os.Stat(fpath)
+		assert.Nil(t, err, "Downloaded file is created")
+
+		downloadedContent, _ := ioutil.ReadFile(fpath)
+		expectedContent, _ := ioutil.ReadFile("testdata/mackerel-plugin-sample_linux_amd64.zip")
+		assert.Equal(t, expectedContent, downloadedContent, "Downloaded data is correct")
 	}
 }
 

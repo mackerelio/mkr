@@ -2,8 +2,11 @@ package plugin
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
+	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -106,6 +109,46 @@ func setupPluginDir(prefix string) (string, error) {
 		return "", err
 	}
 	return prefix, nil
+}
+
+// Download plugin artifact from `url` to `workdir`,
+// and returns downloaded filepath
+func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
+	// Create request to download
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		err = errors.Wrap(err, "failed to create request")
+		return
+	}
+	req.Header.Set("User-Agent", "mkr-plugin-installer/0.0.0")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		err = errors.Wrap(err, "failed to create request")
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, url)
+		return
+	}
+
+	// fpath is filepath where artifact will be saved
+	fpath = filepath.Join(workdir, path.Base(url))
+
+	// download artifact
+	file, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	if err != nil {
+		err = errors.Wrap(err, "failed to open file for download")
+		return
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, resp.Body)
+	if err != nil {
+		err = errors.Wrap(err, "failed to read response")
+	}
+
+	return fpath, nil
 }
 
 type installTarget struct {
