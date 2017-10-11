@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -40,7 +41,7 @@ func doPluginInstall(c *cli.Context) error {
 		return fmt.Errorf("Specify install target")
 	}
 
-	_, err := setupPluginDir(c.String("prefix"))
+	prefix, err := setupPluginDir(c.String("prefix"))
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
@@ -49,6 +50,13 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while parsing install target")
 	}
+
+	// Create a work directory for downloading and extracting an artifact
+	workdir, err := ioutil.TempDir(prefix, "work-")
+	if err != nil {
+		return errors.Wrap(err, "failed to install plugin")
+	}
+	defer os.RemoveAll(workdir)
 
 	fmt.Println("do plugin install [wip]")
 	return nil
