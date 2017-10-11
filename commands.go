@@ -39,6 +39,7 @@ var Commands = []cli.Command{
 	commandCreate,
 	commandUpdate,
 	commandThrow,
+	commandMetrics,
 	commandFetch,
 	commandRetire,
 	commandServices,
@@ -144,6 +145,25 @@ var commandThrow = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
+	},
+}
+
+var commandMetrics = cli.Command{
+	Name:      "metrics",
+	Usage:     "Fetch metric values",
+	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] stdin --from int --to int",
+	Description: `
+    Fetch metric values of 'host metric' or 'service metric'.
+    Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
+		See https://mackerel.io/api-docs/entry/host-metrics#get, https://mackerel.io/ja/api-docs/entry/service-metrics#get.
+`,
+	Action: doMetrics,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "host, H", Value: "", Usage: "Fetch host metric values of <hostID>."},
+		cli.StringFlag{Name: "service, s", Value: "", Usage: "Fetch service metric values of <service>."},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
+		cli.Int64Flag{Name: "from", Value: 0, Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
+		cli.Int64Flag{Name: "to", Value: 0, Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
 	},
 }
 
@@ -462,6 +482,32 @@ func split(ids []string, count int) [][]string {
 		xs[len(xs)-1] = append(xs[len(xs)-1], name)
 	}
 	return xs
+}
+
+func doMetrics(c *cli.Context) error {
+	optHostID := c.String("host")
+	optService := c.String("service")
+	optMetricName := c.String("name")
+	from := c.Int64("from")
+	to := c.Int64("to")
+
+	client := newMackerelFromContext(c)
+
+	if optHostID != "" {
+		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
+		logger.DieIf(err)
+
+		PrettyPrintJSON(metricValue)
+	} else if optService != "" {
+		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
+		logger.DieIf(err)
+
+		PrettyPrintJSON(metricValue)
+	} else {
+		cli.ShowCommandHelp(c, "metrics")
+		os.Exit(1)
+	}
+	return nil
 }
 
 func doFetch(c *cli.Context) error {
