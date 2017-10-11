@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/Songmu/prompter"
 	mkr "github.com/mackerelio/mackerel-client-go"
@@ -162,8 +163,8 @@ var commandMetrics = cli.Command{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Fetch host metric values of <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Fetch service metric values of <service>."},
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
-		cli.Int64Flag{Name: "from", Value: 0, Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
-		cli.Int64Flag{Name: "to", Value: 0, Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
+		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
+		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
 	},
 }
 
@@ -488,8 +489,14 @@ func doMetrics(c *cli.Context) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMetricName := c.String("name")
+
 	from := c.Int64("from")
 	to := c.Int64("to")
+	if from == 0 && to == 0 {
+		now := time.Now()
+		from = now.Add(-5 * time.Minute).Unix()
+		to = now.Unix()
+	}
 
 	client := newMackerelFromContext(c)
 
