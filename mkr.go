@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/mackerelio/mackerel-agent/config"
+	"github.com/mackerelio/mkr/logger"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -32,5 +33,9 @@ func main() {
 	cpu := runtime.NumCPU()
 	runtime.GOMAXPROCS(cpu)
 
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		logger.Log("error", err.Error())
+		os.Exit(1)
+	}
 }

@@ -54,10 +54,10 @@ deb-v2:
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
 deps:
-	go get -d -v .
+	go get -d -v ./...
 
 testdeps:
-	go get -d -v -t .
+	go get -d -v -t ./...
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/axw/gocov/gocov
