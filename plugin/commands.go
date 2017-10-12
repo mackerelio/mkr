@@ -57,7 +57,7 @@ func doPluginInstall(c *cli.Context) error {
 	// Create a work directory for downloading and extracting an artifact
 	workdir, err := ioutil.TempDir(prefix, "work-")
 	if err != nil {
-		return errors.Wrap(err, "failed to install plugin")
+		return errors.Wrap(err, "failed to install plugin while creating a work directory")
 	}
 	defer os.RemoveAll(workdir)
 
