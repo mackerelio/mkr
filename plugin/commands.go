@@ -40,14 +40,16 @@ func doPluginInstall(c *cli.Context) error {
 		return fmt.Errorf("Specify install target")
 	}
 
+	failedMessage := "failed to install plugin"
+
 	err := setupPluginDir(c.String("prefix"))
 	if err != nil {
-		return errors.Wrap(err, "failed to install plugin")
+		return errors.Wrap(err, failedMessage)
 	}
 
 	_, err = parseInstallTarget(argInstallTarget)
 	if err != nil {
-		return errors.Wrap(err, "failed to install plugin")
+		return errors.Wrap(err, failedMessage)
 	}
 
 	fmt.Println("do plugin install [wip]")
