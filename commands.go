@@ -152,7 +152,7 @@ var commandThrow = cli.Command{
 var commandMetrics = cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
-	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] stdin --from int --to int",
+	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] [--name | -n <metricName>] --from int --to int",
 	Description: `
     Fetch metric values of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
@@ -492,10 +492,8 @@ func doMetrics(c *cli.Context) error {
 
 	from := c.Int64("from")
 	to := c.Int64("to")
-	if from == 0 && to == 0 {
-		now := time.Now()
-		from = now.Add(-5 * time.Minute).Unix()
-		to = now.Unix()
+	if to == 0 {
+		to = time.Now().Unix()
 	}
 
 	client := newMackerelFromContext(c)
