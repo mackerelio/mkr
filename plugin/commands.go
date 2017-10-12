@@ -40,16 +40,14 @@ func doPluginInstall(c *cli.Context) error {
 		return fmt.Errorf("Specify install target")
 	}
 
-	failedMessage := "failed to install plugin"
-
 	err := setupPluginDir(c.String("prefix"))
 	if err != nil {
-		return errors.Wrap(err, failedMessage)
+		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
 
 	_, err = parseInstallTarget(argInstallTarget)
 	if err != nil {
-		return errors.Wrap(err, failedMessage)
+		return errors.Wrap(err, "Failed to install plugin while parsing install target")
 	}
 
 	fmt.Println("do plugin install [wip]")
@@ -61,11 +59,7 @@ func setupPluginDir(prefix string) error {
 	if prefix == "" {
 		prefix = "/opt/mackerel-agent/plugins"
 	}
-	err := os.MkdirAll(filepath.Join(prefix, "bin"), 0755)
-	if err != nil {
-		return errors.Wrap(err, "failed to setup plugin directory")
-	}
-	return nil
+	return os.MkdirAll(filepath.Join(prefix, "bin"), 0755)
 }
 
 // Parse install target string passed from args
