@@ -46,7 +46,7 @@ func doPluginInstall(c *cli.Context) error {
 		return fmt.Errorf("Specify install target")
 	}
 
-	_, err := parseInstallTarget(argInstallTarget)
+	it, err := parseInstallTarget(argInstallTarget)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
@@ -59,11 +59,24 @@ func doPluginInstall(c *cli.Context) error {
 	// Create a work directory for downloading and extracting an artifact
 	workdir, err := ioutil.TempDir(prefix, "work-")
 	if err != nil {
-		return errors.Wrap(err, "failed to install plugin while creating a work directory")
+		return errors.Wrap(err, "Failed to install plugin while creating a work directory")
 	}
 	defer os.RemoveAll(workdir)
 
-	fmt.Println("do plugin install [wip]")
+	// Download an artifact and install by it
+	downloadURL, err := it.makeDownloadURL()
+	if err != nil {
+		return errors.Wrap(err, "Failed to install plugin while making a download URL")
+	}
+	artifactFile, err := downloadPluginArtifact(downloadURL, workdir)
+	if err != nil {
+		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
+	}
+	err = installByArtifact(artifactFile, filepath.Join(prefix, "bin"), workdir)
+	if err != nil {
+		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
+	}
+
 	return nil
 }
 
