@@ -241,17 +241,17 @@ func TestInstallByArtifact(t *testing.T) {
 
 func TestLooksLikePlugin(t *testing.T) {
 	testCases := []struct {
-		Name     string
+		Name            string
 		LooksLikePlugin bool
 	}{
-		{ "mackerel-plugin-sample", true },
-		{ "mackerel-plugin-hoge_sample1", true },
-		{ "check-sample", true },
-		{ "check-hoge-sample", true },
-		{ "mackerel-sample", false },
-		{ "hoge-mackerel-plugin-sample", false },
-		{ "hoge-check-sample", false },
-		{ "wrong-sample", false },
+		{"mackerel-plugin-sample", true},
+		{"mackerel-plugin-hoge_sample1", true},
+		{"check-sample", true},
+		{"check-hoge-sample", true},
+		{"mackerel-sample", false},
+		{"hoge-mackerel-plugin-sample", false},
+		{"hoge-check-sample", false},
+		{"wrong-sample", false},
 	}
 
 	for _, tc := range testCases {
