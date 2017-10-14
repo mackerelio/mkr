@@ -148,6 +148,10 @@ func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
 	return fpath, nil
 }
 
+func looksLikePlugin(name string) bool {
+	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
+}
+
 type installTarget struct {
 	owner      string
 	repo       string
