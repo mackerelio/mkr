@@ -134,7 +134,7 @@ func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
 	fpath = filepath.Join(workdir, path.Base(url))
 
 	// download artifact
-	file, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	file, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return "", err
 	}
