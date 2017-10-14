@@ -21,6 +21,18 @@ func tempd(t *testing.T) string {
 	return tmpd
 }
 
+func assertEqualFileContent(t *testing.T, aFile, bFile, message string) {
+	aContent, err := ioutil.ReadFile(aFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bContent, err := ioutil.ReadFile(bFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, aContent, bContent, message)
+}
+
 func TestParseInstallTarget(t *testing.T) {
 	testCases := []struct {
 		Name   string
@@ -148,9 +160,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 		_, err = os.Stat(fpath)
 		assert.Nil(t, err, "Downloaded file is created")
 
-		downloadedContent, _ := ioutil.ReadFile(fpath)
-		expectedContent, _ := ioutil.ReadFile("testdata/mackerel-plugin-sample_linux_amd64.zip")
-		assert.Equal(t, expectedContent, downloadedContent, "Downloaded data is correct")
+		assertEqualFileContent(t, fpath, "testdata/mackerel-plugin-sample_linux_amd64.zip", "Downloaded data is correct")
 	}
 }
 
