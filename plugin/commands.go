@@ -11,6 +11,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/mackerelio/mkr/logger"
+	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -148,8 +150,47 @@ func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
 	return fpath, nil
 }
 
+// Extract artifact and install plugin
+func installByArtifact(artifactFile, bindir, workdir string) error {
+	// unzip artifact to work directory
+	err := archiver.Zip.Open(artifactFile, workdir)
+	if err != nil {
+		return err
+	}
+
+	// Look for plugin files recursively, and place those to binPath
+	return filepath.Walk(workdir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+
+		// a plugin file should be executable, and have specified name.
+		name := info.Name()
+		isExecutable := (info.Mode() & 0111) != 0
+		if isExecutable && looksLikePlugin(name) {
+			return placePlugin(path, filepath.Join(bindir, name))
+		}
+
+		// `path` is a file but not plugin.
+		return nil
+	})
+}
+
 func looksLikePlugin(name string) bool {
 	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
+}
+
+func placePlugin(src, dest string) error {
+	_, err := os.Stat(dest)
+	if err == nil {
+		logger.Log("", fmt.Sprintf("%s already exists. Skip installing for now", dest))
+		return nil
+	}
+	logger.Log("", fmt.Sprintf("Install %s to %s", filepath.Base(dest), filepath.Dir(dest)))
+	return os.Rename(src, dest)
 }
 
 type installTarget struct {

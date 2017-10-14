@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "mackerel-plugin-sample which name is same as a plugin in mackerel-plugin-sample_linux_amd64"
