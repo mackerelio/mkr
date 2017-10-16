@@ -147,7 +147,7 @@ func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
 		return "", err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, url)
 		return "", err
 	}
