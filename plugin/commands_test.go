@@ -113,8 +113,8 @@ func TestSetupPluginDir(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
-		prefix, err := setupPluginDir(tmpd)
-		assert.Equal(t, tmpd, prefix, "returns default prefix directory")
+		pluginDir, err := setupPluginDir(tmpd)
+		assert.Equal(t, tmpd, pluginDir, "returns default plugin directory")
 		assert.Nil(t, err, "setup finished successfully")
 		fi, err := os.Stat(filepath.Join(tmpd, "bin"))
 		if assert.Nil(t, err) {
@@ -129,8 +129,8 @@ func TestSetupPluginDir(t *testing.T) {
 		err := os.Chmod(tmpd, 0500)
 		assert.Nil(t, err, "chmod finished successfully")
 
-		prefix, err := setupPluginDir(tmpd)
-		assert.Equal(t, "", prefix, "returns empty string when failed")
+		pluginDir, err := setupPluginDir(tmpd)
+		assert.Equal(t, "", pluginDir, "returns empty string when failed")
 		assert.NotNil(t, err, "error should be occured while manipulate unpermitted directory")
 	}
 }

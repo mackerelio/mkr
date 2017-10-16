@@ -51,13 +51,13 @@ func doPluginInstall(c *cli.Context) error {
 		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
 
-	prefix, err := setupPluginDir(c.String("prefix"))
+	pluginDir, err := setupPluginDir(c.String("prefix"))
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while parsing install target")
 	}
 
 	// Create a work directory for downloading and extracting an artifact
-	workdir, err := ioutil.TempDir(prefix, "work-")
+	workdir, err := ioutil.TempDir(pluginDir, "work-")
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while creating a work directory")
 	}
@@ -72,7 +72,7 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
-	err = installByArtifact(artifactFile, filepath.Join(prefix, "bin"), workdir)
+	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
 	}
@@ -116,15 +116,15 @@ func parseInstallTarget(target string) (*installTarget, error) {
 }
 
 // Create a directory for plugin install
-func setupPluginDir(prefix string) (string, error) {
-	if prefix == "" {
-		prefix = "/opt/mackerel-agent/plugins"
+func setupPluginDir(pluginDir string) (string, error) {
+	if pluginDir == "" {
+		pluginDir = "/opt/mackerel-agent/plugins"
 	}
-	err := os.MkdirAll(filepath.Join(prefix, "bin"), 0755)
+	err := os.MkdirAll(filepath.Join(pluginDir, "bin"), 0755)
 	if err != nil {
 		return "", err
 	}
-	return prefix, nil
+	return pluginDir, nil
 }
 
 // Download plugin artifact from `url` to `workdir`,
