@@ -77,6 +77,7 @@ func doPluginInstall(c *cli.Context) error {
 		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
 	}
 
+	logger.Log("", fmt.Sprintf("Successfully installed %s", argInstallTarget))
 	return nil
 }
 
@@ -129,6 +130,8 @@ func setupPluginDir(prefix string) (string, error) {
 // Download plugin artifact from `url` to `workdir`,
 // and returns downloaded filepath
 func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
+	logger.Log("", fmt.Sprintf("Downloading %s", url))
+
 	// Create request to download
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -202,7 +205,7 @@ func placePlugin(src, dest string) error {
 		logger.Log("", fmt.Sprintf("%s already exists. Skip installing for now", dest))
 		return nil
 	}
-	logger.Log("", fmt.Sprintf("Install %s to %s", filepath.Base(dest), filepath.Dir(dest)))
+	logger.Log("", fmt.Sprintf("Installing %s", dest))
 	return os.Rename(src, dest)
 }
 
