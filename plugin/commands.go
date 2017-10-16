@@ -57,7 +57,7 @@ func doPluginInstall(c *cli.Context) error {
 	}
 
 	// Create a work directory for downloading and extracting an artifact
-	workdir, err := ioutil.TempDir(pluginDir, "work-")
+	workdir, err := ioutil.TempDir(filepath.Join(pluginDir, "work"), "mkr-plugin-installer-")
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while creating a work directory")
 	}
@@ -121,6 +121,10 @@ func setupPluginDir(pluginDir string) (string, error) {
 		pluginDir = "/opt/mackerel-agent/plugins"
 	}
 	err := os.MkdirAll(filepath.Join(pluginDir, "bin"), 0755)
+	if err != nil {
+		return "", err
+	}
+	err = os.MkdirAll(filepath.Join(pluginDir, "work"), 0755)
 	if err != nil {
 		return "", err
 	}

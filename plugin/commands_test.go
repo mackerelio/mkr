@@ -116,9 +116,15 @@ func TestSetupPluginDir(t *testing.T) {
 		pluginDir, err := setupPluginDir(tmpd)
 		assert.Equal(t, tmpd, pluginDir, "returns default plugin directory")
 		assert.Nil(t, err, "setup finished successfully")
+
 		fi, err := os.Stat(filepath.Join(tmpd, "bin"))
 		if assert.Nil(t, err) {
-			assert.True(t, fi.IsDir(), "plugin directory is created")
+			assert.True(t, fi.IsDir(), "plugin bin directory is created")
+		}
+
+		fi, err = os.Stat(filepath.Join(tmpd, "work"))
+		if assert.Nil(t, err) {
+			assert.True(t, fi.IsDir(), "plugin work directory is created")
 		}
 	}
 
