@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "check-sample is executable"

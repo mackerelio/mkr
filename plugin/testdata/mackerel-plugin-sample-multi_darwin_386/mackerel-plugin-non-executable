@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "mackerel-plugin-non-executable does not have execution permission"
