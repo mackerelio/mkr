@@ -49,12 +49,12 @@ func doPluginInstall(c *cli.Context) error {
 
 	it, err := newInstallTargetFromString(argInstallTarget)
 	if err != nil {
-		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
+		return errors.Wrap(err, "Failed to install plugin while parsing install target")
 	}
 
 	pluginDir, err := setupPluginDir(c.String("prefix"))
 	if err != nil {
-		return errors.Wrap(err, "Failed to install plugin while parsing install target")
+		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
 
 	// Create a work directory for downloading and extracting an artifact
