@@ -229,12 +229,21 @@ func TestNewInstallTargetFromString(t *testing.T) {
 				releaseTag: "v1.0.1",
 			},
 		},
+		{
+			Name:  "Owner and repo with release tag(which has / and @)",
+			Input: "mackerelio/mackerel-plugin-sample@v1.0.1/hoge@fuga",
+			Output: installTarget{
+				owner:      "mackerelio",
+				repo:       "mackerel-plugin-sample",
+				releaseTag: "v1.0.1/hoge@fuga",
+			},
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Logf("testing: %s\n", tc.Name)
 		it, err := newInstallTargetFromString(tc.Input)
-		assert.Nil(t, err, "error does not occur while parseInstallTarget")
+		assert.Nil(t, err, "error does not occur while newInstallTargetFromString")
 		assert.Equal(t, tc.Output, *it, "Parsing result is expected")
 	}
 }
@@ -246,21 +255,41 @@ func TestNewInstallTargetFromString_error(t *testing.T) {
 		Output string
 	}{
 		{
-			Name:   "Too many @",
-			Input:  "mackerel-plugin-sample@v0.0.1@v0.1.0",
-			Output: "Install target is invalid: mackerel-plugin-sample@v0.0.1@v0.1.0",
+			Name:   "Empty String",
+			Input:  "",
+			Output: "Install target is invalid: ",
 		},
 		{
 			Name:   "Too many /",
 			Input:  "mackerelio/hatena/mackerel-plugin-sample",
 			Output: "Install target is invalid: mackerelio/hatena/mackerel-plugin-sample",
 		},
+		{
+			Name:   "End with /",
+			Input:  "mackerelio/",
+			Output: "Install target is invalid: mackerelio/",
+		},
+		{
+			Name:   "Start with /",
+			Input:  "/mackerel-plugin-sample",
+			Output: "Install target is invalid: /mackerel-plugin-sample",
+		},
+		{
+			Name:   "Only release tag",
+			Input:  "@v0.0.1",
+			Output: "Install target is invalid: @v0.0.1",
+		},
+		{
+			Name:   "End with @",
+			Input:  "hoge/fuga@",
+			Output: "Install target is invalid: hoge/fuga@",
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Logf("testing: %s\n", tc.Name)
 		_, err := newInstallTargetFromString(tc.Input)
-		assert.NotNil(t, err, "parseInstallTarget returns err when invalid target string is passed")
+		assert.NotNil(t, err, "newInstallTargetFromString returns err when invalid target string is passed")
 		assert.Equal(t, tc.Output, err.Error(), "error message is expected")
 	}
 }

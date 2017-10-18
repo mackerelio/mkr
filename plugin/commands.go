@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -186,37 +187,27 @@ type installTarget struct {
 	releaseTag string
 }
 
+// the pattern of installTarget string
+// (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
+var targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
+
 // Parse install target string, and construct installTarget
 // example is below
 // - mackerelio/mackerel-plugin-sample
 // - mackerel-plugin-sample
 // - mackerelio/mackerel-plugin-sample@v0.0.1
 func newInstallTargetFromString(target string) (*installTarget, error) {
-	it := &installTarget{}
-
-	ownerRepoAndReleaseTag := strings.Split(target, "@")
-	var ownerRepo string
-	switch len(ownerRepoAndReleaseTag) {
-	case 1:
-		ownerRepo = ownerRepoAndReleaseTag[0]
-	case 2:
-		ownerRepo = ownerRepoAndReleaseTag[0]
-		it.releaseTag = ownerRepoAndReleaseTag[1]
-	default:
+	matches := targetReg.FindStringSubmatch(target)
+	if len(matches) != 5 {
 		return nil, fmt.Errorf("Install target is invalid: %s", target)
 	}
 
-	ownerAndRepo := strings.Split(ownerRepo, "/")
-	switch len(ownerAndRepo) {
-	case 1:
-		it.pluginName = ownerAndRepo[0]
-	case 2:
-		it.owner = ownerAndRepo[0]
-		it.repo = ownerAndRepo[1]
-	default:
-		return nil, fmt.Errorf("Install target is invalid: %s", target)
+	it := &installTarget{
+		owner:      matches[1],
+		repo:       matches[2],
+		pluginName: matches[3],
+		releaseTag: matches[4],
 	}
-
 	return it, nil
 }
 
