@@ -13,7 +13,7 @@ import (
 func TestClientGet(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		if req.URL.Path == "/200" {
-			fmt.Fprint(w, "200 OK from " + req.Header.Get("User-Agent"))
+			fmt.Fprint(w, "200 OK from "+req.Header.Get("User-Agent"))
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -24,7 +24,7 @@ func TestClientGet(t *testing.T) {
 
 	{
 		// Response is 200
-		resp, err := c.get(ts.URL+"/200")
+		resp, err := c.get(ts.URL + "/200")
 		defer closeResponse(resp)
 
 		assert.NoError(t, err, "get finished successfully")
@@ -35,7 +35,7 @@ func TestClientGet(t *testing.T) {
 
 	{
 		// Response is 404
-		resp, err := c.get(ts.URL+"/404")
+		resp, err := c.get(ts.URL + "/404")
 
 		assert.Nil(t, resp, "Return nothing as resp")
 		assert.Error(t, err, "get failed")

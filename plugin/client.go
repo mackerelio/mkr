@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// client provides utility for http request
+// client provides utilities for http request
 type client struct {
 	userAgent string
 }
