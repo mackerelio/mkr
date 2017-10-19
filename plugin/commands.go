@@ -218,7 +218,7 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 		return "", fmt.Errorf("not implemented")
 	}
 
-	filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
+	filename := fmt.Sprintf("%s_%s_%s.zip", repo, runtime.GOOS, runtime.GOARCH)
 	downloadURL := fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
 		owner, repo, it.releaseTag, filename)
 
