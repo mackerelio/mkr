@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -105,18 +104,9 @@ func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
 	logger.Log("", fmt.Sprintf("Downloading %s", url))
 
 	// Create request to download
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	resp, err := (&client{}).get(url)
+	defer closeResponse(resp)
 	if err != nil {
-		return "", err
-	}
-	req.Header.Set("User-Agent", "mkr-plugin-installer/0.0.0")
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, url)
 		return "", err
 	}
 
@@ -242,19 +232,9 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 
 	// Get owner and repo from plugin registry
 	defURL := fmt.Sprintf("%s/mackerelio/plugin-registry/master/plugins/%s.json", it.rawGithubURL, it.pluginName)
-	req, err := http.NewRequest(http.MethodGet, defURL, nil)
+	resp, err := (&client{}).get(defURL)
+	defer closeResponse(resp)
 	if err != nil {
-		return "", "", err
-	}
-	req.Header.Set("User-Agent", "mkr-plugin-installer/0.0.0")
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", "", err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, defURL)
 		return "", "", err
 	}
 
