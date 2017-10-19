@@ -16,6 +16,7 @@ import (
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
+	"net/url"
 )
 
 // CommandPlugin is definition of mkr plugin
@@ -98,20 +99,20 @@ func setupPluginDir(pluginDir string) (string, error) {
 	return pluginDir, nil
 }
 
-// Download plugin artifact from `url` to `workdir`,
+// Download plugin artifact from `u`(URL) to `workdir`,
 // and returns downloaded filepath
-func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
-	logger.Log("", fmt.Sprintf("Downloading %s", url))
+func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
+	logger.Log("", fmt.Sprintf("Downloading %s", u))
 
 	// Create request to download
-	resp, err := (&client{}).get(url)
+	resp, err := (&client{}).get(u)
 	defer closeResponse(resp)
 	if err != nil {
 		return "", err
 	}
 
 	// fpath is filepath where artifact will be saved
-	fpath = filepath.Join(workdir, path.Base(url))
+	fpath = filepath.Join(workdir, path.Base(u))
 
 	// download artifact
 	file, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
@@ -218,9 +219,14 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 		return "", fmt.Errorf("not implemented")
 	}
 
-	filename := fmt.Sprintf("%s_%s_%s.zip", repo, runtime.GOOS, runtime.GOARCH)
-	downloadURL := fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
-		owner, repo, it.releaseTag, filename)
+	filename := fmt.Sprintf("%s_%s_%s.zip", url.PathEscape(repo), runtime.GOOS, runtime.GOARCH)
+	downloadURL := fmt.Sprintf(
+		"https://github.com/%s/%s/releases/download/%s/%s",
+		url.PathEscape(owner),
+		url.PathEscape(repo),
+		url.PathEscape(it.releaseTag),
+		filename,
+	)
 
 	return downloadURL, nil
 }
@@ -231,7 +237,11 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 	}
 
 	// Get owner and repo from plugin registry
-	defURL := fmt.Sprintf("%s/mackerelio/plugin-registry/master/plugins/%s.json", it.rawGithubURL, it.pluginName)
+	defURL := fmt.Sprintf(
+		"%s/mackerelio/plugin-registry/master/plugins/%s.json",
+		it.rawGithubURL,
+		url.PathEscape(it.pluginName),
+	)
 	resp, err := (&client{}).get(defURL)
 	defer closeResponse(resp)
 	if err != nil {
