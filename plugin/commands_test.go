@@ -202,6 +202,7 @@ func TestNewInstallTargetFromString(t *testing.T) {
 			Input: "mackerel-plugin-sample",
 			Output: installTarget{
 				pluginName: "mackerel-plugin-sample",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
@@ -210,6 +211,7 @@ func TestNewInstallTargetFromString(t *testing.T) {
 			Output: installTarget{
 				pluginName: "mackerel-plugin-sample",
 				releaseTag: "v0.0.1",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
@@ -218,6 +220,7 @@ func TestNewInstallTargetFromString(t *testing.T) {
 			Output: installTarget{
 				owner: "mackerelio",
 				repo:  "mackerel-plugin-sample",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
@@ -227,6 +230,7 @@ func TestNewInstallTargetFromString(t *testing.T) {
 				owner:      "mackerelio",
 				repo:       "mackerel-plugin-sample",
 				releaseTag: "v1.0.1",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
@@ -236,6 +240,7 @@ func TestNewInstallTargetFromString(t *testing.T) {
 				owner:      "mackerelio",
 				repo:       "mackerel-plugin-sample",
 				releaseTag: "v1.0.1/hoge@fuga",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 	}
