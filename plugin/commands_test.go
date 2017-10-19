@@ -296,7 +296,7 @@ func TestNewInstallTargetFromString_error(t *testing.T) {
 
 func TestInstallTargetMakeDownloadURL(t *testing.T) {
 	{
-		t.Logf("Make download URL with owner, repo and releaseTag")
+		// Make download URL for `<owner>/<repo>@<releaseTag>`
 		it := &installTarget{
 			owner:      "mackerelio",
 			repo:       "mackerel-plugin-sample",
@@ -310,6 +310,41 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			url,
 			"Download URL is made correctly",
 		)
+	}
+
+	{
+		// Make download URL for `<pluginName>@<releaseTag>`
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			if req.URL.Path == "/mackerelio/plugin-registry/master/plugins/mackerel-plugin-hoge.json" {
+				fmt.Fprint(w, `{"description": "hoge mackerel plugin", "source": "owner-1/mackerel-plugin-hoge"}`)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-hoge",
+			releaseTag:   "v1.2.3",
+			rawGithubURL: ts.URL,
+		}
+		url, err := it.makeDownloadURL()
+		assert.NoError(t, err, "makeDownloadURL is successful")
+		assert.Equal(
+			t,
+			fmt.Sprintf("https://github.com/owner-1/mackerel-plugin-hoge/releases/download/v1.2.3/mackerel-plugin-hoge_%s_%s.zip", runtime.GOOS, runtime.GOARCH),
+			url,
+			"Download URL is made correctly",
+		)
+
+		// Make download URL with pluginName which is not defined in registry
+		it = &installTarget{
+			pluginName:   "mackerel-plugin-fuga",
+			releaseTag:   "v1.2.3",
+			rawGithubURL: ts.URL,
+		}
+		_, err = it.makeDownloadURL()
+		assert.Error(t, err, "makeDownloadURL is failed")
 	}
 }
 

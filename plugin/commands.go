@@ -218,17 +218,21 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 
 // Make artifact's download URL
 func (it *installTarget) makeDownloadURL() (string, error) {
-	if it.owner != "" && it.repo != "" {
-		if it.releaseTag == "" {
-			// TODO: Make latest release download URL by github API
-			return "", fmt.Errorf("not implemented")
-		}
-		filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
-		return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
-			it.owner, it.repo, it.releaseTag, filename), nil
+	owner, repo, err := it.getOwnerAndRepo()
+	if err != nil {
+		return "", err
 	}
-	// TODO: Make download URL by plugin registry
-	return "", fmt.Errorf("not implemented")
+
+	if it.releaseTag == "" {
+		// TODO: Fetch latest release tag by github API
+		return "", fmt.Errorf("not implemented")
+	}
+
+	filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
+	downloadURL := fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
+		owner, repo, it.releaseTag, filename)
+
+	return downloadURL, nil
 }
 
 func (it *installTarget) getOwnerAndRepo() (string, string, error) {
