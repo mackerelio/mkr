@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -181,11 +182,14 @@ func placePlugin(src, dest string) error {
 }
 
 type installTarget struct {
-	owner      string
-	repo       string
-	pluginName string
-	releaseTag string
+	owner        string
+	repo         string
+	pluginName   string
+	releaseTag   string
+	rawGithubURL string
 }
+
+const defaultRawGithubURL = "https://raw.githubusercontent.com"
 
 // the pattern of installTarget string
 // (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
@@ -203,10 +207,11 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 	}
 
 	it := &installTarget{
-		owner:      matches[1],
-		repo:       matches[2],
-		pluginName: matches[3],
-		releaseTag: matches[4],
+		owner:        matches[1],
+		repo:         matches[2],
+		pluginName:   matches[3],
+		releaseTag:   matches[4],
+		rawGithubURL: defaultRawGithubURL,
 	}
 	return it, nil
 }
@@ -224,4 +229,52 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 	}
 	// TODO: Make download URL by plugin registry
 	return "", fmt.Errorf("not implemented")
+}
+
+func (it *installTarget) getOwnerAndRepo() (string, string, error) {
+	if it.owner != "" && it.repo != "" {
+		return it.owner, it.repo, nil
+	}
+
+	// Get owner and repo from plugin registry
+	defURL := fmt.Sprintf("%s/mackerelio/plugin-registry/master/plugins/%s.json", it.rawGithubURL, it.pluginName)
+	req, err := http.NewRequest(http.MethodGet, defURL, nil)
+	if err != nil {
+		return "", "", err
+	}
+	req.Header.Set("User-Agent", "mkr-plugin-installer/0.0.0")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, defURL)
+		return "", "", err
+	}
+
+	var def registryDef
+	err = json.NewDecoder(resp.Body).Decode(&def)
+	if err != nil {
+		return "", "", err
+	}
+
+	ownerAndRepo := strings.Split(def.Source, "/")
+	if len(ownerAndRepo) != 2 {
+		return "", "", fmt.Errorf("source definition is invalid")
+	}
+
+	// Cache owner and repo
+	it.owner = ownerAndRepo[0]
+	it.repo = ownerAndRepo[1]
+
+	return it.owner, it.repo, nil
+}
+
+// registryDef represents one plugin definition in plugin-registry
+// See Also: https://github.com/mackerelio/plugin-registry
+type registryDef struct {
+	Source      string `json:"source"`
+	Description string `json:"description"`
 }

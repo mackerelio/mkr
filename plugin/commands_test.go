@@ -312,3 +312,93 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 		)
 	}
 }
+
+func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
+	{
+		// it already has owner and repo
+		it := &installTarget{
+			owner: "owner1",
+			repo:  "check-repo1",
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "owner1", owner)
+		assert.Equal(t, "check-repo1", repo)
+		assert.NoError(t, err, "getOwnerAndRepo is finished successfully")
+	}
+
+	{
+		// plugin def is not found in registry
+		ts := httptest.NewServer(http.NotFoundHandler())
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-not-found",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is not found")
+		assert.Contains(t, err.Error(), "http response not OK. code: 404,", "Returns correct err")
+	}
+
+	{
+		// plugin def is invalid json
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			fmt.Fprint(w, `{"invalid" "jso"`)
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-invalid-json",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is invalid json")
+		assert.Contains(t, err.Error(), "invalid character ", "Returns correct error from json.Unmarshal")
+	}
+
+	{
+		// a source field of plugin def is invalid
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			fmt.Fprint(w, `{"description": "description", "source": "owner1"}`)
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-invalid-source",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def has invalid source")
+		assert.Equal(t, err.Error(), "source definition is invalid", "Returns correct error")
+	}
+
+	{
+		// get owner and repo correctly from registry
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			if req.URL.Path == "/mackerelio/plugin-registry/master/plugins/mackerel-plugin-sample.json" {
+				fmt.Fprint(w, `{"description": "Sample mackerel plugin", "source": "mackerelio/mackerel-plugin-sample"}`)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-sample",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "mackerelio", owner)
+		assert.Equal(t, "mackerel-plugin-sample", repo)
+		assert.NoError(t, err, "getOwnerAndRepo finished successfully")
+
+		assert.Equal(t, "mackerelio", it.owner, "owner is cached")
+		assert.Equal(t, "mackerel-plugin-sample", it.repo, "repo is cached")
+	}
+}
