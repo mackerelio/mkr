@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -46,14 +47,14 @@ func doPluginInstall(c *cli.Context) error {
 		return fmt.Errorf("Specify install target")
 	}
 
-	it, err := parseInstallTarget(argInstallTarget)
+	it, err := newInstallTargetFromString(argInstallTarget)
 	if err != nil {
-		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
+		return errors.Wrap(err, "Failed to install plugin while parsing install target")
 	}
 
 	pluginDir, err := setupPluginDir(c.String("prefix"))
 	if err != nil {
-		return errors.Wrap(err, "Failed to install plugin while parsing install target")
+		return errors.Wrap(err, "Failed to install plugin while setup plugin directory")
 	}
 
 	// Create a work directory for downloading and extracting an artifact
@@ -79,40 +80,6 @@ func doPluginInstall(c *cli.Context) error {
 
 	logger.Log("", fmt.Sprintf("Successfully installed %s", argInstallTarget))
 	return nil
-}
-
-// Parse install target string passed from args
-// example is below
-// - mackerelio/mackerel-plugin-sample
-// - mackerel-plugin-sample
-// - mackerelio/mackerel-plugin-sample@v0.0.1
-func parseInstallTarget(target string) (*installTarget, error) {
-	it := &installTarget{}
-
-	ownerRepoAndReleaseTag := strings.Split(target, "@")
-	var ownerRepo string
-	switch len(ownerRepoAndReleaseTag) {
-	case 1:
-		ownerRepo = ownerRepoAndReleaseTag[0]
-	case 2:
-		ownerRepo = ownerRepoAndReleaseTag[0]
-		it.releaseTag = ownerRepoAndReleaseTag[1]
-	default:
-		return nil, fmt.Errorf("Install target is invalid: %s", target)
-	}
-
-	ownerAndRepo := strings.Split(ownerRepo, "/")
-	switch len(ownerAndRepo) {
-	case 1:
-		it.pluginName = ownerAndRepo[0]
-	case 2:
-		it.owner = ownerAndRepo[0]
-		it.repo = ownerAndRepo[1]
-	default:
-		return nil, fmt.Errorf("Install target is invalid: %s", target)
-	}
-
-	return it, nil
 }
 
 // Create a directory for plugin install
@@ -218,6 +185,30 @@ type installTarget struct {
 	repo       string
 	pluginName string
 	releaseTag string
+}
+
+// the pattern of installTarget string
+// (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
+var targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
+
+// Parse install target string, and construct installTarget
+// example is below
+// - mackerelio/mackerel-plugin-sample
+// - mackerel-plugin-sample
+// - mackerelio/mackerel-plugin-sample@v0.0.1
+func newInstallTargetFromString(target string) (*installTarget, error) {
+	matches := targetReg.FindStringSubmatch(target)
+	if len(matches) != 5 {
+		return nil, fmt.Errorf("Install target is invalid: %s", target)
+	}
+
+	it := &installTarget{
+		owner:      matches[1],
+		repo:       matches[2],
+		pluginName: matches[3],
+		releaseTag: matches[4],
+	}
+	return it, nil
 }
 
 // Make artifact's download URL
