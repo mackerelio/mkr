@@ -6,11 +6,9 @@ import (
 )
 
 // client provides utilities for http request
-type client struct {
-	userAgent string
-}
+type client struct{}
 
-const defaultUserAgent = "mkr-plugin-installer/0.0.0"
+const userAgent = "mkr-plugin-installer/0.0.0"
 
 // Get response from `url`
 func (c *client) get(url string) (*http.Response, error) {
@@ -18,7 +16,7 @@ func (c *client) get(url string) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", c.getUA())
+	req.Header.Set("User-Agent", userAgent)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -30,11 +28,4 @@ func (c *client) get(url string) (*http.Response, error) {
 	}
 
 	return resp, nil
-}
-
-func (c *client) getUA() string {
-	if c.userAgent != "" {
-		return c.userAgent
-	}
-	return defaultUserAgent
 }

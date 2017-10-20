@@ -46,11 +46,3 @@ func TestClientGet(t *testing.T) {
 		)
 	}
 }
-
-func TestClientGetUA(t *testing.T) {
-	c := &client{}
-	assert.Equal(t, "mkr-plugin-installer/0.0.0", c.getUA(), "Returns default user agent")
-
-	c = &client{userAgent: "custom-user-agent"}
-	assert.Equal(t, "custom-user-agent", c.getUA(), "Returns custom user agent")
-}
