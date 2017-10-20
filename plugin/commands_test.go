@@ -439,6 +439,39 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 	}
 }
 
+func TestInstallTargetGetReleaseTag(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/repos/owner1/repo1/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, `{"tag_name": "v0.5.1"}`)
+	})
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	{
+		// it already has releaseTag
+		it := &installTarget{releaseTag: "v0.1.2"}
+		releaseTag, err := it.getReleaseTag("owner", "repo")
+		assert.NoError(t, err, "getReleaseTag is successful")
+		assert.Equal(t, "v0.1.2", releaseTag, "Returns correct releaseTag")
+	}
+
+	{
+		// Specified owner and repo is not found
+		it := &installTarget{githubAPIURL: ts.URL}
+		releaseTag, err := it.getReleaseTag("owner1", "not-found-repo")
+		assert.Error(t, err, "Returns err if the repository is not found")
+		assert.Equal(t, "", releaseTag, "Returns empty string")
+	}
+
+	{
+		// Get latest releaseTag correctly
+		it := &installTarget{githubAPIURL: ts.URL}
+		releaseTag, err := it.getReleaseTag("owner1", "repo1")
+		assert.NoError(t, err, "getReleaseTag is successful")
+		assert.Equal(t, "v0.5.1", releaseTag, "releaseTag is fetched correctly from api")
+	}
+}
+
 func TestInstallTargetGetRawGithubURL(t *testing.T) {
 	it := &installTarget{}
 	assert.Equal(t, "https://raw.githubusercontent.com", it.getRawGithubURL(), "Returns default URL")

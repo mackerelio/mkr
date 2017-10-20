@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,11 +13,13 @@ import (
 	"runtime"
 	"strings"
 
+	"net/url"
+
+	"github.com/google/go-github/github"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
-	"net/url"
 )
 
 // CommandPlugin is definition of mkr plugin
@@ -267,6 +270,26 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 	it.repo = ownerAndRepo[1]
 
 	return it.owner, it.repo, nil
+}
+
+func (it *installTarget) getReleaseTag(owner, repo string) (string, error) {
+	if it.releaseTag != "" {
+		return it.releaseTag, nil
+	}
+
+	// Get latest release tag from Github API
+	ctx := context.Background()
+	client := github.NewClient(nil)
+	client.BaseURL = it.getGithubAPIURL()
+
+	release, _, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
+	if err != nil {
+		return "", err
+	}
+
+	// Cache releaseTag
+	it.releaseTag = release.GetTagName()
+	return it.releaseTag, nil
 }
 
 func (it *installTarget) getRawGithubURL() string {
