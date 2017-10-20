@@ -202,46 +202,41 @@ func TestNewInstallTargetFromString(t *testing.T) {
 			Name:  "Plugin name only",
 			Input: "mackerel-plugin-sample",
 			Output: installTarget{
-				pluginName:   "mackerel-plugin-sample",
-				rawGithubURL: defaultRawGithubURL,
+				pluginName: "mackerel-plugin-sample",
 			},
 		},
 		{
 			Name:  "Plugin name and release tag",
 			Input: "mackerel-plugin-sample@v0.0.1",
 			Output: installTarget{
-				pluginName:   "mackerel-plugin-sample",
-				releaseTag:   "v0.0.1",
-				rawGithubURL: defaultRawGithubURL,
+				pluginName: "mackerel-plugin-sample",
+				releaseTag: "v0.0.1",
 			},
 		},
 		{
 			Name:  "Owner and repo",
 			Input: "mackerelio/mackerel-plugin-sample",
 			Output: installTarget{
-				owner:        "mackerelio",
-				repo:         "mackerel-plugin-sample",
-				rawGithubURL: defaultRawGithubURL,
+				owner: "mackerelio",
+				repo:  "mackerel-plugin-sample",
 			},
 		},
 		{
 			Name:  "Owner and repo with release tag",
 			Input: "mackerelio/mackerel-plugin-sample@v1.0.1",
 			Output: installTarget{
-				owner:        "mackerelio",
-				repo:         "mackerel-plugin-sample",
-				releaseTag:   "v1.0.1",
-				rawGithubURL: defaultRawGithubURL,
+				owner:      "mackerelio",
+				repo:       "mackerel-plugin-sample",
+				releaseTag: "v1.0.1",
 			},
 		},
 		{
 			Name:  "Owner and repo with release tag(which has / and @)",
 			Input: "mackerelio/mackerel-plugin-sample@v1.0.1/hoge@fuga",
 			Output: installTarget{
-				owner:        "mackerelio",
-				repo:         "mackerel-plugin-sample",
-				releaseTag:   "v1.0.1/hoge@fuga",
-				rawGithubURL: defaultRawGithubURL,
+				owner:      "mackerelio",
+				repo:       "mackerel-plugin-sample",
+				releaseTag: "v1.0.1/hoge@fuga",
 			},
 		},
 	}
@@ -442,4 +437,20 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 		assert.Equal(t, "mackerelio", it.owner, "owner is cached")
 		assert.Equal(t, "mackerel-plugin-sample", it.repo, "repo is cached")
 	}
+}
+
+func TestInstallTargetGetRawGithubURL(t *testing.T) {
+	it := &installTarget{}
+	assert.Equal(t, "https://raw.githubusercontent.com", it.getRawGithubURL(), "Returns default URL")
+
+	it = &installTarget{rawGithubURL: "https://example.com"}
+	assert.Equal(t, "https://example.com", it.getRawGithubURL(), "Returns customized URL")
+}
+
+func TestInstallTargetGetGithubAPIURL(t *testing.T) {
+	it := &installTarget{}
+	assert.Equal(t, "https://api.github.com/", it.getGithubAPIURL().String(), "Returns default URL")
+
+	it = &installTarget{githubAPIURL: "https://api.example.com"}
+	assert.Equal(t, "https://api.example.com/", it.getGithubAPIURL().String(), "Returns customized URL")
 }

@@ -178,9 +178,13 @@ type installTarget struct {
 	pluginName   string
 	releaseTag   string
 	rawGithubURL string
+	githubAPIURL string
 }
 
-const defaultRawGithubURL = "https://raw.githubusercontent.com"
+const (
+	defaultRawGithubURL = "https://raw.githubusercontent.com"
+	defaultGithubAPIURL = "https://api.github.com"
+)
 
 // the pattern of installTarget string
 // (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
@@ -198,11 +202,10 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 	}
 
 	it := &installTarget{
-		owner:        matches[1],
-		repo:         matches[2],
-		pluginName:   matches[3],
-		releaseTag:   matches[4],
-		rawGithubURL: defaultRawGithubURL,
+		owner:      matches[1],
+		repo:       matches[2],
+		pluginName: matches[3],
+		releaseTag: matches[4],
 	}
 	return it, nil
 }
@@ -239,7 +242,7 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 	// Get owner and repo from plugin registry
 	defURL := fmt.Sprintf(
 		"%s/mackerelio/plugin-registry/master/plugins/%s.json",
-		it.rawGithubURL,
+		it.getRawGithubURL(),
 		url.PathEscape(it.pluginName),
 	)
 	resp, err := (&client{}).get(defURL)
@@ -264,6 +267,24 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 	it.repo = ownerAndRepo[1]
 
 	return it.owner, it.repo, nil
+}
+
+func (it *installTarget) getRawGithubURL() string {
+	if it.rawGithubURL != "" {
+		return it.rawGithubURL
+	}
+	return defaultRawGithubURL
+}
+
+// Returns URL object which Github Client.BaseURL can receive as it is
+func (it *installTarget) getGithubAPIURL() *url.URL {
+	u := defaultGithubAPIURL
+	if it.githubAPIURL != "" {
+		u = it.githubAPIURL
+	}
+	// Ignore err because githubAPIURL is specified only internally
+	apiURL, _ := url.Parse(u + "/") // trailing `/` is required for BaseURL
+	return apiURL
 }
 
 // registryDef represents one plugin definition in plugin-registry
