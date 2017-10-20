@@ -38,9 +38,3 @@ func (c *client) getUA() string {
 	}
 	return defaultUserAgent
 }
-
-func closeResponse(resp *http.Response) {
-	if resp != nil {
-		resp.Body.Close()
-	}
-}

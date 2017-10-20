@@ -25,7 +25,7 @@ func TestClientGet(t *testing.T) {
 	{
 		// Response is 200
 		resp, err := c.get(ts.URL + "/200")
-		defer closeResponse(resp)
+		defer resp.Body.Close()
 
 		assert.NoError(t, err, "get finished successfully")
 
@@ -44,9 +44,6 @@ func TestClientGet(t *testing.T) {
 			err.Error(),
 			"err has correct message",
 		)
-
-		// nil is passed to closeResponse, but it doesn't panic
-		closeResponse(resp)
 	}
 }
 

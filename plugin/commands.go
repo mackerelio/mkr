@@ -106,10 +106,10 @@ func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
 
 	// Create request to download
 	resp, err := (&client{}).get(u)
-	defer closeResponse(resp)
 	if err != nil {
 		return "", err
 	}
+	defer resp.Body.Close()
 
 	// fpath is filepath where artifact will be saved
 	fpath = filepath.Join(workdir, path.Base(u))
@@ -243,10 +243,10 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 		url.PathEscape(it.pluginName),
 	)
 	resp, err := (&client{}).get(defURL)
-	defer closeResponse(resp)
 	if err != nil {
 		return "", "", err
 	}
+	defer resp.Body.Close()
 
 	var def registryDef
 	err = json.NewDecoder(resp.Body).Decode(&def)
