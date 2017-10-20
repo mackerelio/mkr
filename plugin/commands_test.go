@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"testing"
 
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -397,7 +398,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 		assert.Equal(t, "", owner)
 		assert.Equal(t, "", repo)
 		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is invalid json")
-		assert.Contains(t, err.Error(), "invalid character ", "Returns correct error from json.Unmarshal")
+		assert.IsType(t, new(json.SyntaxError), err, "error type is syntax error")
 	}
 
 	{
