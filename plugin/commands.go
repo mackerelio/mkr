@@ -220,9 +220,9 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 		return "", err
 	}
 
-	if it.releaseTag == "" {
-		// TODO: Fetch latest release tag by github API
-		return "", fmt.Errorf("not implemented")
+	releaseTag, err := it.getReleaseTag(owner, repo)
+	if err != nil {
+		return "", err
 	}
 
 	filename := fmt.Sprintf("%s_%s_%s.zip", url.PathEscape(repo), runtime.GOOS, runtime.GOARCH)
@@ -230,7 +230,7 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 		"https://github.com/%s/%s/releases/download/%s/%s",
 		url.PathEscape(owner),
 		url.PathEscape(repo),
-		url.PathEscape(it.releaseTag),
+		url.PathEscape(releaseTag),
 		filename,
 	)
 
