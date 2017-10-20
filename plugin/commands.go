@@ -1,10 +1,10 @@
 package plugin
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -16,6 +16,7 @@ import (
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
+	"net/url"
 )
 
 // CommandPlugin is definition of mkr plugin
@@ -98,29 +99,20 @@ func setupPluginDir(pluginDir string) (string, error) {
 	return pluginDir, nil
 }
 
-// Download plugin artifact from `url` to `workdir`,
+// Download plugin artifact from `u`(URL) to `workdir`,
 // and returns downloaded filepath
-func downloadPluginArtifact(url, workdir string) (fpath string, err error) {
-	logger.Log("", fmt.Sprintf("Downloading %s", url))
+func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
+	logger.Log("", fmt.Sprintf("Downloading %s", u))
 
 	// Create request to download
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("User-Agent", "mkr-plugin-installer/0.0.0")
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := (&client{}).get(u)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		err = fmt.Errorf("http response not OK. code: %d, url: %s", resp.StatusCode, url)
-		return "", err
-	}
 
 	// fpath is filepath where artifact will be saved
-	fpath = filepath.Join(workdir, path.Base(url))
+	fpath = filepath.Join(workdir, path.Base(u))
 
 	// download artifact
 	file, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
@@ -181,11 +173,14 @@ func placePlugin(src, dest string) error {
 }
 
 type installTarget struct {
-	owner      string
-	repo       string
-	pluginName string
-	releaseTag string
+	owner        string
+	repo         string
+	pluginName   string
+	releaseTag   string
+	rawGithubURL string
 }
+
+const defaultRawGithubURL = "https://raw.githubusercontent.com"
 
 // the pattern of installTarget string
 // (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
@@ -203,25 +198,77 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 	}
 
 	it := &installTarget{
-		owner:      matches[1],
-		repo:       matches[2],
-		pluginName: matches[3],
-		releaseTag: matches[4],
+		owner:        matches[1],
+		repo:         matches[2],
+		pluginName:   matches[3],
+		releaseTag:   matches[4],
+		rawGithubURL: defaultRawGithubURL,
 	}
 	return it, nil
 }
 
 // Make artifact's download URL
 func (it *installTarget) makeDownloadURL() (string, error) {
-	if it.owner != "" && it.repo != "" {
-		if it.releaseTag == "" {
-			// TODO: Make latest release download URL by github API
-			return "", fmt.Errorf("not implemented")
-		}
-		filename := fmt.Sprintf("%s_%s_%s.zip", it.repo, runtime.GOOS, runtime.GOARCH)
-		return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
-			it.owner, it.repo, it.releaseTag, filename), nil
+	owner, repo, err := it.getOwnerAndRepo()
+	if err != nil {
+		return "", err
 	}
-	// TODO: Make download URL by plugin registry
-	return "", fmt.Errorf("not implemented")
+
+	if it.releaseTag == "" {
+		// TODO: Fetch latest release tag by github API
+		return "", fmt.Errorf("not implemented")
+	}
+
+	filename := fmt.Sprintf("%s_%s_%s.zip", url.PathEscape(repo), runtime.GOOS, runtime.GOARCH)
+	downloadURL := fmt.Sprintf(
+		"https://github.com/%s/%s/releases/download/%s/%s",
+		url.PathEscape(owner),
+		url.PathEscape(repo),
+		url.PathEscape(it.releaseTag),
+		filename,
+	)
+
+	return downloadURL, nil
+}
+
+func (it *installTarget) getOwnerAndRepo() (string, string, error) {
+	if it.owner != "" && it.repo != "" {
+		return it.owner, it.repo, nil
+	}
+
+	// Get owner and repo from plugin registry
+	defURL := fmt.Sprintf(
+		"%s/mackerelio/plugin-registry/master/plugins/%s.json",
+		it.rawGithubURL,
+		url.PathEscape(it.pluginName),
+	)
+	resp, err := (&client{}).get(defURL)
+	if err != nil {
+		return "", "", err
+	}
+	defer resp.Body.Close()
+
+	var def registryDef
+	err = json.NewDecoder(resp.Body).Decode(&def)
+	if err != nil {
+		return "", "", err
+	}
+
+	ownerAndRepo := strings.Split(def.Source, "/")
+	if len(ownerAndRepo) != 2 {
+		return "", "", fmt.Errorf("source definition is invalid")
+	}
+
+	// Cache owner and repo
+	it.owner = ownerAndRepo[0]
+	it.repo = ownerAndRepo[1]
+
+	return it.owner, it.repo, nil
+}
+
+// registryDef represents one plugin definition in plugin-registry
+// See Also: https://github.com/mackerelio/plugin-registry
+type registryDef struct {
+	Source      string `json:"source"`
+	Description string `json:"description"`
 }

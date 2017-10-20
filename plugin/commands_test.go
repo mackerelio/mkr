@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"testing"
 
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -201,41 +202,46 @@ func TestNewInstallTargetFromString(t *testing.T) {
 			Name:  "Plugin name only",
 			Input: "mackerel-plugin-sample",
 			Output: installTarget{
-				pluginName: "mackerel-plugin-sample",
+				pluginName:   "mackerel-plugin-sample",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
 			Name:  "Plugin name and release tag",
 			Input: "mackerel-plugin-sample@v0.0.1",
 			Output: installTarget{
-				pluginName: "mackerel-plugin-sample",
-				releaseTag: "v0.0.1",
+				pluginName:   "mackerel-plugin-sample",
+				releaseTag:   "v0.0.1",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
 			Name:  "Owner and repo",
 			Input: "mackerelio/mackerel-plugin-sample",
 			Output: installTarget{
-				owner: "mackerelio",
-				repo:  "mackerel-plugin-sample",
+				owner:        "mackerelio",
+				repo:         "mackerel-plugin-sample",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
 			Name:  "Owner and repo with release tag",
 			Input: "mackerelio/mackerel-plugin-sample@v1.0.1",
 			Output: installTarget{
-				owner:      "mackerelio",
-				repo:       "mackerel-plugin-sample",
-				releaseTag: "v1.0.1",
+				owner:        "mackerelio",
+				repo:         "mackerel-plugin-sample",
+				releaseTag:   "v1.0.1",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 		{
 			Name:  "Owner and repo with release tag(which has / and @)",
 			Input: "mackerelio/mackerel-plugin-sample@v1.0.1/hoge@fuga",
 			Output: installTarget{
-				owner:      "mackerelio",
-				repo:       "mackerel-plugin-sample",
-				releaseTag: "v1.0.1/hoge@fuga",
+				owner:        "mackerelio",
+				repo:         "mackerel-plugin-sample",
+				releaseTag:   "v1.0.1/hoge@fuga",
+				rawGithubURL: defaultRawGithubURL,
 			},
 		},
 	}
@@ -296,7 +302,7 @@ func TestNewInstallTargetFromString_error(t *testing.T) {
 
 func TestInstallTargetMakeDownloadURL(t *testing.T) {
 	{
-		t.Logf("Make download URL with owner, repo and releaseTag")
+		// Make download URL for `<owner>/<repo>@<releaseTag>`
 		it := &installTarget{
 			owner:      "mackerelio",
 			repo:       "mackerel-plugin-sample",
@@ -310,5 +316,130 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			url,
 			"Download URL is made correctly",
 		)
+	}
+
+	{
+		// Make download URL for `<pluginName>@<releaseTag>`
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			if req.URL.Path == "/mackerelio/plugin-registry/master/plugins/mackerel-plugin-hoge.json" {
+				fmt.Fprint(w, `{"description": "hoge mackerel plugin", "source": "owner-1/mackerel-plugin-hoge"}`)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-hoge",
+			releaseTag:   "v1.2.3",
+			rawGithubURL: ts.URL,
+		}
+		url, err := it.makeDownloadURL()
+		assert.NoError(t, err, "makeDownloadURL is successful")
+		assert.Equal(
+			t,
+			fmt.Sprintf("https://github.com/owner-1/mackerel-plugin-hoge/releases/download/v1.2.3/mackerel-plugin-hoge_%s_%s.zip", runtime.GOOS, runtime.GOARCH),
+			url,
+			"Download URL is made correctly",
+		)
+
+		// Make download URL with pluginName which is not defined in registry
+		it = &installTarget{
+			pluginName:   "mackerel-plugin-fuga",
+			releaseTag:   "v1.2.3",
+			rawGithubURL: ts.URL,
+		}
+		_, err = it.makeDownloadURL()
+		assert.Error(t, err, "makeDownloadURL is failed")
+	}
+}
+
+func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
+	{
+		// it already has owner and repo
+		it := &installTarget{
+			owner: "owner1",
+			repo:  "check-repo1",
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "owner1", owner)
+		assert.Equal(t, "check-repo1", repo)
+		assert.NoError(t, err, "getOwnerAndRepo is finished successfully")
+	}
+
+	{
+		// plugin def is not found in registry
+		ts := httptest.NewServer(http.NotFoundHandler())
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-not-found",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is not found")
+		assert.Contains(t, err.Error(), "http response not OK. code: 404,", "Returns correct err")
+	}
+
+	{
+		// plugin def is invalid json
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			fmt.Fprint(w, `{"invalid" "jso"`)
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-invalid-json",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is invalid json")
+		assert.IsType(t, new(json.SyntaxError), err, "error type is syntax error")
+	}
+
+	{
+		// a source field of plugin def is invalid
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			fmt.Fprint(w, `{"description": "description", "source": "owner1"}`)
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-invalid-source",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "", owner)
+		assert.Equal(t, "", repo)
+		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def has invalid source")
+		assert.Equal(t, err.Error(), "source definition is invalid", "Returns correct error")
+	}
+
+	{
+		// get owner and repo correctly from registry
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			if req.URL.Path == "/mackerelio/plugin-registry/master/plugins/mackerel-plugin-sample.json" {
+				fmt.Fprint(w, `{"description": "Sample mackerel plugin", "source": "mackerelio/mackerel-plugin-sample"}`)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}))
+		defer ts.Close()
+
+		it := &installTarget{
+			pluginName:   "mackerel-plugin-sample",
+			rawGithubURL: ts.URL,
+		}
+		owner, repo, err := it.getOwnerAndRepo()
+		assert.Equal(t, "mackerelio", owner)
+		assert.Equal(t, "mackerel-plugin-sample", repo)
+		assert.NoError(t, err, "getOwnerAndRepo finished successfully")
+
+		assert.Equal(t, "mackerelio", it.owner, "owner is cached")
+		assert.Equal(t, "mackerel-plugin-sample", it.repo, "repo is cached")
 	}
 }
