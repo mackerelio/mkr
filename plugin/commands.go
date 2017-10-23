@@ -175,10 +175,12 @@ func placePlugin(src, dest string) error {
 }
 
 type installTarget struct {
-	owner        string
-	repo         string
-	pluginName   string
-	releaseTag   string
+	owner      string
+	repo       string
+	pluginName string
+	releaseTag string
+
+	// fields for testing
 	rawGithubURL string
 	apiGithubURL string
 }
