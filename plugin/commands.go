@@ -15,7 +15,6 @@ import (
 
 	"net/url"
 
-	"github.com/google/go-github/github"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
@@ -279,7 +278,7 @@ func (it *installTarget) getReleaseTag(owner, repo string) (string, error) {
 
 	// Get latest release tag from Github API
 	ctx := context.Background()
-	client := github.NewClient(nil)
+	client := getGithubClient(ctx)
 	client.BaseURL = it.getGithubAPIURL()
 
 	release, _, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
