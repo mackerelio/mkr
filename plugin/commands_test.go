@@ -136,7 +136,7 @@ func TestInstallByArtifact(t *testing.T) {
 			"Install is skipped, so the contents is what is before",
 		)
 
-		// Install same name plugin forcefully
+		// Install same name plugin with overwrite option
 		workdir3 := tempd(t)
 		defer os.RemoveAll(workdir3)
 		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir3, true)
@@ -145,7 +145,7 @@ func TestInstallByArtifact(t *testing.T) {
 			t,
 			installedPath,
 			"testdata/mackerel-plugin-sample-duplicate_linux_amd64/mackerel-plugin-sample",
-			"a plugin is installed forcefully, so the contents is overwritten",
+			"a plugin is installed with overwrite option, so the contents is overwritten",
 		)
 	}
 

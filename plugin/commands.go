@@ -38,8 +38,8 @@ var CommandPlugin = cli.Command{
 					Usage: "plugin install location",
 				},
 				cli.BoolFlag{
-					Name: "force",
-					Usage: "Force overwriting an existing plugin",
+					Name: "overwrite",
+					Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
 				},
 			},
 		},
@@ -80,7 +80,7 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
-	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, c.Bool("force"))
+	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, c.Bool("overwrite"))
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
 	}
@@ -136,7 +136,7 @@ func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
 }
 
 // Extract artifact and install plugin
-func installByArtifact(artifactFile, bindir, workdir string, force bool) error {
+func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) error {
 	// unzip artifact to work directory
 	err := archiver.Zip.Open(artifactFile, workdir)
 	if err != nil {
@@ -156,7 +156,7 @@ func installByArtifact(artifactFile, bindir, workdir string, force bool) error {
 		name := info.Name()
 		isExecutable := (info.Mode() & 0111) != 0
 		if isExecutable && looksLikePlugin(name) {
-			return placePlugin(path, filepath.Join(bindir, name), force)
+			return placePlugin(path, filepath.Join(bindir, name), overwrite)
 		}
 
 		// `path` is a file but not plugin.
@@ -168,9 +168,9 @@ func looksLikePlugin(name string) bool {
 	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
 }
 
-func placePlugin(src, dest string, force bool) error {
+func placePlugin(src, dest string, overwrite bool) error {
 	_, err := os.Stat(dest)
-	if err == nil && !force {
+	if err == nil && !overwrite {
 		logger.Log("", fmt.Sprintf("%s already exists. Skip installing for now", dest))
 		return nil
 	}
