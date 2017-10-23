@@ -11,19 +11,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(m *testing.M) {
-	// Makes related environments empty,
-	// and reset these after test
+// Makes related environments empty,
+// and returns teardown function which reset
+// these variables.
+func githubTestSetup() func() {
 	origTokenEnv := os.Getenv("GITHUB_TOKEN")
-	defer os.Setenv("GITHUB_TOKEN", origTokenEnv)
 	os.Unsetenv("GITHUB_TOKEN")
 	origGitConfigEnv := os.Getenv("GIT_CONFIG")
-	defer os.Setenv("GIT_CONFIG", origGitConfigEnv)
 	os.Unsetenv("GIT_CONFIG")
-	os.Exit(m.Run())
+
+	return func () {
+		os.Setenv("GITHUB_TOKEN", origTokenEnv)
+		os.Setenv("GIT_CONFIG", origGitConfigEnv)
+	}
 }
 
 func TestGetGithubClient(t *testing.T) {
+	teardown := githubTestSetup()
+	defer teardown()
+
 	// Authorization Header tracking
 	var authHeader string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -36,25 +42,28 @@ func TestGetGithubClient(t *testing.T) {
 	{
 		// Client use `GITHUB_TOKEN`
 		os.Setenv("GITHUB_TOKEN", "tokenFromEnv")
-
 		client := getGithubClient(ctx)
 		client.BaseURL, _ = url.Parse(ts.URL + "/")
 		client.Repositories.GetLatestRelease(ctx, "owner", "repo")
 		assert.Equal(t, "Bearer tokenFromEnv", authHeader, "token is included in request")
-
 		os.Unsetenv("GITHUB_TOKEN")
 	}
 
 	{
 		// Client doesn't use token
+		os.Setenv("GIT_CONFIG", "testdata/not_exists")
 		client := getGithubClient(ctx)
 		client.BaseURL, _ = url.Parse(ts.URL + "/")
 		client.Repositories.GetLatestRelease(ctx, "owner", "repo")
 		assert.Equal(t, "", authHeader, "token is not included in request")
+		os.Unsetenv("GIT_CONFIG")
 	}
 }
 
 func TestGetGithubToken(t *testing.T) {
+	teardown := githubTestSetup()
+	defer teardown()
+
 	{
 		// Get token from environment variable
 		os.Setenv("GITHUB_TOKEN", "tokenFromEnv")
