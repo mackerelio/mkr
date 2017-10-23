@@ -106,7 +106,7 @@ func TestInstallByArtifact(t *testing.T) {
 		workdir := tempd(t)
 		defer os.RemoveAll(workdir)
 
-		err := installByArtifact("testdata/mackerel-plugin-sample_linux_amd64.zip", bindir, workdir)
+		err := installByArtifact("testdata/mackerel-plugin-sample_linux_amd64.zip", bindir, workdir, false)
 		assert.Nil(t, err, "installByArtifact finished successfully")
 
 		installedPath := filepath.Join(bindir, "mackerel-plugin-sample")
@@ -124,7 +124,7 @@ func TestInstallByArtifact(t *testing.T) {
 		// Install same name plugin, but it is skipped
 		workdir2 := tempd(t)
 		defer os.RemoveAll(workdir2)
-		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir2)
+		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir2, false)
 		assert.Nil(t, err, "installByArtifact finished successfully even if same name plugin exists")
 
 		fi, err = os.Stat(filepath.Join(bindir, "mackerel-plugin-sample"))
@@ -135,6 +135,18 @@ func TestInstallByArtifact(t *testing.T) {
 			"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
 			"Install is skipped, so the contents is what is before",
 		)
+
+		// Install same name plugin with overwrite option
+		workdir3 := tempd(t)
+		defer os.RemoveAll(workdir3)
+		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir3, true)
+		assert.Nil(t, err, "installByArtifact finished successfully")
+		assertEqualFileContent(
+			t,
+			installedPath,
+			"testdata/mackerel-plugin-sample-duplicate_linux_amd64/mackerel-plugin-sample",
+			"a plugin is installed with overwrite option, so the contents is overwritten",
+		)
 	}
 
 	{
@@ -144,7 +156,7 @@ func TestInstallByArtifact(t *testing.T) {
 		workdir := tempd(t)
 		defer os.RemoveAll(workdir)
 
-		installByArtifact("testdata/mackerel-plugin-sample-multi_darwin_386.zip", bindir, workdir)
+		installByArtifact("testdata/mackerel-plugin-sample-multi_darwin_386.zip", bindir, workdir, false)
 
 		// check-sample, mackerel-plugin-sample-multi-1 and plugins/mackerel-plugin-sample-multi-2
 		// are installed.  But followings are not installed
