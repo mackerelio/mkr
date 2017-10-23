@@ -180,12 +180,12 @@ type installTarget struct {
 	pluginName   string
 	releaseTag   string
 	rawGithubURL string
-	githubAPIURL string
+	apiGithubURL string
 }
 
 const (
 	defaultRawGithubURL = "https://raw.githubusercontent.com"
-	defaultGithubAPIURL = "https://api.github.com"
+	defaultAPIGithubURL = "https://api.github.com"
 )
 
 // the pattern of installTarget string
@@ -279,7 +279,7 @@ func (it *installTarget) getReleaseTag(owner, repo string) (string, error) {
 	// Get latest release tag from Github API
 	ctx := context.Background()
 	client := getGithubClient(ctx)
-	client.BaseURL = it.getGithubAPIURL()
+	client.BaseURL = it.getAPIGithubURL()
 
 	release, _, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
 	if err != nil {
@@ -299,12 +299,12 @@ func (it *installTarget) getRawGithubURL() string {
 }
 
 // Returns URL object which Github Client.BaseURL can receive as it is
-func (it *installTarget) getGithubAPIURL() *url.URL {
-	u := defaultGithubAPIURL
-	if it.githubAPIURL != "" {
-		u = it.githubAPIURL
+func (it *installTarget) getAPIGithubURL() *url.URL {
+	u := defaultAPIGithubURL
+	if it.apiGithubURL != "" {
+		u = it.apiGithubURL
 	}
-	// Ignore err because githubAPIURL is specified only internally
+	// Ignore err because apiGithubURL is specified only internally
 	apiURL, _ := url.Parse(u + "/") // trailing `/` is required for BaseURL
 	return apiURL
 }

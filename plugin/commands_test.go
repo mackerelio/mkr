@@ -356,13 +356,13 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 		mux.HandleFunc("/repos/owner1/check-repo1/releases/latest", func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, `{"tag_name": "1.01"}`)
 		})
-		githubAPIServer := httptest.NewServer(mux)
-		defer githubAPIServer.Close()
+		apiGithubServer := httptest.NewServer(mux)
+		defer apiGithubServer.Close()
 
 		it := &installTarget{
 			owner:        "owner1",
 			repo:         "check-repo1",
-			githubAPIURL: githubAPIServer.URL,
+			apiGithubURL: apiGithubServer.URL,
 		}
 		url, err := it.makeDownloadURL()
 		assert.NoError(t, err, "makeDownloadURL is successful")
@@ -377,7 +377,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 		it = &installTarget{
 			owner:        "owner1",
 			repo:         "check-not-found",
-			githubAPIURL: githubAPIServer.URL,
+			apiGithubURL: apiGithubServer.URL,
 		}
 		_, err = it.makeDownloadURL()
 		assert.Error(t, err, "makeDownloadURL is failed")
@@ -389,8 +389,8 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 		muxAPI.HandleFunc("/repos/owner1/mackerel-plugin-repo1/releases/latest", func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, `{"tag_name": "release/v0.5.1"}`)
 		})
-		githubAPIServer := httptest.NewServer(muxAPI)
-		defer githubAPIServer.Close()
+		apiGithubServer := httptest.NewServer(muxAPI)
+		defer apiGithubServer.Close()
 
 		muxRaw := http.NewServeMux()
 		muxRaw.HandleFunc(
@@ -404,7 +404,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 
 		it := &installTarget{
 			pluginName:   "mackerel-plugin-repo1",
-			githubAPIURL: githubAPIServer.URL,
+			apiGithubURL: apiGithubServer.URL,
 			rawGithubURL: rawGithubServer.URL,
 		}
 
@@ -527,7 +527,7 @@ func TestInstallTargetGetReleaseTag(t *testing.T) {
 
 	{
 		// Specified owner and repo is not found
-		it := &installTarget{githubAPIURL: ts.URL}
+		it := &installTarget{apiGithubURL: ts.URL}
 		releaseTag, err := it.getReleaseTag("owner1", "not-found-repo")
 		assert.Error(t, err, "Returns err if the repository is not found")
 		assert.Equal(t, "", releaseTag, "Returns empty string")
@@ -535,7 +535,7 @@ func TestInstallTargetGetReleaseTag(t *testing.T) {
 
 	{
 		// Get latest releaseTag correctly
-		it := &installTarget{githubAPIURL: ts.URL}
+		it := &installTarget{apiGithubURL: ts.URL}
 		releaseTag, err := it.getReleaseTag("owner1", "repo1")
 		assert.NoError(t, err, "getReleaseTag is successful")
 		assert.Equal(t, "v0.5.1", releaseTag, "releaseTag is fetched correctly from api")
@@ -550,10 +550,10 @@ func TestInstallTargetGetRawGithubURL(t *testing.T) {
 	assert.Equal(t, "https://example.com", it.getRawGithubURL(), "Returns customized URL")
 }
 
-func TestInstallTargetGetGithubAPIURL(t *testing.T) {
+func TestInstallTargetGetAPIGithubURL(t *testing.T) {
 	it := &installTarget{}
-	assert.Equal(t, "https://api.github.com/", it.getGithubAPIURL().String(), "Returns default URL")
+	assert.Equal(t, "https://api.github.com/", it.getAPIGithubURL().String(), "Returns default URL")
 
-	it = &installTarget{githubAPIURL: "https://api.example.com"}
-	assert.Equal(t, "https://api.example.com/", it.getGithubAPIURL().String(), "Returns customized URL")
+	it = &installTarget{apiGithubURL: "https://api.example.com"}
+	assert.Equal(t, "https://api.example.com/", it.getAPIGithubURL().String(), "Returns customized URL")
 }
