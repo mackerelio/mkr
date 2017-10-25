@@ -59,9 +59,9 @@ var CommandPlugin = cli.Command{
           You can find available plugins in https://github.com/mackerelio/plugin-registry
           Example: mkr plugin install mackerel-plugin-sample
 
-    The installer uses Github API to find latest release.  Please set a github token to
+    The installer uses Github API to find the latest release.  Please set a github token to
     GITHUB_TOKEN environment variable, or to github.token in .gitconfig.
-    Otherwise, installing sometimes fails because of Github API Rate Limit.
+    Otherwise, installation sometimes fails because of Github API Rate Limit.
 
     If you want to use the plugin installer by a server provisioning tool,
     we recommend you to specify <release_tag> explicitly.
