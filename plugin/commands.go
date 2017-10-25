@@ -23,28 +23,53 @@ import (
 
 // CommandPlugin is definition of mkr plugin
 var CommandPlugin = cli.Command{
-	Name:        "plugin",
-	Usage:       "Manage mackerel plugin",
-	Description: `[WIP] Manage mackerel plugin`,
+	Name:  "plugin",
+	Usage: "Manage mackerel plugin",
+	Description: `
+    Manage mackerel plugin.  For example, you can install a mackerel plugin and
+    check plugin by "mkr plugin install".
+`,
 	Subcommands: []cli.Command{
 		{
-			Name:        "install",
-			Usage:       "install mackerel plugin",
-			Description: `WIP`,
-			Action:      doPluginInstall,
+			Name:      "install",
+			Usage:     "Install a plugin from github or plugin registry",
+			ArgsUsage: "[--prefix <prefix>] [--overwrite] <install_target>",
+			Action:    doPluginInstall,
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "prefix",
-					Usage: "plugin install location",
+					Usage: "Plugin install location. The default is /opt/mackerel-agent/plugins",
 				},
 				cli.BoolFlag{
-					Name: "overwrite",
+					Name:  "overwrite",
 					Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
 				},
 			},
+			Description: `
+    Install a mackerel plugin and a check plugin from github or plugin registry.
+    To install by mkr, a plugin has to be released to Github Releases in specification format.
+
+    <install_target> is:
+    - <owner>/<repo>[@<release_tag>]
+          Install from specified github owner, repository, and Github Releases tag.
+          If you omit <release_tag>, the installer install from latest Github Release.
+          Example: mkr plugin install mackerelio/mackerel-plugin-sample@v0.0.1
+    - <plugin_name>[@<release_tag]
+          Install from plugin registry.
+          You can find available plugins in https://github.com/mackerelio/plugin-registry
+          Example: mkr plugin install mackerel-plugin-sample
+
+    The installer uses Github API to find the latest release.  Please set a github token to
+    GITHUB_TOKEN environment variable, or to github.token in .gitconfig.
+    Otherwise, installation sometimes fails because of Github API Rate Limit.
+
+    If you want to use the plugin installer by a server provisioning tool,
+    we recommend you to specify <release_tag> explicitly.
+    If you specify <release_tag>, the installer doesn't use Github API,
+    so Github API Rate Limit error doesn't occur.
+`,
 		},
 	},
-	Hidden: true,
 }
 
 // main function for mkr plugin install
