@@ -1,3 +1,12 @@
+mkr (0.22.0-1) stable; urgency=low
+
+  * Release mkr plugin install (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/125>
+  * Add metrics command (by edangelion)
+    <https://github.com/mackerelio/mkr/pull/119>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 26 Oct 2017 11:13:29 +0900
+
 mkr (0.21.0-1) stable; urgency=low
 
   * Use new API BaseURL (by astj)

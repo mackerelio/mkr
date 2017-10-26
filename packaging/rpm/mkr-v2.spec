@@ -36,6 +36,10 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Oct 26 2017 <mackerel-developers@hatena.ne.jp> - 0.22.0
+- Release mkr plugin install (by shibayu36)
+- Add metrics command (by edangelion)
+
 * Wed Oct 04 2017 <mackerel-developers@hatena.ne.jp> - 0.21.0
 - Use new API BaseURL (by astj)
 
