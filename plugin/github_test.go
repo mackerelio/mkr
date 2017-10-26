@@ -20,7 +20,7 @@ func githubTestSetup() func() {
 	origGitConfigEnv := os.Getenv("GIT_CONFIG")
 	os.Unsetenv("GIT_CONFIG")
 
-	return func () {
+	return func() {
 		os.Setenv("GITHUB_TOKEN", origTokenEnv)
 		os.Setenv("GIT_CONFIG", origGitConfigEnv)
 	}
