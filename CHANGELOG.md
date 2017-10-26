@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.22.0 (2017-10-26)
+
+* Release mkr plugin install #125 (shibayu36)
+* Add metrics command #119 (edangelion)
+
+
 ## 0.21.0 (2017-10-04)
 
 * Use new API BaseURL #116 (astj)
