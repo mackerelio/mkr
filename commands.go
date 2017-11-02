@@ -138,7 +138,7 @@ var commandUpdate = cli.Command{
 var commandThrow = cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
-	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] stdin",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] stdin",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
     Output format of metric values are compatible with that of a Sensu plugin.
@@ -154,7 +154,7 @@ var commandThrow = cli.Command{
 var commandMetrics = cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
-	ArgsUsage: "[--host | -h <hostId>] [--service | -s <service>] [--name | -n <metricName>] --from int --to int",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] --from int --to int",
 	Description: `
     Fetch metric values of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
