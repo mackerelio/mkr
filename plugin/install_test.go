@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -204,10 +205,9 @@ func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context
 }
 
 func TestDoPluginInstall(t *testing.T) {
-	ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
-	defer ts.Close()
-
 	t.Run("specify URL directly", func(t *testing.T) {
+		ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
+		defer ts.Close()
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
@@ -217,6 +217,28 @@ func TestDoPluginInstall(t *testing.T) {
 
 		fpath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
 		_, err = os.Stat(fpath)
+		assert.Nil(t, err, "sample plugin is successfully installed and located")
+	})
+
+	t.Run("file: scheme URL", func(t *testing.T) {
+		cwd, _ := os.Getwd()
+		fpath := filepath.Join(cwd, "testdata", "mackerel-plugin-sample_linux_amd64.zip")
+		fpath = filepath.ToSlash(fpath) // care windows
+		scheme := "file://"
+		if !strings.HasPrefix(fpath, "/") {
+			// care windows drive letter
+			scheme += "/"
+		}
+
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		ctx := newPluginInstallContext(scheme+fpath, tmpd, false)
+		err := doPluginInstall(ctx)
+		assert.Nil(t, err, "sample plugin is succesfully installed")
+
+		plugPath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
+		_, err = os.Stat(plugPath)
 		assert.Nil(t, err, "sample plugin is successfully installed and located")
 	})
 }

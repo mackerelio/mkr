@@ -28,8 +28,11 @@ const (
 )
 
 // the pattern of installTarget string
-// (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
-var targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
+var (
+	// (?:<plugin_name>|<owner>/<repo>)(?:@<releaseTag>)?
+	targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
+	urlReg    = regexp.MustCompile(`^(?:https?|file)://`)
+)
 
 // Parse install target string, and construct installTarget
 // example is below
@@ -37,7 +40,7 @@ var targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
 // - mackerel-plugin-sample
 // - mackerelio/mackerel-plugin-sample@v0.0.1
 func newInstallTargetFromString(target string) (*installTarget, error) {
-	if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
+	if urlReg.MatchString(target) {
 		return &installTarget{
 			directURL: target,
 		}, nil
