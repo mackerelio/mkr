@@ -1,6 +1,8 @@
 package plugin
 
 import (
+	"flag"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -9,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/urfave/cli.v1"
 )
 
 func tempd(t *testing.T) string {
@@ -179,6 +182,43 @@ func TestInstallByArtifact(t *testing.T) {
 		_, err = os.Stat(filepath.Join(bindir, "not-mackerel-plugin-sample"))
 		assert.NotNil(t, err, "not-mackerel-plugin-sample is not installed")
 	}
+}
+
+func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context {
+	fs := flag.NewFlagSet("name", flag.ContinueOnError)
+	for _, f := range commandPluginInstall.Flags {
+		f.Apply(fs)
+	}
+	argv := []string{}
+	if prefix != "" {
+		argv = append(argv, fmt.Sprintf("-prefix=%s", prefix))
+	}
+	if overwrite {
+		argv = append(argv, "-overwrite")
+	}
+	if target != "" {
+		argv = append(argv, target)
+	}
+	fs.Parse(argv)
+	return cli.NewContext(nil, fs, nil)
+}
+
+func TestDoPluginInstall(t *testing.T) {
+	ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
+	defer ts.Close()
+
+	t.Run("specify URL directly", func(t *testing.T) {
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		ctx := newPluginInstallContext(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
+		err := doPluginInstall(ctx)
+		assert.Nil(t, err, "sample plugin is succesfully installed")
+
+		fpath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
+		_, err = os.Stat(fpath)
+		assert.Nil(t, err, "sample plugin is successfully installed and located")
+	})
 }
 
 func TestLooksLikePlugin(t *testing.T) {
