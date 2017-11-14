@@ -15,6 +15,7 @@ type installTarget struct {
 	repo       string
 	pluginName string
 	releaseTag string
+	directURL  string
 
 	// fields for testing
 	rawGithubURL string
@@ -36,6 +37,12 @@ var targetReg = regexp.MustCompile(`^(?:([^@/]+)/([^@/]+)|([^@/]+))(?:@(.+))?$`)
 // - mackerel-plugin-sample
 // - mackerelio/mackerel-plugin-sample@v0.0.1
 func newInstallTargetFromString(target string) (*installTarget, error) {
+	if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
+		return &installTarget{
+			directURL: target,
+		}, nil
+	}
+
 	matches := targetReg.FindStringSubmatch(target)
 	if len(matches) != 5 {
 		return nil, fmt.Errorf("Install target is invalid: %s", target)
@@ -52,6 +59,10 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 
 // Make artifact's download URL
 func (it *installTarget) makeDownloadURL() (string, error) {
+	if it.directURL != "" {
+		return it.directURL, nil
+	}
+
 	owner, repo, err := it.getOwnerAndRepo()
 	if err != nil {
 		return "", err
