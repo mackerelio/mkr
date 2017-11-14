@@ -145,6 +145,29 @@ func TestInstallByArtifact(t *testing.T) {
 		)
 	}
 
+	t.Run("tgz", func(*testing.T) {
+		// Install by the artifact which has a single plugin
+		bindir := tempd(t)
+		defer os.RemoveAll(bindir)
+		workdir := tempd(t)
+		defer os.RemoveAll(workdir)
+
+		err := installByArtifact("testdata/mackerel-plugin-sample_linux_amd64.tar.gz", bindir, workdir, false)
+		assert.Nil(t, err, "installByArtifact finished successfully")
+
+		installedPath := filepath.Join(bindir, "mackerel-plugin-sample")
+
+		fi, err := os.Stat(installedPath)
+		assert.Nil(t, err, "A plugin file exists")
+		assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+		assertEqualFileContent(
+			t,
+			installedPath,
+			"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
+			"Installed plugin is valid",
+		)
+	})
+
 	{
 		// Install by the artifact which has multiple plugins
 		bindir := tempd(t)
