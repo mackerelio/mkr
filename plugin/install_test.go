@@ -1,14 +1,18 @@
 package plugin
 
 import (
+	"flag"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/urfave/cli.v1"
 )
 
 func tempd(t *testing.T) string {
@@ -202,6 +206,64 @@ func TestInstallByArtifact(t *testing.T) {
 		_, err = os.Stat(filepath.Join(bindir, "not-mackerel-plugin-sample"))
 		assert.NotNil(t, err, "not-mackerel-plugin-sample is not installed")
 	}
+}
+
+func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context {
+	fs := flag.NewFlagSet("name", flag.ContinueOnError)
+	for _, f := range commandPluginInstall.Flags {
+		f.Apply(fs)
+	}
+	argv := []string{}
+	if prefix != "" {
+		argv = append(argv, fmt.Sprintf("-prefix=%s", prefix))
+	}
+	if overwrite {
+		argv = append(argv, "-overwrite")
+	}
+	if target != "" {
+		argv = append(argv, target)
+	}
+	fs.Parse(argv)
+	return cli.NewContext(nil, fs, nil)
+}
+
+func TestDoPluginInstall(t *testing.T) {
+	t.Run("specify URL directly", func(t *testing.T) {
+		ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
+		defer ts.Close()
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		ctx := newPluginInstallContext(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
+		err := doPluginInstall(ctx)
+		assert.Nil(t, err, "sample plugin is succesfully installed")
+
+		fpath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
+		_, err = os.Stat(fpath)
+		assert.Nil(t, err, "sample plugin is successfully installed and located")
+	})
+
+	t.Run("file: scheme URL", func(t *testing.T) {
+		cwd, _ := os.Getwd()
+		fpath := filepath.Join(cwd, "testdata", "mackerel-plugin-sample_linux_amd64.zip")
+		fpath = filepath.ToSlash(fpath) // care windows
+		scheme := "file://"
+		if !strings.HasPrefix(fpath, "/") {
+			// care windows drive letter
+			scheme += "/"
+		}
+
+		tmpd := tempd(t)
+		defer os.RemoveAll(tmpd)
+
+		ctx := newPluginInstallContext(scheme+fpath, tmpd, false)
+		err := doPluginInstall(ctx)
+		assert.Nil(t, err, "sample plugin is succesfully installed")
+
+		plugPath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
+		_, err = os.Stat(plugPath)
+		assert.Nil(t, err, "sample plugin is successfully installed and located")
+	})
 }
 
 func TestLooksLikePlugin(t *testing.T) {
