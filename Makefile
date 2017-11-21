@@ -12,7 +12,7 @@ build: deps
 
 lint: testdeps
 	go vet ./...
-	golint -set_exit_status ./...
+	golint -set_exit_status $$(go list ./...)
 
 GOFMT_RET = .gofmt.txt
 gofmt: testdeps
@@ -54,10 +54,10 @@ deb-v2:
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
 deps:
-	go get -d -v ./...
+	go get -u github.com/golang/dep/cmd/dep
+	dep ensure
 
-testdeps:
-	go get -d -v -t ./...
+testdeps: deps
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/axw/gocov/gocov
