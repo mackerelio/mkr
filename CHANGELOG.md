@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.23.0 (2017-11-28)
+
+* [plugin.install] support direct URL target #130 (Songmu)
+* [plugin.install] support tarball archives #131 (Songmu)
+* fix hostId option flag in the command help of throw and metrics commands #129 (astj)
+* Refactor mkr plugin install implementation #127 (shibayu36)
+
+
 ## 0.22.0 (2017-10-26)
 
 * Release mkr plugin install #125 (shibayu36)

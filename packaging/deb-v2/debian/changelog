@@ -1,3 +1,16 @@
+mkr (0.23.0-1.v2) stable; urgency=low
+
+  * [plugin.install] support direct URL target (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/130>
+  * [plugin.install] support tarball archives (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/131>
+  * fix hostId option flag in the command help of throw and metrics commands (by astj)
+    <https://github.com/mackerelio/mkr/pull/129>
+  * Refactor mkr plugin install implementation (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/127>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 28 Nov 2017 12:58:08 +0900
+
 mkr (0.22.0-1.v2) stable; urgency=low
 
   * Release mkr plugin install (by shibayu36)
