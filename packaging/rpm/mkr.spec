@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Nov 28 2017 <mackerel-developers@hatena.ne.jp> - 0.23.0
+- [plugin.install] support direct URL target (by Songmu)
+- [plugin.install] support tarball archives (by Songmu)
+- fix hostId option flag in the command help of throw and metrics commands (by astj)
+- Refactor mkr plugin install implementation (by shibayu36)
+
 * Thu Oct 26 2017 <mackerel-developers@hatena.ne.jp> - 0.22.0
 - Release mkr plugin install (by shibayu36)
 - Add metrics command (by edangelion)
