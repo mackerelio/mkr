@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.24.0 (2017-12-12)
+
+* Support maxCheckAttempts for host metric and service metric monitors #134 (itchyny)
+
+
 ## 0.23.0 (2017-11-28)
 
 * [plugin.install] support direct URL target #130 (Songmu)

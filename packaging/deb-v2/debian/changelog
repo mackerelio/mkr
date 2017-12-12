@@ -1,3 +1,10 @@
+mkr (0.24.0-1.v2) stable; urgency=low
+
+  * Support maxCheckAttempts for host metric and service metric monitors (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/134>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 12 Dec 2017 12:43:04 +0900
+
 mkr (0.23.0-1.v2) stable; urgency=low
 
   * [plugin.install] support direct URL target (by Songmu)

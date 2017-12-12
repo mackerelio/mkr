@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Dec 12 2017 <mackerel-developers@hatena.ne.jp> - 0.24.0
+- Support maxCheckAttempts for host metric and service metric monitors (by itchyny)
+
 * Tue Nov 28 2017 <mackerel-developers@hatena.ne.jp> - 0.23.0
 - [plugin.install] support direct URL target (by Songmu)
 - [plugin.install] support tarball archives (by Songmu)
