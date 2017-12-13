@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Dec 13 2017 <mackerel-developers@hatena.ne.jp> - 0.24.1
+- Rebuild to avoid panic when action of check-plugin was not specified (by astj)
+
 * Tue Dec 12 2017 <mackerel-developers@hatena.ne.jp> - 0.24.0
 - Support maxCheckAttempts for host metric and service metric monitors (by itchyny)
 

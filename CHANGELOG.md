@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.24.1 (2017-12-13)
+
+* Rebuild to avoid panic when action of check-plugin was not specified #136 (astj)
+
+
 ## 0.24.0 (2017-12-12)
 
 * Support maxCheckAttempts for host metric and service metric monitors #134 (itchyny)
