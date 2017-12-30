@@ -1,0 +1,8 @@
+version: "{build}"
+clone_folder: c:\gopath\src\github.com\mackerelio\mkr
+environment:
+  GOPATH: c:\gopath
+build: false
+test_script:
+- go get -d -v -t ./...
+- go test ./...
