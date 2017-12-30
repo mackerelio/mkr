@@ -91,7 +91,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 		defer os.RemoveAll(tmpd)
 
 		fpath, err := downloadPluginArtifact(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd)
-		assert.Equal(t, tmpd+"/mackerel-plugin-sample_linux_amd64.zip", fpath, "Returns fpath correctly")
+		assert.Equal(t, filepath.Join(tmpd, "/mackerel-plugin-sample_linux_amd64.zip"), fpath, "Returns fpath correctly")
 
 		_, err = os.Stat(fpath)
 		assert.Nil(t, err, "Downloaded file is created")
