@@ -4,28 +4,36 @@ CURRENT_REVISION = $(shell git rev-parse --short HEAD)
 
 all: clean cross lint gofmt test rpm deb
 
-test: testdeps
+deps:
+	go get -d -v ./...
+
+test-deps:
+	go get -d -v -t ./...
+	go get github.com/golang/lint/golint
+
+devel-deps: test-deps
+	go get github.com/mattn/goveralls
+	go get github.com/Songmu/goxz/cmd/goxz
+
+test: test-deps
 	go test -v ./...
 
 build: deps
 	go build -ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
 
-lint: testdeps
+lint: test-deps
 	go vet ./...
 	golint -set_exit_status ./...
 
 GOFMT_RET = .gofmt.txt
-gofmt: testdeps
+gofmt: test-deps
 	rm -f $(GOFMT_RET)
 	gofmt -s -d *.go | tee $(GOFMT_RET)
 	test ! -s $(GOFMT_RET)
 
-cross: deps
-	goxc -tasks='xc archive' -bc 'linux,!arm darwin' -d . -build-ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -resources-include='README*'
-	cp -p $(PWD)/snapshot/linux_amd64/mkr $(PWD)/snapshot/mkr_linux_amd64
-	cp -p $(PWD)/snapshot/linux_386/mkr $(PWD)/snapshot/mkr_linux_386
-	cp -p $(PWD)/snapshot/darwin_amd64/mkr $(PWD)/snapshot/mkr_darwin_amd64
-	cp -p $(PWD)/snapshot/darwin_386/mkr $(PWD)/snapshot/mkr_darwin_386
+cross: devel-deps
+	goxz -d snapshot -os darwin,linux -arch 386,amd64 \
+	  -build-ldflags "-X main.gitcommit=$(CURRENT_REVISION)"
 
 rpm: rpm-v1 rpm-v2
 
@@ -53,16 +61,6 @@ deb-v2:
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
-deps:
-	go get -d -v ./...
-
-testdeps:
-	go get -d -v -t ./...
-	go get github.com/golang/lint/golint
-	go get golang.org/x/tools/cmd/cover
-	go get github.com/axw/gocov/gocov
-	go get github.com/mattn/goveralls
-
 check-release-deps:
 	@have_error=0; \
 	for command in cpanm hub ghch gobump; do \
@@ -81,7 +79,7 @@ clean:
 	rm -fr build
 	go clean
 
-cover: testdeps
+cover: devel-deps
 	goveralls
 
-.PHONY: test build cross lint gofmt deps testdeps clean deb deb-v1 deb-v2 rpm rpm-v1 rpm-v2 release cover
+.PHONY: test build cross lint gofmt deps test-deps devel-deps clean deb deb-v1 deb-v2 rpm rpm-v1 rpm-v2 release cover

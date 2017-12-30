@@ -6,7 +6,6 @@ env:
   - PATH=~/bin:~/gopath/bin:$PATH
   - secure: "PDv5k+Wp7fEHGN2oszqpN/7Lvcc6bY4wT9PgT0w+G8AUNOhprXzPzIHVP2qNIBfhIDjECrbw4T6h1PeumIZYXg3wqLElGe+24OfDjSPjB3nal40Sx9PLLG5h7ywsJlPMqV0bfKyYTxs0lmUhE5XaaBvHEJGv6MHNjBc2H0bVMsE="
 install:
-- go get github.com/laher/goxc
 - sudo apt-get update
 - DEBIAN_FRONTEND=noninteractive sudo apt-get install -y rpm devscripts debhelper
 - mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
