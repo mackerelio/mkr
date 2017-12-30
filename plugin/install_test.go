@@ -8,12 +8,15 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/urfave/cli.v1"
 )
+
+var isWin = runtime.GOOS == "windows"
 
 func tempd(t *testing.T) string {
 	tmpd, err := ioutil.TempDir("", "mkr-plugin-install")
@@ -36,8 +39,7 @@ func assertEqualFileContent(t *testing.T, aFile, bFile, message string) {
 }
 
 func TestSetupPluginDir(t *testing.T) {
-	{
-		// Creating plugin dir is successful
+	t.Run("Creating plugin dir is successful", func(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
@@ -54,10 +56,12 @@ func TestSetupPluginDir(t *testing.T) {
 		if assert.Nil(t, err) {
 			assert.True(t, fi.IsDir(), "plugin work directory is created")
 		}
-	}
+	})
 
-	{
-		// Creating plugin dir is failed because of directory's permission
+	t.Run("Creating plugin dir is failed because of directory's permission", func(t *testing.T) {
+		if isWin {
+			t.Skip("skipping test on windows")
+		}
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 		err := os.Chmod(tmpd, 0500)
@@ -66,25 +70,23 @@ func TestSetupPluginDir(t *testing.T) {
 		pluginDir, err := setupPluginDir(tmpd)
 		assert.Equal(t, "", pluginDir, "returns empty string when failed")
 		assert.NotNil(t, err, "error should be occured while manipulate unpermitted directory")
-	}
+	})
 }
 
 func TestDownloadPluginArtifact(t *testing.T) {
 	ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
 	defer ts.Close()
 
-	{
-		// Response not found
+	t.Run("Response not found", func(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
 		fpath, err := downloadPluginArtifact(ts.URL+"/not_found.zip", tmpd)
 		assert.Equal(t, "", fpath, "fpath is empty")
 		assert.Contains(t, err.Error(), "http response not OK. code: 404,", "Returns correct err")
-	}
+	})
 
-	{
-		// Download is finished successfully
+	t.Run("Download is finished successfully", func(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
@@ -95,7 +97,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 		assert.Nil(t, err, "Downloaded file is created")
 
 		assertEqualFileContent(t, fpath, "testdata/mackerel-plugin-sample_linux_amd64.zip", "Downloaded data is correct")
-	}
+	})
 }
 
 func TestInstallByArtifact(t *testing.T) {
