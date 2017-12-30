@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/mackerelio/mkr/logger"
@@ -54,6 +55,8 @@ var commandPluginInstall = cli.Command{
     so Github API Rate Limit error doesn't occur.
 `,
 }
+
+var isWin = runtime.GOOS == "windows"
 
 // main function for mkr plugin install
 func doPluginInstall(c *cli.Context) error {
@@ -166,11 +169,10 @@ func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) err
 
 		// a plugin file should be executable, and have specified name.
 		name := info.Name()
-		isExecutable := (info.Mode() & 0111) != 0
+		isExecutable := isWin || (info.Mode()&0111) != 0
 		if isExecutable && looksLikePlugin(name) {
 			return placePlugin(path, filepath.Join(bindir, name), overwrite)
 		}
-
 		// `path` is a file but not plugin.
 		return nil
 	})

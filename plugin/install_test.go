@@ -8,15 +8,12 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/urfave/cli.v1"
 )
-
-var isWin = runtime.GOOS == "windows"
 
 func tempd(t *testing.T) string {
 	tmpd, err := ioutil.TempDir("", "mkr-plugin-install")
@@ -115,7 +112,9 @@ func TestInstallByArtifact(t *testing.T) {
 
 			fi, err := os.Stat(installedPath)
 			assert.Nil(t, err, "A plugin file exists")
-			assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+			if !isWin {
+				assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+			}
 			assertEqualFileContent(
 				t,
 				installedPath,
@@ -155,7 +154,6 @@ func TestInstallByArtifact(t *testing.T) {
 	}
 
 	t.Run("tgz", func(*testing.T) {
-		// Install by the artifact which has a single plugin
 		bindir := tempd(t)
 		defer os.RemoveAll(bindir)
 		workdir := tempd(t)
@@ -168,7 +166,9 @@ func TestInstallByArtifact(t *testing.T) {
 
 		fi, err := os.Stat(installedPath)
 		assert.Nil(t, err, "A plugin file exists")
-		assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+		if !isWin {
+			assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+		}
 		assertEqualFileContent(
 			t,
 			installedPath,
@@ -248,7 +248,13 @@ func TestDoPluginInstall(t *testing.T) {
 	})
 
 	t.Run("file: scheme URL", func(t *testing.T) {
-		cwd, _ := os.Getwd()
+		if isWin {
+			t.Skip("skipping on windows")
+		}
+		cwd, err := os.Getwd()
+		if err != nil {
+			t.Fatal(err)
+		}
 		fpath := filepath.Join(cwd, "testdata", "mackerel-plugin-sample_linux_amd64.zip")
 		fpath = filepath.ToSlash(fpath) // care windows
 		scheme := "file://"
@@ -261,7 +267,7 @@ func TestDoPluginInstall(t *testing.T) {
 		defer os.RemoveAll(tmpd)
 
 		ctx := newPluginInstallContext(scheme+fpath, tmpd, false)
-		err := doPluginInstall(ctx)
+		err = doPluginInstall(ctx)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
 		plugPath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
