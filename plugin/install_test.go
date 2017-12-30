@@ -102,53 +102,56 @@ func TestDownloadPluginArtifact(t *testing.T) {
 
 func TestInstallByArtifact(t *testing.T) {
 	{
-		// Install by the artifact which has a single plugin
 		bindir := tempd(t)
 		defer os.RemoveAll(bindir)
-		workdir := tempd(t)
-		defer os.RemoveAll(workdir)
-
-		err := installByArtifact("testdata/mackerel-plugin-sample_linux_amd64.zip", bindir, workdir, false)
-		assert.Nil(t, err, "installByArtifact finished successfully")
-
 		installedPath := filepath.Join(bindir, "mackerel-plugin-sample")
 
-		fi, err := os.Stat(installedPath)
-		assert.Nil(t, err, "A plugin file exists")
-		assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
-		assertEqualFileContent(
-			t,
-			installedPath,
-			"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
-			"Installed plugin is valid",
-		)
+		t.Run("Install by the artifact which has a single plugin", func(t *testing.T) {
+			workdir := tempd(t)
+			defer os.RemoveAll(workdir)
 
-		// Install same name plugin, but it is skipped
-		workdir2 := tempd(t)
-		defer os.RemoveAll(workdir2)
-		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir2, false)
-		assert.Nil(t, err, "installByArtifact finished successfully even if same name plugin exists")
+			err := installByArtifact("testdata/mackerel-plugin-sample_linux_amd64.zip", bindir, workdir, false)
+			assert.Nil(t, err, "installByArtifact finished successfully")
 
-		fi, err = os.Stat(filepath.Join(bindir, "mackerel-plugin-sample"))
-		assert.Nil(t, err, "A plugin file exists")
-		assertEqualFileContent(
-			t,
-			installedPath,
-			"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
-			"Install is skipped, so the contents is what is before",
-		)
+			fi, err := os.Stat(installedPath)
+			assert.Nil(t, err, "A plugin file exists")
+			assert.True(t, fi.Mode().IsRegular() && fi.Mode().Perm() == 0755, "A plugin file has execution permission")
+			assertEqualFileContent(
+				t,
+				installedPath,
+				"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
+				"Installed plugin is valid",
+			)
+		})
 
-		// Install same name plugin with overwrite option
-		workdir3 := tempd(t)
-		defer os.RemoveAll(workdir3)
-		err = installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir3, true)
-		assert.Nil(t, err, "installByArtifact finished successfully")
-		assertEqualFileContent(
-			t,
-			installedPath,
-			"testdata/mackerel-plugin-sample-duplicate_linux_amd64/mackerel-plugin-sample",
-			"a plugin is installed with overwrite option, so the contents is overwritten",
-		)
+		t.Run("Install same name plugin, but it is skipped", func(t *testing.T) {
+			workdir := tempd(t)
+			defer os.RemoveAll(workdir)
+			err := installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir, false)
+			assert.Nil(t, err, "installByArtifact finished successfully even if same name plugin exists")
+
+			_, err = os.Stat(installedPath)
+			assert.Nil(t, err, "A plugin file exists")
+			assertEqualFileContent(
+				t,
+				installedPath,
+				"testdata/mackerel-plugin-sample_linux_amd64/mackerel-plugin-sample",
+				"Install is skipped, so the contents is what is before",
+			)
+		})
+
+		t.Run("Install same name plugin with overwrite option", func(t *testing.T) {
+			workdir := tempd(t)
+			defer os.RemoveAll(workdir)
+			err := installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir, true)
+			assert.Nil(t, err, "installByArtifact finished successfully")
+			assertEqualFileContent(
+				t,
+				installedPath,
+				"testdata/mackerel-plugin-sample-duplicate_linux_amd64/mackerel-plugin-sample",
+				"a plugin is installed with overwrite option, so the contents is overwritten",
+			)
+		})
 	}
 
 	t.Run("tgz", func(*testing.T) {
@@ -174,8 +177,7 @@ func TestInstallByArtifact(t *testing.T) {
 		)
 	})
 
-	{
-		// Install by the artifact which has multiple plugins
+	t.Run("Install by the artifact which has multiple plugins", func(t *testing.T) {
 		bindir := tempd(t)
 		defer os.RemoveAll(bindir)
 		workdir := tempd(t)
@@ -207,7 +209,7 @@ func TestInstallByArtifact(t *testing.T) {
 		assert.NotNil(t, err, "mackerel-plugin-not-executable is not installed")
 		_, err = os.Stat(filepath.Join(bindir, "not-mackerel-plugin-sample"))
 		assert.NotNil(t, err, "not-mackerel-plugin-sample is not installed")
-	}
+	})
 }
 
 func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context {
