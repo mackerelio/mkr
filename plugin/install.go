@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/mackerelio/mkr/logger"
@@ -14,6 +15,18 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v1"
 )
+
+// The reason why an immediate function, not `init()` is used here is that
+// the `defaultPluginInstallLocation` is used in following `commandPluginInstall`
+// assignment. Top level variable assignment is executed before `init()`.
+var defaultPluginInstallLocation = func() string {
+	if runtime.GOOS != "windows" {
+		return "/opt/mackerel-agent/plugins"
+	}
+	path, err := os.Executable()
+	logger.DieIf(err)
+	return filepath.Join(filepath.Dir(path), "plugins")
+}()
 
 var commandPluginInstall = cli.Command{
 	Name:      "install",
@@ -23,7 +36,7 @@ var commandPluginInstall = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:  "prefix",
-			Usage: "Plugin install location. The default is /opt/mackerel-agent/plugins",
+			Usage: fmt.Sprintf("Plugin install location. The default is %s", defaultPluginInstallLocation),
 		},
 		cli.BoolFlag{
 			Name:  "overwrite",
@@ -100,7 +113,7 @@ func doPluginInstall(c *cli.Context) error {
 // Create a directory for plugin install
 func setupPluginDir(pluginDir string) (string, error) {
 	if pluginDir == "" {
-		pluginDir = "/opt/mackerel-agent/plugins"
+		pluginDir = defaultPluginInstallLocation
 	}
 	err := os.MkdirAll(filepath.Join(pluginDir, "bin"), 0755)
 	if err != nil {
