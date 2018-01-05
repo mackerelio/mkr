@@ -68,6 +68,8 @@ var commandPluginInstall = cli.Command{
 `,
 }
 
+var isWin = runtime.GOOS == "windows"
+
 // main function for mkr plugin install
 func doPluginInstall(c *cli.Context) error {
 	argInstallTarget := c.Args().First()
@@ -179,11 +181,10 @@ func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) err
 
 		// a plugin file should be executable, and have specified name.
 		name := info.Name()
-		isExecutable := (info.Mode() & 0111) != 0
+		isExecutable := isWin || (info.Mode()&0111) != 0
 		if isExecutable && looksLikePlugin(name) {
 			return placePlugin(path, filepath.Join(bindir, name), overwrite)
 		}
-
 		// `path` is a file but not plugin.
 		return nil
 	})
