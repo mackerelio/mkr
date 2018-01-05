@@ -2,7 +2,7 @@ version: "{build}"
 clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
   GOPATH: c:\gopath
-build: false
+build: off
 install:
   - set PATH=C:\go\bin;%GOPATH%\bin;C:\msys64\mingw64\bin;%PATH%
 test_script:
