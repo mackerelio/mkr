@@ -65,6 +65,12 @@ var commandPluginInstall = cli.Command{
     we recommend you to specify <release_tag> explicitly.
     If you specify <release_tag>, the installer doesn't use Github API,
     so Github API Rate Limit error doesn't occur.
+
+    Please refer to following documents for detail.
+    - Using mkr plugin install
+      https://mackerel.io/docs/entry/advanced/install-plugin-by-mkr
+    - Creating plugins supported with mkr plugin install
+      https://mackerel.io/docs/entry/advanced/make-plugin-corresponding-to-installer
 `,
 }
 
