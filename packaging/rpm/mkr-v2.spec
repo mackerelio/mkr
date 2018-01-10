@@ -36,6 +36,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jan 10 2018 <mackerel-developers@hatena.ne.jp> - 0.25.0
+- Add plugin document links (by shibayu36)
+- introduce goxz and adjust deps (by Songmu)
+- add appveyor.yml and adjust tests for windows (by Songmu)
+- Define plugin default installation path in windows environment (by Songmu)
+
 * Wed Dec 13 2017 <mackerel-developers@hatena.ne.jp> - 0.24.1
 - Rebuild to avoid panic when action of check-plugin was not specified (by astj)
 
