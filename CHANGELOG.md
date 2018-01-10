@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.25.0 (2018-01-10)
+
+* Add plugin document links #141 (shibayu36)
+* introduce goxz and adjust deps #139 (Songmu)
+* add appveyor.yml and adjust tests for windows #140 (Songmu)
+* Define plugin default installation path in windows environment #138 (Songmu)
+
+
 ## 0.24.1 (2017-12-13)
 
 * Rebuild to avoid panic when action of check-plugin was not specified #136 (astj)

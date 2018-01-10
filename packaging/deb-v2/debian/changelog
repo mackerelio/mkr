@@ -1,3 +1,16 @@
+mkr (0.25.0-1.v2) stable; urgency=low
+
+  * Add plugin document links (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/141>
+  * introduce goxz and adjust deps (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/139>
+  * add appveyor.yml and adjust tests for windows (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/140>
+  * Define plugin default installation path in windows environment (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/138>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 10 Jan 2018 16:19:07 +0900
+
 mkr (0.24.1-1.v2) stable; urgency=low
 
   * Rebuild to avoid panic when action of check-plugin was not specified (by astj)
