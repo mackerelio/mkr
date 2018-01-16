@@ -48,6 +48,9 @@ rpm-v2:
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
 	  --define "buildarch x86_64" --define "dist .el7.centos" \
 	  -bb packaging/rpm/mkr-v2.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
+	  --define "buildarch x86_64" --define "dist .amzn2" \
+	  -bb packaging/rpm/mkr-v2.spec
 
 deb: deb-v1 deb-v2
 
