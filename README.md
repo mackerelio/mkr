@@ -151,7 +151,7 @@ mkr retire <hostId> ...
 
 ### Examples (on hosts running mackerel-agent)
 
-Specifing the <hostId> and MACKEREL_APIKEY is not necessary because mkr refers to /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifying manually.
+Specifying the <hostId> and MACKEREL_APIKEY is not necessary because mkr refers to /var/lib/mackerel-agent/id and /etc/mackerel-agent/mackerel-agent.conf instead of specifying manually.
 
 ```
 mkr status
@@ -162,7 +162,7 @@ mkr update --status maintenance <hostIds>...
 ```
 
 ```
-mkr fetch -n loadavg5
+mkr fetch --name loadavg5 <hostId>
 ```
 
 ```bash
