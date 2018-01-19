@@ -290,6 +290,7 @@ func TestLooksLikePlugin(t *testing.T) {
 		{"hoge-check-sample", false},
 		{"wrong-sample", false},
 		{"mackerel-plugin-sample.zip", false},
+		{"mackerel-plugin-sample.tgz", false},
 		{"check-sample.tar.gz", false},
 	}
 

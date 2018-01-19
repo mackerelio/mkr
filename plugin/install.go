@@ -197,8 +197,10 @@ func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) err
 }
 
 func looksLikePlugin(name string) bool {
-	return (strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")) &&
-		(!strings.HasSuffix(name, ".zip") && !strings.HasSuffix(name, ".tar.gz"))
+	if strings.HasSuffix(name, ".zip") || strings.HasSuffix(name, ".tar.gz") || strings.HasSuffix(name, ".tgz") {
+		return false
+	}
+	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
 }
 
 func placePlugin(src, dest string, overwrite bool) error {
