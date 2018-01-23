@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.26.0 (2018-01-23)
+
+* Fix copying plugin archives while installing a plugin on Windows #144 (itchyny)
+* update rpm-v2 task for building Amazon Linux 2 package #143 (hayajo)
+
+
 ## 0.25.0 (2018-01-10)
 
 * Add plugin document links #141 (shibayu36)
