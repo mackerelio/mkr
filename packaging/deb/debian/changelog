@@ -1,3 +1,12 @@
+mkr (0.26.0-1) stable; urgency=low
+
+  * Fix copying plugin archives while installing a plugin on Windows (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/144>
+  * update rpm-v2 task for building Amazon Linux 2 package (by hayajo)
+    <https://github.com/mackerelio/mkr/pull/143>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 23 Jan 2018 11:26:49 +0900
+
 mkr (0.25.0-1) stable; urgency=low
 
   * Add plugin document links (by shibayu36)

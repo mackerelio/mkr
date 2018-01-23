@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Jan 23 2018 <mackerel-developers@hatena.ne.jp> - 0.26.0
+- Fix copying plugin archives while installing a plugin on Windows (by itchyny)
+- update rpm-v2 task for building Amazon Linux 2 package (by hayajo)
+
 * Wed Jan 10 2018 <mackerel-developers@hatena.ne.jp> - 0.25.0
 - Add plugin document links (by shibayu36)
 - introduce goxz and adjust deps (by Songmu)
