@@ -134,51 +134,48 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 		case *mkr.MonitorConnectivity:
 			monitorMsg = ""
 		case *mkr.MonitorHostMetric:
-			switch alert.Status {
-			case "CRITICAL":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Critical)
-			case "WARNING":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Warning)
-			default:
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, m.Critical)
+			if alert.Status == "CRITICAL" && m.Critical != nil {
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, *m.Critical)
+			} else if alert.Status == "WARNING" && m.Warning != nil {
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, *m.Warning)
+			} else {
+				monitorMsg = fmt.Sprintf("%s %.2f", m.Metric, alert.Value)
 			}
 		case *mkr.MonitorServiceMetric:
-			switch alert.Status {
-			case "CRITICAL":
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Critical)
-			case "WARNING":
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Warning)
-			default:
-				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, m.Critical)
+			if alert.Status == "CRITICAL" && m.Critical != nil {
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, *m.Critical)
+			} else if alert.Status == "WARNING" && m.Warning != nil {
+				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, *m.Warning)
+			} else {
+				monitorMsg = fmt.Sprintf("%s %s %.2f", m.Service, m.Metric, alert.Value)
 			}
 		case *mkr.MonitorExternalHTTP:
 			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
 			switch alert.Status {
 			case "CRITICAL":
-				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.URL, alert.Value, m.ResponseTimeCritical, alert.Message)
+				if statusRegexp.MatchString(alert.Message) && m.ResponseTimeCritical != nil {
+					monitorMsg = fmt.Sprintf("%s %.2f > %.2f msec, status:%s", m.URL, alert.Value, *m.ResponseTimeCritical, alert.Message)
 				} else {
 					monitorMsg = fmt.Sprintf("%s %.2f msec, %s", m.URL, alert.Value, alert.Message)
 				}
 			case "WARNING":
-				if statusRegexp.MatchString(alert.Message) {
-					monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeWarning, alert.Message)
+				if statusRegexp.MatchString(alert.Message) && m.ResponseTimeWarning != nil {
+					monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, *m.ResponseTimeWarning, alert.Message)
 				} else {
 					monitorMsg = fmt.Sprintf("%.2f msec, %s", alert.Value, alert.Message)
 				}
 			default:
-				monitorMsg = fmt.Sprintf("%.2f > %.2f msec, status:%s", alert.Value, m.ResponseTimeCritical, alert.Message)
+				monitorMsg = fmt.Sprintf("%.2f msec, status:%s", alert.Value, alert.Message)
 			}
 		case *mkr.MonitorExpression:
 			expression := formatExpressionOneline(m.Expression)
-			switch alert.Status {
-			case "CRITICAL":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Critical)
-			case "WARNING":
-				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, m.Warning)
-			case "UNKNOWN":
+			if alert.Status == "CRITICAL" && m.Critical != nil {
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, *m.Critical)
+			} else if alert.Status == "WARNING" && m.Warning != nil {
+				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, *m.Warning)
+			} else if alert.Status == "UNKNOWN" {
 				monitorMsg = fmt.Sprintf("%s", expression)
-			default:
+			} else {
 				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
 			}
 		default:

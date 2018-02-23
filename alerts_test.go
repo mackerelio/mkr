@@ -33,7 +33,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 			&alertSet{
 				&mkr.Alert{ID: "2tZhm", Type: "host", Status: "CRITICAL", HostID: "3XYyG", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 200},
 				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
-				&mkr.MonitorHostMetric{ID: "5rXR3", Type: "host", Name: "All::loadavg5", Metric: "loadavg5", Warning: 8.0, Critical: 12.0, Operator: ">"},
+				&mkr.MonitorHostMetric{ID: "5rXR3", Type: "host", Name: "All::loadavg5", Metric: "loadavg5", Warning: pfloat64(8.0), Critical: pfloat64(12.0), Operator: ">"},
 			},
 			"2tZhm 1970-01-01 00:03:20 CRITICAL All::loadavg5 loadavg5 15.70 > 12.00 app.example.com working [foo:bar,baz]",
 		},
@@ -41,7 +41,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 			&alertSet{
 				&mkr.Alert{ID: "2tZhm", Type: "service", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 300},
 				nil,
-				&mkr.MonitorServiceMetric{ID: "5rXR3", Type: "service", Service: "ServiceFoo", Name: "bar.baz monitor", Metric: "custom.bar.baz", Warning: 10.0, Critical: 20.0, Operator: ">"},
+				&mkr.MonitorServiceMetric{ID: "5rXR3", Type: "service", Service: "ServiceFoo", Name: "bar.baz monitor", Metric: "custom.bar.baz", Warning: pfloat64(10.0), Critical: pfloat64(20.0), Operator: ">"},
 			},
 			"2tZhm 1970-01-01 00:05:00 WARNING bar.baz monitor ServiceFoo custom.bar.baz 15.70 > 10.00",
 		},
@@ -49,7 +49,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 			&alertSet{
 				&mkr.Alert{ID: "2tZhm", Type: "external", Status: "CRITICAL", MonitorID: "5rXR3", Value: 2500, Message: "200", OpenedAt: 400},
 				nil,
-				&mkr.MonitorExternalHTTP{ID: "5rXR3", Type: "external", Name: "Example Domain", URL: "https://example.com", ResponseTimeWarning: 500, ResponseTimeCritical: 1000, ResponseTimeDuration: 5},
+				&mkr.MonitorExternalHTTP{ID: "5rXR3", Type: "external", Name: "Example Domain", URL: "https://example.com", ResponseTimeWarning: pfloat64(500), ResponseTimeCritical: pfloat64(1000), ResponseTimeDuration: puint64(5)},
 			},
 			"2tZhm 1970-01-01 00:06:40 CRITICAL Example Domain https://example.com 2500.00 > 1000.00 msec, status:200",
 		},
@@ -57,7 +57,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 			&alertSet{
 				&mkr.Alert{ID: "2tZhm", Type: "expression", Status: "WARNING", MonitorID: "5rXR3", Value: 15.7, OpenedAt: 500},
 				nil,
-				&mkr.MonitorExpression{ID: "5rXR3", Type: "expression", Name: "Max loadavg5 monitor", Expression: "max(  \n  roleSlots(  \n    'service:role',\n    'loadavg5'\n  )\n)\n", Warning: 10.0, Critical: 20.0, Operator: ">"},
+				&mkr.MonitorExpression{ID: "5rXR3", Type: "expression", Name: "Max loadavg5 monitor", Expression: "max(  \n  roleSlots(  \n    'service:role',\n    'loadavg5'\n  )\n)\n", Warning: pfloat64(10.0), Critical: pfloat64(20.0), Operator: ">"},
 			},
 			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max(roleSlots('service:role', 'loadavg5')) 15.70 > 10.00",
 		},
