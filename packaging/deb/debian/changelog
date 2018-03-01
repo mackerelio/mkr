@@ -1,3 +1,10 @@
+mkr (0.27.0-1) stable; urgency=low
+
+  * Support empty threshold for monitors (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/148>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 01 Mar 2018 14:16:43 +0900
+
 mkr (0.26.0-1) stable; urgency=low
 
   * Fix copying plugin archives while installing a plugin on Windows (by itchyny)

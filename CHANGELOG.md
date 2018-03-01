@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.27.0 (2018-03-01)
+
+* Support empty threshold for monitors #148 (itchyny)
+
+
 ## 0.26.0 (2018-01-23)
 
 * Fix copying plugin archives while installing a plugin on Windows #144 (itchyny)
