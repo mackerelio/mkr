@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Mar 01 2018 <mackerel-developers@hatena.ne.jp> - 0.27.0
+- Support empty threshold for monitors (by itchyny)
+
 * Tue Jan 23 2018 <mackerel-developers@hatena.ne.jp> - 0.26.0
 - Fix copying plugin archives while installing a plugin on Windows (by itchyny)
 - update rpm-v2 task for building Amazon Linux 2 package (by hayajo)
