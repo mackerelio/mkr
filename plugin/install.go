@@ -42,6 +42,10 @@ var commandPluginInstall = cli.Command{
 			Name:  "overwrite",
 			Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
 		},
+		cli.BoolFlag{
+			Name:  "upgrade",
+			Usage: "Upgrade a plugin command in a plugin directory only when a release_tag is modified",
+		},
 	},
 	Description: `
     Install a mackerel plugin and a check plugin from github or plugin registry.
@@ -105,6 +109,18 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while making a download URL")
 	}
+
+	if c.Bool("upgrade") {
+		install, err := shouldInstall(pluginDir, it)
+		if err != nil {
+			return errors.Wrap(err, "Failed to detect plugin should be installed")
+		}
+		if !install {
+			logger.Log("", fmt.Sprintf("release_tag %s already exists. Skip installing for now", it.releaseTag))
+			return nil
+		}
+	}
+
 	artifactFile, err := downloadPluginArtifact(downloadURL, workdir)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
@@ -112,6 +128,11 @@ func doPluginInstall(c *cli.Context) error {
 	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, c.Bool("overwrite"))
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
+	}
+
+	err = storeReleaseTag(pluginDir, it)
+	if err != nil {
+		return errors.Wrap(err, "Failed to store plugin release tag")
 	}
 
 	logger.Log("", fmt.Sprintf("Successfully installed %s", argInstallTarget))
@@ -128,6 +149,10 @@ func setupPluginDir(pluginDir string) (string, error) {
 		return "", err
 	}
 	err = os.MkdirAll(filepath.Join(pluginDir, "work"), 0755)
+	if err != nil {
+		return "", err
+	}
+	err = os.MkdirAll(filepath.Join(pluginDir, "tags"), 0755)
 	if err != nil {
 		return "", err
 	}
@@ -211,4 +236,32 @@ func placePlugin(src, dest string, overwrite bool) error {
 	}
 	logger.Log("", fmt.Sprintf("Installing %s", dest))
 	return os.Rename(src, dest)
+}
+
+func shouldInstall(pluginDir string, it *installTarget) (bool, error) {
+	dir := filepath.Join(pluginDir, "tags", it.owner)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return false, err
+	}
+	filename := filepath.Join(dir, it.repo)
+	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
+	b, err := ioutil.ReadAll(f)
+	if string(b) == it.releaseTag {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+func storeReleaseTag(pluginDir string, it *installTarget) error {
+	dir := filepath.Join(pluginDir, "tags", it.owner)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return err
+	}
+	filename := filepath.Join(dir, it.repo)
+	return ioutil.WriteFile(filename, []byte(it.releaseTag), 0644)
 }
