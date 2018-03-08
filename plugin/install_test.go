@@ -127,7 +127,7 @@ func TestInstallByArtifact(t *testing.T) {
 			workdir := tempd(t)
 			defer os.RemoveAll(workdir)
 			err := installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir, false)
-			assert.Nil(t, err, "installByArtifact finished successfully even if same name plugin exists")
+			assert.Equal(t, err, errSkipInstall, "installByArtifact finished successfully even if same name plugin exists")
 
 			_, err = os.Stat(installedPath)
 			assert.Nil(t, err, "A plugin file exists")

@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/pkg/errors"
 )
 
 type metaDataStore struct {
@@ -11,8 +13,14 @@ type metaDataStore struct {
 	installTarget *installTarget
 }
 
+var errDisaleMetaDataStore = errors.New("MetaData disabled. cloud not detect owner/repo")
+
 func newMetaDataStore(pluginDir string, it *installTarget) (*metaDataStore, error) {
-	dir := filepath.Join(pluginDir, "meta", it.owner, it.repo)
+	owner, repo, err := it.getOwnerAndRepo()
+	if err != nil {
+		return nil, errDisaleMetaDataStore
+	}
+	dir := filepath.Join(pluginDir, "meta", owner, repo)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
 	}

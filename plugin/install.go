@@ -111,13 +111,18 @@ func doPluginInstall(c *cli.Context) error {
 		return errors.Wrap(err, "Failed to install plugin while making a download URL")
 	}
 
+	canUpgrade := true
 	meta, err := newMetaDataStore(pluginDir, it)
 	if err != nil {
-		return errors.Wrap(err, "Failed to prepare meta data store")
+		if err == errDisaleMetaDataStore {
+			canUpgrade = false
+		} else {
+			return errors.Wrap(err, "Failed to prepare meta data store")
+		}
 	}
 
 	overwrite := c.Bool("overwrite")
-	if c.Bool("upgrade") {
+	if canUpgrade && c.Bool("upgrade") {
 		releaseTag, err := meta.load("release_tag")
 		if err != nil {
 			return errors.Wrap(err, "Failed to load release_tag")
@@ -135,8 +140,10 @@ func doPluginInstall(c *cli.Context) error {
 	}
 	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, overwrite)
 	if err == nil {
-		if err := meta.store("release_tag", it.releaseTag); err != nil {
-			return errors.Wrap(err, "Failed to store release_tag")
+		if meta != nil {
+			if err := meta.store("release_tag", it.releaseTag); err != nil {
+				return errors.Wrap(err, "Failed to store release_tag")
+			}
 		}
 	} else if err == errSkipInstall {
 		// do not update metadata
