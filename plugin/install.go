@@ -111,24 +111,24 @@ func doPluginInstall(c *cli.Context) error {
 		return errors.Wrap(err, "Failed to install plugin while making a download URL")
 	}
 
-	canUpgrade := true
+	isMetaDataStoreEnabled := true
 	meta, err := newMetaDataStore(pluginDir, it)
 	if err != nil {
 		if err == errDisaleMetaDataStore {
-			canUpgrade = false
+			isMetaDataStoreEnabled = false
 		} else {
 			return errors.Wrap(err, "Failed to prepare meta data store")
 		}
 	}
 
 	overwrite := c.Bool("overwrite")
-	if canUpgrade && c.Bool("upgrade") {
+	if isMetaDataStoreEnabled && c.Bool("upgrade") {
 		releaseTag, err := meta.load("release_tag")
 		if err != nil {
 			return errors.Wrap(err, "Failed to load release_tag")
 		}
 		if releaseTag == it.releaseTag {
-			logger.Log("", fmt.Sprintf("release_tag %s already exists. Skip installing for now", it.releaseTag))
+			logger.Log("", fmt.Sprintf("release_tag %s is already installed. Skip installing for now", it.releaseTag))
 			return nil
 		}
 		overwrite = true // force overwrite in upgrade

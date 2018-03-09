@@ -15,8 +15,8 @@ type metaDataStore struct {
 
 var errDisaleMetaDataStore = errors.New("MetaData disabled. could not detect owner/repo")
 
-func newMetaDataStore(pluginDir string, it *installTarget) (*metaDataStore, error) {
-	owner, repo, err := it.getOwnerAndRepo()
+func newMetaDataStore(pluginDir string, target *installTarget) (*metaDataStore, error) {
+	owner, repo, err := target.getOwnerAndRepo()
 	if err != nil {
 		return nil, errDisaleMetaDataStore
 	}
@@ -26,7 +26,7 @@ func newMetaDataStore(pluginDir string, it *installTarget) (*metaDataStore, erro
 	}
 	return &metaDataStore{
 		dir:           dir,
-		installTarget: it,
+		installTarget: target,
 	}, nil
 }
 
