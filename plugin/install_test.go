@@ -53,6 +53,11 @@ func TestSetupPluginDir(t *testing.T) {
 		if assert.Nil(t, err) {
 			assert.True(t, fi.IsDir(), "plugin work directory is created")
 		}
+
+		fi, err = os.Stat(filepath.Join(tmpd, "meta"))
+		if assert.Nil(t, err) {
+			assert.True(t, fi.IsDir(), "plugin meta directory is created")
+		}
 	})
 
 	t.Run("Creating plugin dir is failed because of directory's permission", func(t *testing.T) {
