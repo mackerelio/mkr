@@ -31,17 +31,13 @@ func newMetaDataStore(pluginDir string, target *installTarget) (*metaDataStore, 
 }
 
 func (m *metaDataStore) load(key string) (string, error) {
-	f, err := os.OpenFile(
-		filepath.Join(m.dir, key),
-		os.O_RDONLY|os.O_CREATE,
-		0644,
-	)
-	if err != nil {
+	b, err := ioutil.ReadFile(filepath.Join(m.dir, key))
+	if os.IsNotExist(err) {
+		return "", nil
+	} else if err != nil {
 		return "", err
 	}
-	defer f.Close()
-	b, err := ioutil.ReadAll(f)
-	return string(b), err
+	return string(b), nil
 }
 
 func (m *metaDataStore) store(key, value string) error {
