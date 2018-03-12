@@ -56,6 +56,10 @@ var commandPluginInstall = cli.Command{
           Install from plugin registry.
           You can find available plugins in https://github.com/mackerelio/plugin-registry
           Example: mkr plugin install mackerel-plugin-sample
+    - <direct_url>
+          Install from specified URL.
+          Supported URL schemes are http, https and file.
+          Example: mkr plugin install https://github.com/mackerelio/mackerel-plugin-sample/releases/download/v0.0.3/mackerel-plugin-sample_linux_amd64.zip
 
     The installer uses Github API to find the latest release.  Please set a github token to
     GITHUB_TOKEN environment variable, or to github.token in .gitconfig.

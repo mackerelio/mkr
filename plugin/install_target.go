@@ -39,6 +39,8 @@ var (
 // - mackerelio/mackerel-plugin-sample
 // - mackerel-plugin-sample
 // - mackerelio/mackerel-plugin-sample@v0.0.1
+// - https://mackerel.io/mackerel-plugin-sample_linux_amd64.zip
+// - file:///path/to/mackerel-plugin-sample_linux_amd64.zip
 func newInstallTargetFromString(target string) (*installTarget, error) {
 	if urlReg.MatchString(target) {
 		return &installTarget{
