@@ -93,6 +93,11 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 		return it.owner, it.repo, nil
 	}
 
+	// if directURL is specified, target doesn't have owner and repo
+	if it.directURL != "" {
+		return "", "", fmt.Errorf("owner and repo are not found because directURL is specified")
+	}
+
 	// Get owner and repo from plugin registry
 	defURL := fmt.Sprintf(
 		"%s/mackerelio/plugin-registry/master/plugins/%s.json",
