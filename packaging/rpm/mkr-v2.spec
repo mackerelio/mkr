@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Mar 15 2018 <mackerel-developers@hatena.ne.jp> - 0.27.1
+- Add <direct_url> help (by shibayu36)
+
 * Thu Mar 01 2018 <mackerel-developers@hatena.ne.jp> - 0.27.0
 - Support empty threshold for monitors (by itchyny)
 

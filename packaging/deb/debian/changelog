@@ -1,3 +1,10 @@
+mkr (0.27.1-1) stable; urgency=low
+
+  * Add <direct_url> help (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/151>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 15 Mar 2018 10:39:29 +0900
+
 mkr (0.27.0-1) stable; urgency=low
 
   * Support empty threshold for monitors (by itchyny)
