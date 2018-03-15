@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.27.1 (2018-03-15)
+
+* Add <direct_url> help #151 (shibayu36)
+
+
 ## 0.27.0 (2018-03-01)
 
 * Support empty threshold for monitors #148 (itchyny)
