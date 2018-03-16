@@ -31,7 +31,7 @@ var defaultPluginInstallLocation = func() string {
 var commandPluginInstall = cli.Command{
 	Name:      "install",
 	Usage:     "Install a plugin from github or plugin registry",
-	ArgsUsage: "[--prefix <prefix>] [--overwrite] <install_target>",
+	ArgsUsage: "[--prefix <prefix>] [--overwrite] [--upgrade] <install_target>",
 	Action:    doPluginInstall,
 	Flags: []cli.Flag{
 		cli.StringFlag{
@@ -41,6 +41,10 @@ var commandPluginInstall = cli.Command{
 		cli.BoolFlag{
 			Name:  "overwrite",
 			Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
+		},
+		cli.BoolFlag{
+			Name:  "upgrade",
+			Usage: "Upgrade a plugin command in a plugin directory only when a release_tag is modified",
 		},
 	},
 	Description: `
@@ -79,6 +83,7 @@ var commandPluginInstall = cli.Command{
 }
 
 var isWin = runtime.GOOS == "windows"
+var errSkipInstall = errors.New("skip installing for now")
 
 // main function for mkr plugin install
 func doPluginInstall(c *cli.Context) error {
@@ -109,12 +114,44 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while making a download URL")
 	}
+
+	isMetaDataStoreEnabled := true
+	meta, err := newMetaDataStore(pluginDir, it)
+	if err != nil {
+		if err == errDisaleMetaDataStore {
+			isMetaDataStoreEnabled = false
+		} else {
+			return errors.Wrap(err, "Failed to prepare meta data store")
+		}
+	}
+
+	overwrite := c.Bool("overwrite")
+	if isMetaDataStoreEnabled && c.Bool("upgrade") {
+		releaseTag, err := meta.load("release_tag")
+		if err != nil {
+			return errors.Wrap(err, "Failed to load release_tag")
+		}
+		if releaseTag == it.releaseTag {
+			logger.Log("", fmt.Sprintf("release_tag %s is already installed. Skip installing for now", it.releaseTag))
+			return nil
+		}
+		overwrite = true // force overwrite in upgrade
+	}
+
 	artifactFile, err := downloadPluginArtifact(downloadURL, workdir)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
-	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, c.Bool("overwrite"))
-	if err != nil {
+	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, overwrite)
+	if err == nil {
+		if meta != nil {
+			if err := meta.store("release_tag", it.releaseTag); err != nil {
+				return errors.Wrap(err, "Failed to store release_tag")
+			}
+		}
+	} else if err == errSkipInstall {
+		// do not update metadata
+	} else {
 		return errors.Wrap(err, "Failed to install plugin while extracting and placing")
 	}
 
@@ -132,6 +169,10 @@ func setupPluginDir(pluginDir string) (string, error) {
 		return "", err
 	}
 	err = os.MkdirAll(filepath.Join(pluginDir, "work"), 0755)
+	if err != nil {
+		return "", err
+	}
+	err = os.MkdirAll(filepath.Join(pluginDir, "meta"), 0755)
 	if err != nil {
 		return "", err
 	}
@@ -211,7 +252,7 @@ func placePlugin(src, dest string, overwrite bool) error {
 	_, err := os.Stat(dest)
 	if err == nil && !overwrite {
 		logger.Log("", fmt.Sprintf("%s already exists. Skip installing for now", dest))
-		return nil
+		return errSkipInstall
 	}
 	logger.Log("", fmt.Sprintf("Installing %s", dest))
 	return os.Rename(src, dest)

@@ -53,6 +53,11 @@ func TestSetupPluginDir(t *testing.T) {
 		if assert.Nil(t, err) {
 			assert.True(t, fi.IsDir(), "plugin work directory is created")
 		}
+
+		fi, err = os.Stat(filepath.Join(tmpd, "meta"))
+		if assert.Nil(t, err) {
+			assert.True(t, fi.IsDir(), "plugin meta directory is created")
+		}
 	})
 
 	t.Run("Creating plugin dir is failed because of directory's permission", func(t *testing.T) {
@@ -127,7 +132,7 @@ func TestInstallByArtifact(t *testing.T) {
 			workdir := tempd(t)
 			defer os.RemoveAll(workdir)
 			err := installByArtifact("testdata/mackerel-plugin-sample-duplicate_linux_amd64.zip", bindir, workdir, false)
-			assert.Nil(t, err, "installByArtifact finished successfully even if same name plugin exists")
+			assert.Equal(t, err, errSkipInstall, "installByArtifact finished successfully even if same name plugin exists")
 
 			_, err = os.Stat(installedPath)
 			assert.Nil(t, err, "A plugin file exists")
