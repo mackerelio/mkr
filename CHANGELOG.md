@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.28.0 (2018-03-28)
+
+* Add --upgrade option to plugin install. #150 (fujiwara)
+
+
 ## 0.27.1 (2018-03-15)
 
 * Add <direct_url> help #151 (shibayu36)
