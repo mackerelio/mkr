@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Mar 28 2018 <mackerel-developers@hatena.ne.jp> - 0.28.0
+- Add --upgrade option to plugin install. (by fujiwara)
+
 * Thu Mar 15 2018 <mackerel-developers@hatena.ne.jp> - 0.27.1
 - Add <direct_url> help (by shibayu36)
 
