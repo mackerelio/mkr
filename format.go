@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/mackerelio/mkr/logger"
 )
@@ -37,4 +38,9 @@ func JSONMarshalIndent(src interface{}, prefix, indent string) string {
 func replaceAngleBrackets(s string) string {
 	s = strings.Replace(s, "\\u003c", "<", -1)
 	return strings.Replace(s, "\\u003e", ">", -1)
+}
+
+func formatISO8601Extended(t time.Time) string {
+	const layoutISO8601Exetnded = "2006-01-02T15:04:05-07:00"
+	return t.Format(layoutISO8601Exetnded)
 }
