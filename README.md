@@ -75,7 +75,7 @@ mkr status <hostId>
         "My-Service:proxy"
     ],
     "isRetired": false,
-    "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+    "createdAt": "2014-11-15T21:41:00+09:00"
 }
 ```
 
@@ -90,7 +90,7 @@ mkr hosts --service My-Service --role proxy
             "My-Service:proxy"
         ],
         "isRetired": false,
-        "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+        "createdAt": "2014-11-15T21:41:00+09:00"
     },
     {
         "id": "2eQGDXqtoXs",
@@ -100,7 +100,7 @@ mkr hosts --service My-Service --role proxy
             "My-Service:proxy"
         ],
         "isRetired": false,
-        "createdAt": "Nov 15, 2014 at 9:41pm (JST)"
+        "createdAt": "2014-11-15T21:41:00+09:00"
     },
 ]
 ```

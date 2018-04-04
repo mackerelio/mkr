@@ -260,7 +260,7 @@ func doStatus(c *cli.Context) error {
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
-			CreatedAt:     host.DateStringFromCreatedAt(),
+			CreatedAt:     formatISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
 		}
 
@@ -297,7 +297,7 @@ func doHosts(c *cli.Context) error {
 				Status:        host.Status,
 				RoleFullnames: host.GetRoleFullnames(),
 				IsRetired:     host.IsRetired,
-				CreatedAt:     host.DateStringFromCreatedAt(),
+				CreatedAt:     formatISO8601Extended(host.DateFromCreatedAt()),
 				IPAddresses:   host.IPAddresses(),
 			}
 			hostsFormat = append(hostsFormat, format)
