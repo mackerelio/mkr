@@ -105,6 +105,8 @@ mkr hosts --service My-Service --role proxy
 ]
 ```
 
+The format of `createdAt` uses ISO-8601 in the current time zone.
+
 The `mkr hosts` command has an '-f' option to format the output.
 
 ```
