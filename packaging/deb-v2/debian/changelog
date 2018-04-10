@@ -1,3 +1,10 @@
+mkr (0.29.0-1.v2) stable; urgency=low
+
+  * Change createdAt of hosts subcommand output to ISO 8601 extended format (by hayajo)
+    <https://github.com/mackerelio/mkr/pull/154>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 10 Apr 2018 12:14:11 +0900
+
 mkr (0.28.0-1.v2) stable; urgency=low
 
   * Add --upgrade option to plugin install. (by fujiwara)

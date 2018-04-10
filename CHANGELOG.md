@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.29.0 (2018-04-10)
+
+* Change createdAt of hosts subcommand output to ISO 8601 extended format #154 (hayajo)
+
+
 ## 0.28.0 (2018-03-28)
 
 * Add --upgrade option to plugin install. #150 (fujiwara)

@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Apr 10 2018 <mackerel-developers@hatena.ne.jp> - 0.29.0
+- Change createdAt of hosts subcommand output to ISO 8601 extended format (by hayajo)
+
 * Wed Mar 28 2018 <mackerel-developers@hatena.ne.jp> - 0.28.0
 - Add --upgrade option to plugin install. (by fujiwara)
 
