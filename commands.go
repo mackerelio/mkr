@@ -202,18 +202,6 @@ var commandRetire = cli.Command{
 	},
 }
 
-var commandServices = cli.Command{
-	Name:      "services",
-	Usage:     "List services",
-	ArgsUsage: "",
-	Description: `
-    List the information of the services.
-    Requests "GET /api/v0/services". See https://mackerel.io/api-docs/entry/services#list.
-`,
-	Action: doServices,
-	Flags:  []cli.Flag{},
-}
-
 func newMackerelFromContext(c *cli.Context) *mkr.Client {
 	confFile := c.GlobalString("conf")
 	apiBase := c.GlobalString("apibase")
@@ -566,12 +554,5 @@ func doRetire(c *cli.Context) error {
 
 		logger.Log("retired", hostID)
 	}
-	return nil
-}
-
-func doServices(c *cli.Context) error {
-	services, err := newMackerelFromContext(c).FindServices()
-	logger.DieIf(err)
-	PrettyPrintJSON(services)
 	return nil
 }
