@@ -32,6 +32,16 @@ var commandServices = cli.Command{
 				cli.StringFlag{Name: "memo, m", Value: "", Usage: "Memo for the service"},
 			},
 		},
+		{
+			Name:      "delete",
+			Usage:     "delete an existing service",
+			ArgsUsage: "serviceName",
+			Description: `
+    Delete an existing service with given name.
+    Requests "DELETE /api/v0/services". See https://mackerel.io/api-docs/entry/services#delete .
+`,
+			Action: doServiceDelete,
+		},
 	},
 }
 
@@ -60,6 +70,24 @@ func doServiceCreate(c *cli.Context) error {
 	logger.DieIf(err)
 
 	logger.Log("created", service.Name)
+
+	return nil
+}
+
+func doServiceDelete(c *cli.Context) error {
+	argServiceName := c.Args().Get(0)
+
+	if argServiceName == "" {
+		cli.ShowSubcommandHelp(c)
+		os.Exit(1)
+	}
+
+	client := newMackerelFromContext(c)
+
+	service, err := client.DeleteService(argServiceName)
+	logger.DieIf(err)
+
+	logger.Log("deleted", service.Name)
 
 	return nil
 }
