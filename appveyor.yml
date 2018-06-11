@@ -2,9 +2,10 @@ version: "{build}"
 clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
   GOPATH: c:\gopath
+  GOROOT: c:\go110-x86
 build: off
 install:
-  - set PATH=C:\go\bin;%GOPATH%\bin;C:\msys64\mingw64\bin;%PATH%
+  - set PATH=%GOROOT%\bin;%GOPATH%\bin;C:\msys64\mingw64\bin;%PATH%
 test_script:
   - go get -d -v -t ./...
   - go test -v ./...
