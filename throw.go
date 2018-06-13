@@ -110,7 +110,7 @@ func requestWithRetry(f func() error) error {
 	var delay time.Duration
 	for int(b.Attempt()) < maxRetry {
 		if b.Attempt() > 0 {
-			logger.Log("warning", fmt.Sprintf("Failed to request. will retry after %.0f seconds...", delay.Seconds()))
+			logger.Log("warning", fmt.Sprintf("Failed to request. will retry after %.0f seconds. Error: %s", delay.Seconds(), err))
 			time.Sleep(delay)
 		}
 		if err = f(); err == nil {
