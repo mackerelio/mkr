@@ -1,3 +1,10 @@
+mkr (0.30.0-1) stable; urgency=low
+
+  * Build with Go 1.10 (by astj)
+    <https://github.com/mackerelio/mkr/pull/157>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 20 Jun 2018 11:02:02 +0900
+
 mkr (0.29.0-1) stable; urgency=low
 
   * Change createdAt of hosts subcommand output to ISO 8601 extended format (by hayajo)

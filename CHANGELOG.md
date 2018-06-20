@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.30.0 (2018-06-20)
+
+* Build with Go 1.10 #157 (astj)
+
+
 ## 0.29.0 (2018-04-10)
 
 * Change createdAt of hosts subcommand output to ISO 8601 extended format #154 (hayajo)
