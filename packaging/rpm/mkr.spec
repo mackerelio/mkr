@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jun 20 2018 <mackerel-developers@hatena.ne.jp> - 0.30.0
+- Build with Go 1.10 (by astj)
+
 * Tue Apr 10 2018 <mackerel-developers@hatena.ne.jp> - 0.29.0
 - Change createdAt of hosts subcommand output to ISO 8601 extended format (by hayajo)
 
