@@ -3,9 +3,15 @@ package main
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	mkr "github.com/mackerelio/mackerel-client-go"
 )
+
+func init() {
+	// Shorten interval in tests
+	minInterval = 1 * time.Second
+}
 
 func TestRequestWithRetry_Success(t *testing.T) {
 	var counter int

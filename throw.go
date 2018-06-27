@@ -100,10 +100,12 @@ func doThrow(c *cli.Context) error {
 	return nil
 }
 
+var minInterval = 15 * time.Second
+
 func requestWithRetry(f func() error, maxRetry int) error {
 	b := &backoff.Backoff{
-		Min:    1 * time.Second,
-		Max:    1 * time.Minute,
+		Min:    minInterval,
+		Max:    5 * time.Minute,
 		Factor: 2,
 		Jitter: false,
 	}
