@@ -116,7 +116,13 @@ func requestWithRetry(f func() error) error {
 		if err = f(); err == nil {
 			// SUCCESS!!
 			break
+		} else if e, isAPIError := err.(*mkr.APIError); isAPIError {
+			// Do not retry when status is 4XX
+			if e.StatusCode >= 400 && e.StatusCode < 500 {
+				break
+			}
 		}
+
 		delay = b.Duration()
 	}
 	return err
