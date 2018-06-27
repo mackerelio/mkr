@@ -17,22 +17,25 @@ import (
 var commandThrow = cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
-	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] stdin",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--max-retry | -m N ] stdin",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
     Output format of metric values are compatible with that of a Sensu plugin.
     Requests "POST /api/v0/tsdb". See https://mackerel.io/api-docs/entry/host-metrics#post .
+    Automatically retries the API request when --max-retry is specified.
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
+		cli.IntFlag{Name: "max-retry, m", Usage: "Retries up to N times when API request fails."},
 	},
 }
 
 func doThrow(c *cli.Context) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
+	optMaxRetry := c.Int("max-retry")
 
 	var metricValues []*(mkr.MetricValue)
 
@@ -77,7 +80,7 @@ func doThrow(c *cli.Context) error {
 	if optHostID != "" {
 		logger.DieIf(requestWithRetry(func() error {
 			return client.PostHostMetricValuesByHostID(optHostID, metricValues)
-		}))
+		}, optMaxRetry))
 
 		for _, metric := range metricValues {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostID, metric.Name, metric.Value, metric.Time))
@@ -85,7 +88,7 @@ func doThrow(c *cli.Context) error {
 	} else if optService != "" {
 		logger.DieIf(requestWithRetry(func() error {
 			return client.PostServiceMetricValues(optService, metricValues)
-		}))
+		}, optMaxRetry))
 
 		for _, metric := range metricValues {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
@@ -97,9 +100,7 @@ func doThrow(c *cli.Context) error {
 	return nil
 }
 
-const maxRetry = 10
-
-func requestWithRetry(f func() error) error {
+func requestWithRetry(f func() error, maxRetry int) error {
 	b := &backoff.Backoff{
 		Min:    1 * time.Second,
 		Max:    1 * time.Minute,
@@ -108,7 +109,7 @@ func requestWithRetry(f func() error) error {
 	}
 	var err error
 	var delay time.Duration
-	for int(b.Attempt()) < maxRetry {
+	for int(b.Attempt()) <= maxRetry {
 		if b.Attempt() > 0 {
 			logger.Log("warning", fmt.Sprintf("Failed to request. will retry after %.0f seconds. Error: %s", delay.Seconds(), err))
 			time.Sleep(delay)
