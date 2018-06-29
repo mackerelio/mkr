@@ -17,7 +17,7 @@ func TestRequestWithRetry_Success(t *testing.T) {
 	var counter int
 	var err error
 	f0 := func() error {
-		counter += 1
+		counter++
 		return nil
 	}
 
@@ -53,7 +53,7 @@ func TestRequestWithRetry_Giveup(t *testing.T) {
 	var counter int
 	var err error
 	f0 := func() error {
-		counter += 1
+		counter++
 		return fmt.Errorf("ohno")
 	}
 
@@ -89,7 +89,7 @@ func TestRequestWithRetry_Recovery(t *testing.T) {
 	var counter int
 	var err error
 	f0 := func() error {
-		counter += 1
+		counter++
 		if counter < 3 {
 			return fmt.Errorf("Not yet")
 		}
@@ -120,8 +120,8 @@ func TestRequestWithRetry_Status(t *testing.T) {
 	var err error
 	var status int
 	f0 := func() error {
-		counter += 1
-		return &mkr.APIError{status, "ohno"}
+		counter++
+		return &mkr.APIError{StatusCode: status, Message: "ohno"}
 	}
 
 	counter = 0
