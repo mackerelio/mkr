@@ -17,18 +17,18 @@ import (
 var commandThrow = cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
-	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--max-retry | -m N ] stdin",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--retry | -r N ] stdin",
 	Description: `
     Post metric values to 'host metric' or 'service metric'.
     Output format of metric values are compatible with that of a Sensu plugin.
     Requests "POST /api/v0/tsdb". See https://mackerel.io/api-docs/entry/host-metrics#post .
-    Automatically retries the API request when --max-retry is specified.
+    Automatically retries the API request when --retry is specified.
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
-		cli.IntFlag{Name: "max-retry, m", Usage: "Retries up to N times when API request fails."},
+		cli.IntFlag{Name: "retry, r", Usage: "Retries up to N times when API request fails."},
 	},
 }
 
