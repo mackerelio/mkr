@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jul 04 2018 <mackerel-developers@hatena.ne.jp> - 0.31.0
+- add Retry feature and --retry option to `mkr throw` (by astj)
+
 * Wed Jun 20 2018 <mackerel-developers@hatena.ne.jp> - 0.30.0
 - Build with Go 1.10 (by astj)
 

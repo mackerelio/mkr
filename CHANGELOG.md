@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.31.0 (2018-07-04)
+
+* add Retry feature and --retry option to `mkr throw` #159 (astj)
+
+
 ## 0.30.0 (2018-06-20)
 
 * Build with Go 1.10 #157 (astj)

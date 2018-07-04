@@ -1,3 +1,10 @@
+mkr (0.31.0-1.v2) stable; urgency=low
+
+  * add Retry feature and --retry option to `mkr throw` (by astj)
+    <https://github.com/mackerelio/mkr/pull/159>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 04 Jul 2018 12:29:00 +0900
+
 mkr (0.30.0-1.v2) stable; urgency=low
 
   * Build with Go 1.10 (by astj)
