@@ -35,7 +35,7 @@ var commandThrow = cli.Command{
 func doThrow(c *cli.Context) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
-	optMaxRetry := c.Int("max-retry")
+	optMaxRetry := c.Int("retry")
 
 	var metricValues []*(mkr.MetricValue)
 
