@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jul 04 2018 <mackerel-developers@hatena.ne.jp> - 0.31.1
+- Fix mkr throw --retry not working (by astj)
+
 * Wed Jul 04 2018 <mackerel-developers@hatena.ne.jp> - 0.31.0
 - add Retry feature and --retry option to `mkr throw` (by astj)
 

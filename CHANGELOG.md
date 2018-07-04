@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.31.1 (2018-07-04)
+
+* Fix mkr throw --retry not working #161 (astj)
+
+
 ## 0.31.0 (2018-07-04)
 
 * add Retry feature and --retry option to `mkr throw` #159 (astj)
