@@ -47,14 +47,6 @@ $ go get github.com/mackerelio/mkr
 $ go install github.com/mackerelio/mkr
 ```
 
-## Linux (Docker)
-
-https://registry.hub.docker.com/u/mackerel/mkr/
-
-```bash
-$ docker run mackerel/mkr --rm --entrypoint="cat" /go/bin/app > /usr/local/bin/mkr && chmod +x /usr/local/bin/mkr
-```
-
 # USAGE
 
 First the MACKEREL_APIKEY environment variable must be set. It is not necessary to set the MACKEREL_APIKEY on hosts running [mackerel-agent](https://github.com/mackerelio/mackerel-agent). For more details, see below.
@@ -181,6 +173,14 @@ mkr retire
 
 ```bash
 $ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
+```
+
+## Using Docker Image
+
+https://registry.hub.docker.com/u/mackerel/mkr/
+
+```bash
+$ docker run --rm --env=MACKEREL_APIKEY=<API key> mackerel/mkr help
 ```
 
 # CONTRIBUTION
