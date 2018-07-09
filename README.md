@@ -180,7 +180,7 @@ $ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
 https://registry.hub.docker.com/u/mackerel/mkr/
 
 ```bash
-$ docker run --rm --env=MACKEREL_APIKEY=<API key> mackerel/mkr help
+$ docker run --rm --env MACKEREL_APIKEY=<API key> mackerel/mkr help
 ```
 
 # CONTRIBUTION
