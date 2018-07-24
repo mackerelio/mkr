@@ -19,7 +19,7 @@ test: test-deps
 	go test -v ./...
 
 build: deps
-	go build -ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
+	go build -ldflags "-w -s -X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
 
 lint: test-deps
 	go vet ./...
