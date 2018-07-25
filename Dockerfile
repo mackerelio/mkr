@@ -1,5 +1,5 @@
 FROM golang:alpine3.7 AS builder
-RUN apk add --no-cache make git ca-certificates
+RUN apk add --no-cache make git ca-certificates gcc musl-dev
 WORKDIR /go/src/github.com/mackerelio/mkr/
 COPY . .
 RUN make build
