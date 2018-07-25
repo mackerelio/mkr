@@ -19,7 +19,7 @@ test: test-deps
 	go test -v ./...
 
 build: deps
-	go build -ldflags "-X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
+	CGO_ENABLED=0 go build -ldflags=all="-w -s -extldflags '-static' -X main.gitcommit=$(CURRENT_REVISION)" -a -tags netgo -installsuffix netgo -o $(BIN) .
 
 lint: test-deps
 	go vet ./...

@@ -1,10 +1,10 @@
-FROM golang:alpine3.7
-RUN apk add --no-cache make git
+FROM golang:alpine3.7 AS builder
+RUN apk add --no-cache make git ca-certificates gcc musl-dev
 WORKDIR /go/src/github.com/mackerelio/mkr/
 COPY . .
 RUN make build
 
-FROM alpine:3.7
-RUN apk add --no-cache ca-certificates
-COPY --from=0 /go/src/github.com/mackerelio/mkr/mkr /usr/local/bin/
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /go/src/github.com/mackerelio/mkr/mkr /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/mkr"]
