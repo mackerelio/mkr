@@ -12,6 +12,7 @@ import (
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/plugin"
+	"github.com/mackerelio/mkr/wrap"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -33,6 +34,7 @@ var Commands = []cli.Command{
 	commandOrg,
 	plugin.CommandPlugin,
 	checks.Command,
+	wrap.Command,
 }
 
 var commandStatus = cli.Command{
