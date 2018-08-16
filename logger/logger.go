@@ -22,6 +22,10 @@ var logger = &colorine.Logger{
 	},
 }
 
+func init() {
+	logger.SetOutput(os.Stderr)
+}
+
 // Log outputs `message` with `prefix` by go-colorine
 func Log(prefix, message string) {
 	logger.Log(prefix, message)
