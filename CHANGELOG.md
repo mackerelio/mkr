@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.32.0 (2018-08-30)
+
+* logs to Stderr #167 (Songmu)
+* Omit symbol table and debug information from the executable #166 (itchyny)
+* fix Dockerfile to create alpine based docker image #163 (hayajo)
+
+
 ## 0.31.1 (2018-07-04)
 
 * Fix mkr throw --retry not working #161 (astj)

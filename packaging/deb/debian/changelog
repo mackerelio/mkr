@@ -1,3 +1,14 @@
+mkr (0.32.0-1) stable; urgency=low
+
+  * logs to Stderr (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/167>
+  * Omit symbol table and debug information from the executable (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/166>
+  * fix Dockerfile to create alpine based docker image (by hayajo)
+    <https://github.com/mackerelio/mkr/pull/163>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 30 Aug 2018 10:51:35 +0900
+
 mkr (0.31.1-1) stable; urgency=low
 
   * Fix mkr throw --retry not working (by astj)

@@ -42,6 +42,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Aug 30 2018 <mackerel-developers@hatena.ne.jp> - 0.32.0
+- logs to Stderr (by Songmu)
+- Omit symbol table and debug information from the executable (by itchyny)
+- fix Dockerfile to create alpine based docker image (by hayajo)
+
 * Wed Jul 04 2018 <mackerel-developers@hatena.ne.jp> - 0.31.1
 - Fix mkr throw --retry not working (by astj)
 
