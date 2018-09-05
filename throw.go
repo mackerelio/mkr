@@ -29,6 +29,7 @@ var commandThrow = cli.Command{
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
 		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
 		cli.IntFlag{Name: "retry, r", Usage: "Retries up to N times when API request fails."},
+		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
 }
 
@@ -36,6 +37,7 @@ func doThrow(c *cli.Context) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMaxRetry := c.Int("retry")
+	optVerbose := c.Bool("verbose")
 
 	var metricValues []*(mkr.MetricValue)
 
@@ -82,16 +84,20 @@ func doThrow(c *cli.Context) error {
 			return client.PostHostMetricValuesByHostID(optHostID, metricValues)
 		}, optMaxRetry))
 
-		for _, metric := range metricValues {
-			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostID, metric.Name, metric.Value, metric.Time))
+		if !optVerbose {
+			for _, metric := range metricValues {
+				logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optHostID, metric.Name, metric.Value, metric.Time))
+			}
 		}
 	} else if optService != "" {
 		logger.DieIf(requestWithRetry(func() error {
 			return client.PostServiceMetricValues(optService, metricValues)
 		}, optMaxRetry))
 
-		for _, metric := range metricValues {
-			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
+		if !optVerbose {
+			for _, metric := range metricValues {
+				logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
+			}
 		}
 	} else {
 		cli.ShowCommandHelp(c, "throw")
