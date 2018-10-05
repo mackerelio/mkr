@@ -2,7 +2,7 @@ version: "{build}"
 clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
   GOPATH: c:\gopath
-  GOROOT: c:\go110-x86
+  GOROOT: c:\go111-x86
 build: off
 install:
   - set PATH=%GOROOT%\bin;%GOPATH%\bin;C:\msys64\mingw64\bin;%PATH%
