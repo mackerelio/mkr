@@ -9,7 +9,7 @@ deps:
 
 test-deps:
 	go get -d -v -t ./...
-	go get github.com/golang/lint/golint
+	go get golang.org/x/lint/golint
 
 devel-deps: test-deps
 	go get github.com/mattn/goveralls
