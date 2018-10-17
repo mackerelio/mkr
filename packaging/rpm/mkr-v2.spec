@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Oct 17 2018 <mackerel-developers@hatena.ne.jp> - 0.32.1
+- Build with Go 1.11 (by astj)
+
 * Thu Aug 30 2018 <mackerel-developers@hatena.ne.jp> - 0.32.0
 - logs to Stderr (by Songmu)
 - Omit symbol table and debug information from the executable (by itchyny)

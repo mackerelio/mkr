@@ -1,3 +1,10 @@
+mkr (0.32.1-1) stable; urgency=low
+
+  * Build with Go 1.11 (by astj)
+    <https://github.com/mackerelio/mkr/pull/169>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 17 Oct 2018 11:06:43 +0900
+
 mkr (0.32.0-1) stable; urgency=low
 
   * logs to Stderr (by Songmu)
