@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.32.1 (2018-10-17)
+
+* Build with Go 1.11 #169 (astj)
+
+
 ## 0.32.0 (2018-08-30)
 
 * logs to Stderr #167 (Songmu)
