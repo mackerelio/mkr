@@ -187,6 +187,11 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
+	// If alert is caused by check monitoring, take monitorMsg from alert.message
+	if alert.Type == "check" {
+		monitorMsg = alert.Message
+	}
+
 	statusMsg := alert.Status
 	if colorize {
 		switch alert.Status {
