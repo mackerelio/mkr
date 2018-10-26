@@ -10,6 +10,7 @@ import (
 	"github.com/fatih/color"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"golang.org/x/exp/utf8string"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -189,7 +190,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	}
 	// If alert is caused by check monitoring, take monitorMsg from alert.message
 	if alert.Type == "check" {
-		monitorMsg = alert.Message
+		monitorMsg = formatCheckMessage(alert.Message)
 	}
 
 	statusMsg := alert.Status
@@ -211,6 +212,24 @@ var expressionNewlinePattern = regexp.MustCompile(`\s*[\r\n]+\s*`)
 func formatExpressionOneline(expr string) string {
 	expr = strings.Trim(expressionNewlinePattern.ReplaceAllString(expr, " "), " ")
 	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
+}
+
+var checkNewLinePattern = regexp.MustCompile(`[\r\n]+.*`)
+
+func formatCheckMessage(msg string) string {
+	truncated := false
+	if trimmed := checkNewLinePattern.ReplaceAllString(msg, ""); trimmed != msg {
+		msg = trimmed
+		truncated = true
+	}
+	if msgU := utf8string.NewString(msg); msgU.RuneCount() > 100 {
+		msg = msgU.Slice(0, 100)
+		truncated = true
+	}
+	if truncated {
+		msg = msg + "..."
+	}
+	return msg
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
