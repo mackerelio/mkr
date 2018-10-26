@@ -47,6 +47,7 @@ var Commands = []cli.Command{
 	commandAlerts,
 	commandDashboards,
 	commandAnnotations,
+	commandOrg,
 	plugin.CommandPlugin,
 }
 
