@@ -214,12 +214,10 @@ func formatExpressionOneline(expr string) string {
 	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
 }
 
-var checkNewLinePattern = regexp.MustCompile(`[\r\n]+.*`)
-
 func formatCheckMessage(msg string) string {
 	truncated := false
-	if trimmed := checkNewLinePattern.ReplaceAllString(msg, ""); trimmed != msg {
-		msg = trimmed
+	if index := strings.IndexAny(msg, "\n\r"); index != -1 {
+		msg = msg[0:index]
 		truncated = true
 	}
 	if msgU := utf8string.NewString(msg); msgU.RuneCount() > 100 {
