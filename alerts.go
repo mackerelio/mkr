@@ -187,6 +187,11 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
+	// If alert is caused by check monitoring, take monitorMsg from alert.message
+	if alert.Type == "check" {
+		monitorMsg = formatCheckMessage(alert.Message)
+	}
+
 	statusMsg := alert.Status
 	if colorize {
 		switch alert.Status {
@@ -206,6 +211,22 @@ var expressionNewlinePattern = regexp.MustCompile(`\s*[\r\n]+\s*`)
 func formatExpressionOneline(expr string) string {
 	expr = strings.Trim(expressionNewlinePattern.ReplaceAllString(expr, " "), " ")
 	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
+}
+
+func formatCheckMessage(msg string) string {
+	truncated := false
+	if index := strings.IndexAny(msg, "\n\r"); index != -1 {
+		msg = msg[0:index]
+		truncated = true
+	}
+	if runes := []rune(msg); len(runes) > 100 {
+		msg = string(runes[0:100])
+		truncated = true
+	}
+	if truncated {
+		msg = msg + "..."
+	}
+	return msg
 }
 
 func doAlertsRetrieve(c *cli.Context) error {

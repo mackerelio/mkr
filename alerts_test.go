@@ -61,6 +61,30 @@ func TestFormatJoinedAlert(t *testing.T) {
 			},
 			"2tZhm 1970-01-01 00:08:20 WARNING Max loadavg5 monitor max(roleSlots('service:role', 'loadavg5')) 15.70 > 10.00",
 		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "check", Status: "WARNING", MonitorID: "5rXR3", OpenedAt: 500, Message: "Short check monitoring description"},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				nil,
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING Short check monitoring description app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "check", Status: "WARNING", MonitorID: "5rXR3", OpenedAt: 500, Message: "description with\nnew line\nmore new line "},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				nil,
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING description with... app.example.com working [foo:bar,baz]",
+		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "check", Status: "WARNING", MonitorID: "5rXR3", OpenedAt: 500, Message: "long long long long long long long long long long long long long long long long long long long そして長い長い alert"},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				nil,
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
+		},
 	}
 
 	for _, testCase := range testCases {
