@@ -10,7 +10,6 @@ import (
 	"github.com/fatih/color"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
-	"golang.org/x/exp/utf8string"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -220,8 +219,8 @@ func formatCheckMessage(msg string) string {
 		msg = msg[0:index]
 		truncated = true
 	}
-	if msgU := utf8string.NewString(msg); msgU.RuneCount() > 100 {
-		msg = msgU.Slice(0, 100)
+	if runes := []rune(msg); len(runes) > 100 {
+		msg = string(runes[0:100])
 		truncated = true
 	}
 	if truncated {
