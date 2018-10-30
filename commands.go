@@ -364,7 +364,6 @@ func doUpdate(c *cli.Context) error {
 		if needUpdateHost {
 			host, err := client.FindHost(hostID)
 			logger.DieIf(err)
-			meta := host.Meta
 			name := ""
 			if optName == "" {
 				name = host.Name
@@ -380,7 +379,8 @@ func doUpdate(c *cli.Context) error {
 			param := &mkr.UpdateHostParam{
 				Name:        name,
 				DisplayName: displayname,
-				Meta:        meta,
+				Meta:        host.Meta,
+				Interfaces:  host.Interfaces,
 			}
 			if needUpdateRolesInHostUpdate {
 				param.RoleFullnames = optRoleFullnames
