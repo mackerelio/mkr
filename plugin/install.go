@@ -217,8 +217,8 @@ func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) err
 	if strings.HasSuffix(artifactFile, ".tar.gz") || strings.HasSuffix(artifactFile, ".tgz") {
 		unarchiver = archiver.DefaultTarGz
 	}
-	err := unarchiver.Unarchive(artifactFile, workdir)
-	if err != nil {
+
+	if err := unarchiver.Unarchive(artifactFile, workdir); err != nil {
 		return err
 	}
 
