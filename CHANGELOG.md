@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.33.0 (2018-11-12)
+
+* Follow https://github.com/mholt/archiver's change #175 (astj)
+* update subcommand should keep the interface infromation #174 (itchyny)
+* show alert.Message as monitor message in mkr alerts list #173 (astj)
+* implement org subcommand #172 (itchyny)
+
+
 ## 0.32.1 (2018-10-17)
 
 * Build with Go 1.11 #169 (astj)
