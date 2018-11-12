@@ -36,6 +36,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Nov 12 2018 <mackerel-developers@hatena.ne.jp> - 0.33.0
+- Follow https://github.com/mholt/archiver's change (by astj)
+- update subcommand should keep the interface infromation (by itchyny)
+- show alert.Message as monitor message in mkr alerts list (by astj)
+- implement org subcommand (by itchyny)
+
 * Wed Oct 17 2018 <mackerel-developers@hatena.ne.jp> - 0.32.1
 - Build with Go 1.11 (by astj)
 

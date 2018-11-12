@@ -1,3 +1,16 @@
+mkr (0.33.0-1.v2) stable; urgency=low
+
+  * Follow https://github.com/mholt/archiver's change (by astj)
+    <https://github.com/mackerelio/mkr/pull/175>
+  * update subcommand should keep the interface infromation (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/174>
+  * show alert.Message as monitor message in mkr alerts list (by astj)
+    <https://github.com/mackerelio/mkr/pull/173>
+  * implement org subcommand (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/172>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 12 Nov 2018 11:35:35 +0900
+
 mkr (0.32.1-1.v2) stable; urgency=low
 
   * Build with Go 1.11 (by astj)
