@@ -257,6 +257,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 				} else {
 					break
 				}
+				time.Sleep(1 * time.Second)
 			}
 		}
 
@@ -273,6 +274,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 				if id == "" {
 					break
 				}
+				time.Sleep(1 * time.Second)
 			}
 		}
 
@@ -306,6 +308,7 @@ func doAlertsList(c *cli.Context) error {
 				} else {
 					break
 				}
+				time.Sleep(1 * time.Second)
 			}
 		}
 		joinedAlerts := joinMonitorsAndHosts(client, alerts)
@@ -356,6 +359,7 @@ func doAlertsList(c *cli.Context) error {
 				if id == "" {
 					break
 				}
+				time.Sleep(1 * time.Second)
 			}
 		}
 		joinedAlerts := joinMonitorsAndHosts(client, alerts)
