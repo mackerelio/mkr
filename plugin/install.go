@@ -211,13 +211,14 @@ func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
 
 // Extract artifact and install plugin
 func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) error {
+	var unarchiver archiver.Unarchiver
 	// unzip artifact to work directory
-	fn := archiver.Zip.Open
+	unarchiver = archiver.DefaultZip
 	if strings.HasSuffix(artifactFile, ".tar.gz") || strings.HasSuffix(artifactFile, ".tgz") {
-		fn = archiver.TarGz.Open
+		unarchiver = archiver.DefaultTarGz
 	}
-	err := fn(artifactFile, workdir)
-	if err != nil {
+
+	if err := unarchiver.Unarchive(artifactFile, workdir); err != nil {
 		return err
 	}
 
