@@ -47,6 +47,8 @@ var commandAlerts = cli.Command{
 					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
+				cli.BoolFlag{Name: "withClosed, w", Usage: "Displays closed alerts."},
+				cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Number of alerts to display at one time"},
 			},
 		},
 		{
