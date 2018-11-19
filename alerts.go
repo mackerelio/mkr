@@ -238,19 +238,19 @@ func formatCheckMessage(msg string) string {
 
 func doAlertsRetrieve(c *cli.Context) error {
 	client := newMackerelFromContext(c)
-	isClosed := c.Bool("withClosed")
+	withClosed := c.Bool("with-closed")
 	limit := c.Int("limit")
 
-	if isClosed {
+	if withClosed {
 		alerts, err := client.FindWithClosedAlerts()
 		logger.DieIf(err)
-		if alerts.ID != "" {
+		if alerts.NextID != "" {
 			for {
 				if limit >= len(alerts.Alerts) {
-					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.ID)
+					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-					if alerts.ID == "" {
+					if alerts.NextID == "" {
 						break
 					}
 					time.Sleep(1 * time.Second)
@@ -264,12 +264,12 @@ func doAlertsRetrieve(c *cli.Context) error {
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
-		if alerts.ID != "" {
+		if alerts.NextID != "" {
 			for {
-				nextAlerts, err := client.FindAlertsByNextID(alerts.ID)
+				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-				if alerts.ID == "" {
+				if alerts.NextID == "" {
 					break
 				}
 				time.Sleep(1 * time.Second)
@@ -285,20 +285,20 @@ func doAlertsList(c *cli.Context) error {
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
 	client := newMackerelFromContext(c)
-	isClosed := c.Bool("withClosed")
+	withClosed := c.Bool("with-closed")
 	limit := c.Int("limit")
 	var alert []*mkr.Alert
 
-	if isClosed {
+	if withClosed {
 		alerts, err := client.FindWithClosedAlerts()
 		logger.DieIf(err)
-		if alerts.ID != "" {
+		if alerts.NextID != "" {
 			for {
 				if limit >= len(alerts.Alerts) {
-					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.ID)
+					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-					if alerts.ID == "" {
+					if alerts.NextID == "" {
 						break
 					}
 					time.Sleep(1 * time.Second)
@@ -311,12 +311,12 @@ func doAlertsList(c *cli.Context) error {
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
-		if alerts.ID != "" {
+		if alerts.NextID != "" {
 			for {
-				nextAlerts, err := client.FindAlertsByNextID(alerts.ID)
+				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-				if alerts.ID == "" {
+				if alerts.NextID == "" {
 					break
 				}
 				time.Sleep(1 * time.Second)
