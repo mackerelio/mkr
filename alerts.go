@@ -23,8 +23,8 @@ var commandAlerts = cli.Command{
 `,
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "with-closed, w", Usage: "Displays closed alerts."},
-		cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Number of alerts to display at one time"},
+		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
+		cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Set the number of alerts to display at once when withClosed is active. default: 100"},
 	},
 	Subcommands: []cli.Command{
 		{
@@ -47,8 +47,8 @@ var commandAlerts = cli.Command{
 					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
-				cli.BoolFlag{Name: "with-closed, w", Usage: "Displays closed alerts."},
-				cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Number of alerts to display at one time"},
+				cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
+				cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Set the number of alerts to display at once when withClosed is active. default: 100"},
 			},
 		},
 		{
