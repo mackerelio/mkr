@@ -203,9 +203,11 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	if colorize {
 		switch alert.Status {
 		case "CRITICAL":
-			statusMsg = color.RedString("CRITICAL")
+			statusMsg = color.RedString("CRITICAL ")
 		case "WARNING":
 			statusMsg = color.YellowString("WARNING ")
+		case "OK":
+			statusMsg = color.GreenString("OK ")
 		case "UNKNOWN":
 			statusMsg = "UNKNOWN "
 		}
@@ -246,7 +248,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 		logger.DieIf(err)
 		if alerts.NextID != "" {
 			for {
-				if limit >= len(alerts.Alerts) {
+				if limit > len(alerts.Alerts) {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
@@ -294,7 +296,7 @@ func doAlertsList(c *cli.Context) error {
 		logger.DieIf(err)
 		if alerts.NextID != "" {
 			for {
-				if limit >= len(alerts.Alerts) {
+				if limit > len(alerts.Alerts) {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
