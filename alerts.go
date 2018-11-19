@@ -16,21 +16,21 @@ import (
 var commandAlerts = cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
-	ArgsUsage: "[--withClosed | -w] [--limit | -l]",
+	ArgsUsage: "[--with-closed | -w] [--limit | -l]",
 	Description: `
     Retrieve/Close alerts. With no subcommand specified, this will show all alerts.
     Requests APIs under "/api/v0/alerts". See https://mackerel.io/api-docs/entry/alerts .
 `,
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "withClosed, w", Usage: "Displays closed alerts."},
+		cli.BoolFlag{Name: "with-closed, w", Usage: "Displays closed alerts."},
 		cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Number of alerts to display at one time"},
 	},
 	Subcommands: []cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",
-			ArgsUsage: "[--service | -s <service>] [--host-status | -S <file>] [--color | -c]",
+			ArgsUsage: "[--service | -s <service>] [--host-status | -S <file>] [--color | -c] [--with-closed | -w] [--limit | -l]",
 			Description: `
     Shows alerts in human-readable format.
 `,
@@ -47,7 +47,7 @@ var commandAlerts = cli.Command{
 					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
-				cli.BoolFlag{Name: "withClosed, w", Usage: "Displays closed alerts."},
+				cli.BoolFlag{Name: "with-closed, w", Usage: "Displays closed alerts."},
 				cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Number of alerts to display at one time"},
 			},
 		},
@@ -240,40 +240,36 @@ func doAlertsRetrieve(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 	isClosed := c.Bool("withClosed")
 	limit := c.Int("limit")
-	count := 0
 
 	if isClosed {
-		alerts, id, err := client.FindWithClosedAlerts()
+		alerts, err := client.FindWithClosedAlerts()
 		logger.DieIf(err)
-		if id != "" {
+		if alerts.ID != "" {
 			for {
-				nextAlerts := alerts
-				count += len(alerts)
-				if limit >= count {
-					nextAlerts, id, err = client.FindWithClosedAlertsByNextID(id)
+				if limit >= len(alerts.Alerts) {
+					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.ID)
 					logger.DieIf(err)
-					alerts = append(alerts, nextAlerts...)
-					if id == "" {
+					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					if alerts.ID == "" {
 						break
 					}
+					time.Sleep(1 * time.Second)
 				} else {
 					break
 				}
-				time.Sleep(1 * time.Second)
 			}
 		}
 
 		PrettyPrintJSON(alerts)
 	} else {
-		alerts, id, err := client.FindAlerts()
+		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
-		if id != "" {
+		if alerts.ID != "" {
 			for {
-				nextAlerts := alerts
-				nextAlerts, id, err = client.FindAlertsByNextID(id)
+				nextAlerts, err := client.FindAlertsByNextID(alerts.ID)
 				logger.DieIf(err)
-				alerts = append(alerts, nextAlerts...)
-				if id == "" {
+				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				if alerts.ID == "" {
 					break
 				}
 				time.Sleep(1 * time.Second)
@@ -291,115 +287,78 @@ func doAlertsList(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 	isClosed := c.Bool("withClosed")
 	limit := c.Int("limit")
-	count := 0
+	var alert []*mkr.Alert
 
 	if isClosed {
-		alerts, id, err := client.FindWithClosedAlerts()
+		alerts, err := client.FindWithClosedAlerts()
 		logger.DieIf(err)
-		if id != "" {
+		if alerts.ID != "" {
 			for {
-				nextAlerts := alerts
-				count += len(alerts)
-				if limit >= count {
-					nextAlerts, id, err = client.FindWithClosedAlertsByNextID(id)
+				if limit >= len(alerts.Alerts) {
+					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.ID)
 					logger.DieIf(err)
-					alerts = append(alerts, nextAlerts...)
-					if id == "" {
+					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					if alerts.ID == "" {
 						break
 					}
+					time.Sleep(1 * time.Second)
 				} else {
 					break
 				}
-				time.Sleep(1 * time.Second)
 			}
 		}
-		joinedAlerts := joinMonitorsAndHosts(client, alerts)
-		for _, joinAlert := range joinedAlerts {
-			if len(filterServices) > 0 {
-				found := false
-				for _, filterService := range filterServices {
-					if joinAlert.Host != nil {
-						if _, ok := joinAlert.Host.Roles[filterService]; ok {
-							found = true
-						}
-					} else {
-						var service string
-						if m, ok := joinAlert.Monitor.(*mkr.MonitorServiceMetric); ok {
-							service = m.Service
-						} else if m, ok := joinAlert.Monitor.(*mkr.MonitorExternalHTTP); ok {
-							service = m.Service
-						}
-						found = service == filterService
-					}
-				}
-				if !found {
-					continue
-				}
-			}
-			if len(filterStatuses) > 0 {
-				found := false
-				for _, filterStatus := range filterStatuses {
-					if joinAlert.Host != nil && joinAlert.Host.Status == filterStatus {
-						found = true
-					}
-				}
-				if !found {
-					continue
-				}
-			}
-			fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
-		}
+		alert = alerts.Alerts
 	} else {
-		alerts, id, err := client.FindAlerts()
+		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
-		if id != "" {
+		if alerts.ID != "" {
 			for {
-				nextAlerts := alerts
-				nextAlerts, id, err = client.FindAlertsByNextID(id)
+				nextAlerts, err := client.FindAlertsByNextID(alerts.ID)
 				logger.DieIf(err)
-				alerts = append(alerts, nextAlerts...)
-				if id == "" {
+				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				if alerts.ID == "" {
 					break
 				}
 				time.Sleep(1 * time.Second)
 			}
 		}
-		joinedAlerts := joinMonitorsAndHosts(client, alerts)
-		for _, joinAlert := range joinedAlerts {
-			if len(filterServices) > 0 {
-				found := false
-				for _, filterService := range filterServices {
-					if joinAlert.Host != nil {
-						if _, ok := joinAlert.Host.Roles[filterService]; ok {
-							found = true
-						}
-					} else {
-						var service string
-						if m, ok := joinAlert.Monitor.(*mkr.MonitorServiceMetric); ok {
-							service = m.Service
-						} else if m, ok := joinAlert.Monitor.(*mkr.MonitorExternalHTTP); ok {
-							service = m.Service
-						}
-						found = service == filterService
-					}
-				}
-				if !found {
-					continue
-				}
-			}
-			if len(filterStatuses) > 0 {
-				found := false
-				for _, filterStatus := range filterStatuses {
-					if joinAlert.Host != nil && joinAlert.Host.Status == filterStatus {
+		alert = alerts.Alerts
+	}
+	joinedAlerts := joinMonitorsAndHosts(client, alert)
+	for _, joinAlert := range joinedAlerts {
+		if len(filterServices) > 0 {
+			found := false
+			for _, filterService := range filterServices {
+				if joinAlert.Host != nil {
+					if _, ok := joinAlert.Host.Roles[filterService]; ok {
 						found = true
 					}
-				}
-				if !found {
-					continue
+				} else {
+					var service string
+					if m, ok := joinAlert.Monitor.(*mkr.MonitorServiceMetric); ok {
+						service = m.Service
+					} else if m, ok := joinAlert.Monitor.(*mkr.MonitorExternalHTTP); ok {
+						service = m.Service
+					}
+					found = service == filterService
 				}
 			}
-			fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
+			if !found {
+				continue
+			}
 		}
+		if len(filterStatuses) > 0 {
+			found := false
+			for _, filterStatus := range filterStatuses {
+				if joinAlert.Host != nil && joinAlert.Host.Status == filterStatus {
+					found = true
+				}
+			}
+			if !found {
+				continue
+			}
+		}
+		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
 	}
 	return nil
 }
