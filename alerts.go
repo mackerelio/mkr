@@ -252,6 +252,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					alerts.NextID = nextAlerts.NextID
 					if alerts.NextID == "" {
 						break
 					}
@@ -271,6 +272,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				alerts.NextID = nextAlerts.NextID
 				if alerts.NextID == "" {
 					break
 				}
@@ -300,6 +302,7 @@ func doAlertsList(c *cli.Context) error {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					alerts.NextID = nextAlerts.NextID
 					if alerts.NextID == "" {
 						break
 					}
@@ -318,6 +321,7 @@ func doAlertsList(c *cli.Context) error {
 				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				alerts.NextID = nextAlerts.NextID
 				if alerts.NextID == "" {
 					break
 				}
