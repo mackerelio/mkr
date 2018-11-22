@@ -263,7 +263,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts)
+		PrettyPrintJSON(alerts.Alerts)
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
@@ -280,7 +280,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts)
+		PrettyPrintJSON(alerts.Alerts)
 	}
 	return nil
 }
