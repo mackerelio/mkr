@@ -252,6 +252,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					alerts.NextID = nextAlerts.NextID
 					if alerts.NextID == "" {
 						break
 					}
@@ -262,7 +263,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts)
+		PrettyPrintJSON(alerts.Alerts[:limit])
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
@@ -271,6 +272,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				alerts.NextID = nextAlerts.NextID
 				if alerts.NextID == "" {
 					break
 				}
@@ -278,7 +280,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts)
+		PrettyPrintJSON(alerts.Alerts[:limit])
 	}
 	return nil
 }
@@ -300,6 +302,7 @@ func doAlertsList(c *cli.Context) error {
 					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
 					logger.DieIf(err)
 					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+					alerts.NextID = nextAlerts.NextID
 					if alerts.NextID == "" {
 						break
 					}
@@ -309,7 +312,7 @@ func doAlertsList(c *cli.Context) error {
 				}
 			}
 		}
-		alert = alerts.Alerts
+		alert = alerts.Alerts[:limit]
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
@@ -318,13 +321,14 @@ func doAlertsList(c *cli.Context) error {
 				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
 				logger.DieIf(err)
 				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
+				alerts.NextID = nextAlerts.NextID
 				if alerts.NextID == "" {
 					break
 				}
 				time.Sleep(1 * time.Second)
 			}
 		}
-		alert = alerts.Alerts
+		alert = alerts.Alerts[:limit]
 	}
 	joinedAlerts := joinMonitorsAndHosts(client, alert)
 	for _, joinAlert := range joinedAlerts {
