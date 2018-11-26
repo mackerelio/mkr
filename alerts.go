@@ -263,7 +263,10 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts.Alerts[:limit])
+		if len(alerts.Alerts) > limit {
+			alerts.Alerts = alerts.Alerts[:limit]
+		}
+		PrettyPrintJSON(alerts.Alerts)
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
@@ -280,7 +283,10 @@ func doAlertsRetrieve(c *cli.Context) error {
 			}
 		}
 
-		PrettyPrintJSON(alerts.Alerts[:limit])
+		if len(alerts.Alerts) > limit {
+			alerts.Alerts = alerts.Alerts[:limit]
+		}
+		PrettyPrintJSON(alerts.Alerts)
 	}
 	return nil
 }
@@ -312,7 +318,10 @@ func doAlertsList(c *cli.Context) error {
 				}
 			}
 		}
-		alert = alerts.Alerts[:limit]
+		alert = alerts.Alerts
+		if len(alert) > limit {
+			alert = alert[:limit]
+		}
 	} else {
 		alerts, err := client.FindAlerts()
 		logger.DieIf(err)
@@ -328,7 +337,10 @@ func doAlertsList(c *cli.Context) error {
 				time.Sleep(1 * time.Second)
 			}
 		}
-		alert = alerts.Alerts[:limit]
+		alert = alerts.Alerts
+		if len(alert) > limit {
+			alert = alert[:limit]
+		}
 	}
 	joinedAlerts := joinMonitorsAndHosts(client, alert)
 	for _, joinAlert := range joinedAlerts {
