@@ -338,6 +338,9 @@ func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, 
 		}
 		if resp.NextID != "" {
 			for {
+				if limit <= len(resp.Alerts) {
+					break
+				}
 				nextResp, err := client.FindAlertsByNextID(resp.NextID)
 				if err != nil {
 					return nil, err
