@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Nov 26 2018 <mackerel-developers@hatena.ne.jp> - 0.34.1
+- avoid out of range exception in mkr alerts (by astj)
+
 * Mon Nov 26 2018 <mackerel-developers@hatena.ne.jp> - 0.34.0
 - Fixed issue where nextID was not inherited (by yaminoma)
 - Implemented according to new specification of Alerts API. (by yaminoma)

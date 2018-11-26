@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.34.1 (2018-11-26)
+
+* avoid out of range exception in mkr alerts #181 (astj)
+
+
 ## 0.34.0 (2018-11-26)
 
 * Fixed issue where nextID was not inherited #179 (yaminoma)
