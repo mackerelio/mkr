@@ -242,52 +242,9 @@ func doAlertsRetrieve(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 	withClosed := c.Bool("with-closed")
 	limit := c.Int("limit")
-
-	if withClosed {
-		alerts, err := client.FindWithClosedAlerts()
-		logger.DieIf(err)
-		if alerts.NextID != "" {
-			for {
-				if limit > len(alerts.Alerts) {
-					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
-					logger.DieIf(err)
-					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-					alerts.NextID = nextAlerts.NextID
-					if alerts.NextID == "" {
-						break
-					}
-					time.Sleep(1 * time.Second)
-				} else {
-					break
-				}
-			}
-		}
-
-		if len(alerts.Alerts) > limit {
-			alerts.Alerts = alerts.Alerts[:limit]
-		}
-		PrettyPrintJSON(alerts.Alerts)
-	} else {
-		alerts, err := client.FindAlerts()
-		logger.DieIf(err)
-		if alerts.NextID != "" {
-			for {
-				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
-				logger.DieIf(err)
-				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-				alerts.NextID = nextAlerts.NextID
-				if alerts.NextID == "" {
-					break
-				}
-				time.Sleep(1 * time.Second)
-			}
-		}
-
-		if len(alerts.Alerts) > limit {
-			alerts.Alerts = alerts.Alerts[:limit]
-		}
-		PrettyPrintJSON(alerts.Alerts)
-	}
+	alerts, err := fetchAlerts(client, withClosed, limit)
+	logger.DieIf(err)
+	PrettyPrintJSON(alerts)
 	return nil
 }
 
@@ -297,52 +254,10 @@ func doAlertsList(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 	withClosed := c.Bool("with-closed")
 	limit := c.Int("limit")
-	var alert []*mkr.Alert
+	alerts, err := fetchAlerts(client, withClosed, limit)
+	logger.DieIf(err)
 
-	if withClosed {
-		alerts, err := client.FindWithClosedAlerts()
-		logger.DieIf(err)
-		if alerts.NextID != "" {
-			for {
-				if limit > len(alerts.Alerts) {
-					nextAlerts, err := client.FindWithClosedAlertsByNextID(alerts.NextID)
-					logger.DieIf(err)
-					alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-					alerts.NextID = nextAlerts.NextID
-					if alerts.NextID == "" {
-						break
-					}
-					time.Sleep(1 * time.Second)
-				} else {
-					break
-				}
-			}
-		}
-		alert = alerts.Alerts
-		if len(alert) > limit {
-			alert = alert[:limit]
-		}
-	} else {
-		alerts, err := client.FindAlerts()
-		logger.DieIf(err)
-		if alerts.NextID != "" {
-			for {
-				nextAlerts, err := client.FindAlertsByNextID(alerts.NextID)
-				logger.DieIf(err)
-				alerts.Alerts = append(alerts.Alerts, nextAlerts.Alerts...)
-				alerts.NextID = nextAlerts.NextID
-				if alerts.NextID == "" {
-					break
-				}
-				time.Sleep(1 * time.Second)
-			}
-		}
-		alert = alerts.Alerts
-		if len(alert) > limit {
-			alert = alert[:limit]
-		}
-	}
-	joinedAlerts := joinMonitorsAndHosts(client, alert)
+	joinedAlerts := joinMonitorsAndHosts(client, alerts)
 	for _, joinAlert := range joinedAlerts {
 		if len(filterServices) > 0 {
 			found := false
@@ -379,6 +294,55 @@ func doAlertsList(c *cli.Context) error {
 		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
 	}
 	return nil
+}
+
+func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, error) {
+	var resp *mkr.AlertsResp
+	var err error
+	if withClosed {
+		if resp, err = client.FindWithClosedAlerts(); err != nil {
+			return nil, err
+		}
+		if resp.NextID != "" {
+			for {
+				if limit <= len(resp.Alerts) {
+					break
+				}
+				nextResp, err := client.FindWithClosedAlertsByNextID(resp.NextID)
+				if err != nil {
+					return nil, err
+				}
+				resp.Alerts = append(resp.Alerts, nextResp.Alerts...)
+				resp.NextID = nextResp.NextID
+				if resp.NextID == "" {
+					break
+				}
+				time.Sleep(1 * time.Second)
+			}
+		}
+	} else {
+		if resp, err = client.FindAlerts(); err != nil {
+			return nil, err
+		}
+		if resp.NextID != "" {
+			for {
+				nextResp, err := client.FindAlertsByNextID(resp.NextID)
+				if err != nil {
+					return nil, err
+				}
+				resp.Alerts = append(resp.Alerts, nextResp.Alerts...)
+				resp.NextID = nextResp.NextID
+				if resp.NextID == "" {
+					break
+				}
+				time.Sleep(1 * time.Second)
+			}
+		}
+	}
+	if len(resp.Alerts) > limit {
+		resp.Alerts = resp.Alerts[:limit]
+	}
+	return resp.Alerts, nil
 }
 
 func doAlertsClose(c *cli.Context) error {
