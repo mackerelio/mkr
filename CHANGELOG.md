@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.34.0 (2018-11-26)
+
+* Fixed issue where nextID was not inherited #179 (yaminoma)
+* Implemented according to new specification of Alerts API. #178 (yaminoma)
+
+
 ## 0.33.0 (2018-11-12)
 
 * Follow https://github.com/mholt/archiver's change #175 (astj)
