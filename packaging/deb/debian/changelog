@@ -1,3 +1,12 @@
+mkr (0.34.0-1) stable; urgency=low
+
+  * Fixed issue where nextID was not inherited (by yaminoma)
+    <https://github.com/mackerelio/mkr/pull/179>
+  * Implemented according to new specification of Alerts API. (by yaminoma)
+    <https://github.com/mackerelio/mkr/pull/178>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 26 Nov 2018 15:23:24 +0900
+
 mkr (0.33.0-1) stable; urgency=low
 
   * Follow https://github.com/mholt/archiver's change (by astj)

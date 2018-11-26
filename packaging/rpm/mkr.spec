@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Nov 26 2018 <mackerel-developers@hatena.ne.jp> - 0.34.0
+- Fixed issue where nextID was not inherited (by yaminoma)
+- Implemented according to new specification of Alerts API. (by yaminoma)
+
 * Mon Nov 12 2018 <mackerel-developers@hatena.ne.jp> - 0.33.0
 - Follow https://github.com/mholt/archiver's change (by astj)
 - update subcommand should keep the interface infromation (by itchyny)
