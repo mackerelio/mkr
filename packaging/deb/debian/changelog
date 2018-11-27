@@ -1,3 +1,10 @@
+mkr (0.34.2-1) stable; urgency=low
+
+  * Fix the default limit of mkr alerts (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/184>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 27 Nov 2018 12:57:47 +0900
+
 mkr (0.34.1-1) stable; urgency=low
 
   * avoid out of range exception in mkr alerts (by astj)

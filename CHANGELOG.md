@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.34.2 (2018-11-27)
+
+* Fix the default limit of mkr alerts #184 (itchyny)
+
+
 ## 0.34.1 (2018-11-26)
 
 * avoid out of range exception in mkr alerts #181 (astj)
