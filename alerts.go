@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strings"
@@ -24,7 +26,7 @@ var commandAlerts = cli.Command{
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-		cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Set the number of alerts to display at once when withClosed is active. default: 100"},
+		cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
 	},
 	Subcommands: []cli.Command{
 		{
@@ -48,7 +50,7 @@ var commandAlerts = cli.Command{
 				},
 				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
 				cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-				cli.IntFlag{Name: "limit, l", Value: 100, Usage: "Set the number of alerts to display at once when withClosed is active. default: 100"},
+				cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
 			},
 		},
 		{
@@ -66,6 +68,8 @@ var commandAlerts = cli.Command{
 		},
 	},
 }
+
+const defaultAlertsLimit int = 100
 
 type alertSet struct {
 	Alert   *mkr.Alert
@@ -241,8 +245,7 @@ func formatCheckMessage(msg string) string {
 func doAlertsRetrieve(c *cli.Context) error {
 	client := newMackerelFromContext(c)
 	withClosed := c.Bool("with-closed")
-	limit := c.Int("limit")
-	alerts, err := fetchAlerts(client, withClosed, limit)
+	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
 	PrettyPrintJSON(alerts)
 	return nil
@@ -253,8 +256,7 @@ func doAlertsList(c *cli.Context) error {
 	filterStatuses := c.StringSlice("host-status")
 	client := newMackerelFromContext(c)
 	withClosed := c.Bool("with-closed")
-	limit := c.Int("limit")
-	alerts, err := fetchAlerts(client, withClosed, limit)
+	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
 
 	joinedAlerts := joinMonitorsAndHosts(client, alerts)
@@ -296,7 +298,21 @@ func doAlertsList(c *cli.Context) error {
 	return nil
 }
 
+func getAlertsLimit(c *cli.Context, withClosed bool) int {
+	if c.IsSet("limit") {
+		return c.Int("limit")
+	}
+	if withClosed {
+		return defaultAlertsLimit
+	}
+	// When -limit is not set, mkr alerts should print all the open alerts.
+	return math.MaxInt32
+}
+
 func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, error) {
+	if limit < 0 {
+		return nil, errors.New("limit should not be negative")
+	}
 	var resp *mkr.AlertsResp
 	var err error
 	if withClosed {
@@ -326,6 +342,9 @@ func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, 
 		}
 		if resp.NextID != "" {
 			for {
+				if limit <= len(resp.Alerts) {
+					break
+				}
 				nextResp, err := client.FindAlertsByNextID(resp.NextID)
 				if err != nil {
 					return nil, err
