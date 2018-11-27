@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"os"
@@ -309,6 +310,9 @@ func getAlertsLimit(c *cli.Context, withClosed bool) int {
 }
 
 func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, error) {
+	if limit < 0 {
+		return nil, errors.New("limit should not be negative")
+	}
 	var resp *mkr.AlertsResp
 	var err error
 	if withClosed {
