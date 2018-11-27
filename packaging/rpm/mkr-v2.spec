@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Nov 27 2018 <mackerel-developers@hatena.ne.jp> - 0.34.2
+- Fix the default limit of mkr alerts (by itchyny)
+
 * Mon Nov 26 2018 <mackerel-developers@hatena.ne.jp> - 0.34.1
 - avoid out of range exception in mkr alerts (by astj)
 
