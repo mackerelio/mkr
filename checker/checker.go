@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/mackerelio/mackerel-agent/config"
 	cli "gopkg.in/urfave/cli.v1"
+	yaml "gopkg.in/yaml.v2"
 )
 
 var Command = cli.Command{
@@ -40,10 +42,25 @@ func doRunChecks(c *cli.Context) error {
 }
 
 type result struct {
-	name, memo, cmd string
-	stdout, stderr  string
-	exitCode        int
-	err             error
+	Name     string `yaml:"-"`
+	Memo     string `yaml:"memo,omitempty"`
+	Cmd      string `yaml:"command"`
+	Stdout   string `yaml:"stdout,omitempty"`
+	Stderr   string `yaml:"stderr,omitempty"`
+	ExitCode int    `yaml:"exitCode,omitempty"`
+	ErrMsg   string `yaml:"error,omitempty"`
+}
+
+func (re *result) tapFormat(num int) string {
+	okOrNot := "ok"
+	if re.ExitCode != 0 || re.ErrMsg != "" {
+		okOrNot = "not ok"
+	}
+	b, _ := yaml.Marshal(re)
+	// indent
+	yamlStr := "  " + strings.Replace(strings.TrimSpace(string(b)), "\n", "\n  ", -1)
+	return fmt.Sprintf("%s %d - %s\n  ---\n%s\n  ...",
+		okOrNot, num, re.Name, yamlStr)
 }
 
 type checkPluginChecker struct {
@@ -59,14 +76,18 @@ func (cpc *checkPluginChecker) check() *result {
 		b, _ := json.Marshal(p.Command.Args)
 		cmdStr = string(b)
 	}
+	errMsg := ""
+	if err != nil {
+		errMsg = err.Error()
+	}
 	return &result{
-		name:     cpc.name,
-		memo:     p.Memo,
-		cmd:      cmdStr,
-		exitCode: exitCode,
-		stdout:   stdout,
-		stderr:   stderr,
-		err:      err,
+		Name:     cpc.name,
+		Memo:     p.Memo,
+		Cmd:      cmdStr,
+		ExitCode: exitCode,
+		Stdout:   strings.TrimSpace(stdout),
+		Stderr:   strings.TrimSpace(stderr),
+		ErrMsg:   errMsg,
 	}
 }
 
@@ -90,10 +111,11 @@ func runChecks(checkers []checker, w io.Writer) error {
 		close(ch)
 	}()
 	fmt.Fprintln(w, "TAP version 13")
-	fmt.Fprintf(w, "1..%d", total)
+	fmt.Fprintf(w, "1..%d\n", total)
 	testNum := 1
 	for re := range ch {
-		fmt.Fprintln(w, re)
+		fmt.Fprintln(w, re.tapFormat(testNum))
+		testNum++
 	}
 	return nil
 }
