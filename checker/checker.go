@@ -1,6 +1,10 @@
 package checker
 
 import (
+	"encoding/json"
+	"fmt"
+	"sync"
+
 	"github.com/mackerelio/mackerel-agent/config"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -24,6 +28,44 @@ func doRunChecks(c *cli.Context) error {
 	return runChecks(conf.CheckPlugins)
 }
 
+type result struct {
+	name, memo, cmd string
+	stdout, stderr  string
+	exitCode        int
+	err             error
+}
+
 func runChecks(plugins map[string]*config.CheckPlugin) error {
+	ch := make(chan *result)
+	go func() {
+		wg := &sync.WaitGroup{}
+		wg.Add(len(plugins))
+		for name, p := range plugins {
+			go func(name string, p *config.CheckPlugin) {
+				defer wg.Done()
+				stdout, stderr, exitCode, err := p.Command.Run()
+				cmdStr := p.Command.Cmd
+				if cmdStr == "" {
+					b, _ := json.Marshal(p.Command.Args)
+					cmdStr = string(b)
+				}
+				ch <- &result{
+					name:     name,
+					memo:     p.Memo,
+					cmd:      cmdStr,
+					stdout:   stdout,
+					stderr:   stderr,
+					exitCode: exitCode,
+					err:      err,
+				}
+			}(name, p)
+		}
+		wg.Wait()
+		close(ch)
+	}()
+
+	for re := range ch {
+		fmt.Println(re)
+	}
 	return nil
 }
