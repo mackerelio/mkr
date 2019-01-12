@@ -18,6 +18,8 @@ var Command = cli.Command{
 	Description: `
     Execute command of check plugins in mackerel-agent.conf all at once.
     It is used for checking setting and operation of the check plugins.
+	The result is output to stdout in TAP format. If any check fails,
+	it exits non-zero.
 `,
 	Action: doRunChecks,
 }
