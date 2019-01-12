@@ -12,6 +12,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+// Command is command definition of mkr run-checks
 var Command = cli.Command{
 	Name:  "run-checks",
 	Usage: "run check commands in mackerel-agent.conf",
