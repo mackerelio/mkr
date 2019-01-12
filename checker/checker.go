@@ -3,6 +3,8 @@ package checker
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 	"sync"
 
 	"github.com/mackerelio/mackerel-agent/config"
@@ -34,7 +36,7 @@ func doRunChecks(c *cli.Context) error {
 		}
 		i++
 	}
-	return runChecks(checkers)
+	return runChecks(checkers, os.Stdout)
 }
 
 type result struct {
@@ -61,9 +63,9 @@ func (cpc *checkPluginChecker) check() *result {
 		name:     cpc.name,
 		memo:     p.Memo,
 		cmd:      cmdStr,
+		exitCode: exitCode,
 		stdout:   stdout,
 		stderr:   stderr,
-		exitCode: exitCode,
 		err:      err,
 	}
 }
@@ -72,11 +74,12 @@ type checker interface {
 	check() *result
 }
 
-func runChecks(checkers []checker) error {
+func runChecks(checkers []checker, w io.Writer) error {
 	ch := make(chan *result)
+	total := len(checkers)
 	go func() {
 		wg := &sync.WaitGroup{}
-		wg.Add(len(checkers))
+		wg.Add(total)
 		for _, c := range checkers {
 			go func(c checker) {
 				defer wg.Done()
@@ -86,9 +89,11 @@ func runChecks(checkers []checker) error {
 		wg.Wait()
 		close(ch)
 	}()
-
+	fmt.Fprintln(w, "TAP version 13")
+	fmt.Fprintf(w, "1..%d", total)
+	testNum := 1
 	for re := range ch {
-		fmt.Println(re)
+		fmt.Fprintln(w, re)
 	}
 	return nil
 }
