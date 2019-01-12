@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -42,13 +41,13 @@ func doRunChecks(c *cli.Context) error {
 }
 
 type result struct {
-	Name     string `yaml:"-"`
-	Memo     string `yaml:"memo,omitempty"`
-	Cmd      string `yaml:"command"`
-	Stdout   string `yaml:"stdout,omitempty"`
-	Stderr   string `yaml:"stderr,omitempty"`
-	ExitCode int    `yaml:"exitCode,omitempty"`
-	ErrMsg   string `yaml:"error,omitempty"`
+	Name     string   `yaml:"-"`
+	Memo     string   `yaml:"memo,omitempty"`
+	Cmd      []string `yaml:"command,flow"`
+	Stdout   string   `yaml:"stdout,omitempty"`
+	Stderr   string   `yaml:"stderr,omitempty"`
+	ExitCode int      `yaml:"exitCode,omitempty"`
+	ErrMsg   string   `yaml:"error,omitempty"`
 }
 
 func (re *result) ok() bool {
@@ -75,10 +74,9 @@ type checkPluginChecker struct {
 func (cpc *checkPluginChecker) check() *result {
 	p := cpc.cp
 	stdout, stderr, exitCode, err := p.Command.Run()
-	cmdStr := p.Command.Cmd
-	if cmdStr == "" {
-		b, _ := json.Marshal(p.Command.Args)
-		cmdStr = string(b)
+	cmd := p.Command.Args
+	if len(cmd) == 0 {
+		cmd = append(cmd, p.Command.Cmd)
 	}
 	errMsg := ""
 	if err != nil {
@@ -87,7 +85,7 @@ func (cpc *checkPluginChecker) check() *result {
 	return &result{
 		Name:     cpc.name,
 		Memo:     p.Memo,
-		Cmd:      cmdStr,
+		Cmd:      cmd,
 		ExitCode: exitCode,
 		Stdout:   strings.TrimSpace(stdout),
 		Stderr:   strings.TrimSpace(stderr),
