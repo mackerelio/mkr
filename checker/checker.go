@@ -51,9 +51,13 @@ type result struct {
 	ErrMsg   string `yaml:"error,omitempty"`
 }
 
+func (re *result) ok() bool {
+	return re.ExitCode == 0 && re.ErrMsg == ""
+}
+
 func (re *result) tapFormat(num int) string {
 	okOrNot := "ok"
-	if re.ExitCode != 0 || re.ErrMsg != "" {
+	if !re.ok() {
 		okOrNot = "not ok"
 	}
 	b, _ := yaml.Marshal(re)
@@ -112,10 +116,17 @@ func runChecks(checkers []checker, w io.Writer) error {
 	}()
 	fmt.Fprintln(w, "TAP version 13")
 	fmt.Fprintf(w, "1..%d\n", total)
-	testNum := 1
+	testNum, errNum := 1, 0
 	for re := range ch {
 		fmt.Fprintln(w, re.tapFormat(testNum))
 		testNum++
+		if !re.ok() {
+			errNum++
+		}
+	}
+	if errNum > 0 {
+		return fmt.Errorf("Failed %d/%d tests, %3.2f%% okay",
+			errNum, total, float64(100*(total-errNum))/float64(total))
 	}
 	return nil
 }
