@@ -25,7 +25,16 @@ func doRunChecks(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	return runChecks(conf.CheckPlugins)
+	checkers := make([]checker, len(conf.CheckPlugins))
+	i := 0
+	for name, p := range conf.CheckPlugins {
+		checkers[i] = &checkPluginChecker{
+			name: name,
+			cp:   p,
+		}
+		i++
+	}
+	return runChecks(checkers)
 }
 
 type result struct {
@@ -35,30 +44,44 @@ type result struct {
 	err             error
 }
 
-func runChecks(plugins map[string]*config.CheckPlugin) error {
+type checkPluginChecker struct {
+	name string
+	cp   *config.CheckPlugin
+}
+
+func (cpc *checkPluginChecker) check() *result {
+	p := cpc.cp
+	stdout, stderr, exitCode, err := p.Command.Run()
+	cmdStr := p.Command.Cmd
+	if cmdStr == "" {
+		b, _ := json.Marshal(p.Command.Args)
+		cmdStr = string(b)
+	}
+	return &result{
+		name:     cpc.name,
+		memo:     p.Memo,
+		cmd:      cmdStr,
+		stdout:   stdout,
+		stderr:   stderr,
+		exitCode: exitCode,
+		err:      err,
+	}
+}
+
+type checker interface {
+	check() *result
+}
+
+func runChecks(checkers []checker) error {
 	ch := make(chan *result)
 	go func() {
 		wg := &sync.WaitGroup{}
-		wg.Add(len(plugins))
-		for name, p := range plugins {
-			go func(name string, p *config.CheckPlugin) {
+		wg.Add(len(checkers))
+		for _, c := range checkers {
+			go func(c checker) {
 				defer wg.Done()
-				stdout, stderr, exitCode, err := p.Command.Run()
-				cmdStr := p.Command.Cmd
-				if cmdStr == "" {
-					b, _ := json.Marshal(p.Command.Args)
-					cmdStr = string(b)
-				}
-				ch <- &result{
-					name:     name,
-					memo:     p.Memo,
-					cmd:      cmdStr,
-					stdout:   stdout,
-					stderr:   stderr,
-					exitCode: exitCode,
-					err:      err,
-				}
-			}(name, p)
+				ch <- c.check()
+			}(c)
 		}
 		wg.Wait()
 		close(ch)
