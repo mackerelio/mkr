@@ -263,7 +263,7 @@ func (ap *app) report(re *result) error {
 			return err
 		}
 	}
-	if lastRe == nil || !re.Success {
+	if lastRe == nil || !lastRe.Success || !re.Success {
 		ap.doReport(re)
 	}
 	return re.saveResult()
