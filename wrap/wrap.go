@@ -22,7 +22,7 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
-// CommandPlugin is definition of mkr wrap
+// Command is definition of mkr wrap
 var Command = cli.Command{
 	Name:      "wrap",
 	Usage:     "wrap command status",
@@ -170,6 +170,12 @@ func (re *result) saveResult() error {
 	return os.Rename(tmpf.Name(), fname)
 }
 
+func (re *result) errorEnd(format string, err error) *result {
+	re.Msg = fmt.Sprintf(format, err)
+	re.ExitCode = wrapcommander.ResolveExitCode(err)
+	return re
+}
+
 func (ap *app) run() error {
 	re := ap.runCmd()
 	// TODO keep original exit code
@@ -186,17 +192,13 @@ func (ap *app) runCmd() *result {
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
-		re.ExitCode = wrapcommander.ResolveExitCode(err)
-		return re
+		return re.errorEnd("command invocation failed with follwing error: %s", err)
 	}
 	defer stdoutPipe.Close()
 
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
-		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
-		re.ExitCode = wrapcommander.ResolveExitCode(err)
-		return re
+		return re.errorEnd("command invocation failed with follwing error: %s", err)
 	}
 	defer stderrPipe.Close()
 
@@ -211,9 +213,7 @@ func (ap *app) runCmd() *result {
 	re.StartAt = time.Now()
 	err = cmd.Start()
 	if err != nil {
-		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
-		re.ExitCode = wrapcommander.ResolveExitCode(err)
-		return re
+		return re.errorEnd("command invocation failed with follwing error: %s", err)
 	}
 	re.Pid = cmd.Process.Pid
 	eg := &errgroup.Group{}
