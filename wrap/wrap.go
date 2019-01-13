@@ -45,6 +45,10 @@ func doWrap(c *cli.Context) error {
 		return err
 	}
 	apibase := c.GlobalString("apibase")
+	if apibase == "" {
+		apibase = conf.Apibase
+	}
+
 	apikey := conf.Apikey
 	if apikey == "" {
 		apikey = os.Getenv("MACKEREL_APIKEY")
@@ -224,6 +228,10 @@ func (ap *app) runCmd() *result {
 }
 
 func (ap *app) report(re *result) error {
+	if ap.apikey == "" || ap.hostID == "" {
+		return fmt.Errorf("Both apikey and hostID are needed to report result to Mackerel")
+	}
+
 	fmt.Println(re.checkName())
 	return nil
 }
