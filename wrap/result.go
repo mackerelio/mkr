@@ -91,13 +91,13 @@ func (re *result) errorEnd(format string, err error) *result {
 	return re
 }
 
-func (re *result) buildMsg(verbose bool) string {
+func (re *result) buildMsg(detail bool) string {
 	msg := re.Msg
 	if re.Memo != "" {
 		msg += "\nMemo: " + re.Memo
 	}
 	msg += "\n% " + strings.Join(re.Cmd, " ")
-	if verbose {
+	if detail {
 		msg += "\n" + re.Output
 	}
 	const messageLengthLimit = 1024

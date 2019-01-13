@@ -17,12 +17,12 @@ import (
 )
 
 type wrap struct {
-	apibase string
 	name    string
-	verbose bool
+	detail  bool
 	memo    string
 	warning bool
 	hostID  string
+	apibase string
 	apikey  string
 	cmd     []string
 }
@@ -31,7 +31,7 @@ func (wr *wrap) run() error {
 	re := wr.runCmd()
 	if err := wr.report(re); err != nil {
 		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s",
-			err, re.buildMsg(wr.verbose))
+			err, re.buildMsg(wr.detail))
 	}
 	if !re.Success {
 		return cli.NewExitError(re.Msg, re.ExitCode)
@@ -152,7 +152,7 @@ func (wr *wrap) doReport(re *result) error {
 				Name:       re.checkName(),
 				Status:     checkSt,
 				OccurredAt: time.Now().Unix(),
-				Message:    re.buildMsg(wr.verbose),
+				Message:    re.buildMsg(wr.detail),
 			},
 		},
 	}

@@ -13,14 +13,14 @@ import (
 var Command = cli.Command{
 	Name:      "wrap",
 	Usage:     "wrap command status",
-	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--memo | -m <memo>] -- /path/to/batch",
+	ArgsUsage: "[--detail|-d] [--name|-n <name>] [--memo|-m <memo>] [--warning|w] -- /path/to/batch",
 	Description: `
     wrap command line
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "monitored `check-name` which must be unique on a host"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "verbose output"},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "`check-name` which must be unique on a host"},
+		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output to Mackerel"},
 		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
 		cli.StringFlag{Name: "H, host", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
@@ -66,7 +66,7 @@ func doWrap(c *cli.Context) error {
 	return (&wrap{
 		apibase: apibase,
 		name:    c.String("name"),
-		verbose: c.Bool("verbose"),
+		detail:  c.Bool("detail"),
 		memo:    c.String("memo"),
 		warning: c.Bool("warning"),
 		hostID:  hostID,
