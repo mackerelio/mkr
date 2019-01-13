@@ -93,7 +93,8 @@ type result struct {
 	name, memo string
 
 	output, stdout, stderr string
-	pid, exitCode          *int
+	pid                    int
+	exitCode               *int
 	signaled               bool
 	startAt, endAt         time.Time
 
@@ -103,8 +104,7 @@ type result struct {
 
 func (ap *app) run() error {
 	re := ap.runCmd()
-	_ = re
-	return nil
+	return ap.report(re)
 }
 
 func (ap *app) runCmd() *result {
@@ -143,7 +143,7 @@ func (ap *app) runCmd() *result {
 		re.msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
 		return re
 	}
-	re.pid = &cmd.Process.Pid
+	re.pid = cmd.Process.Pid
 	eg := &errgroup.Group{}
 
 	eg.Go(func() error {
@@ -179,4 +179,8 @@ func (ap *app) runCmd() *result {
 
 	re.success = *re.exitCode == 0
 	return re
+}
+
+func (ap *app) report(re *result) error {
+	return nil
 }
