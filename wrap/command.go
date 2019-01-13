@@ -12,15 +12,17 @@ import (
 // Command is definition of mkr wrap
 var Command = cli.Command{
 	Name:      "wrap",
-	Usage:     "wrap command status",
+	Usage:     "Wrap and monitor batch jobs to run with cron etc",
 	ArgsUsage: "[--detail|-d] [--name|-n <name>] [--memo|-m <memo>] [--warning|w] -- /path/to/batch",
 	Description: `
-    wrap command line
+    Wrap a batch command with specifying it as arguments. If the command failed
+    with non-zero exit code, it sends a report to Mackerel and raises an alert.
+    It is useful for cron jobs etc.
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "`check-name` which must be unique on a host"},
-		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output to Mackerel"},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host"},
+		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
 		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
 		cli.StringFlag{Name: "H, host", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
