@@ -26,6 +26,8 @@ type wrap struct {
 	apibase               string
 	apikey                string
 	cmd                   []string
+
+	outStream, errStream io.Writer
 }
 
 func (wr *wrap) run() error {
@@ -78,12 +80,12 @@ func (wr *wrap) runCmd() *result {
 
 	eg.Go(func() error {
 		defer stdoutPipe.Close()
-		_, err := io.Copy(os.Stdout, stdoutPipe2)
+		_, err := io.Copy(wr.outStream, stdoutPipe2)
 		return err
 	})
 	eg.Go(func() error {
 		defer stderrPipe.Close()
-		_, err := io.Copy(os.Stderr, stderrPipe2)
+		_, err := io.Copy(wr.errStream, stderrPipe2)
 		return err
 	})
 	eg.Wait()

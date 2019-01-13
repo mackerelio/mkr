@@ -76,5 +76,7 @@ func doWrap(c *cli.Context) error {
 		hostID:                hostID,
 		apikey:                apikey,
 		cmd:                   cmd,
+		outStream:             os.Stdout,
+		errStream:             os.Stderr,
 	}).run()
 }
