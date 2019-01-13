@@ -229,7 +229,18 @@ func (ap *app) runCmd() *result {
 
 func (ap *app) report(re *result) error {
 	if ap.apikey == "" || ap.hostID == "" {
-		return fmt.Errorf("Both apikey and hostID are needed to report result to Mackerel")
+		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
+	}
+	lastRe, err := re.loadLastResult()
+	if err != nil {
+		// resultFile something went wrong.
+		// It may be no permission, broken json, not a normal file, and so on.
+		// Though it rough, try to delete as workaround
+		err := os.RemoveAll(re.resultFile())
+		if err != nil {
+			// XXX report result here?
+			return err
+		}
 	}
 
 	fmt.Println(re.checkName())
