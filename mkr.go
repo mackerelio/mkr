@@ -31,7 +31,11 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
+		exitCode := 1
+		if excoder, ok := err.(cli.ExitCoder); ok {
+			exitCode = excoder.ExitCode()
+		}
 		logger.Log("error", err.Error())
-		os.Exit(1)
+		os.Exit(exitCode)
 	}
 }

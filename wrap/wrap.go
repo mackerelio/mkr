@@ -183,7 +183,9 @@ func (ap *app) run() error {
 		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s",
 			err, ap.buildMsg(re))
 	}
-	// TODO keep original exit code
+	if !re.Success {
+		return cli.NewExitError(re.Msg, re.ExitCode)
+	}
 	return nil
 }
 
