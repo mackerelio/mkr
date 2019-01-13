@@ -77,7 +77,7 @@ func doWrap(c *cli.Context) error {
 		return fmt.Errorf("no commands specified")
 	}
 
-	return (&app{
+	return (&wrap{
 		apibase: apibase,
 		name:    c.String("name"),
 		verbose: c.Bool("verbose"),
@@ -89,7 +89,7 @@ func doWrap(c *cli.Context) error {
 	}).run()
 }
 
-type app struct {
+type wrap struct {
 	apibase string
 	name    string
 	verbose bool
@@ -177,11 +177,11 @@ func (re *result) errorEnd(format string, err error) *result {
 	return re
 }
 
-func (ap *app) run() error {
-	re := ap.runCmd()
-	if err := ap.report(re); err != nil {
+func (wr *wrap) run() error {
+	re := wr.runCmd()
+	if err := wr.report(re); err != nil {
 		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s",
-			err, ap.buildMsg(re))
+			err, wr.buildMsg(re))
 	}
 	if !re.Success {
 		return cli.NewExitError(re.Msg, re.ExitCode)
@@ -189,12 +189,12 @@ func (ap *app) run() error {
 	return nil
 }
 
-func (ap *app) runCmd() *result {
-	cmd := exec.Command(ap.cmd[0], ap.cmd[1:]...)
+func (wr *wrap) runCmd() *result {
+	cmd := exec.Command(wr.cmd[0], wr.cmd[1:]...)
 	re := &result{
-		Cmd:  ap.cmd,
-		Name: ap.name,
-		Memo: ap.memo,
+		Cmd:  wr.cmd,
+		Name: wr.name,
+		Memo: wr.memo,
 	}
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -259,7 +259,7 @@ func (ap *app) runCmd() *result {
 	return re
 }
 
-func (ap *app) report(re *result) error {
+func (wr *wrap) report(re *result) error {
 	defer func() {
 		err := re.saveResult()
 		if err != nil {
@@ -267,7 +267,7 @@ func (ap *app) report(re *result) error {
 		}
 	}()
 
-	if ap.apikey == "" || ap.hostID == "" {
+	if wr.apikey == "" || wr.hostID == "" {
 		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
 	}
 	lastRe, err := re.loadLastResult()
@@ -281,18 +281,18 @@ func (ap *app) report(re *result) error {
 		}
 	}
 	if lastRe == nil || !lastRe.Success || !re.Success {
-		return ap.doReport(re)
+		return wr.doReport(re)
 	}
 	return nil
 }
 
-func (ap *app) buildMsg(re *result) string {
+func (wr *wrap) buildMsg(re *result) string {
 	msg := re.Msg
 	if re.Memo != "" {
 		msg += "\nMemo: " + re.Memo
 	}
 	msg += "\n% " + strings.Join(re.Cmd, " ")
-	if ap.verbose {
+	if wr.verbose {
 		msg += "\n" + re.Output
 	}
 	const messageLengthLimit = 1024
@@ -303,10 +303,10 @@ func (ap *app) buildMsg(re *result) string {
 	return msg
 }
 
-func (ap *app) doReport(re *result) error {
+func (wr *wrap) doReport(re *result) error {
 	checkSt := mackerel.CheckStatusOK
 	if !re.Success {
-		if ap.warning {
+		if wr.warning {
 			checkSt = mackerel.CheckStatusWarning
 		} else {
 			checkSt = mackerel.CheckStatusCritical
@@ -315,15 +315,15 @@ func (ap *app) doReport(re *result) error {
 	crs := &mackerel.CheckReports{
 		Reports: []*mackerel.CheckReport{
 			{
-				Source:     mackerel.NewCheckSourceHost(ap.hostID),
+				Source:     mackerel.NewCheckSourceHost(wr.hostID),
 				Name:       re.checkName(),
 				Status:     checkSt,
 				OccurredAt: time.Now().Unix(),
-				Message:    ap.buildMsg(re),
+				Message:    wr.buildMsg(re),
 			},
 		},
 	}
-	cli, err := mackerel.NewClientWithOptions(ap.apikey, ap.apibase, false)
+	cli, err := mackerel.NewClientWithOptions(wr.apikey, wr.apibase, false)
 	if err != nil {
 		return err
 	}
