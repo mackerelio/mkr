@@ -32,11 +32,11 @@ var Command = cli.Command{
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "monitor <name>"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "verbose output mode"},
-		cli.StringFlag{Name: "memo, m", Value: "", Usage: "monitor <memo>"},
-		cli.StringFlag{Name: "H, host", Value: "", Usage: "<hostId>"},
-		cli.BoolFlag{Name: "warning, w", Usage: "alert as warning"},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "monitored `check-name` which must be unique on a host"},
+		cli.BoolFlag{Name: "verbose, v", Usage: "verbose output"},
+		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
+		cli.StringFlag{Name: "H, host", Value: "", Usage: "`hostID`"},
+		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
 	},
 }
 
@@ -172,6 +172,7 @@ func (re *result) saveResult() error {
 
 func (ap *app) run() error {
 	re := ap.runCmd()
+	// TODO keep original exit code
 	return ap.report(re)
 }
 
@@ -280,8 +281,17 @@ func (ap *app) doReport(re *result) error {
 		}
 	}
 	msg := re.Msg
+	if re.Memo != "" {
+		msg += "\nMemo: " + re.Memo
+	}
+	msg += "\nCommand% " + strings.Join(re.Cmd, " ")
 	if ap.verbose {
-		// more message
+		msg += "\n" + re.Output
+	}
+	const messageLengthLimit = 1024
+	runes := []rune(msg)
+	if len(runes) > messageLengthLimit {
+		msg = string(runes[0:messageLengthLimit])
 	}
 	crs := &mackerel.CheckReports{
 		Reports: []*mackerel.CheckReport{
