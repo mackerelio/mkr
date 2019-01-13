@@ -105,7 +105,7 @@ type result struct {
 
 	Output, Stdout, Stderr string `json:"-"`
 	Pid                    int
-	ExitCode               *int
+	ExitCode               int
 	Signaled               bool
 	StartAt, EndAt         time.Time
 
@@ -187,6 +187,7 @@ func (ap *app) runCmd() *result {
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
 		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.ExitCode = wrapcommander.ResolveExitCode(err)
 		return re
 	}
 	defer stdoutPipe.Close()
@@ -194,6 +195,7 @@ func (ap *app) runCmd() *result {
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
 		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.ExitCode = wrapcommander.ResolveExitCode(err)
 		return re
 	}
 	defer stderrPipe.Close()
@@ -210,6 +212,7 @@ func (ap *app) runCmd() *result {
 	err = cmd.Start()
 	if err != nil {
 		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.ExitCode = wrapcommander.ResolveExitCode(err)
 		return re
 	}
 	re.Pid = cmd.Process.Pid
@@ -229,24 +232,23 @@ func (ap *app) runCmd() *result {
 
 	cmdErr := cmd.Wait()
 	re.EndAt = time.Now()
-	ex := wrapcommander.ResolveExitCode(cmdErr)
-	re.ExitCode = &ex
-	if *re.ExitCode > 128 {
+	re.ExitCode = wrapcommander.ResolveExitCode(cmdErr)
+	if re.ExitCode > 128 {
 		w, ok := wrapcommander.ErrorToWaitStatus(cmdErr)
 		if ok {
 			re.Signaled = w.Signaled()
 		}
 	}
 	if !re.Signaled {
-		re.Msg = fmt.Sprintf("command exited with code: %d", *re.ExitCode)
+		re.Msg = fmt.Sprintf("command exited with code: %d", re.ExitCode)
 	} else {
-		re.Msg = fmt.Sprintf("command died with signal: %d", *re.ExitCode&127)
+		re.Msg = fmt.Sprintf("command died with signal: %d", re.ExitCode&127)
 	}
 	re.Stdout = bufStdout.String()
 	re.Stderr = bufStderr.String()
 	re.Output = bufMerged.String()
 
-	re.Success = *re.ExitCode == 0
+	re.Success = re.ExitCode == 0
 	return re
 }
 
