@@ -10,6 +10,7 @@ import (
 
 	"github.com/Songmu/wrapcommander"
 	"github.com/mackerelio/mackerel-agent/config"
+	"github.com/mackerelio/mkr/logger"
 	"golang.org/x/sync/errgroup"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -44,21 +45,24 @@ func doWrap(c *cli.Context) error {
 		apikey = os.Getenv("MACKEREL_APIKEY")
 	}
 	if apikey == "" {
-		return fmt.Errorf(`MACKEREL_APIKEY environment variable is not set. (Try "export MACKEREL_APIKEY='<Your apikey>'`)
+		logger.Log("error", "[mkr wrap] failed to detect Mackerel APIKey. Try to specify in mackerel-agent.conf or export MACKEREL_APIKEY='<Your apikey>'")
 	}
 	hostID, _ := conf.LoadHostID()
 	if c.String("host") != "" {
 		hostID = c.String("host")
 	}
 	if hostID == "" {
-		return fmt.Errorf("failed to load hostID. (Try to specify -host option explicitly)")
+		logger.Log("error", "[mkr wrap] failed to load hostID. Try to specify -host option explicitly")
 	}
+	// Since command execution has the highest priority, even when apikey or
+	// hostID is empty, we don't return errors and only output the log here.
+
 	cmd := c.Args()
 	if len(cmd) > 0 && cmd[0] == "--" {
 		cmd = cmd[1:]
 	}
 	if len(cmd) < 1 {
-		return fmt.Errorf("no command specified")
+		return fmt.Errorf("no commands specified")
 	}
 
 	return (&app{
