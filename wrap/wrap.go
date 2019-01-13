@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -148,6 +149,26 @@ func (re *result) loadLastResult() (*result, error) {
 	return prevRe, err
 }
 
+func (re *result) saveResult() error {
+	fname := re.resultFile()
+	tmpf, err := ioutil.TempFile(filepath.Dir(fname), "tmp-mkrwrap")
+	if err != nil {
+		return err
+	}
+	defer func(tmpfname string) {
+		tmpf.Close()
+		os.Remove(tmpfname)
+	}(tmpf.Name())
+
+	if err := json.NewEncoder(tmpf).Encode(re); err != nil {
+		return err
+	}
+	if err := tmpf.Close(); err != nil {
+		return err
+	}
+	return os.Rename(tmpf.Name(), fname)
+}
+
 func (ap *app) run() error {
 	re := ap.runCmd()
 	return ap.report(re)
@@ -242,7 +263,12 @@ func (ap *app) report(re *result) error {
 			return err
 		}
 	}
+	if lastRe == nil || !re.Success {
+		ap.doReport(re)
+	}
+	return re.saveResult()
+}
 
-	fmt.Println(re.checkName())
+func (ap *app) doReport(re *result) error {
 	return nil
 }
