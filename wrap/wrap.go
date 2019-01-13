@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Songmu/retry"
 	"github.com/Songmu/wrapcommander"
 	"github.com/mackerelio/mackerel-agent/config"
 	mackerel "github.com/mackerelio/mackerel-client-go"
@@ -263,7 +264,6 @@ func (ap *app) report(re *result) error {
 		// Though it rough, try to delete as workaround
 		err := os.RemoveAll(re.resultFile())
 		if err != nil {
-			// XXX report result here?
 			return err
 		}
 	}
@@ -310,5 +310,7 @@ func (ap *app) doReport(re *result) error {
 	if err != nil {
 		return err
 	}
-	return cli.PostCheckReports(crs)
+	return retry.Retry(3, time.Second*3, func() error {
+		return cli.PostCheckReports(crs)
+	})
 }
