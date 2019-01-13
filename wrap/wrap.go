@@ -3,6 +3,7 @@ package wrap
 import (
 	"bytes"
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -96,7 +97,7 @@ type result struct {
 	Cmd        []string
 	Name, Memo string
 
-	Output, Stdout, Stderr string
+	Output, Stdout, Stderr string `json:"-"`
 	Pid                    int
 	ExitCode               *int
 	Signaled               bool
@@ -120,6 +121,27 @@ func (re *result) checkName() string {
 	return fmt.Sprintf("mkrwrap-%s-%x",
 		normalizeName(filepath.Base(re.Cmd[0])),
 		sum[0:3])
+}
+
+func (re *result) resultFile() string {
+	return filepath.Join(os.TempDir(), fmt.Sprintf("mkrwrap-%s.json", re.checkName()))
+}
+
+func (re *result) loadLastResult() (*result, error) {
+	prevRe := &result{}
+	fname := re.resultFile()
+
+	f, err := os.Open(fname)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	defer f.Close()
+
+	err = json.NewDecoder(f).Decode(prevRe)
+	return prevRe, err
 }
 
 func (ap *app) run() error {
