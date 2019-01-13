@@ -89,17 +89,17 @@ type app struct {
 }
 
 type result struct {
-	cmd        []string
-	name, memo string
+	Cmd        []string
+	Name, Memo string
 
-	output, stdout, stderr string
-	pid                    int
-	exitCode               *int
-	signaled               bool
-	startAt, endAt         time.Time
+	Output, Stdout, Stderr string
+	Pid                    int
+	ExitCode               *int
+	Signaled               bool
+	StartAt, EndAt         time.Time
 
-	msg     string
-	success bool
+	Msg     string
+	Success bool
 }
 
 func (ap *app) run() error {
@@ -110,21 +110,21 @@ func (ap *app) run() error {
 func (ap *app) runCmd() *result {
 	cmd := exec.Command(ap.cmd[0], ap.cmd[1:]...)
 	re := &result{
-		cmd:  ap.cmd,
-		name: ap.name,
-		memo: ap.memo,
+		Cmd:  ap.cmd,
+		Name: ap.name,
+		Memo: ap.memo,
 	}
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		re.msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
 		return re
 	}
 	defer stdoutPipe.Close()
 
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
-		re.msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
 		return re
 	}
 	defer stderrPipe.Close()
@@ -137,13 +137,13 @@ func (ap *app) runCmd() *result {
 	stdoutPipe2 := io.TeeReader(stdoutPipe, io.MultiWriter(bufStdout, bufMerged))
 	stderrPipe2 := io.TeeReader(stderrPipe, io.MultiWriter(bufStderr, bufMerged))
 
-	re.startAt = time.Now()
+	re.StartAt = time.Now()
 	err = cmd.Start()
 	if err != nil {
-		re.msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
+		re.Msg = fmt.Sprintf("command invocation failed with follwing error: %s", err)
 		return re
 	}
-	re.pid = cmd.Process.Pid
+	re.Pid = cmd.Process.Pid
 	eg := &errgroup.Group{}
 
 	eg.Go(func() error {
@@ -159,25 +159,25 @@ func (ap *app) runCmd() *result {
 	eg.Wait()
 
 	cmdErr := cmd.Wait()
-	re.endAt = time.Now()
+	re.EndAt = time.Now()
 	ex := wrapcommander.ResolveExitCode(cmdErr)
-	re.exitCode = &ex
-	if *re.exitCode > 128 {
+	re.ExitCode = &ex
+	if *re.ExitCode > 128 {
 		w, ok := wrapcommander.ErrorToWaitStatus(cmdErr)
 		if ok {
-			re.signaled = w.Signaled()
+			re.Signaled = w.Signaled()
 		}
 	}
-	if !re.signaled {
-		re.msg = fmt.Sprintf("command exited with code: %d", *re.exitCode)
+	if !re.Signaled {
+		re.Msg = fmt.Sprintf("command exited with code: %d", *re.ExitCode)
 	} else {
-		re.msg = fmt.Sprintf("command died with signal: %d", *re.exitCode&127)
+		re.Msg = fmt.Sprintf("command died with signal: %d", *re.ExitCode&127)
 	}
-	re.stdout = bufStdout.String()
-	re.stderr = bufStderr.String()
-	re.output = bufMerged.String()
+	re.Stdout = bufStdout.String()
+	re.Stderr = bufStderr.String()
+	re.Output = bufMerged.String()
 
-	re.success = *re.exitCode == 0
+	re.Success = *re.ExitCode == 0
 	return re
 }
 
