@@ -286,7 +286,7 @@ func (ap *app) doReport(re *result) error {
 	if re.Memo != "" {
 		msg += "\nMemo: " + re.Memo
 	}
-	msg += "\nCommand% " + strings.Join(re.Cmd, " ")
+	msg += "\n% " + strings.Join(re.Cmd, " ")
 	if ap.verbose {
 		msg += "\n" + re.Output
 	}
