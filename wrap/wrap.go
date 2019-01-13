@@ -17,14 +17,15 @@ import (
 )
 
 type wrap struct {
-	name    string
-	detail  bool
-	memo    string
-	warning bool
-	hostID  string
-	apibase string
-	apikey  string
-	cmd     []string
+	name                  string
+	detail                bool
+	memo                  string
+	warning               bool
+	preventAlertAutoClose bool
+	hostID                string
+	apibase               string
+	apikey                string
+	cmd                   []string
 }
 
 func (wr *wrap) run() error {
@@ -130,7 +131,7 @@ func (wr *wrap) report(re *result) error {
 			return err
 		}
 	}
-	if lastRe == nil || !lastRe.Success || !re.Success {
+	if !re.Success || !wr.preventAlertAutoClose && (lastRe == nil || !lastRe.Success) {
 		return wr.doReport(re)
 	}
 	return nil
