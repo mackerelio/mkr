@@ -2,10 +2,14 @@ package wrap
 
 import (
 	"bytes"
+	"crypto/md5"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/Songmu/wrapcommander"
@@ -15,7 +19,7 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
-// CommandPlugin is definition of mkr plugin
+// CommandPlugin is definition of mkr wrap
 var Command = cli.Command{
 	Name:      "wrap",
 	Usage:     "wrap command status",
@@ -102,6 +106,22 @@ type result struct {
 	Success bool
 }
 
+var reg = regexp.MustCompile(`[^-a-zA-Z0-9_]`)
+
+func normalizeName(devName string) string {
+	return reg.ReplaceAllString(strings.TrimSpace(devName), "_")
+}
+
+func (re *result) checkName() string {
+	if re.Name != "" {
+		return re.Name
+	}
+	sum := md5.Sum([]byte(strings.Join(re.Cmd, " ")))
+	return fmt.Sprintf("mkrwrap-%s-%x",
+		normalizeName(filepath.Base(re.Cmd[0])),
+		sum[0:3])
+}
+
 func (ap *app) run() error {
 	re := ap.runCmd()
 	return ap.report(re)
@@ -182,5 +202,6 @@ func (ap *app) runCmd() *result {
 }
 
 func (ap *app) report(re *result) error {
+	fmt.Println(re.checkName())
 	return nil
 }
