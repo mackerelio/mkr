@@ -1,6 +1,7 @@
 package wrap
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/Songmu/wrapcommander"
@@ -91,15 +93,30 @@ func (re *result) errorEnd(format string, err error) *result {
 	return re
 }
 
+const msgTplText = `{{.Msg}}
+{{- if ne .Memo "" }}
+Memo: {{.Memo}}{{end}}
+% {{.Command}}
+{{- if .Detail }}
+{{.Output}}{{end}}`
+
+var msgTpl *template.Template
+
+func init() {
+	msgTpl = template.Must(template.New("msg").Parse(msgTplText))
+}
+
 func (re *result) buildMsg(detail bool) string {
-	msg := re.Msg
-	if re.Memo != "" {
-		msg += "\nMemo: " + re.Memo
+	s := struct {
+		Msg, Memo, Command, Output string
+		Detail                     bool
+	}{
+		re.Msg, re.Memo, strings.Join(re.Cmd, " "), re.Output,
+		detail,
 	}
-	msg += "\n% " + strings.Join(re.Cmd, " ")
-	if detail {
-		msg += "\n" + re.Output
-	}
+	buf := &bytes.Buffer{}
+	template.Must(msgTpl.Clone()).Execute(buf, s)
+	msg := buf.String()
 	const messageLengthLimit = 1024
 	runes := []rune(msg)
 	if len(runes) > messageLengthLimit {
