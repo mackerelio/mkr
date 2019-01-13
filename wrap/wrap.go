@@ -179,8 +179,12 @@ func (re *result) errorEnd(format string, err error) *result {
 
 func (ap *app) run() error {
 	re := ap.runCmd()
+	if err := ap.report(re); err != nil {
+		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s",
+			err, ap.buildMsg(re))
+	}
 	// TODO keep original exit code
-	return ap.report(re)
+	return nil
 }
 
 func (ap *app) runCmd() *result {
@@ -254,6 +258,13 @@ func (ap *app) runCmd() *result {
 }
 
 func (ap *app) report(re *result) error {
+	defer func() {
+		err := re.saveResult()
+		if err != nil {
+			logger.Logf("error", "failed to save result: %s", err)
+		}
+	}()
+
 	if ap.apikey == "" || ap.hostID == "" {
 		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
 	}
@@ -268,20 +279,12 @@ func (ap *app) report(re *result) error {
 		}
 	}
 	if lastRe == nil || !lastRe.Success || !re.Success {
-		ap.doReport(re)
+		return ap.doReport(re)
 	}
-	return re.saveResult()
+	return nil
 }
 
-func (ap *app) doReport(re *result) error {
-	checkSt := mackerel.CheckStatusOK
-	if !re.Success {
-		if ap.warning {
-			checkSt = mackerel.CheckStatusWarning
-		} else {
-			checkSt = mackerel.CheckStatusCritical
-		}
-	}
+func (ap *app) buildMsg(re *result) string {
 	msg := re.Msg
 	if re.Memo != "" {
 		msg += "\nMemo: " + re.Memo
@@ -295,6 +298,18 @@ func (ap *app) doReport(re *result) error {
 	if len(runes) > messageLengthLimit {
 		msg = string(runes[0:messageLengthLimit])
 	}
+	return msg
+}
+
+func (ap *app) doReport(re *result) error {
+	checkSt := mackerel.CheckStatusOK
+	if !re.Success {
+		if ap.warning {
+			checkSt = mackerel.CheckStatusWarning
+		} else {
+			checkSt = mackerel.CheckStatusCritical
+		}
+	}
 	crs := &mackerel.CheckReports{
 		Reports: []*mackerel.CheckReport{
 			{
@@ -302,7 +317,7 @@ func (ap *app) doReport(re *result) error {
 				Name:       re.checkName(),
 				Status:     checkSt,
 				OccurredAt: time.Now().Unix(),
-				Message:    msg,
+				Message:    ap.buildMsg(re),
 			},
 		},
 	}

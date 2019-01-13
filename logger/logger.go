@@ -3,6 +3,7 @@ package logger
 // We borrow this code from github.com/motemen/ghq/utils
 
 import (
+	"fmt"
 	"os"
 
 	colorine "github.com/motemen/go-colorine"
@@ -29,6 +30,12 @@ func init() {
 // Log outputs `message` with `prefix` by go-colorine
 func Log(prefix, message string) {
 	logger.Log(prefix, message)
+}
+
+// Logf outputs `message` with `prefix` by go-colorine
+func Logf(prefix, message string, args ...interface{}) {
+	msg := fmt.Sprintf(message, args...)
+	logger.Log(prefix, msg)
 }
 
 // ErrorIf outputs log if `err` occurs.
