@@ -16,6 +16,7 @@ import (
 
 	"github.com/Songmu/wrapcommander"
 	"github.com/mackerelio/mackerel-agent/config"
+	mackerel "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"golang.org/x/sync/errgroup"
 	cli "gopkg.in/urfave/cli.v1"
@@ -270,5 +271,32 @@ func (ap *app) report(re *result) error {
 }
 
 func (ap *app) doReport(re *result) error {
-	return nil
+	checkSt := mackerel.CheckStatusOK
+	if !re.Success {
+		if ap.warning {
+			checkSt = mackerel.CheckStatusWarning
+		} else {
+			checkSt = mackerel.CheckStatusCritical
+		}
+	}
+	msg := re.Msg
+	if ap.verbose {
+		// more message
+	}
+	crs := &mackerel.CheckReports{
+		Reports: []*mackerel.CheckReport{
+			{
+				Source:     mackerel.NewCheckSourceHost(ap.hostID),
+				Name:       re.checkName(),
+				Status:     checkSt,
+				OccurredAt: time.Now().Unix(),
+				Message:    msg,
+			},
+		},
+	}
+	cli, err := mackerel.NewClientWithOptions(ap.apikey, ap.apibase, false)
+	if err != nil {
+		return err
+	}
+	return cli.PostCheckReports(crs)
 }
