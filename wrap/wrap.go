@@ -17,15 +17,15 @@ import (
 )
 
 type wrap struct {
-	name                  string
-	detail                bool
-	memo                  string
-	warning               bool
-	preventAlertAutoClose bool
-	hostID                string
-	apibase               string
-	apikey                string
-	cmd                   []string
+	name      string
+	detail    bool
+	memo      string
+	warning   bool
+	autoClose bool
+	hostID    string
+	apibase   string
+	apikey    string
+	cmd       []string
 
 	outStream, errStream io.Writer
 }
@@ -113,21 +113,20 @@ func (wr *wrap) runCmd() *result {
 }
 
 func (wr *wrap) report(re *result) error {
-	defer func() {
-		if wr.preventAlertAutoClose {
-			return
-		}
-		err := re.saveResult()
-		if err != nil {
-			logger.Logf("error", "failed to save result: %s", err)
-		}
-	}()
+	if wr.autoClose {
+		defer func() {
+			err := re.saveResult()
+			if err != nil {
+				logger.Logf("error", "failed to save result: %s", err)
+			}
+		}()
+	}
 
 	if wr.apikey == "" || wr.hostID == "" {
 		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
 	}
 	var lastRe *result
-	if !wr.preventAlertAutoClose {
+	if wr.autoClose {
 		var err error
 		lastRe, err = re.loadLastResult()
 		if err != nil {
@@ -140,7 +139,7 @@ func (wr *wrap) report(re *result) error {
 			}
 		}
 	}
-	if !re.Success || !wr.preventAlertAutoClose && (lastRe == nil || !lastRe.Success) {
+	if !re.Success || wr.autoClose && (lastRe == nil || !lastRe.Success) {
 		return wr.doReport(re)
 	}
 	return nil

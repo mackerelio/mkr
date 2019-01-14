@@ -26,7 +26,7 @@ var Command = cli.Command{
 		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
-		cli.BoolFlag{Name: "prevent-alert-auto-close, p", Usage: "alerts will not be automatically closed"},
+		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
 	},
 }
 
@@ -67,16 +67,16 @@ func doWrap(c *cli.Context) error {
 	}
 
 	return (&wrap{
-		apibase:               apibase,
-		name:                  c.String("name"),
-		detail:                c.Bool("detail"),
-		memo:                  c.String("memo"),
-		warning:               c.Bool("warning"),
-		preventAlertAutoClose: c.Bool("prevent-alert-auto-close"),
-		hostID:                hostID,
-		apikey:                apikey,
-		cmd:                   cmd,
-		outStream:             os.Stdout,
-		errStream:             os.Stderr,
+		apibase:   apibase,
+		name:      c.String("name"),
+		detail:    c.Bool("detail"),
+		memo:      c.String("memo"),
+		warning:   c.Bool("warning"),
+		autoClose: c.Bool("auto-close"),
+		hostID:    hostID,
+		apikey:    apikey,
+		cmd:       cmd,
+		outStream: os.Stdout,
+		errStream: os.Stderr,
 	}).run()
 }
