@@ -6,7 +6,7 @@ import (
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func main() {

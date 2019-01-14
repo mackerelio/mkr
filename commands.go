@@ -11,26 +11,8 @@ import (
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/plugin"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
-
-func init() {
-	// Requirements:
-	// - .Description: First and last line is blank.
-	// - .ArgsUsage: ArgsUsage includes flag usages (e.g. [-v|verbose] <hostId>).
-	//   All cli.Command should have ArgsUsage field.
-	cli.CommandHelpTemplate = `NAME:
-   {{.HelpName}} - {{.Usage}}
-
-USAGE:
-   {{.HelpName}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{if .Description}}
-
-DESCRIPTION:{{.Description}}{{end}}{{if .VisibleFlags}}
-OPTIONS:
-   {{range .VisibleFlags}}{{.}}
-   {{end}}{{end}}
-`
-}
 
 // Commands cli.Command object list
 var Commands = []cli.Command{
