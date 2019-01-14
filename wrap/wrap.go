@@ -17,15 +17,16 @@ import (
 )
 
 type wrap struct {
-	name      string
-	detail    bool
-	memo      string
-	warning   bool
-	autoClose bool
-	hostID    string
-	apibase   string
-	apikey    string
-	cmd       []string
+	name                 string
+	detail               bool
+	memo                 string
+	warning              bool
+	autoClose            bool
+	notificationInterval time.Duration
+	hostID               string
+	apibase              string
+	apikey               string
+	cmd                  []string
 
 	outStream, errStream io.Writer
 }
@@ -154,14 +155,20 @@ func (wr *wrap) doReport(re *result) error {
 			checkSt = mackerel.CheckStatusCritical
 		}
 	}
+	notificationIntervalInMinutes := uint(wr.notificationInterval.Minutes())
+	if notificationIntervalInMinutes < 10 {
+		notificationIntervalInMinutes = 10
+	}
+
 	payload := &mackerel.CheckReports{
 		Reports: []*mackerel.CheckReport{
 			{
-				Source:     mackerel.NewCheckSourceHost(wr.hostID),
-				Name:       re.checkName(),
-				Status:     checkSt,
-				OccurredAt: time.Now().Unix(),
-				Message:    re.buildMsg(wr.detail),
+				Source:               mackerel.NewCheckSourceHost(wr.hostID),
+				Name:                 re.checkName(),
+				Status:               checkSt,
+				OccurredAt:           time.Now().Unix(),
+				Message:              re.buildMsg(wr.detail),
+				NotificationInterval: notificationIntervalInMinutes,
 			},
 		},
 	}

@@ -21,12 +21,13 @@ var Command = cli.Command{
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host"},
+		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host. If it is empty it will be automatically derived."},
 		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
 		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
 		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
+		cli.DurationFlag{Name: "notification-interval, I", Usage: "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)"},
 	},
 }
 
@@ -67,16 +68,17 @@ func doWrap(c *cli.Context) error {
 	}
 
 	return (&wrap{
-		apibase:   apibase,
-		name:      c.String("name"),
-		detail:    c.Bool("detail"),
-		memo:      c.String("memo"),
-		warning:   c.Bool("warning"),
-		autoClose: c.Bool("auto-close"),
-		hostID:    hostID,
-		apikey:    apikey,
-		cmd:       cmd,
-		outStream: os.Stdout,
-		errStream: os.Stderr,
+		apibase:              apibase,
+		name:                 c.String("name"),
+		detail:               c.Bool("detail"),
+		memo:                 c.String("memo"),
+		warning:              c.Bool("warning"),
+		autoClose:            c.Bool("auto-close"),
+		notificationInterval: c.Duration("notification-interval"),
+		hostID:               hostID,
+		apikey:               apikey,
+		cmd:                  cmd,
+		outStream:            os.Stdout,
+		errStream:            os.Stderr,
 	}).run()
 }
