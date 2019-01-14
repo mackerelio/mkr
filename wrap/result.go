@@ -20,11 +20,11 @@ type result struct {
 	Cmd        []string
 	Name, Memo string
 
-	Output, Stdout, Stderr string `json:"-"`
-	Pid                    int
-	ExitCode               int
-	Signaled               bool
-	StartAt, EndAt         time.Time
+	Output         string `json:"-"`
+	Pid            int
+	ExitCode       int
+	Signaled       bool
+	StartAt, EndAt time.Time
 
 	Msg     string
 	Success bool

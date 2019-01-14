@@ -63,13 +63,9 @@ func (wr *wrap) runCmd() *result {
 	}
 	defer stderrPipe.Close()
 
-	var (
-		bufStdout = &bytes.Buffer{}
-		bufStderr = &bytes.Buffer{}
-		bufMerged = &bytes.Buffer{}
-	)
-	stdoutPipe2 := io.TeeReader(stdoutPipe, io.MultiWriter(bufStdout, bufMerged))
-	stderrPipe2 := io.TeeReader(stderrPipe, io.MultiWriter(bufStderr, bufMerged))
+	bufMerged := &bytes.Buffer{}
+	stdoutPipe2 := io.TeeReader(stdoutPipe, bufMerged)
+	stderrPipe2 := io.TeeReader(stderrPipe, bufMerged)
 
 	re.StartAt = time.Now()
 	err = cmd.Start()
@@ -105,8 +101,6 @@ func (wr *wrap) runCmd() *result {
 	} else {
 		re.Msg = fmt.Sprintf("command died with signal: %d", re.ExitCode&127)
 	}
-	re.Stdout = bufStdout.String()
-	re.Stderr = bufStderr.String()
 	re.Output = bufMerged.String()
 
 	re.Success = re.ExitCode == 0
