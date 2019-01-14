@@ -114,6 +114,9 @@ func (wr *wrap) runCmd() *result {
 
 func (wr *wrap) report(re *result) error {
 	defer func() {
+		if wr.preventAlertAutoClose {
+			return
+		}
 		err := re.saveResult()
 		if err != nil {
 			logger.Logf("error", "failed to save result: %s", err)
@@ -123,14 +126,18 @@ func (wr *wrap) report(re *result) error {
 	if wr.apikey == "" || wr.hostID == "" {
 		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
 	}
-	lastRe, err := re.loadLastResult()
-	if err != nil {
-		// resultFile something went wrong.
-		// It may be no permission, broken json, not a normal file, and so on.
-		// Though it rough, try to delete as workaround
-		err := os.RemoveAll(re.resultFile())
+	var lastRe *result
+	if !wr.preventAlertAutoClose {
+		var err error
+		lastRe, err = re.loadLastResult()
 		if err != nil {
-			return err
+			// resultFile something went wrong.
+			// It may be no permission, broken json, not a normal file, and so on.
+			// Though it rough, try to delete as workaround
+			err := os.RemoveAll(re.resultFile())
+			if err != nil {
+				return err
+			}
 		}
 	}
 	if !re.Success || !wr.preventAlertAutoClose && (lastRe == nil || !lastRe.Success) {
