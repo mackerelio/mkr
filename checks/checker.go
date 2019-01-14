@@ -15,9 +15,7 @@ import (
 // Command is command definition of mkr checks
 var Command = cli.Command{
 	Name:  "checks",
-	Usage: "utility for check plugins",
-	Description: `
-    Utility for check plugins`,
+	Usage: "Utility for check plugins",
 	Subcommands: []cli.Command{
 		commandRun,
 	},
