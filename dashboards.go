@@ -7,14 +7,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mackerelio/mackerel-client-go"
+	mackerel "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
-	"gopkg.in/yaml.v2"
+	cli "gopkg.in/urfave/cli.v1"
+	yaml "gopkg.in/yaml.v2"
 )
 
 var commandDashboards = cli.Command{
-	Name: "dashboards",
+	Name:  "dashboards",
+	Usage: "Generating custom dashboards",
 	Description: `
     Generating dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
