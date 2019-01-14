@@ -9,7 +9,7 @@ import (
 
 	"github.com/Songmu/prompter"
 	mkr "github.com/mackerelio/mackerel-client-go"
-	"github.com/mackerelio/mkr/checker"
+	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/plugin"
 	cli "gopkg.in/urfave/cli.v1"
@@ -50,7 +50,7 @@ var Commands = []cli.Command{
 	commandAnnotations,
 	commandOrg,
 	plugin.CommandPlugin,
-	checker.Command,
+	checks.Command,
 }
 
 var commandStatus = cli.Command{

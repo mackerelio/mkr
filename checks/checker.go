@@ -1,4 +1,4 @@
-package checker
+package checks
 
 import (
 	"fmt"
@@ -12,16 +12,25 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// Command is command definition of mkr run-checks
+// Command is command definition of mkr checks
 var Command = cli.Command{
-	Name:  "run-checks",
+	Name:  "checks",
+	Usage: "utility for check plugins",
+	Description: `
+    Utility for check plugins`,
+	Subcommands: []cli.Command{
+		commandRun,
+	},
+}
+
+var commandRun = cli.Command{
+	Name:  "run",
 	Usage: "run check commands in mackerel-agent.conf",
 	Description: `
     Execute command of check plugins in mackerel-agent.conf all at once.
     It is used for checking setting and operation of the check plugins.
-	The result is output to stdout in TAP format. If any check fails,
-	it exits non-zero.
-`,
+    The result is output to stdout in TAP format. If any check fails,
+    it exits non-zero.`,
 	Action: doRunChecks,
 }
 
