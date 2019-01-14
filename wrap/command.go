@@ -28,6 +28,9 @@ var Command = cli.Command{
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
 		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
 		cli.DurationFlag{Name: "notification-interval, I", Usage: "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)"},
+		// XXX Implementation of maxCheckAttempts is difficult because the
+		// execution interval of cron or batches are not always one-minute.
+		// This is due to the server-side logic of the Mackerel.
 	},
 }
 
