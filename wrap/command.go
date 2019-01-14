@@ -24,7 +24,7 @@ var Command = cli.Command{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host"},
 		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
 		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
-		cli.StringFlag{Name: "H, host", Value: "", Usage: "`hostID`"},
+		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
 		cli.BoolFlag{Name: "prevent-alert-auto-close, p", Usage: "alerts will not be automatically closed"},
 	},
