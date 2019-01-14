@@ -13,7 +13,7 @@ import (
 var Command = cli.Command{
 	Name:      "wrap",
 	Usage:     "Wrap and monitor batch jobs to run with cron etc",
-	ArgsUsage: "[--detail|-d] [--name|-n <name>] [--memo|-m <memo>] [--warning|w] -- /path/to/batch",
+	ArgsUsage: "[--name|-n <name>] [OPTIONS] -- /path/to/batch",
 	Description: `
     Wrap a batch command with specifying it as arguments. If the command failed
     with non-zero exit code, it sends a report to Mackerel and raises an alert.
