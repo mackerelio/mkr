@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 
@@ -112,12 +113,15 @@ func runChecks(checkers []checker, w io.Writer) error {
 	ch := make(chan *result)
 	total := len(checkers)
 	go func() {
+		sem := make(chan struct{}, runtime.NumCPU()*2)
 		wg := &sync.WaitGroup{}
 		wg.Add(total)
 		for _, c := range checkers {
 			go func(c checker) {
 				defer wg.Done()
+				sem <- struct{}{}
 				ch <- c.check()
+				<-sem
 			}(c)
 		}
 		wg.Wait()
