@@ -47,9 +47,10 @@ func TestCommand_Action(t *testing.T) {
 
 		body, _ := ioutil.ReadAll(req.Body)
 		type vr struct {
-			Name    string               `json:"name"`
-			Status  mackerel.CheckStatus `json:"status"`
-			Message string               `json:"message"`
+			Name                 string               `json:"name"`
+			Status               mackerel.CheckStatus `json:"status"`
+			Message              string               `json:"message"`
+			NotificationInterval uint                 `json:"notificationInterval,omitempty"`
 		}
 		type v struct {
 			Reports []vr `json:"reports"`
@@ -66,6 +67,7 @@ Memo: This is memo
 Hello.
 exit status 1
 `,
+					NotificationInterval: 0,
 				},
 			},
 		}

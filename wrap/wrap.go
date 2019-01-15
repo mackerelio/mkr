@@ -149,9 +149,9 @@ func (wr *wrap) doReport(re *result) error {
 			checkSt = mackerel.CheckStatusCritical
 		}
 	}
-	notificationIntervalInMinutes := uint(wr.notificationInterval.Minutes())
-	if notificationIntervalInMinutes < 10 {
-		notificationIntervalInMinutes = 10
+	niInMinutes := uint(wr.notificationInterval.Minutes())
+	if 0 < niInMinutes && niInMinutes < 10 {
+		niInMinutes = 10
 	}
 
 	payload := &mackerel.CheckReports{
@@ -162,7 +162,7 @@ func (wr *wrap) doReport(re *result) error {
 				Status:               checkSt,
 				OccurredAt:           time.Now().Unix(),
 				Message:              re.buildMsg(wr.detail),
-				NotificationInterval: notificationIntervalInMinutes,
+				NotificationInterval: niInMinutes,
 			},
 		},
 	}
