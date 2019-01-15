@@ -1,10 +1,9 @@
 package main
 
 import (
-	"strings"
 	"testing"
 
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func TestCommands_requirements(t *testing.T) {
@@ -20,12 +19,6 @@ func TestCommands_requirements(t *testing.T) {
 		}
 	}
 	for _, c := range cs {
-		if !strings.HasPrefix(c.Description, "\n    ") {
-			t.Errorf("%s: cli.Command.Description should start with '\\n    ', got:\n%s", c.Name, c.Description)
-		}
-		if !strings.HasSuffix(c.Description, "\n") {
-			t.Errorf("%s: cli.Command.Description should end with '\\n', got:\n%s", c.Name, c.Description)
-		}
 		if len(c.Flags) > 0 && c.ArgsUsage == "" {
 			t.Errorf("%s: cli.Command.ArgsUsage should not be empty. Describe flag options.", c.Name)
 		}
