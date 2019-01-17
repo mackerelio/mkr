@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/mackerelio/checkers"
 	"github.com/mackerelio/mackerel-agent/config"
 	cli "gopkg.in/urfave/cli.v1"
 	yaml "gopkg.in/yaml.v2"
@@ -56,6 +57,7 @@ type result struct {
 	Name     string   `yaml:"-"`
 	Memo     string   `yaml:"memo,omitempty"`
 	Cmd      []string `yaml:"command,flow"`
+	Status   string   `yaml:"status"`
 	Stdout   string   `yaml:"stdout,omitempty"`
 	Stderr   string   `yaml:"stderr,omitempty"`
 	ExitCode int      `yaml:"exitCode,omitempty"`
@@ -94,10 +96,12 @@ func (cpc *checkPluginChecker) check() *result {
 	if err != nil {
 		errMsg = err.Error()
 	}
+
 	return &result{
 		Name:     cpc.name,
 		Memo:     p.Memo,
 		Cmd:      cmd,
+		Status:   checkers.Status(exitCode).String(),
 		ExitCode: exitCode,
 		Stdout:   strings.TrimSpace(stdout),
 		Stderr:   strings.TrimSpace(stderr),

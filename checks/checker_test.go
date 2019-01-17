@@ -17,6 +17,7 @@ func TestRunChecks(t *testing.T) {
 	te := &testChecker{&result{
 		Name:     "hoge",
 		Cmd:      []string{"perl", "-E", "say 'Hello'"},
+		Status:   "OK",
 		Stdout:   "Hello",
 		ExitCode: 0,
 	}}
@@ -28,6 +29,7 @@ func TestRunChecks(t *testing.T) {
 ok 1 - hoge
   ---
   command: [perl, -E, say 'Hello']
+  status: OK
   stdout: Hello
   ...
 `
