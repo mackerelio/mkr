@@ -9,9 +9,10 @@ import (
 
 	"github.com/Songmu/prompter"
 	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/plugin"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func init() {
@@ -49,6 +50,7 @@ var Commands = []cli.Command{
 	commandAnnotations,
 	commandOrg,
 	plugin.CommandPlugin,
+	checks.Command,
 }
 
 var commandStatus = cli.Command{

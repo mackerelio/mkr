@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func TestCommands_requirements(t *testing.T) {
@@ -31,7 +31,12 @@ func TestCommands_requirements(t *testing.T) {
 		}
 	}
 	for _, sc := range subcs {
-		if sc.Description == "" {
+		if sc.Action == nil {
+			if sc.Description == "" && sc.Usage == "" {
+				t.Errorf("%s: Neither .Description nor .Usage should be empty", sc.Name)
+
+			}
+		} else if sc.Description == "" {
 			t.Errorf("%s: cli.Command.Description should not be empty", sc.Name)
 		}
 	}
