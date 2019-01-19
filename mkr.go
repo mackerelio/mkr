@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func main() {
@@ -29,9 +28,6 @@ func main() {
 			Usage: fmt.Sprintf("API Base (default: \"%s\")", config.DefaultConfig.Apibase),
 		},
 	}
-
-	cpu := runtime.NumCPU()
-	runtime.GOMAXPROCS(cpu)
 
 	err := app.Run(os.Args)
 	if err != nil {
