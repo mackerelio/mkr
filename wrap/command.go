@@ -52,9 +52,11 @@ func doWrap(c *cli.Context) error {
 	if apikey == "" {
 		logger.Log("error", "[mkr wrap] failed to detect Mackerel APIKey. Try to specify in mackerel-agent.conf or export MACKEREL_APIKEY='<Your apikey>'")
 	}
-	hostID, _ := conf.LoadHostID()
-	if c.String("host") != "" {
-		hostID = c.String("host")
+	var hostID string
+	if id := c.String("host"); id != "" {
+		hostID = id
+	} else {
+		hostID, _ = conf.LoadHostID()
 	}
 	if hostID == "" {
 		logger.Log("error", "[mkr wrap] failed to load hostID. Try to specify -host option explicitly")
