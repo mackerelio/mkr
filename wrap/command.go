@@ -38,7 +38,7 @@ func doWrap(c *cli.Context) error {
 	confFile := c.GlobalString("conf")
 	conf, err := config.LoadConfig(confFile)
 	if err != nil {
-		return err
+		logger.Logf("error", "[mkr wrap] failed to load the config %q: %s", confFile, err)
 	}
 	apibase := c.GlobalString("apibase")
 	if apibase == "" {
@@ -61,8 +61,9 @@ func doWrap(c *cli.Context) error {
 	if hostID == "" {
 		logger.Log("error", "[mkr wrap] failed to load hostID. Try to specify -host option explicitly")
 	}
-	// Since command execution has the highest priority, even when apikey or
-	// hostID is empty, we don't return errors and only output the log here.
+	// Since command execution has the highest priority, even when the config
+	// loading is failed, or apikey or hostID is empty, we don't return errors
+	// and only output the log here.
 
 	cmd := c.Args()
 	if len(cmd) > 0 && cmd[0] == "--" {
