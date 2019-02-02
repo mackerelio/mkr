@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"text/template"
 	"time"
 
 	"github.com/Songmu/prompter"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/checks"
+	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/hosts"
 	"github.com/mackerelio/mkr/logger"
+	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/mackerelio/mkr/plugin"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -18,7 +20,7 @@ import (
 // Commands cli.Command object list
 var Commands = []cli.Command{
 	commandStatus,
-	commandHosts,
+	hosts.Command,
 	commandCreate,
 	commandUpdate,
 	commandThrow,
@@ -45,33 +47,6 @@ var commandStatus = cli.Command{
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
-	},
-}
-
-var commandHosts = cli.Command{
-	Name:      "hosts",
-	Usage:     "List hosts",
-	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]",
-	Description: `
-    List the information of the hosts refined by host name, service name, role name and/or status.
-    Requests "GET /api/v0/hosts.json". See https://mackerel.io/api-docs/entry/hosts#list .
-`,
-	Action: doHosts,
-	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "List hosts only matched with <name>"},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belonging to <service>"},
-		cli.StringSliceFlag{
-			Name:  "role, r",
-			Value: &cli.StringSlice{},
-			Usage: "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
-		},
-		cli.StringSliceFlag{
-			Name:  "status, st",
-			Value: &cli.StringSlice{},
-			Usage: "List hosts only matched <status>. Multiple choices are allowed.",
-		},
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 	},
 }
@@ -181,96 +156,34 @@ var commandServices = cli.Command{
 	Flags:  []cli.Flag{},
 }
 
-func newMackerelFromContext(c *cli.Context) *mkr.Client {
-	confFile := c.GlobalString("conf")
-	apiBase := c.GlobalString("apibase")
-	apiKey := LoadApikeyFromEnvOrConfig(confFile)
-	if apiKey == "" {
-		logger.Log("error", `
-    MACKEREL_APIKEY environment variable is not set. (Try "export MACKEREL_APIKEY='<Your apikey>'")
-`)
-		os.Exit(1)
-	}
-
-	if apiBase == "" {
-		apiBase = LoadApibaseFromConfigWithFallback(confFile)
-	}
-
-	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
-	logger.DieIf(err)
-
-	return mackerel
-}
-
 func doStatus(c *cli.Context) error {
 	confFile := c.GlobalString("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 
 	if argHostID == "" {
-		if argHostID = LoadHostIDFromConfig(confFile); argHostID == "" {
+		if argHostID = mackerelclient.LoadHostIDFromConfig(confFile); argHostID == "" {
 			cli.ShowCommandHelp(c, "status")
 			os.Exit(1)
 		}
 	}
 
-	host, err := newMackerelFromContext(c).FindHost(argHostID)
+	host, err := mackerelclient.NewFromContext(c).FindHost(argHostID)
 	logger.DieIf(err)
 
 	if isVerbose {
-		PrettyPrintJSON(host)
+		format.PrettyPrintJSON(host)
 	} else {
-		format := &HostFormat{
+		format.PrettyPrintJSON(&format.Host{
 			ID:            host.ID,
 			Name:          host.Name,
 			DisplayName:   host.DisplayName,
 			Status:        host.Status,
 			RoleFullnames: host.GetRoleFullnames(),
 			IsRetired:     host.IsRetired,
-			CreatedAt:     formatISO8601Extended(host.DateFromCreatedAt()),
+			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
-		}
-
-		PrettyPrintJSON(format)
-	}
-	return nil
-}
-
-func doHosts(c *cli.Context) error {
-	isVerbose := c.Bool("verbose")
-
-	hosts, err := newMackerelFromContext(c).FindHosts(&mkr.FindHostsParam{
-		Name:     c.String("name"),
-		Service:  c.String("service"),
-		Roles:    c.StringSlice("role"),
-		Statuses: c.StringSlice("status"),
-	})
-	logger.DieIf(err)
-
-	format := c.String("format")
-	if format != "" {
-		t := template.Must(template.New("format").Parse(format))
-		err := t.Execute(os.Stdout, hosts)
-		logger.DieIf(err)
-	} else if isVerbose {
-		PrettyPrintJSON(hosts)
-	} else {
-		var hostsFormat []*HostFormat
-		for _, host := range hosts {
-			format := &HostFormat{
-				ID:            host.ID,
-				Name:          host.Name,
-				DisplayName:   host.DisplayName,
-				Status:        host.Status,
-				RoleFullnames: host.GetRoleFullnames(),
-				IsRetired:     host.IsRetired,
-				CreatedAt:     formatISO8601Extended(host.DateFromCreatedAt()),
-				IPAddresses:   host.IPAddresses(),
-			}
-			hostsFormat = append(hostsFormat, format)
-		}
-
-		PrettyPrintJSON(hostsFormat)
+		})
 	}
 	return nil
 }
@@ -286,7 +199,7 @@ func doCreate(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	hostID, err := client.CreateHost(&mkr.CreateHostParam{
 		Name:             argHostName,
@@ -316,7 +229,7 @@ func doUpdate(c *cli.Context) error {
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
-		if argHostIDs[0] = LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
+		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "update")
 			os.Exit(1)
 		}
@@ -332,7 +245,7 @@ func doUpdate(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	for _, hostID := range argHostIDs {
 		if needUpdateHostStatus {
@@ -400,18 +313,18 @@ func doMetrics(c *cli.Context) error {
 		to = time.Now().Unix()
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	if optHostID != "" {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		PrettyPrintJSON(metricValue)
+		format.PrettyPrintJSON(metricValue)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		PrettyPrintJSON(metricValue)
+		format.PrettyPrintJSON(metricValue)
 	} else {
 		cli.ShowCommandHelp(c, "metrics")
 		os.Exit(1)
@@ -431,14 +344,14 @@ func doFetch(c *cli.Context) error {
 	allMetricValues := make(mkr.LatestMetricValues)
 	// Fetches 100 hosts per one request (to avoid URL maximum length).
 	for _, hostIds := range split(argHostIDs, 100) {
-		metricValues, err := newMackerelFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)
+		metricValues, err := mackerelclient.NewFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)
 		logger.DieIf(err)
 		for key := range metricValues {
 			allMetricValues[key] = metricValues[key]
 		}
 	}
 
-	PrettyPrintJSON(allMetricValues)
+	format.PrettyPrintJSON(allMetricValues)
 	return nil
 }
 
@@ -449,7 +362,7 @@ func doRetire(c *cli.Context) error {
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
-		if argHostIDs[0] = LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
+		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
 			cli.ShowCommandHelp(c, "retire")
 			os.Exit(1)
 		}
@@ -460,7 +373,7 @@ func doRetire(c *cli.Context) error {
 		return nil
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	for _, hostID := range argHostIDs {
 		err := client.RetireHost(hostID)
@@ -472,8 +385,8 @@ func doRetire(c *cli.Context) error {
 }
 
 func doServices(c *cli.Context) error {
-	services, err := newMackerelFromContext(c).FindServices()
+	services, err := mackerelclient.NewFromContext(c).FindServices()
 	logger.DieIf(err)
-	PrettyPrintJSON(services)
+	format.PrettyPrintJSON(services)
 	return nil
 }

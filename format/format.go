@@ -1,4 +1,4 @@
-package main
+package format
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 )
 
 // HostFormat defines output json structure.
-type HostFormat struct {
+type Host struct {
 	ID            string            `json:"id,omitempty"`
 	Name          string            `json:"name,omitempty"`
 	DisplayName   string            `json:"displayName,omitempty"`
@@ -40,7 +40,8 @@ func replaceAngleBrackets(s string) string {
 	return strings.Replace(s, "\\u003e", ">", -1)
 }
 
-func formatISO8601Extended(t time.Time) string {
+// ISO8601Exetnded format
+func ISO8601Extended(t time.Time) string {
 	const layoutISO8601Exetnded = "2006-01-02T15:04:05-07:00"
 	return t.Format(layoutISO8601Exetnded)
 }

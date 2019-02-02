@@ -2,8 +2,10 @@ package main
 
 import (
 	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
+	"github.com/mackerelio/mkr/mackerelclient"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandAnnotations = cli.Command{
@@ -114,7 +116,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 		return cli.NewExitError("`to` is a required field to create a graph annotation.", 1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.CreateGraphAnnotation(&mkr.GraphAnnotation{
 		Title:       title,
 		Description: description,
@@ -124,7 +126,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(annotation)
 	return nil
 }
 
@@ -148,10 +150,10 @@ func doAnnotationsList(c *cli.Context) error {
 		return cli.NewExitError("`to` is a required field to list graph annotations.", 1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	annotations, err := client.FindGraphAnnotations(service, from, to)
 	logger.DieIf(err)
-	PrettyPrintJSON(annotations)
+	format.PrettyPrintJSON(annotations)
 	return nil
 }
 
@@ -184,7 +186,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 		return cli.NewExitError("`to` is a required field to update a graph annotation.", 1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.UpdateGraphAnnotation(annotationID, &mkr.GraphAnnotation{
 		Title:       title,
 		Description: description,
@@ -194,7 +196,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(annotation)
 	return nil
 }
 
@@ -206,9 +208,9 @@ func doAnnotationsDelete(c *cli.Context) error {
 		return cli.NewExitError("`id` is a required field to delete a graph annotation.", 1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.DeleteGraphAnnotation(annotationID)
 	logger.DieIf(err)
-	PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(annotation)
 	return nil
 }

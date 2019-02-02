@@ -11,8 +11,10 @@ import (
 
 	"github.com/fatih/color"
 	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
+	"github.com/mackerelio/mkr/mackerelclient"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandAlerts = cli.Command{
@@ -243,18 +245,18 @@ func formatCheckMessage(msg string) string {
 }
 
 func doAlertsRetrieve(c *cli.Context) error {
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
-	PrettyPrintJSON(alerts)
+	format.PrettyPrintJSON(alerts)
 	return nil
 }
 
 func doAlertsList(c *cli.Context) error {
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
@@ -374,14 +376,14 @@ func doAlertsClose(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	for _, alertID := range argAlertIDs {
 		alert, err := client.CloseAlert(alertID, reason)
 		logger.DieIf(err)
 
 		logger.Log("Alert closed", alertID)
 		if isVerbose == true {
-			PrettyPrintJSON(alert)
+			format.PrettyPrintJSON(alert)
 		}
 	}
 	return nil

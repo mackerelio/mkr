@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
+	"github.com/mackerelio/mkr/mackerelclient"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandOrg = cli.Command{
@@ -16,10 +18,10 @@ var commandOrg = cli.Command{
 }
 
 func doOrgRetrieve(c *cli.Context) error {
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	org, err := client.GetOrg()
 	logger.DieIf(err)
-	PrettyPrintJSON(org)
+	format.PrettyPrintJSON(org)
 	return nil
 }
