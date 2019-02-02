@@ -39,61 +39,80 @@ func newWrapContext(args []string) *cli.Context {
 }
 
 func TestCommand_Action(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		reqPath := "/api/v0/monitoring/checks/report"
-		if req.URL.Path != reqPath {
-			t.Errorf("request URL should be %s but: %s", reqPath, req.URL.Path)
-		}
+	type testResult struct {
+		Name                 string               `json:"name"`
+		Status               mackerel.CheckStatus `json:"status"`
+		Message              string               `json:"message"`
+		NotificationInterval uint                 `json:"notificationInterval,omitempty"`
+	}
+	type testReq struct {
+		Reports []testResult `json:"reports"`
+	}
 
-		body, _ := ioutil.ReadAll(req.Body)
-		type vr struct {
-			Name                 string               `json:"name"`
-			Status               mackerel.CheckStatus `json:"status"`
-			Message              string               `json:"message"`
-			NotificationInterval uint                 `json:"notificationInterval,omitempty"`
-		}
-		type v struct {
-			Reports []vr `json:"reports"`
-		}
-		var got v
-		expect := v{
-			Reports: []vr{
-				{
-					Name:   "test-check",
-					Status: mackerel.CheckStatusCritical,
-					Message: `command exited with code: 1
+	testCases := []struct {
+		Name           string
+		Args           []string
+		ExpectedResult testResult
+	}{
+		{
+			Name: "simple",
+			Args: []string{
+				"-name=test-check",
+				"-detail",
+				"-memo", "This is memo",
+				"--",
+				"go", "run", "testdata/stub.go",
+			},
+			ExpectedResult: testResult{
+				Name:   "test-check",
+				Status: mackerel.CheckStatusCritical,
+				Message: `command exited with code: 1
 Memo: This is memo
 % go run testdata/stub.go
 Hello.
 exit status 1
 `,
-					NotificationInterval: 0,
-				},
+				NotificationInterval: 0,
 			},
-		}
+		},
+	}
 
-		err := json.Unmarshal(body, &got)
-		if err != nil {
-			t.Fatal("request body should be decoded as json", string(body))
-		}
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+				reqPath := "/api/v0/monitoring/checks/report"
+				if req.URL.Path != reqPath {
+					t.Errorf("request URL should be %s but: %s", reqPath, req.URL.Path)
+				}
 
-		if !reflect.DeepEqual(got, expect) {
-			t.Errorf("something went wrong.\n   got: %+v,\nexpect: %+v", got, expect)
-		}
+				body, _ := ioutil.ReadAll(req.Body)
+				var treq testReq
 
-		res.Header()["Content-Type"] = []string{"application/json"}
-		json.NewEncoder(res).Encode(map[string]bool{
-			"success": true,
+				err := json.Unmarshal(body, &treq)
+				if err != nil {
+					t.Fatal("request body should be decoded as json", string(body))
+				}
+				got := treq.Reports[0]
+				expect := tc.ExpectedResult
+
+				if !reflect.DeepEqual(got, expect) {
+					t.Errorf("something went wrong.\n   got: %+v,\nexpect: %+v", got, expect)
+				}
+
+				res.Header()["Content-Type"] = []string{"application/json"}
+				json.NewEncoder(res).Encode(map[string]bool{
+					"success": true,
+				})
+			}))
+			defer ts.Close()
+
+			args := append(
+				[]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap"},
+				tc.Args...,
+			)
+
+			c := newWrapContext(args)
+			Command.Action.(func(*cli.Context) error)(c)
 		})
-	}))
-	defer ts.Close()
-
-	c := newWrapContext([]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap",
-		"-name=test-check",
-		"-detail",
-		"-memo", "This is memo",
-		"--",
-		"go", "run", "testdata/stub.go",
-	})
-	Command.Action.(func(*cli.Context) error)(c)
+	}
 }
