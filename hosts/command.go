@@ -6,7 +6,6 @@ import (
 
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
-	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -48,15 +47,16 @@ func doHosts(c *cli.Context) error {
 		Roles:    c.StringSlice("role"),
 		Statuses: c.StringSlice("status"),
 	})
-	logger.DieIf(err)
+	if err != nil {
+		return err
+	}
 
 	fmtStr := c.String("format")
 	if fmtStr != "" {
 		t := template.Must(template.New("format").Parse(fmtStr))
-		err := t.Execute(os.Stdout, hosts)
-		logger.DieIf(err)
+		return t.Execute(os.Stdout, hosts)
 	} else if isVerbose {
-		format.PrettyPrintJSON(hosts)
+		return format.PrettyPrintJSON(hosts)
 	} else {
 		var hostsFormat []*format.Host
 		for _, host := range hosts {
@@ -71,8 +71,6 @@ func doHosts(c *cli.Context) error {
 				IPAddresses:   host.IPAddresses(),
 			})
 		}
-
-		format.PrettyPrintJSON(hostsFormat)
+		return format.PrettyPrintJSON(hostsFormat)
 	}
-	return nil
 }

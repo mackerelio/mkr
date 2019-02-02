@@ -24,8 +24,9 @@ type Host struct {
 }
 
 // PrettyPrintJSON output indented json via stdout.
-func PrettyPrintJSON(src interface{}) {
-	fmt.Fprintln(os.Stdout, JSONMarshalIndent(src, "", "    "))
+func PrettyPrintJSON(src interface{}) error {
+	_, err := fmt.Fprintln(os.Stdout, JSONMarshalIndent(src, "", "    "))
+	return err
 }
 
 // JSONMarshalIndent call json.MarshalIndent and replace encoded angle brackets
