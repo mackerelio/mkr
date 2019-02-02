@@ -50,9 +50,11 @@ func TestCommand_Action(t *testing.T) {
 	}
 
 	testCases := []struct {
-		Name           string
-		Args           []string
-		ExpectedResult testResult
+		Name string
+		Args []string
+
+		Result   testResult
+		ExitCode int
 	}{
 		{
 			Name: "simple",
@@ -63,7 +65,7 @@ func TestCommand_Action(t *testing.T) {
 				"--",
 				"go", "run", "testdata/stub.go",
 			},
-			ExpectedResult: testResult{
+			Result: testResult{
 				Name:   "test-check",
 				Status: mackerel.CheckStatusCritical,
 				Message: `command exited with code: 1
@@ -74,6 +76,45 @@ exit status 1
 `,
 				NotificationInterval: 0,
 			},
+			ExitCode: 1,
+		},
+		{
+			Name: "notification interval",
+			Args: []string{
+				"-name=test-check2",
+				"-auto-close",
+				"-notification-interval", "20m",
+				"--",
+				"echo", "1",
+			},
+			Result: testResult{
+				Name:   "test-check2",
+				Status: mackerel.CheckStatusOK,
+				Message: `command exited with code: 0
+% echo 1
+`,
+				NotificationInterval: 1200,
+			},
+			ExitCode: 0,
+		},
+		{
+			Name: "minimum notification interval",
+			Args: []string{
+				"-name=test-check3",
+				"-auto-close",
+				"-notification-interval", "5m",
+				"--",
+				"echo", "2",
+			},
+			Result: testResult{
+				Name:   "test-check2",
+				Status: mackerel.CheckStatusOK,
+				Message: `command exited with code: 0
+% echo 2
+`,
+				NotificationInterval: 600,
+			},
+			ExitCode: 0,
 		},
 	}
 
@@ -93,7 +134,7 @@ exit status 1
 					t.Fatal("request body should be decoded as json", string(body))
 				}
 				got := treq.Reports[0]
-				expect := tc.ExpectedResult
+				expect := tc.Result
 
 				if !reflect.DeepEqual(got, expect) {
 					t.Errorf("something went wrong.\n   got: %+v,\nexpect: %+v", got, expect)
@@ -112,7 +153,17 @@ exit status 1
 			)
 
 			c := newWrapContext(args)
-			Command.Action.(func(*cli.Context) error)(c)
+			err := Command.Action.(func(*cli.Context) error)(c)
+			var exitCode int
+			if err != nil {
+				exitCode = 1
+				if excoder, ok := err.(cli.ExitCoder); ok {
+					exitCode = excoder.ExitCode()
+				}
+			}
+			if exitCode != tc.ExitCode {
+				t.Errorf("exit code %d is expected. but: %d", tc.ExitCode, exitCode)
+			}
 		})
 	}
 }
