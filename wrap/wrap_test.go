@@ -61,7 +61,7 @@ func TestCommand_Action(t *testing.T) {
 			Args: []string{
 				"-name=test-check",
 				"-detail",
-				"-memo", "This is memo",
+				"-note", "This is note",
 				"--",
 				"go", "run", "testdata/stub.go",
 			},
@@ -69,7 +69,7 @@ func TestCommand_Action(t *testing.T) {
 				Name:   "test-check",
 				Status: mackerel.CheckStatusCritical,
 				Message: `command exited with code: 1
-Memo: This is memo
+Note: This is note
 % go run testdata/stub.go
 Hello.
 exit status 1

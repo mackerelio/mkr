@@ -18,7 +18,7 @@ import (
 
 type result struct {
 	Cmd        []string
-	Name, Memo string
+	Name, Note string
 
 	Output         string `json:"-"`
 	Pid            int
@@ -94,8 +94,8 @@ func (re *result) errorEnd(format string, err error) *result {
 }
 
 const msgTplText = `{{.Msg}}
-{{- if ne .Memo "" }}
-Memo: {{.Memo}}{{end}}
+{{- if ne .Note "" }}
+Note: {{.Note}}{{end}}
 % {{.Command}}
 {{- if .Detail }}
 {{.Output}}{{end}}`
@@ -108,10 +108,10 @@ func init() {
 
 func (re *result) buildMsg(detail bool) string {
 	s := struct {
-		Msg, Memo, Command, Output string
+		Msg, Note, Command, Output string
 		Detail                     bool
 	}{
-		re.Msg, re.Memo, strings.Join(re.Cmd, " "), re.Output,
+		re.Msg, re.Note, strings.Join(re.Cmd, " "), re.Output,
 		detail,
 	}
 	buf := &bytes.Buffer{}

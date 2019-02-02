@@ -19,7 +19,7 @@ import (
 type wrap struct {
 	name                 string
 	detail               bool
-	memo                 string
+	note                 string
 	warning              bool
 	autoClose            bool
 	notificationInterval time.Duration
@@ -48,7 +48,7 @@ func (wr *wrap) runCmd() *result {
 	re := &result{
 		Cmd:  wr.cmd,
 		Name: wr.name,
-		Memo: wr.memo,
+		Note: wr.note,
 	}
 
 	stdoutPipe, err := cmd.StdoutPipe()

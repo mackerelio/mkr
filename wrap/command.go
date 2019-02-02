@@ -23,7 +23,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host. If it is empty it will be automatically derived."},
 		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
-		cli.StringFlag{Name: "memo, m", Value: "", Usage: "`memo` of the job"},
+		cli.StringFlag{Name: "note, N", Value: "", Usage: "`note` of the job"},
 		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
 		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
 		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
@@ -87,7 +87,7 @@ func doWrap(c *cli.Context) error {
 		apibase:              apibase,
 		name:                 c.String("name"),
 		detail:               c.Bool("detail"),
-		memo:                 c.String("memo"),
+		note:                 c.String("note"),
 		warning:              c.Bool("warning"),
 		autoClose:            c.Bool("auto-close"),
 		notificationInterval: c.Duration("notification-interval"),
