@@ -11,6 +11,7 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
+// Command is definition of mkr hosts subcommand
 var Command = cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",

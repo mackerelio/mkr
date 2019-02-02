@@ -8,6 +8,7 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
+// NewFromContext returns mackerel client from cli.Context
 func NewFromContext(c *cli.Context) *mkr.Client {
 	confFile := c.GlobalString("conf")
 	apiBase := c.GlobalString("apibase")
