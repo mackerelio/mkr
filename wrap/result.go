@@ -11,7 +11,6 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
-	"time"
 
 	"github.com/Songmu/wrapcommander"
 )
@@ -20,11 +19,9 @@ type result struct {
 	Cmd        []string
 	Name, Note string
 
-	Output         string `json:"-"`
-	Pid            int
-	ExitCode       int
-	Signaled       bool
-	StartAt, EndAt time.Time
+	Output   string `json:"-"`
+	ExitCode int
+	Signaled bool
 
 	Msg     string
 	Success bool

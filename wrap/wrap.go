@@ -67,12 +67,10 @@ func (wr *wrap) runCmd() *result {
 	stdoutPipe2 := io.TeeReader(stdoutPipe, bufMerged)
 	stderrPipe2 := io.TeeReader(stderrPipe, bufMerged)
 
-	re.StartAt = time.Now()
 	err = cmd.Start()
 	if err != nil {
 		return re.errorEnd("command invocation failed with follwing error: %s", err)
 	}
-	re.Pid = cmd.Process.Pid
 	eg := &errgroup.Group{}
 
 	eg.Go(func() error {
@@ -88,7 +86,6 @@ func (wr *wrap) runCmd() *result {
 	eg.Wait()
 
 	cmdErr := cmd.Wait()
-	re.EndAt = time.Now()
 	re.ExitCode = wrapcommander.ResolveExitCode(cmdErr)
 	if re.ExitCode > 128 {
 		w, ok := wrapcommander.ErrorToWaitStatus(cmdErr)
