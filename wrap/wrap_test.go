@@ -167,3 +167,19 @@ exit status 1
 		})
 	}
 }
+
+func TestCommand_Action_withoutConf(t *testing.T) {
+	c := newWrapContext([]string{
+		"-conf=notfound", "-apibase=http://localhost", "wrap",
+		"--detail", "--",
+		"go", "run", "testdata/stub.go",
+	})
+	expect := "command exited with code: 1"
+	err := Command.Action.(func(*cli.Context) error)(c)
+	if err == nil {
+		t.Errorf("error should be occurred but nil")
+	} else if err.Error() != expect {
+		t.Errorf("The error message is different from the expected.\n   got: %s\nexpect: %s",
+			err, expect)
+	}
+}
