@@ -36,10 +36,20 @@ var Command = cli.Command{
 
 func doWrap(c *cli.Context) error {
 	confFile := c.GlobalString("conf")
-	conf, err := config.LoadConfig(confFile)
-	if err != nil {
-		logger.Logf("error", "[mkr wrap] failed to load the config %q: %s", confFile, err)
+	var conf *config.Config
+	if _, err := os.Stat(confFile); err == nil {
+		conf, err = config.LoadConfig(confFile)
+		if err != nil {
+			logger.Logf("error", "[mkr wrap] failed to load the config %q: %s", confFile, err)
+		}
+	} else {
+		logger.Logf("info", "[mkr wrap] configuraion file %q not found", confFile)
 	}
+	if conf == nil {
+		// fallback default config
+		conf = config.DefaultConfig
+	}
+
 	apibase := c.GlobalString("apibase")
 	if apibase == "" {
 		apibase = conf.Apibase

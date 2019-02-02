@@ -16,6 +16,7 @@ var logger = &colorine.Logger{
 		"error": colorine.Error,
 
 		"":        colorine.Info,
+		"info":    colorine.Info,
 		"created": colorine.Info,
 		"updated": colorine.Info,
 		"thrown":  colorine.Info,
