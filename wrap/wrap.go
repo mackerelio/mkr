@@ -127,7 +127,7 @@ func (wr *wrap) report(re *result) error {
 		if err != nil {
 			// resultFile something went wrong.
 			// It may be no permission, broken json, not a normal file, and so on.
-			// Though it is rough, try to delete as workaround
+			// Though it is rough, try to delete as workaround.
 			err := os.RemoveAll(re.resultFile())
 			if err != nil {
 				return err

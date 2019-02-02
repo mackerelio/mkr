@@ -45,9 +45,9 @@ func doWrap(c *cli.Context) error {
 		apibase = conf.Apibase
 	}
 
-	apikey := conf.Apikey
+	apikey := os.Getenv("MACKEREL_APIKEY")
 	if apikey == "" {
-		apikey = os.Getenv("MACKEREL_APIKEY")
+		apikey = conf.Apikey
 	}
 	if apikey == "" {
 		logger.Log("error", "[mkr wrap] failed to detect Mackerel APIKey. Try to specify in mackerel-agent.conf or export MACKEREL_APIKEY='<Your apikey>'")
