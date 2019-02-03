@@ -1,11 +1,6 @@
 package hosts
 
 import (
-	"os"
-	"text/template"
-
-	mkr "github.com/mackerelio/mackerel-client-go"
-	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/mackerelclient"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -39,38 +34,21 @@ var Command = cli.Command{
 }
 
 func doHosts(c *cli.Context) error {
-	isVerbose := c.Bool("verbose")
-
-	hosts, err := mackerelclient.NewFromContext(c).FindHosts(&mkr.FindHostsParam{
-		Name:     c.String("name"),
-		Service:  c.String("service"),
-		Roles:    c.StringSlice("role"),
-		Statuses: c.StringSlice("status"),
-	})
+	cli, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
 	if err != nil {
 		return err
 	}
 
-	fmtStr := c.String("format")
-	if fmtStr != "" {
-		t := template.Must(template.New("format").Parse(fmtStr))
-		return t.Execute(os.Stdout, hosts)
-	} else if isVerbose {
-		return format.PrettyPrintJSON(hosts)
-	} else {
-		var hostsFormat []*format.Host
-		for _, host := range hosts {
-			hostsFormat = append(hostsFormat, &format.Host{
-				ID:            host.ID,
-				Name:          host.Name,
-				DisplayName:   host.DisplayName,
-				Status:        host.Status,
-				RoleFullnames: host.GetRoleFullnames(),
-				IsRetired:     host.IsRetired,
-				CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
-				IPAddresses:   host.IPAddresses(),
-			})
-		}
-		return format.PrettyPrintJSON(hostsFormat)
-	}
+	return (&hostApp{
+		cli: cli,
+
+		verbose: c.Bool("verbose"),
+
+		name:     c.String("name"),
+		service:  c.String("service"),
+		roles:    c.StringSlice("role"),
+		statuses: c.StringSlice("statuses"),
+
+		format: c.String("format"),
+	}).run()
 }
