@@ -1,4 +1,4 @@
-package main
+package mackerelclient
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestLoadApibaseFromConfig(t *testing.T) {
-	conffile := "test/mackerel-agent.conf"
+	conffile := "testdata/mackerel-agent.conf"
 
 	apiBase := LoadApibaseFromConfig(conffile)
 
@@ -16,7 +16,7 @@ func TestLoadApibaseFromConfig(t *testing.T) {
 }
 
 func TestLoadApibaseFromConfigWithFallback(t *testing.T) {
-	conffile := "test/mackerel-agent.conf"
+	conffile := "testdata/mackerel-agent.conf"
 
 	apiBase := LoadApibaseFromConfigWithFallback(conffile)
 
@@ -24,7 +24,7 @@ func TestLoadApibaseFromConfigWithFallback(t *testing.T) {
 		t.Error("should be https://example.com/")
 	}
 
-	apiBase = LoadApibaseFromConfigWithFallback("test/mackerel-agent-no-base.conf")
+	apiBase = LoadApibaseFromConfigWithFallback("testdata/mackerel-agent-no-base.conf")
 
 	if apiBase != "https://api.mackerelio.com" {
 		t.Error("should be https://api.mackerelio.com")
@@ -32,7 +32,7 @@ func TestLoadApibaseFromConfigWithFallback(t *testing.T) {
 }
 
 func TestLoadApikeyFromConfig(t *testing.T) {
-	conffile := "test/mackerel-agent.conf"
+	conffile := "testdata/mackerel-agent.conf"
 
 	apiKey := LoadApikeyFromConfig(conffile)
 
@@ -44,7 +44,7 @@ func TestLoadApikeyFromConfig(t *testing.T) {
 func TestLoadApikeyFromConfigOrEnv(t *testing.T) {
 	os.Setenv("MACKEREL_APIKEY", "")
 
-	conffile := "test/mackerel-agent.conf"
+	conffile := "testdata/mackerel-agent.conf"
 
 	apiKey := LoadApikeyFromEnvOrConfig(conffile)
 
@@ -64,7 +64,7 @@ func TestLoadApikeyFromConfigOrEnv(t *testing.T) {
 }
 
 func TestLoadHostIDFromConfig(t *testing.T) {
-	conffile := "test/mackerel-agent.conf"
+	conffile := "testdata/mackerel-agent.conf"
 
 	hostID := LoadHostIDFromConfig(conffile)
 

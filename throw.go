@@ -11,7 +11,8 @@ import (
 	"github.com/jpillora/backoff"
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
-	"gopkg.in/urfave/cli.v1"
+	"github.com/mackerelio/mkr/mackerelclient"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandThrow = cli.Command{
@@ -75,7 +76,7 @@ func doThrow(c *cli.Context) error {
 	}
 	logger.ErrorIf(scanner.Err())
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	if optHostID != "" {
 		logger.DieIf(requestWithRetry(func() error {

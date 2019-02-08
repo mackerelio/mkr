@@ -9,6 +9,7 @@ import (
 
 	mackerel "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"github.com/mackerelio/mkr/mackerelclient"
 	cli "gopkg.in/urfave/cli.v1"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -377,7 +378,7 @@ func doGenerateDashboards(c *cli.Context) error {
 	err = yaml.Unmarshal(buf, &yml)
 	logger.DieIf(err)
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 
 	org, err := client.GetOrg()
 	logger.DieIf(err)

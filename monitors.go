@@ -10,10 +10,12 @@ import (
 	"strings"
 
 	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
+	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandMonitors = cli.Command{
@@ -81,7 +83,7 @@ func monitorSaveRules(rules []mkr.Monitor, optFilePath string) error {
 	defer file.Close()
 
 	monitors := map[string]interface{}{"monitors": rules}
-	data := JSONMarshalIndent(monitors, "", "    ") + "\n"
+	data := format.JSONMarshalIndent(monitors, "", "    ") + "\n"
 
 	_, err = file.WriteString(data)
 	if err != nil {
@@ -154,10 +156,10 @@ func decodeMonitor(mes json.RawMessage) (mkr.Monitor, error) {
 }
 
 func doMonitorsList(c *cli.Context) error {
-	monitors, err := newMackerelFromContext(c).FindMonitors()
+	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
-	PrettyPrintJSON(monitors)
+	format.PrettyPrintJSON(monitors)
 	return nil
 }
 
@@ -165,13 +167,13 @@ func doMonitorsPull(c *cli.Context) error {
 	isVerbose := c.Bool("verbose")
 	filePath := c.String("file-path")
 
-	monitors, err := newMackerelFromContext(c).FindMonitors()
+	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
 	monitorSaveRules(monitors, filePath)
 
 	if isVerbose {
-		PrettyPrintJSON(monitors)
+		format.PrettyPrintJSON(monitors)
 	}
 
 	if filePath == "" {
@@ -182,15 +184,15 @@ func doMonitorsPull(c *cli.Context) error {
 }
 
 func stringifyMonitor(a mkr.Monitor, prefix string) string {
-	return prefix + JSONMarshalIndent(a, prefix, "  ") + ","
+	return prefix + format.JSONMarshalIndent(a, prefix, "  ") + ","
 }
 
 // diffMonitor returns JSON diff between monitors.
 // In order to use `mkr monitors` without pull and to manage monitors by name
 // only, it skips top level "id" field
 func diffMonitor(a mkr.Monitor, b mkr.Monitor) string {
-	as := filterIDLine(JSONMarshalIndent(a, " ", "  "))
-	bs := filterIDLine(JSONMarshalIndent(b, " ", "  "))
+	as := filterIDLine(format.JSONMarshalIndent(a, " ", "  "))
+	bs := filterIDLine(format.JSONMarshalIndent(b, " ", "  "))
 	diff, err := gojsondiff.New().Compare([]byte(as), []byte(bs))
 	if err != nil || !diff.Modified() {
 		return ""
@@ -304,7 +306,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 
 	var monitorDiff monitorDiff
 
-	monitorsRemote, err := newMackerelFromContext(c).FindMonitors()
+	monitorsRemote, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 	flagNameUniquenessRemote, err := validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
@@ -393,7 +395,7 @@ func doMonitorsPush(c *cli.Context) error {
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
 
-	client := newMackerelFromContext(c)
+	client := mackerelclient.NewFromContext(c)
 	if isVerbose {
 		client.Verbose = true
 	}
