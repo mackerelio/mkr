@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.35.0 (2019-02-13)
+
+* separate hosts package from main and reorganize package structure #189 (Songmu)
+* add wrap subcommand to monitor batch jobs to run with cron etc #186 (Songmu)
+* add `checks run` subcommand to confirm check plugin settings #187 (Songmu)
+
+
 ## 0.34.2 (2018-11-27)
 
 * Fix the default limit of mkr alerts #184 (itchyny)

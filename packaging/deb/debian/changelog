@@ -1,3 +1,14 @@
+mkr (0.35.0-1) stable; urgency=low
+
+  * separate hosts package from main and reorganize package structure (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/189>
+  * add wrap subcommand to monitor batch jobs to run with cron etc (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/186>
+  * add `checks run` subcommand to confirm check plugin settings (by Songmu)
+    <https://github.com/mackerelio/mkr/pull/187>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 13 Feb 2019 07:45:26 +0000
+
 mkr (0.34.2-1) stable; urgency=low
 
   * Fix the default limit of mkr alerts (by itchyny)
