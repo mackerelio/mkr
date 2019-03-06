@@ -47,7 +47,7 @@ func doHosts(c *cli.Context) error {
 		name:     c.String("name"),
 		service:  c.String("service"),
 		roles:    c.StringSlice("role"),
-		statuses: c.StringSlice("statuses"),
+		statuses: c.StringSlice("status"),
 
 		format: c.String("format"),
 	}).run()
