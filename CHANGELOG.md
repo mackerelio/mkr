@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.35.1 (2019-03-06)
+
+* Fix status option of hosts subcommand #191 (itchyny)
+
+
 ## 0.35.0 (2019-02-13)
 
 * separate hosts package from main and reorganize package structure #189 (Songmu)

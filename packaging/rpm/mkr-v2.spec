@@ -36,6 +36,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Mar 06 2019 <mackerel-developers@hatena.ne.jp> - 0.35.1
+- Fix status option of hosts subcommand (by itchyny)
+
 * Wed Feb 13 2019 <mackerel-developers@hatena.ne.jp> - 0.35.0
 - separate hosts package from main and reorganize package structure (by Songmu)
 - add wrap subcommand to monitor batch jobs to run with cron etc (by Songmu)
