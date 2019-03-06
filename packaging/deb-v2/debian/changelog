@@ -1,3 +1,10 @@
+mkr (0.35.1-1.v2) stable; urgency=low
+
+  * Fix status option of hosts subcommand (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/191>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 06 Mar 2019 15:23:00 +0900
+
 mkr (0.35.0-1.v2) stable; urgency=low
 
   * separate hosts package from main and reorganize package structure (by Songmu)
