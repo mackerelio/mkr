@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
@@ -126,7 +128,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	format.PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(os.Stdout, annotation)
 	return nil
 }
 
@@ -153,7 +155,7 @@ func doAnnotationsList(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotations, err := client.FindGraphAnnotations(service, from, to)
 	logger.DieIf(err)
-	format.PrettyPrintJSON(annotations)
+	format.PrettyPrintJSON(os.Stdout, annotations)
 	return nil
 }
 
@@ -196,7 +198,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	format.PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(os.Stdout, annotation)
 	return nil
 }
 
@@ -211,6 +213,6 @@ func doAnnotationsDelete(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.DeleteGraphAnnotation(annotationID)
 	logger.DieIf(err)
-	format.PrettyPrintJSON(annotation)
+	format.PrettyPrintJSON(os.Stdout, annotation)
 	return nil
 }

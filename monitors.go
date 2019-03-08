@@ -159,7 +159,7 @@ func doMonitorsList(c *cli.Context) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
-	format.PrettyPrintJSON(monitors)
+	format.PrettyPrintJSON(os.Stdout, monitors)
 	return nil
 }
 
@@ -173,7 +173,7 @@ func doMonitorsPull(c *cli.Context) error {
 	monitorSaveRules(monitors, filePath)
 
 	if isVerbose {
-		format.PrettyPrintJSON(monitors)
+		format.PrettyPrintJSON(os.Stdout, monitors)
 	}
 
 	if filePath == "" {
