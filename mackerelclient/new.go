@@ -11,7 +11,7 @@ import (
 )
 
 // New returns new mackerel client
-func New(conffile, apibase string) (*mkr.Client, error) {
+func New(conffile, apibase string) (Client, error) {
 	apikey := os.Getenv("MACKEREL_APIKEY")
 	var conf *config.Config
 	if apikey == "" {
