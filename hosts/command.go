@@ -37,13 +37,13 @@ var Command = cli.Command{
 }
 
 func doHosts(c *cli.Context) error {
-	cli, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
 	if err != nil {
 		return err
 	}
 
 	return (&hostApp{
-		cli: cli,
+		client: client,
 
 		verbose: c.Bool("verbose"),
 

@@ -11,7 +11,7 @@ import (
 )
 
 type hostApp struct {
-	cli mackerelclient.Client
+	client mackerelclient.Client
 
 	verbose bool
 
@@ -26,7 +26,7 @@ type hostApp struct {
 }
 
 func (ha *hostApp) run() error {
-	hosts, err := ha.cli.FindHosts(&mackerel.FindHostsParam{
+	hosts, err := ha.client.FindHosts(&mackerel.FindHostsParam{
 		Name:     ha.name,
 		Service:  ha.service,
 		Roles:    ha.roles,
