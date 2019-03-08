@@ -5,6 +5,7 @@ import mackerel "github.com/mackerelio/mackerel-client-go"
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {
 	findHostsCallback func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
+	getOrgCallback    func() (*mackerel.Org, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -42,5 +43,20 @@ func (c *MockClient) FindHosts(param *mackerel.FindHostsParam) ([]*mackerel.Host
 func MockFindHosts(callback func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findHostsCallback = callback
+	}
+}
+
+// GetOrg ...
+func (c *MockClient) GetOrg() (*mackerel.Org, error) {
+	if c.getOrgCallback != nil {
+		return c.getOrgCallback()
+	}
+	return nil, errCallbackNotFound("GetOrg")
+}
+
+// MockGetOrg returns an option to set the callback of GetOrg
+func MockGetOrg(callback func() (*mackerel.Org, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.getOrgCallback = callback
 	}
 }
