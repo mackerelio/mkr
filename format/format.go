@@ -3,7 +3,7 @@ package format
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+	"io"
 	"strings"
 	"time"
 
@@ -24,8 +24,8 @@ type Host struct {
 }
 
 // PrettyPrintJSON output indented json via stdout.
-func PrettyPrintJSON(src interface{}) error {
-	_, err := fmt.Fprintln(os.Stdout, JSONMarshalIndent(src, "", "    "))
+func PrettyPrintJSON(outStream io.Writer, src interface{}) error {
+	_, err := fmt.Fprintln(outStream, JSONMarshalIndent(src, "", "    "))
 	return err
 }
 

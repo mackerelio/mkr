@@ -174,9 +174,9 @@ func doStatus(c *cli.Context) error {
 	logger.DieIf(err)
 
 	if isVerbose {
-		format.PrettyPrintJSON(host)
+		format.PrettyPrintJSON(os.Stdout, host)
 	} else {
-		format.PrettyPrintJSON(&format.Host{
+		format.PrettyPrintJSON(os.Stdout, &format.Host{
 			ID:            host.ID,
 			Name:          host.Name,
 			DisplayName:   host.DisplayName,
@@ -321,12 +321,12 @@ func doMetrics(c *cli.Context) error {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(metricValue)
+		format.PrettyPrintJSON(os.Stdout, metricValue)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(metricValue)
+		format.PrettyPrintJSON(os.Stdout, metricValue)
 	} else {
 		cli.ShowCommandHelp(c, "metrics")
 		os.Exit(1)
@@ -353,7 +353,7 @@ func doFetch(c *cli.Context) error {
 		}
 	}
 
-	format.PrettyPrintJSON(allMetricValues)
+	format.PrettyPrintJSON(os.Stdout, allMetricValues)
 	return nil
 }
 
@@ -389,6 +389,6 @@ func doRetire(c *cli.Context) error {
 func doServices(c *cli.Context) error {
 	services, err := mackerelclient.NewFromContext(c).FindServices()
 	logger.DieIf(err)
-	format.PrettyPrintJSON(services)
+	format.PrettyPrintJSON(os.Stdout, services)
 	return nil
 }

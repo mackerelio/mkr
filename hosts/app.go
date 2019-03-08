@@ -40,7 +40,7 @@ func (ha *hostApp) run() error {
 		}
 		return t.Execute(os.Stdout, hosts)
 	case ha.verbose:
-		return format.PrettyPrintJSON(hosts)
+		return format.PrettyPrintJSON(os.Stdout, hosts)
 	default:
 		var hostsFormat []*format.Host
 		for _, host := range hosts {
@@ -55,6 +55,6 @@ func (ha *hostApp) run() error {
 				IPAddresses:   host.IPAddresses(),
 			})
 		}
-		return format.PrettyPrintJSON(hostsFormat)
+		return format.PrettyPrintJSON(os.Stdout, hostsFormat)
 	}
 }

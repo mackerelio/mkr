@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -22,6 +24,6 @@ func doOrgRetrieve(c *cli.Context) error {
 
 	org, err := client.GetOrg()
 	logger.DieIf(err)
-	format.PrettyPrintJSON(org)
+	format.PrettyPrintJSON(os.Stdout, org)
 	return nil
 }
