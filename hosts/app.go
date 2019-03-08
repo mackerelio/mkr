@@ -6,10 +6,11 @@ import (
 
 	mkr "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/mackerelclient"
 )
 
 type hostApp struct {
-	cli *mkr.Client
+	cli mackerelclient.Client
 
 	verbose bool
 
