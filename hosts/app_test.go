@@ -3,6 +3,7 @@ package hosts
 import (
 	"bytes"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -49,6 +50,8 @@ var (
 )
 
 func TestHostApp_Run(t *testing.T) {
+	time.Local = time.FixedZone("Asia/Tokyo", 9*60*60)
+	defer func() { time.Local = nil }()
 	testCases := []struct {
 		id       string
 		verbose  bool
