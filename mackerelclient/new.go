@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mackerelio/mackerel-agent/config"
-	mkr "github.com/mackerelio/mackerel-client-go"
-	"github.com/mackerelio/mkr/logger"
 	cli "gopkg.in/urfave/cli.v1"
+
+	"github.com/mackerelio/mackerel-agent/config"
+	mackerel "github.com/mackerelio/mackerel-client-go"
+
+	"github.com/mackerelio/mkr/logger"
 )
 
 // New returns new mackerel client
@@ -34,11 +36,11 @@ func New(conffile, apibase string) (Client, error) {
 		}
 		apibase = conf.Apibase
 	}
-	return mkr.NewClientWithOptions(apikey, apibase, os.Getenv("DEBUG") != "")
+	return mackerel.NewClientWithOptions(apikey, apibase, os.Getenv("DEBUG") != "")
 }
 
 // NewFromContext returns mackerel client from cli.Context
-func NewFromContext(c *cli.Context) *mkr.Client {
+func NewFromContext(c *cli.Context) *mackerel.Client {
 	confFile := c.GlobalString("conf")
 	apiBase := c.GlobalString("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(confFile)
@@ -53,8 +55,8 @@ func NewFromContext(c *cli.Context) *mkr.Client {
 		apiBase = LoadApibaseFromConfigWithFallback(confFile)
 	}
 
-	mackerel, err := mkr.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
+	client, err := mackerel.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
 	logger.DieIf(err)
 
-	return mackerel
+	return client
 }

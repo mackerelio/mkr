@@ -4,7 +4,8 @@ import (
 	"os"
 	"text/template"
 
-	mkr "github.com/mackerelio/mackerel-client-go"
+	mackerel "github.com/mackerelio/mackerel-client-go"
+
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
@@ -23,7 +24,7 @@ type hostApp struct {
 }
 
 func (ha *hostApp) run() error {
-	hosts, err := ha.cli.FindHosts(&mkr.FindHostsParam{
+	hosts, err := ha.cli.FindHosts(&mackerel.FindHostsParam{
 		Name:     ha.name,
 		Service:  ha.service,
 		Roles:    ha.roles,
