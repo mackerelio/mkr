@@ -5,8 +5,6 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/mackerelio/mkr/format"
-	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
@@ -22,10 +20,13 @@ var Command = cli.Command{
 }
 
 func doOrg(c *cli.Context) error {
-	client := mackerelclient.NewFromContext(c)
+	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	if err != nil {
+		return err
+	}
 
-	org, err := client.GetOrg()
-	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, org)
-	return nil
+	return (&orgApp{
+		client:    client,
+		outStream: os.Stdout,
+	}).run()
 }
