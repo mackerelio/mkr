@@ -13,6 +13,7 @@ import (
 	"github.com/mackerelio/mkr/hosts"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
+	"github.com/mackerelio/mkr/org"
 	"github.com/mackerelio/mkr/plugin"
 	"github.com/mackerelio/mkr/wrap"
 	cli "gopkg.in/urfave/cli.v1"
@@ -33,7 +34,7 @@ var Commands = []cli.Command{
 	commandAlerts,
 	commandDashboards,
 	commandAnnotations,
-	commandOrg,
+	org.Command,
 	plugin.CommandPlugin,
 	checks.Command,
 	wrap.Command,
