@@ -1,8 +1,9 @@
 package hosts
 
 import (
-	"github.com/mackerelio/mkr/mackerelclient"
 	cli "gopkg.in/urfave/cli.v1"
+
+	"github.com/mackerelio/mkr/mackerelclient"
 )
 
 // Command is definition of mkr hosts subcommand
