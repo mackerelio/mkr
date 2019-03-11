@@ -1,6 +1,8 @@
 package hosts
 
 import (
+	"os"
+
 	cli "gopkg.in/urfave/cli.v1"
 
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -35,13 +37,13 @@ var Command = cli.Command{
 }
 
 func doHosts(c *cli.Context) error {
-	cli, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
 	if err != nil {
 		return err
 	}
 
 	return (&hostApp{
-		cli: cli,
+		client: client,
 
 		verbose: c.Bool("verbose"),
 
@@ -51,5 +53,7 @@ func doHosts(c *cli.Context) error {
 		statuses: c.StringSlice("status"),
 
 		format: c.String("format"),
+
+		outStream: os.Stdout,
 	}).run()
 }

@@ -1,7 +1,7 @@
 package hosts
 
 import (
-	"os"
+	"io"
 	"text/template"
 
 	mackerel "github.com/mackerelio/mackerel-client-go"
@@ -11,7 +11,7 @@ import (
 )
 
 type hostApp struct {
-	cli mackerelclient.Client
+	client mackerelclient.Client
 
 	verbose bool
 
@@ -21,10 +21,12 @@ type hostApp struct {
 	statuses []string
 
 	format string
+
+	outStream io.Writer
 }
 
 func (ha *hostApp) run() error {
-	hosts, err := ha.cli.FindHosts(&mackerel.FindHostsParam{
+	hosts, err := ha.client.FindHosts(&mackerel.FindHostsParam{
 		Name:     ha.name,
 		Service:  ha.service,
 		Roles:    ha.roles,
@@ -40,9 +42,9 @@ func (ha *hostApp) run() error {
 		if err != nil {
 			return err
 		}
-		return t.Execute(os.Stdout, hosts)
+		return t.Execute(ha.outStream, hosts)
 	case ha.verbose:
-		return format.PrettyPrintJSON(os.Stdout, hosts)
+		return format.PrettyPrintJSON(ha.outStream, hosts)
 	default:
 		var hostsFormat []*format.Host
 		for _, host := range hosts {
@@ -57,6 +59,6 @@ func (ha *hostApp) run() error {
 				IPAddresses:   host.IPAddresses(),
 			})
 		}
-		return format.PrettyPrintJSON(os.Stdout, hostsFormat)
+		return format.PrettyPrintJSON(ha.outStream, hostsFormat)
 	}
 }
