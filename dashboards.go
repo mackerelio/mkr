@@ -27,7 +27,7 @@ var commandDashboards = cli.Command{
 			ArgsUsage: "[--print | -p] <file>",
 			Description: `
     A custom dashboard is registered from a yaml file.
-    Requests "POST /api/v0/dashboards". See https://mackerel.io/ja/api-docs/entry/dashboards#create.
+    Requests "POST /api/v0/dashboards". See https://mackerel.io/api-docs/entry/dashboards#create.
 `,
 			Action: doGenerateDashboards,
 			Flags: []cli.Flag{
