@@ -5,8 +5,6 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/mackerelio/mkr/format"
-	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
@@ -23,8 +21,13 @@ var Command = cli.Command{
 }
 
 func doServices(c *cli.Context) error {
-	services, err := mackerelclient.NewFromContext(c).FindServices()
-	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, services)
-	return nil
+	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	if err != nil {
+		return err
+	}
+
+	return (&servicesApp{
+		client:    client,
+		outStream: os.Stdout,
+	}).run()
 }
