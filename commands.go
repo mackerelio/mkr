@@ -103,7 +103,7 @@ var commandMetrics = cli.Command{
 	Description: `
     Fetch metric values of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
-		See https://mackerel.io/api-docs/entry/host-metrics#get, https://mackerel.io/ja/api-docs/entry/service-metrics#get.
+    See https://mackerel.io/api-docs/entry/host-metrics#get, https://mackerel.io/api-docs/entry/service-metrics#get.
 `,
 	Action: doMetrics,
 	Flags: []cli.Flag{
