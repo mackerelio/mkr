@@ -15,6 +15,7 @@ import (
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/mackerelio/mkr/org"
 	"github.com/mackerelio/mkr/plugin"
+	"github.com/mackerelio/mkr/services"
 	"github.com/mackerelio/mkr/wrap"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -29,7 +30,7 @@ var Commands = []cli.Command{
 	commandMetrics,
 	commandFetch,
 	commandRetire,
-	commandServices,
+	services.Command,
 	commandMonitors,
 	commandAlerts,
 	commandDashboards,
@@ -145,18 +146,6 @@ var commandRetire = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "force", Usage: "Force retirement without confirmation."},
 	},
-}
-
-var commandServices = cli.Command{
-	Name:      "services",
-	Usage:     "List services",
-	ArgsUsage: "",
-	Description: `
-    List the information of the services.
-    Requests "GET /api/v0/services". See https://mackerel.io/api-docs/entry/services#list.
-`,
-	Action: doServices,
-	Flags:  []cli.Flag{},
 }
 
 func doStatus(c *cli.Context) error {
@@ -384,12 +373,5 @@ func doRetire(c *cli.Context) error {
 
 		logger.Log("retired", hostID)
 	}
-	return nil
-}
-
-func doServices(c *cli.Context) error {
-	services, err := mackerelclient.NewFromContext(c).FindServices()
-	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, services)
 	return nil
 }
