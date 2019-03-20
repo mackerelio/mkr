@@ -98,7 +98,7 @@ release: check-release-deps
 
 .PHONY: clean
 clean:
-	rm -fr build
+	rm -fr build snapshot
 	go clean
 
 .PHONY: cover
