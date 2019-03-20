@@ -1,6 +1,7 @@
 BIN = mkr
 VERSION = 0.35.1
 CURRENT_REVISION = $(shell git rev-parse --short HEAD)
+BUILD_LDFLAGS = "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 
 all: clean cross lint gofmt test rpm deb
 
@@ -19,7 +20,7 @@ test: test-deps
 	go test -v ./...
 
 build: deps
-	go build -ldflags "-w -s -X main.gitcommit=$(CURRENT_REVISION)" -o $(BIN) .
+	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
 
 lint: test-deps
 	go vet ./...
@@ -33,7 +34,7 @@ gofmt: test-deps
 
 cross: devel-deps
 	goxz -d snapshot -os darwin,linux -arch 386,amd64 \
-	  -build-ldflags "-X main.gitcommit=$(CURRENT_REVISION)"
+	  -build-ldflags=$(BUILD_LDFLAGS)
 
 rpm: rpm-v1 rpm-v2
 
