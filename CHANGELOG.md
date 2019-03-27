@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.36.0 (2019-03-27)
+
+* [monitors] support interruption monitoring thresholds of service metric monitors #201 (itchyny)
+* Improve Makefile #200 (itchyny)
+* Create services package and add tests for services subcommand #198 (itchyny)
+* Create org package and add tests for org subcommand #196 (itchyny)
+* Add tests for hosts package #195 (itchyny)
+* Introduce Client interface for Mackerel API #194 (itchyny)
+* Add out stream argument to format.PrettyPrintJSON #193 (itchyny)
+
+
 ## 0.35.1 (2019-03-06)
 
 * Fix status option of hosts subcommand #191 (itchyny)

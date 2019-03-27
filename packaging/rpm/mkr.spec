@@ -42,6 +42,15 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Mar 27 2019 <mackerel-developers@hatena.ne.jp> - 0.36.0
+- [monitors] support interruption monitoring thresholds of service metric monitors (by itchyny)
+- Improve Makefile (by itchyny)
+- Create services package and add tests for services subcommand (by itchyny)
+- Create org package and add tests for org subcommand (by itchyny)
+- Add tests for hosts package (by itchyny)
+- Introduce Client interface for Mackerel API (by itchyny)
+- Add out stream argument to format.PrettyPrintJSON (by itchyny)
+
 * Wed Mar 06 2019 <mackerel-developers@hatena.ne.jp> - 0.35.1
 - Fix status option of hosts subcommand (by itchyny)
 

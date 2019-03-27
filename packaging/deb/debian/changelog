@@ -1,3 +1,22 @@
+mkr (0.36.0-1) stable; urgency=low
+
+  * [monitors] support interruption monitoring thresholds of service metric monitors (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/201>
+  * Improve Makefile (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/200>
+  * Create services package and add tests for services subcommand (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/198>
+  * Create org package and add tests for org subcommand (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/196>
+  * Add tests for hosts package (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/195>
+  * Introduce Client interface for Mackerel API (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/194>
+  * Add out stream argument to format.PrettyPrintJSON (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/193>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 27 Mar 2019 06:47:20 +0000
+
 mkr (0.35.1-1) stable; urgency=low
 
   * Fix status option of hosts subcommand (by itchyny)
