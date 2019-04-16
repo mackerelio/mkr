@@ -80,6 +80,30 @@ exit status 1
 			ExitCode: 1,
 		},
 		{
+			Name: "long output",
+			Args: []string{
+				"-name=test-check",
+				"-detail",
+				"-note", "This is note",
+				"--",
+				"go", "run", "testdata/long.go",
+			},
+			Result: testResult{
+				Name:   "test-check",
+				Status: mackerel.CheckStatusCritical,
+				Message: `command exited with code: 1
+Note: This is note
+% go run testdata/long.go
+` + strings.Repeat("Hello world!\n", 33) + `Hello w
+...
+!
+` + strings.Repeat("Hello world!\n", 38) + `exit status 1
+`,
+				NotificationInterval: 0,
+			},
+			ExitCode: 1,
+		},
+		{
 			Name: "notification interval",
 			Args: []string{
 				"-name=test-check2",
