@@ -113,11 +113,25 @@ func (re *result) buildMsg(detail bool) string {
 	}
 	buf := &bytes.Buffer{}
 	template.Must(msgTpl.Clone()).Execute(buf, s)
-	msg := buf.String()
-	const messageLengthLimit = 1024
-	runes := []rune(msg)
-	if len(runes) > messageLengthLimit {
-		msg = string(runes[0:messageLengthLimit])
+	const messageLengthLimit = 1024 // https://mackerel.io/api-docs/entry/check-monitoring#post
+	return truncate(buf.String(), messageLengthLimit, "\n...\n")
+}
+
+func truncate(src string, limit int, sep string) string {
+	rs := []rune(src)
+	if len(rs) <= limit {
+		return src
 	}
-	return msg
+	seprs := []rune(sep)
+	var i int
+	rest := limit - len(seprs)
+	if 0 < rest {
+		i += rest / 2
+		rest -= rest / 2
+	}
+	i += copy(rs[i:], seprs)
+	if 0 < rest {
+		copy(rs[i:], rs[len(rs)-rest:])
+	}
+	return string(rs[:limit])
 }
