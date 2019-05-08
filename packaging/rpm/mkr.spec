@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed May 08 2019 <mackerel-developers@hatena.ne.jp> - 0.37.0
+- [wrap] Improve message truncation algorithm (by itchyny)
+
 * Wed Mar 27 2019 <mackerel-developers@hatena.ne.jp> - 0.36.0
 - [monitors] support interruption monitoring thresholds of service metric monitors (by itchyny)
 - Improve Makefile (by itchyny)
