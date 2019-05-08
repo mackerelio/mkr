@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.37.0 (2019-05-08)
+
+* [wrap] Improve message truncation algorithm #203 (itchyny)
+
+
 ## 0.36.0 (2019-03-27)
 
 * [monitors] support interruption monitoring thresholds of service metric monitors #201 (itchyny)

@@ -1,3 +1,10 @@
+mkr (0.37.0-1.v2) stable; urgency=low
+
+  * [wrap] Improve message truncation algorithm (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/203>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 08 May 2019 07:38:29 +0000
+
 mkr (0.36.0-1.v2) stable; urgency=low
 
   * [monitors] support interruption monitoring thresholds of service metric monitors (by itchyny)
