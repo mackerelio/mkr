@@ -6,26 +6,21 @@ BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 .PHONY: all
 all: clean cross lint gofmt test rpm deb
 
-.PHONY: deps
-deps:
-	go get -d -v ./...
-
 .PHONY: test-deps
 test-deps:
-	go get -d -v -t ./...
-	go get golang.org/x/lint/golint
+	GO111MODULE=off go get golang.org/x/lint/golint
 
 .PHONY: devel-deps
 devel-deps: test-deps
-	go get github.com/mattn/goveralls
-	go get github.com/Songmu/goxz/cmd/goxz
+	GO111MODULE=off go get github.com/mattn/goveralls
+	GO111MODULE=off go get github.com/Songmu/goxz/cmd/goxz
 
 .PHONY: test
 test: test-deps
 	go test -v ./...
 
 .PHONY: build
-build: deps
+build:
 	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
 
 .PHONY: lint

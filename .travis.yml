@@ -3,6 +3,7 @@ go:
 - 1.11.x
 env:
   global:
+  - GO111MODULE=on
   - PATH=~/bin:~/gopath/bin:$PATH
   - secure: "PDv5k+Wp7fEHGN2oszqpN/7Lvcc6bY4wT9PgT0w+G8AUNOhprXzPzIHVP2qNIBfhIDjECrbw4T6h1PeumIZYXg3wqLElGe+24OfDjSPjB3nal40Sx9PLLG5h7ywsJlPMqV0bfKyYTxs0lmUhE5XaaBvHEJGv6MHNjBc2H0bVMsE="
 install:
