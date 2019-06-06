@@ -47,9 +47,9 @@ func doCreate(c *cli.Context) error {
 		logger:    logger.New(),
 		outStream: os.Stdout,
 	}).createHost(createHostParam{
-		Name:             argHostName,
-		RoleFullnames:    c.StringSlice("roleFullname"),
-		Status:           c.String("status"),
-		CustomIdentifier: c.String("customIdentifier"),
+		name:             argHostName,
+		roleFullnames:    c.StringSlice("roleFullname"),
+		status:           c.String("status"),
+		customIdentifier: c.String("customIdentifier"),
 	})
 }

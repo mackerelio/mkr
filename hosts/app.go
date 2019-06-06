@@ -72,17 +72,17 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 }
 
 type createHostParam struct {
-	Name             string
-	RoleFullnames    []string
-	Status           string
-	CustomIdentifier string
+	name             string
+	roleFullnames    []string
+	status           string
+	customIdentifier string
 }
 
 func (ha *hostApp) createHost(param createHostParam) error {
 	hostID, err := ha.client.CreateHost(&mackerel.CreateHostParam{
-		Name:             param.Name,
-		RoleFullnames:    param.RoleFullnames,
-		CustomIdentifier: param.CustomIdentifier,
+		Name:             param.name,
+		RoleFullnames:    param.roleFullnames,
+		CustomIdentifier: param.customIdentifier,
 	})
 	if err != nil {
 		ha.error(err)
@@ -91,13 +91,13 @@ func (ha *hostApp) createHost(param createHostParam) error {
 
 	ha.log("created", hostID)
 
-	if param.Status != "" {
-		err := ha.client.UpdateHostStatus(hostID, param.Status)
+	if param.status != "" {
+		err := ha.client.UpdateHostStatus(hostID, param.status)
 		if err != nil {
 			ha.error(err)
 			return err
 		}
-		ha.log("updated", fmt.Sprintf("%s %s", hostID, param.Status))
+		ha.log("updated", fmt.Sprintf("%s %s", hostID, param.status))
 	}
 	return nil
 }

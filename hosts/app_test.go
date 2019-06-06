@@ -296,10 +296,10 @@ func TestHostApp_CreateHost(t *testing.T) {
 				outStream: out,
 			}
 			assert.Equal(t, tc.err, app.createHost(createHostParam{
-				Name:             tc.name,
-				RoleFullnames:    tc.roleFullnames,
-				Status:           tc.status,
-				CustomIdentifier: tc.customIdentifier,
+				name:             tc.name,
+				roleFullnames:    tc.roleFullnames,
+				status:           tc.status,
+				customIdentifier: tc.customIdentifier,
 			}))
 			assert.Equal(t, tc.output, out.String())
 		})
