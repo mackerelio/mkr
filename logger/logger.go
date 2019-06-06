@@ -9,6 +9,7 @@ import (
 	colorine "github.com/motemen/go-colorine"
 )
 
+// Logger is wrapped go-colorine logger for mkr
 type Logger struct {
 	logger *colorine.Logger
 }
