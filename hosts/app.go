@@ -80,13 +80,19 @@ func (ha *hostApp) createHost(param createHostParam) error {
 		RoleFullnames:    param.RoleFullnames,
 		CustomIdentifier: param.CustomIdentifier,
 	})
-	ha.dieIf(err)
+	if err != nil {
+		ha.error(err)
+		return err
+	}
 
 	ha.log("created", hostID)
 
 	if param.Status != "" {
 		err := ha.client.UpdateHostStatus(hostID, param.Status)
-		ha.dieIf(err)
+		if err != nil {
+			ha.error(err)
+			return err
+		}
 		ha.log("updated", fmt.Sprintf("%s %s", hostID, param.Status))
 	}
 	return nil
@@ -98,8 +104,8 @@ func (ha *hostApp) log(prefix, message string) {
 	}
 }
 
-func (ha *hostApp) dieIf(err error) {
+func (ha *hostApp) error(err error) {
 	if ha.logger != nil {
-		ha.logger.DieIf(err)
+		ha.logger.Error(err)
 	}
 }

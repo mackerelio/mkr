@@ -52,22 +52,19 @@ func (l *Logger) Logf(prefix, message string, args ...interface{}) {
 	l.logger.Log(prefix, msg)
 }
 
+// Error outputs log given non-nil `err`
+func (l *Logger) Error(err error) {
+	l.Log("error", err.Error())
+}
+
 // ErrorIf outputs log if `err` occurs.
 func (l *Logger) ErrorIf(err error) bool {
 	if err != nil {
-		l.Log("error", err.Error())
+		l.Error(err)
 		return true
 	}
 
 	return false
-}
-
-// DieIf outputs log and exit(1) if `err` occurs.
-func (l *Logger) DieIf(err error) {
-	if err != nil {
-		l.Log("error", err.Error())
-		os.Exit(1)
-	}
 }
 
 var defaultLogger = New()
@@ -89,5 +86,7 @@ func ErrorIf(err error) bool {
 
 // DieIf outputs log and exit(1) if `err` occurs.
 func DieIf(err error) {
-	defaultLogger.DieIf(err)
+	if defaultLogger.ErrorIf(err) {
+		os.Exit(1)
+	}
 }
