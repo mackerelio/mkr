@@ -51,16 +51,6 @@ func (l *Logger) Error(err error) {
 	l.Log("error", err.Error())
 }
 
-// ErrorIf outputs log if `err` occurs.
-func (l *Logger) ErrorIf(err error) bool {
-	if err != nil {
-		l.Error(err)
-		return true
-	}
-
-	return false
-}
-
 var defaultLogger = New()
 
 // Log outputs `message` with `prefix` by go-colorine
@@ -75,12 +65,16 @@ func Logf(prefix, message string, args ...interface{}) {
 
 // ErrorIf outputs log if `err` occurs.
 func ErrorIf(err error) bool {
-	return defaultLogger.ErrorIf(err)
+	if err == nil {
+		return false
+	}
+	defaultLogger.Error(err)
+	return true
 }
 
 // DieIf outputs log and exit(1) if `err` occurs.
 func DieIf(err error) {
-	if defaultLogger.ErrorIf(err) {
+	if ErrorIf(err) {
 		os.Exit(1)
 	}
 }
