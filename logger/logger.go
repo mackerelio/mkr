@@ -4,7 +4,6 @@ package logger
 
 import (
 	"fmt"
-	"io"
 	"os"
 
 	colorine "github.com/motemen/go-colorine"
@@ -34,11 +33,6 @@ func New() *Logger {
 	// Default output
 	logger.SetOutput(os.Stderr)
 	return &Logger{logger: logger}
-}
-
-// SetOutput sets output
-func (l *Logger) SetOutput(w io.Writer) {
-	l.logger.SetOutput(w)
 }
 
 // Log outputs `message` with `prefix` by go-colorine
