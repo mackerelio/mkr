@@ -15,7 +15,7 @@ type Logger struct {
 }
 
 // New is constructor for new colorine logger
-func New() Logger {
+func New() *Logger {
 	logger := &colorine.Logger{
 		Prefixes: colorine.Prefixes{
 			"warning": colorine.Warn,
@@ -33,7 +33,7 @@ func New() Logger {
 
 	// Default output
 	logger.SetOutput(os.Stderr)
-	return Logger{logger: logger}
+	return &Logger{logger: logger}
 }
 
 // SetOutput sets output

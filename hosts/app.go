@@ -1,18 +1,20 @@
 package hosts
 
 import (
+	"fmt"
 	"io"
 	"text/template"
 
 	mackerel "github.com/mackerelio/mackerel-client-go"
 
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
 type hostApp struct {
-	client mackerelclient.Client
-
+	client    mackerelclient.Client
+	logger    *logger.Logger
 	outStream io.Writer
 }
 
@@ -40,7 +42,7 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 
 	switch {
 	case param.format != "":
-		t, err := template.New("format").Parse(ha.format)
+		t, err := template.New("format").Parse(param.format)
 		if err != nil {
 			return err
 		}
@@ -63,4 +65,29 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 		}
 		return format.PrettyPrintJSON(ha.outStream, hostsFormat)
 	}
+}
+
+type createHostParam struct {
+	Name             string
+	RoleFullnames    []string
+	Status           string
+	CustomIdentifier string
+}
+
+func (ha *hostApp) createHost(param createHostParam) error {
+	hostID, err := ha.client.CreateHost(&mackerel.CreateHostParam{
+		Name:             param.Name,
+		RoleFullnames:    param.RoleFullnames,
+		CustomIdentifier: param.CustomIdentifier,
+	})
+	ha.logger.DieIf(err)
+
+	ha.logger.Log("created", hostID)
+
+	if param.Status != "" {
+		err := ha.client.UpdateHostStatus(hostID, param.Status)
+		ha.logger.DieIf(err)
+		ha.logger.Log("updated", fmt.Sprintf("%s %s", hostID, param.Status))
+	}
+	return nil
 }

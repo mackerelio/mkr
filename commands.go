@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -24,7 +23,7 @@ import (
 var Commands = []cli.Command{
 	commandStatus,
 	hosts.CommandHosts,
-	commandCreate,
+	hosts.CommandCreate,
 	commandUpdate,
 	commandThrow,
 	commandMetrics,
@@ -52,26 +51,6 @@ var commandStatus = cli.Command{
 	Action: doStatus,
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
-	},
-}
-
-var commandCreate = cli.Command{
-	Name:      "create",
-	Usage:     "Create a new host",
-	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] <hostName>",
-	Description: `
-    Create a new host with status, roleFullname and/or customIdentifier.
-    Requests "POST /api/v0/hosts". See https://mackerel.io/api-docs/entry/hosts#create .
-`,
-	Action: doCreate,
-	Flags: []cli.Flag{
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'maintenance')"},
-		cli.StringSliceFlag{
-			Name:  "roleFullname, R",
-			Value: &cli.StringSlice{},
-			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
-		},
-		cli.StringFlag{Name: "customIdentifier", Value: "", Usage: "CustomIdentifier for the Host"},
 	},
 }
 
@@ -176,36 +155,6 @@ func doStatus(c *cli.Context) error {
 			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
 		})
-	}
-	return nil
-}
-
-func doCreate(c *cli.Context) error {
-	argHostName := c.Args().Get(0)
-	optRoleFullnames := c.StringSlice("roleFullname")
-	optStatus := c.String("status")
-	optCustomIdentifier := c.String("customIdentifier")
-
-	if argHostName == "" {
-		cli.ShowCommandHelp(c, "create")
-		os.Exit(1)
-	}
-
-	client := mackerelclient.NewFromContext(c)
-
-	hostID, err := client.CreateHost(&mkr.CreateHostParam{
-		Name:             argHostName,
-		RoleFullnames:    optRoleFullnames,
-		CustomIdentifier: optCustomIdentifier,
-	})
-	logger.DieIf(err)
-
-	logger.Log("created", hostID)
-
-	if optStatus != "" {
-		err := client.UpdateHostStatus(hostID, optStatus)
-		logger.DieIf(err)
-		logger.Log("updated", fmt.Sprintf("%s %s", hostID, optStatus))
 	}
 	return nil
 }
