@@ -70,7 +70,7 @@ func Log(prefix, message string) {
 
 // Logf outputs `message` with `prefix` by go-colorine
 func Logf(prefix, message string, args ...interface{}) {
-	defaultLogger.Logf(prefix, message, args)
+	defaultLogger.Logf(prefix, message, args...)
 }
 
 // ErrorIf outputs log if `err` occurs.
