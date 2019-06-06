@@ -8,13 +8,17 @@ import (
 	mackerel "github.com/mackerelio/mackerel-client-go"
 
 	"github.com/mackerelio/mkr/format"
-	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
+type appLogger interface {
+	Log(string, string)
+	Error(error)
+}
+
 type hostApp struct {
 	client    mackerelclient.Client
-	logger    *logger.Logger
+	logger    appLogger
 	outStream io.Writer
 }
 
