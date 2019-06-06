@@ -49,7 +49,7 @@ var (
 	}
 )
 
-func TestHostApp_Run(t *testing.T) {
+func TestHostApp_FindHosts(t *testing.T) {
 	time.Local = time.FixedZone("Asia/Tokyo", 9*60*60)
 	defer func() { time.Local = nil }()
 	testCases := []struct {
@@ -197,15 +197,16 @@ bar sample.app2 standby 1552000000
 			out := new(bytes.Buffer)
 			app := &hostApp{
 				client:    client,
-				verbose:   tc.verbose,
-				name:      tc.name,
-				service:   tc.service,
-				roles:     tc.roles,
-				statuses:  tc.statuses,
-				format:    tc.format,
 				outStream: out,
 			}
-			assert.NoError(t, app.run())
+			assert.NoError(t, app.findHosts(findHostsParam{
+				verbose:  tc.verbose,
+				name:     tc.name,
+				service:  tc.service,
+				roles:    tc.roles,
+				statuses: tc.statuses,
+				format:   tc.format,
+			}))
 			assert.Equal(t, tc.expected, out.String())
 		})
 	}

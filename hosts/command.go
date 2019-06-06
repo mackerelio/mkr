@@ -8,8 +8,8 @@ import (
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
-// Command is definition of mkr hosts subcommand
-var Command = cli.Command{
+// CommandHosts is definition of mkr hosts subcommand
+var CommandHosts = cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",
 	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]",
@@ -45,6 +45,8 @@ func doHosts(c *cli.Context) error {
 	return (&hostApp{
 		client: client,
 
+		outStream: os.Stdout,
+	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
 
 		name:     c.String("name"),
@@ -53,7 +55,5 @@ func doHosts(c *cli.Context) error {
 		statuses: c.StringSlice("status"),
 
 		format: c.String("format"),
-
-		outStream: os.Stdout,
-	}).run()
+	})
 }

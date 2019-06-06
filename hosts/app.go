@@ -13,6 +13,10 @@ import (
 type hostApp struct {
 	client mackerelclient.Client
 
+	outStream io.Writer
+}
+
+type findHostsParam struct {
 	verbose bool
 
 	name     string
@@ -21,29 +25,27 @@ type hostApp struct {
 	statuses []string
 
 	format string
-
-	outStream io.Writer
 }
 
-func (ha *hostApp) run() error {
+func (ha *hostApp) findHosts(param findHostsParam) error {
 	hosts, err := ha.client.FindHosts(&mackerel.FindHostsParam{
-		Name:     ha.name,
-		Service:  ha.service,
-		Roles:    ha.roles,
-		Statuses: ha.statuses,
+		Name:     param.name,
+		Service:  param.service,
+		Roles:    param.roles,
+		Statuses: param.statuses,
 	})
 	if err != nil {
 		return err
 	}
 
 	switch {
-	case ha.format != "":
+	case param.format != "":
 		t, err := template.New("format").Parse(ha.format)
 		if err != nil {
 			return err
 		}
 		return t.Execute(ha.outStream, hosts)
-	case ha.verbose:
+	case param.verbose:
 		return format.PrettyPrintJSON(ha.outStream, hosts)
 	default:
 		var hostsFormat []*format.Host

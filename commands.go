@@ -23,7 +23,7 @@ import (
 // Commands cli.Command object list
 var Commands = []cli.Command{
 	commandStatus,
-	hosts.Command,
+	hosts.CommandHosts,
 	commandCreate,
 	commandUpdate,
 	commandThrow,
