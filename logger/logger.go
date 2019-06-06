@@ -70,13 +70,6 @@ func (l *Logger) DieIf(err error) {
 	}
 }
 
-// PanicIf raise panic if `err` occurs.
-func (l *Logger) PanicIf(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 var defaultLogger = New()
 
 // Log outputs `message` with `prefix` by go-colorine
@@ -97,9 +90,4 @@ func ErrorIf(err error) bool {
 // DieIf outputs log and exit(1) if `err` occurs.
 func DieIf(err error) {
 	defaultLogger.DieIf(err)
-}
-
-// PanicIf raise panic if `err` occurs.
-func PanicIf(err error) {
-	defaultLogger.PanicIf(err)
 }
