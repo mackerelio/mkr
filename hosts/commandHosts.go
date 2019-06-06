@@ -43,8 +43,7 @@ func doHosts(c *cli.Context) error {
 	}
 
 	return (&hostApp{
-		client: client,
-
+		client:    client,
 		outStream: os.Stdout,
 	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
