@@ -23,7 +23,7 @@ require (
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
 	github.com/mackerelio/golib v0.0.0-20190411032134-c87047ca454e // indirect
 	github.com/mackerelio/mackerel-agent v0.59.3
-	github.com/mackerelio/mackerel-client-go v0.3.0
+	github.com/mackerelio/mackerel-client-go v0.5.0
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
@@ -39,11 +39,11 @@ require (
 	github.com/yudai/gojsondiff v1.0.0
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
-	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
-	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
-	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0
+	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5 // indirect
+	golang.org/x/net v0.0.0-20190603091049-60506f45cf65 // indirect
+	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/sys v0.0.0-20190523142557-0e01d883c5c5 // indirect
+	golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0
