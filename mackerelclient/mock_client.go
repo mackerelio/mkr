@@ -94,7 +94,7 @@ func MockCreateHost(callback func(*mackerel.CreateHostParam) (string, error)) Mo
 	}
 }
 
-// UpdateHostStatusCallback ...
+// UpdateHostStatus ...
 func (c *MockClient) UpdateHostStatus(hostID string, status string) error {
 	if c.updateHostStatusCallback != nil {
 		return c.updateHostStatusCallback(hostID, status)
@@ -102,7 +102,7 @@ func (c *MockClient) UpdateHostStatus(hostID string, status string) error {
 	return errCallbackNotFound("UpdateHostStatus")
 }
 
-// MockCreateHost returns an option to set the callback of CreateHost
+// MockUpdateHostStatus returns an option to set the callback of UpdateHostStatus
 func MockUpdateHostStatus(callback func(string, string) error) MockClientOption {
 	return func(c *MockClient) {
 		c.updateHostStatusCallback = callback
