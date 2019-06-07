@@ -103,13 +103,9 @@ func (ha *hostApp) createHost(param createHostParam) error {
 }
 
 func (ha *hostApp) log(prefix, message string) {
-	if ha.logger != nil {
-		ha.logger.Log(prefix, message)
-	}
+	ha.logger.Log(prefix, message)
 }
 
 func (ha *hostApp) error(err error) {
-	if ha.logger != nil {
-		ha.logger.Error(err)
-	}
+	ha.logger.Error(err)
 }
