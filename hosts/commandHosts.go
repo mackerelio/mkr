@@ -5,6 +5,7 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
+	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
@@ -44,6 +45,7 @@ func doHosts(c *cli.Context) error {
 
 	return (&hostApp{
 		client:    client,
+		logger:    logger.New(),
 		outStream: os.Stdout,
 	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
