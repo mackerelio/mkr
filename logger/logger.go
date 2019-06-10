@@ -1,6 +1,6 @@
 package logger
 
-// We borrow this code from github.com/motemen/ghq/utils
+// Originally from github.com/motemen/ghq/utils
 
 import (
 	"fmt"
@@ -9,57 +9,73 @@ import (
 	colorine "github.com/motemen/go-colorine"
 )
 
-var logger = &colorine.Logger{
-	Prefixes: colorine.Prefixes{
-		"warning": colorine.Warn,
-
-		"error": colorine.Error,
-
-		"":        colorine.Info,
-		"info":    colorine.Info,
-		"created": colorine.Info,
-		"updated": colorine.Info,
-		"thrown":  colorine.Info,
-		"retired": colorine.Info,
-	},
+// Logger is wrapped go-colorine logger for mkr
+type Logger struct {
+	logger *colorine.Logger
 }
 
-func init() {
+// New is constructor for new colorine logger
+func New() *Logger {
+	logger := &colorine.Logger{
+		Prefixes: colorine.Prefixes{
+			"warning": colorine.Warn,
+
+			"error": colorine.Error,
+
+			"":        colorine.Info,
+			"info":    colorine.Info,
+			"created": colorine.Info,
+			"updated": colorine.Info,
+			"thrown":  colorine.Info,
+			"retired": colorine.Info,
+		},
+	}
+
+	// Default output
 	logger.SetOutput(os.Stderr)
+	return &Logger{logger: logger}
 }
 
 // Log outputs `message` with `prefix` by go-colorine
+func (l *Logger) Log(prefix, message string) {
+	l.logger.Log(prefix, message)
+}
+
+// Logf outputs `message` with `prefix` by go-colorine
+func (l *Logger) Logf(prefix, message string, args ...interface{}) {
+	msg := fmt.Sprintf(message, args...)
+	l.logger.Log(prefix, msg)
+}
+
+// Error outputs log given non-nil `err`
+func (l *Logger) Error(err error) {
+	l.Log("error", err.Error())
+}
+
+var defaultLogger = New()
+
+// Log outputs `message` with `prefix` by go-colorine
 func Log(prefix, message string) {
-	logger.Log(prefix, message)
+	defaultLogger.Log(prefix, message)
 }
 
 // Logf outputs `message` with `prefix` by go-colorine
 func Logf(prefix, message string, args ...interface{}) {
-	msg := fmt.Sprintf(message, args...)
-	logger.Log(prefix, msg)
+	defaultLogger.Logf(prefix, message, args...)
 }
 
 // ErrorIf outputs log if `err` occurs.
 func ErrorIf(err error) bool {
-	if err != nil {
-		Log("error", err.Error())
-		return true
+	if err == nil {
+		return false
 	}
-
-	return false
+	defaultLogger.Error(err)
+	return true
 }
 
 // DieIf outputs log and exit(1) if `err` occurs.
 func DieIf(err error) {
-	if err != nil {
-		Log("error", err.Error())
+	if ErrorIf(err) {
 		os.Exit(1)
-	}
-}
-
-// PanicIf raise panic if `err` occurs.
-func PanicIf(err error) {
-	if err != nil {
-		panic(err)
 	}
 }

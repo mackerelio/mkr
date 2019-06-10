@@ -4,9 +4,11 @@ import mackerel "github.com/mackerelio/mackerel-client-go"
 
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {
-	findHostsCallback    func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
-	findServicesCallback func() ([]*mackerel.Service, error)
-	getOrgCallback       func() (*mackerel.Org, error)
+	findHostsCallback        func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
+	findServicesCallback     func() ([]*mackerel.Service, error)
+	getOrgCallback           func() (*mackerel.Org, error)
+	createHostCallback       func(param *mackerel.CreateHostParam) (string, error)
+	updateHostStatusCallback func(hostID string, status string) error
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -74,5 +76,35 @@ func (c *MockClient) GetOrg() (*mackerel.Org, error) {
 func MockGetOrg(callback func() (*mackerel.Org, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.getOrgCallback = callback
+	}
+}
+
+// CreateHost ...
+func (c *MockClient) CreateHost(param *mackerel.CreateHostParam) (string, error) {
+	if c.createHostCallback != nil {
+		return c.createHostCallback(param)
+	}
+	return "", errCallbackNotFound("CreateHost")
+}
+
+// MockCreateHost returns an option to set the callback of CreateHost
+func MockCreateHost(callback func(*mackerel.CreateHostParam) (string, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.createHostCallback = callback
+	}
+}
+
+// UpdateHostStatus ...
+func (c *MockClient) UpdateHostStatus(hostID string, status string) error {
+	if c.updateHostStatusCallback != nil {
+		return c.updateHostStatusCallback(hostID, status)
+	}
+	return errCallbackNotFound("UpdateHostStatus")
+}
+
+// MockUpdateHostStatus returns an option to set the callback of UpdateHostStatus
+func MockUpdateHostStatus(callback func(string, string) error) MockClientOption {
+	return func(c *MockClient) {
+		c.updateHostStatusCallback = callback
 	}
 }

@@ -2,12 +2,13 @@ package hosts
 
 import (
 	"bytes"
+	"fmt"
+	"io"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/mackerelio/mkr/mackerelclient"
 )
@@ -49,7 +50,7 @@ var (
 	}
 )
 
-func TestHostApp_Run(t *testing.T) {
+func TestHostApp_FindHosts(t *testing.T) {
 	time.Local = time.FixedZone("Asia/Tokyo", 9*60*60)
 	defer func() { time.Local = nil }()
 	testCases := []struct {
@@ -197,16 +198,110 @@ bar sample.app2 standby 1552000000
 			out := new(bytes.Buffer)
 			app := &hostApp{
 				client:    client,
-				verbose:   tc.verbose,
-				name:      tc.name,
-				service:   tc.service,
-				roles:     tc.roles,
-				statuses:  tc.statuses,
-				format:    tc.format,
 				outStream: out,
 			}
-			assert.NoError(t, app.run())
+			assert.NoError(t, app.findHosts(findHostsParam{
+				verbose:  tc.verbose,
+				name:     tc.name,
+				service:  tc.service,
+				roles:    tc.roles,
+				statuses: tc.statuses,
+				format:   tc.format,
+			}))
 			assert.Equal(t, tc.expected, out.String())
+		})
+	}
+}
+
+type testLogger struct {
+	w io.Writer
+}
+
+func (l *testLogger) Log(prefix, message string) {
+	fmt.Fprintln(l.w, prefix, message)
+}
+
+func (l *testLogger) Error(err error) {
+	fmt.Fprintln(l.w, err.Error())
+}
+
+func TestHostApp_CreateHost(t *testing.T) {
+	testCases := []struct {
+		id                string
+		name              string
+		roleFullnames     []string
+		status            string
+		customIdentifier  string
+		hostID            string
+		output            string
+		err               error
+		createError       error
+		updateStatusError error
+	}{
+		{
+			id:               "basic",
+			name:             "app.example.com",
+			customIdentifier: "app.hosting.example.com",
+			roleFullnames:    []string{"foo:bar"},
+			hostID:           "xxx",
+			output:           "created xxx\n",
+		},
+		{
+			id:            "with status",
+			name:          "app.example.com",
+			roleFullnames: []string{"foo:bar"},
+			status:        "working",
+			hostID:        "xxx",
+			output:        "created xxx\nupdated xxx working\n",
+		},
+		{
+			id:            "createError",
+			name:          "app.example.com",
+			roleFullnames: []string{"foo:bar"},
+			hostID:        "xxx",
+			output:        "http request failed\n",
+			createError:   fmt.Errorf("http request failed"),
+			err:           fmt.Errorf("http request failed"),
+		},
+		{
+			id:                "updateStatusError",
+			name:              "app.example.com",
+			roleFullnames:     []string{"foo:bar"},
+			status:            "working",
+			hostID:            "xxx",
+			output:            "created xxx\nhttp request failed\n",
+			updateStatusError: fmt.Errorf("http request failed"),
+			err:               fmt.Errorf("http request failed"),
+		},
+	}
+	for _, tc := range testCases {
+		client := mackerelclient.NewMockClient(
+			mackerelclient.MockCreateHost(func(param *mackerel.CreateHostParam) (string, error) {
+				assert.Equal(t, tc.name, param.Name)
+				assert.Equal(t, tc.roleFullnames, param.RoleFullnames)
+				assert.Equal(t, tc.customIdentifier, param.CustomIdentifier)
+				return tc.hostID, tc.createError
+			}),
+			mackerelclient.MockUpdateHostStatus(func(hostID, status string) error {
+				assert.Equal(t, tc.hostID, hostID)
+				assert.Equal(t, tc.status, status)
+				return tc.updateStatusError
+			}),
+		)
+		t.Run(tc.id, func(t *testing.T) {
+			out := new(bytes.Buffer)
+			app := &hostApp{
+				client:    client,
+				logger:    &testLogger{out},
+				outStream: out,
+			}
+			assert.Equal(t, tc.err, app.createHost(createHostParam{
+				name:             tc.name,
+				roleFullnames:    tc.roleFullnames,
+				status:           tc.status,
+				customIdentifier: tc.customIdentifier,
+			}))
+			assert.Equal(t, tc.output, out.String())
 		})
 	}
 }

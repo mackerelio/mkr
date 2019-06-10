@@ -1,6 +1,7 @@
 package hosts
 
 import (
+	"fmt"
 	"io"
 	"text/template"
 
@@ -10,9 +11,18 @@ import (
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
-type hostApp struct {
-	client mackerelclient.Client
+type appLogger interface {
+	Log(string, string)
+	Error(error)
+}
 
+type hostApp struct {
+	client    mackerelclient.Client
+	logger    appLogger
+	outStream io.Writer
+}
+
+type findHostsParam struct {
 	verbose bool
 
 	name     string
@@ -21,29 +31,27 @@ type hostApp struct {
 	statuses []string
 
 	format string
-
-	outStream io.Writer
 }
 
-func (ha *hostApp) run() error {
+func (ha *hostApp) findHosts(param findHostsParam) error {
 	hosts, err := ha.client.FindHosts(&mackerel.FindHostsParam{
-		Name:     ha.name,
-		Service:  ha.service,
-		Roles:    ha.roles,
-		Statuses: ha.statuses,
+		Name:     param.name,
+		Service:  param.service,
+		Roles:    param.roles,
+		Statuses: param.statuses,
 	})
 	if err != nil {
 		return err
 	}
 
 	switch {
-	case ha.format != "":
-		t, err := template.New("format").Parse(ha.format)
+	case param.format != "":
+		t, err := template.New("format").Parse(param.format)
 		if err != nil {
 			return err
 		}
 		return t.Execute(ha.outStream, hosts)
-	case ha.verbose:
+	case param.verbose:
 		return format.PrettyPrintJSON(ha.outStream, hosts)
 	default:
 		var hostsFormat []*format.Host
@@ -61,4 +69,43 @@ func (ha *hostApp) run() error {
 		}
 		return format.PrettyPrintJSON(ha.outStream, hostsFormat)
 	}
+}
+
+type createHostParam struct {
+	name             string
+	roleFullnames    []string
+	status           string
+	customIdentifier string
+}
+
+func (ha *hostApp) createHost(param createHostParam) error {
+	hostID, err := ha.client.CreateHost(&mackerel.CreateHostParam{
+		Name:             param.name,
+		RoleFullnames:    param.roleFullnames,
+		CustomIdentifier: param.customIdentifier,
+	})
+	if err != nil {
+		ha.error(err)
+		return err
+	}
+
+	ha.log("created", hostID)
+
+	if param.status != "" {
+		err := ha.client.UpdateHostStatus(hostID, param.status)
+		if err != nil {
+			ha.error(err)
+			return err
+		}
+		ha.log("updated", fmt.Sprintf("%s %s", hostID, param.status))
+	}
+	return nil
+}
+
+func (ha *hostApp) log(prefix, message string) {
+	ha.logger.Log(prefix, message)
+}
+
+func (ha *hostApp) error(err error) {
+	ha.logger.Error(err)
 }
