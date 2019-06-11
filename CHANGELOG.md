@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.38.0 (2019-06-11)
+
+* Move implementation of `mkr create` into mkr/hosts #208 (astj)
+* Build With Go 1.12 #207 (astj)
+* Update go module dependencies #206 (astj)
+* support go modules #205 (lufia)
+
+
 ## 0.37.0 (2019-05-08)
 
 * [wrap] Improve message truncation algorithm #203 (itchyny)

@@ -1,3 +1,16 @@
+mkr (0.38.0-1) stable; urgency=low
+
+  * Move implementation of `mkr create` into mkr/hosts (by astj)
+    <https://github.com/mackerelio/mkr/pull/208>
+  * Build With Go 1.12 (by astj)
+    <https://github.com/mackerelio/mkr/pull/207>
+  * Update go module dependencies (by astj)
+    <https://github.com/mackerelio/mkr/pull/206>
+  * support go modules (by lufia)
+    <https://github.com/mackerelio/mkr/pull/205>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 11 Jun 2019 03:15:58 +0000
+
 mkr (0.37.0-1) stable; urgency=low
 
   * [wrap] Improve message truncation algorithm (by itchyny)
