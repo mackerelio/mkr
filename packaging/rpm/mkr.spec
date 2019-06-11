@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Jun 11 2019 <mackerel-developers@hatena.ne.jp> - 0.38.0
+- Move implementation of `mkr create` into mkr/hosts (by astj)
+- Build With Go 1.12 (by astj)
+- Update go module dependencies (by astj)
+- support go modules (by lufia)
+
 * Wed May 08 2019 <mackerel-developers@hatena.ne.jp> - 0.37.0
 - [wrap] Improve message truncation algorithm (by itchyny)
 
