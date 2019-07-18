@@ -85,6 +85,14 @@ func TestFormatJoinedAlert(t *testing.T) {
 			},
 			"2tZhm 1970-01-01 00:08:20 WARNING long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
 		},
+		{
+			&alertSet{
+				&mkr.Alert{ID: "2tZhm", Type: "anomalyDetection", Status: "WARNING", MonitorID: "5rXR3", OpenedAt: 500},
+				&mkr.Host{ID: "3XYyG", Name: "app.example.com", Roles: mkr.Roles{"foo": {"bar", "baz"}}, Status: "working"},
+				&mkr.MonitorAnomalyDetection{ID: "5rXR3", Type: "anomalyDetection", Name: "My anomaly detection for roles", WarningSensitivity: "insensitive", MaxCheckAttempts: 5, Scopes: []string{"foo: bar", "foo: baz"}},
+			},
+			"2tZhm 1970-01-01 00:08:20 WARNING My anomaly detection for roles app.example.com working [foo:bar,baz]",
+		},
 	}
 
 	for _, testCase := range testCases {

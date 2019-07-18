@@ -191,6 +191,8 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			} else {
 				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
 			}
+		case *mkr.MonitorAnomalyDetection:
+			monitorMsg = ""
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
 		}
