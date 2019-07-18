@@ -148,6 +148,8 @@ func decodeMonitor(mes json.RawMessage) (mkr.Monitor, error) {
 		m = &mkr.MonitorExternalHTTP{}
 	case "expression":
 		m = &mkr.MonitorExpression{}
+	case "anomalyDetection":
+		m = &mkr.MonitorAnomalyDetection{}
 	}
 	if err := json.Unmarshal(mes, m); err != nil {
 		return nil, err
