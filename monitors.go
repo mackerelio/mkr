@@ -239,6 +239,21 @@ func isSameMonitor(a mkr.Monitor, b mkr.Monitor, flagNameUniqueness bool) (strin
 	return "", false
 }
 
+func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) (bool, error) {
+	f := "Scopes"
+	vf := v.FieldByName("Scopes")
+	if !vf.IsValid() {
+		return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+	}
+	scopes, ok := vf.Interface().([]string)
+	if !ok {
+		return false, fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
+	} else if len(scopes) == 0 {
+		return false, fmt.Errorf("Monitor '%s' has empty '%s'", label, f)
+	}
+	return true, nil
+}
+
 func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 
 	flagNameUniqueness := true
@@ -273,6 +288,14 @@ func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
+		case *mkr.MonitorAnomalyDetection:
+			for _, f := range []string{"Name"} {
+				vf := v.FieldByName(f)
+				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+				}
+			}
+			return validateRuleAnomalyDetectionScopes(v, label)
 		case *mkr.MonitorConnectivity:
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
