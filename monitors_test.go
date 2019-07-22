@@ -23,13 +23,32 @@ func TestIsSameMonitor(t *testing.T) {
 }
 
 func TestValidateRoles(t *testing.T) {
-	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
+	{
+		a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 
-	ret, err := validateRules([](mkr.Monitor){a}, "test monitor")
-	if ret != true {
-		t.Errorf("should validate the rule: %s", err.Error())
+		ret, err := validateRules([](mkr.Monitor){a}, "test monitor")
+		if ret != true {
+			t.Errorf("should validate the rule: %s", err.Error())
+		}
 	}
 
+	{
+		a := &mkr.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive", Scopes: []string{"MyService: MyRole"}}
+
+		ret, err := validateRules([](mkr.Monitor){a}, "anomaly detection monitor")
+		if ret != true {
+			t.Errorf("should validate the rule: %s", err.Error())
+		}
+	}
+
+	{
+		a := &mkr.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive"}
+
+		ret, err := validateRules([](mkr.Monitor){a}, "anomaly detection monitor")
+		if ret == true || err == nil {
+			t.Error("should invalidate the rule")
+		}
+	}
 }
 
 func pfloat64(x float64) *float64 {
