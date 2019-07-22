@@ -26,7 +26,7 @@ require (
 	github.com/kr/pty v1.1.8 // indirect
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
 	github.com/mackerelio/go-osstat v0.0.0-20190712033226-e9f3fb840708 // indirect
-	github.com/mackerelio/mackerel-agent v0.60.0
+	github.com/mackerelio/mackerel-agent v0.61.0
 	github.com/mackerelio/mackerel-client-go v0.6.0
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mholt/archiver v3.1.1+incompatible
