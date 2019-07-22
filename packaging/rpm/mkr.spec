@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Mon Jul 22 2019 <mackerel-developers@hatena.ne.jp> - 0.39.0
+- Implement anomaly detection monitor (by syou6162)
+- Bump github.com/mackerelio/mackerel-agent from 0.59.3 to 0.60.0 (by dependabot-preview[bot])
+- add fakeroot to build dependencies (by astj)
+- upgrade builder image and enable go modules (by lufia)
+
 * Tue Jun 11 2019 <mackerel-developers@hatena.ne.jp> - 0.38.0
 - Move implementation of `mkr create` into mkr/hosts (by astj)
 - Build With Go 1.12 (by astj)

@@ -1,3 +1,16 @@
+mkr (0.39.0-1.v2) stable; urgency=low
+
+  * Implement anomaly detection monitor (by syou6162)
+    <https://github.com/mackerelio/mkr/pull/212>
+  * Bump github.com/mackerelio/mackerel-agent from 0.59.3 to 0.60.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/213>
+  * add fakeroot to build dependencies (by astj)
+    <https://github.com/mackerelio/mkr/pull/211>
+  * upgrade builder image and enable go modules (by lufia)
+    <https://github.com/mackerelio/mkr/pull/210>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 22 Jul 2019 13:12:16 +0900
+
 mkr (0.38.0-1.v2) stable; urgency=low
 
   * Move implementation of `mkr create` into mkr/hosts (by astj)

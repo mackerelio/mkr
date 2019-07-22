@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.0 (2019-07-22)
+
+* Implement anomaly detection monitor #212 (syou6162)
+* Bump github.com/mackerelio/mackerel-agent from 0.59.3 to 0.60.0 #213 (dependabot-preview[bot])
+* add fakeroot to build dependencies #211 (astj)
+* upgrade builder image and enable go modules #210 (lufia)
+
+
 ## 0.38.0 (2019-06-11)
 
 * Move implementation of `mkr create` into mkr/hosts #208 (astj)
