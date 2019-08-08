@@ -10,7 +10,7 @@ import (
 
 	"github.com/mackerelio/checkers"
 	"github.com/mackerelio/mackerel-agent/config"
-	cli "gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 	yaml "gopkg.in/yaml.v2"
 )
 

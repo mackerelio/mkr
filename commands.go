@@ -16,7 +16,7 @@ import (
 	"github.com/mackerelio/mkr/plugin"
 	"github.com/mackerelio/mkr/services"
 	"github.com/mackerelio/mkr/wrap"
-	cli "gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 )
 
 // Commands cli.Command object list

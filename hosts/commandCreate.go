@@ -3,10 +3,9 @@ package hosts
 import (
 	"os"
 
-	cli "gopkg.in/urfave/cli.v1"
-
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
+	"github.com/urfave/cli"
 )
 
 // CommandCreate is definition of mkr create subcommand

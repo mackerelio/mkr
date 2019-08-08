@@ -12,8 +12,8 @@ import (
 	"github.com/Songmu/wrapcommander"
 	mackerel "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
+	"github.com/urfave/cli"
 	"golang.org/x/sync/errgroup"
-	cli "gopkg.in/urfave/cli.v1"
 )
 
 type wrap struct {

@@ -3,9 +3,8 @@ package org
 import (
 	"os"
 
-	cli "gopkg.in/urfave/cli.v1"
-
 	"github.com/mackerelio/mkr/mackerelclient"
+	"github.com/urfave/cli"
 )
 
 // Command is the definition of org subcommand

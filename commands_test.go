@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	cli "gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 )
 
 func TestCommands_requirements(t *testing.T) {

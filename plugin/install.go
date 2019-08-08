@@ -13,7 +13,7 @@ import (
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
-	"gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 )
 
 // The reason why an immediate function, not `init()` is used here is that
