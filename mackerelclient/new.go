@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	cli "gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 
 	"github.com/mackerelio/mackerel-agent/config"
 	mackerel "github.com/mackerelio/mackerel-client-go"

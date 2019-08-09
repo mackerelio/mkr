@@ -10,7 +10,7 @@ import (
 	mackerel "github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	cli "gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 	yaml "gopkg.in/yaml.v2"
 )
 

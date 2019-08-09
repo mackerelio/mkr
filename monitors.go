@@ -13,9 +13,9 @@ import (
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
+	"github.com/urfave/cli"
 	"github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
-	cli "gopkg.in/urfave/cli.v1"
 )
 
 var commandMonitors = cli.Command{
