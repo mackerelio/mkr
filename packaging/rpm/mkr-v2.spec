@@ -36,6 +36,11 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Aug 29 2019 <mackerel-developers@hatena.ne.jp> - 0.39.1
+- rename gopkg.in/urfave/cli.v1 -> github.com/urfave/cli (by lufia)
+- Bump github.com/mackerelio/mackerel-agent from 0.61.1 to 0.62.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.60.0 to 0.61.1 (by dependabot-preview[bot])
+
 * Mon Jul 22 2019 <mackerel-developers@hatena.ne.jp> - 0.39.0
 - Implement anomaly detection monitor (by syou6162)
 - Bump github.com/mackerelio/mackerel-agent from 0.59.3 to 0.60.0 (by dependabot-preview[bot])
