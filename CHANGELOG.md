@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.39.1 (2019-08-29)
+
+* rename gopkg.in/urfave/cli.v1 -> github.com/urfave/cli #220 (lufia)
+* Bump github.com/mackerelio/mackerel-agent from 0.61.1 to 0.62.0 #218 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.60.0 to 0.61.1 #216 (dependabot-preview[bot])
+
+
 ## 0.39.0 (2019-07-22)
 
 * Implement anomaly detection monitor #212 (syou6162)
