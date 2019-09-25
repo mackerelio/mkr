@@ -73,6 +73,8 @@ github.com/mackerelio/golib v0.0.0-20190411032134-c87047ca454e h1:MwWzFCq2tENDy2
 github.com/mackerelio/golib v0.0.0-20190411032134-c87047ca454e/go.mod h1:kbqYA8VcFqcMt07v+GPSZQwqtwc7Wr0V0vzxUNMrk7E=
 github.com/mackerelio/mackerel-agent v0.62.1 h1:DrItVi7+HkHFPc6IcwiT/O4l9Apaz5xS2ztUh6Z0JAY=
 github.com/mackerelio/mackerel-agent v0.62.1/go.mod h1:B4nY2nKl7x3Wy4nIHYhnj/tmdiO4CF0FBKv3EPXA/tg=
+github.com/mackerelio/mackerel-agent v0.63.0 h1:/k2OA43PLc0to+vWs5amVCMsHtAOJpZGYL4wzczWEeI=
+github.com/mackerelio/mackerel-agent v0.63.0/go.mod h1:B4nY2nKl7x3Wy4nIHYhnj/tmdiO4CF0FBKv3EPXA/tg=
 github.com/mackerelio/mackerel-client-go v0.6.0 h1:Zzer4jmHdDucOpO5Qco7r0MdIg0TExbQem1nLX8dtYE=
 github.com/mackerelio/mackerel-client-go v0.6.0/go.mod h1:/FVnUK7nsg/MEBpIVOCZLYzdIwY5mg/SyAlXDnxVcAI=
 github.com/mackerelio/mackerel-client-go v0.7.0 h1:iccCwvdDArIoXj6sdpdGMw5qhidFhT9au2hXbxf+Avs=
