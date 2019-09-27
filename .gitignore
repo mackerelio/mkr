@@ -1,4 +1,5 @@
 .*
+!.dependabot
 !.travis.yml
 mkr
 build
