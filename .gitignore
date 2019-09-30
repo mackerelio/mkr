@@ -1,4 +1,6 @@
 .*
+!.dependabot
+!.travis.yml
 mkr
 build
 snapshot
