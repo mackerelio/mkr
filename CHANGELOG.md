@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.39.2 (2019-10-02)
+
+* Bump gopkg.in/yaml.v2 from 2.2.2 to 2.2.3 #234 (dependabot-preview[bot])
+* Bump github.com/urfave/cli from 1.22.0 to 1.22.1 #230 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.62.1 to 0.63.0 #227 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.7.0 to 0.8.0 #229 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.6.0 to 0.7.0 #224 (dependabot-preview[bot])
+* Bump github.com/urfave/cli from 1.21.0 to 1.22.0 #225 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.62.0 to 0.62.1 #223 (dependabot-preview[bot])
+* Bump github.com/stretchr/testify from 1.3.0 to 1.4.0 #221 (dependabot-preview[bot])
+
+
 ## 0.39.1 (2019-08-29)
 
 * rename gopkg.in/urfave/cli.v1 -> github.com/urfave/cli #220 (lufia)
