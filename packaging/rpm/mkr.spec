@@ -42,6 +42,16 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Oct 02 2019 <mackerel-developers@hatena.ne.jp> - 0.39.2
+- Bump gopkg.in/yaml.v2 from 2.2.2 to 2.2.3 (by dependabot-preview[bot])
+- Bump github.com/urfave/cli from 1.22.0 to 1.22.1 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.62.1 to 0.63.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-client-go from 0.7.0 to 0.8.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-client-go from 0.6.0 to 0.7.0 (by dependabot-preview[bot])
+- Bump github.com/urfave/cli from 1.21.0 to 1.22.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.62.0 to 0.62.1 (by dependabot-preview[bot])
+- Bump github.com/stretchr/testify from 1.3.0 to 1.4.0 (by dependabot-preview[bot])
+
 * Thu Aug 29 2019 <mackerel-developers@hatena.ne.jp> - 0.39.1
 - rename gopkg.in/urfave/cli.v1 -> github.com/urfave/cli (by lufia)
 - Bump github.com/mackerelio/mackerel-agent from 0.61.1 to 0.62.0 (by dependabot-preview[bot])
