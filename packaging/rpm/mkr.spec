@@ -42,6 +42,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Oct 24 2019 <mackerel-developers@hatena.ne.jp> - 0.39.3
+- Bump gopkg.in/yaml.v2 from 2.2.3 to 2.2.4 (by dependabot-preview[bot])
+
 * Wed Oct 02 2019 <mackerel-developers@hatena.ne.jp> - 0.39.2
 - Bump gopkg.in/yaml.v2 from 2.2.2 to 2.2.3 (by dependabot-preview[bot])
 - Bump github.com/urfave/cli from 1.22.0 to 1.22.1 (by dependabot-preview[bot])
