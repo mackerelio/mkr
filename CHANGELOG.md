@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.39.3 (2019-10-24)
+
+* Build with Go 1.12.12
+* Bump gopkg.in/yaml.v2 from 2.2.3 to 2.2.4 #236 (dependabot-preview[bot])
+
+
 ## 0.39.2 (2019-10-02)
 
 * Bump gopkg.in/yaml.v2 from 2.2.2 to 2.2.3 #234 (dependabot-preview[bot])
