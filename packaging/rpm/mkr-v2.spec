@@ -37,6 +37,7 @@ rm -f %{buildroot}%{_bindir}/%{name}
 
 %changelog
 * Thu Oct 24 2019 <mackerel-developers@hatena.ne.jp> - 0.39.3
+- Build with Go 1.12.12
 - Bump gopkg.in/yaml.v2 from 2.2.3 to 2.2.4 (by dependabot-preview[bot])
 
 * Wed Oct 02 2019 <mackerel-developers@hatena.ne.jp> - 0.39.2
