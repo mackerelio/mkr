@@ -1,3 +1,16 @@
+mkr (0.39.4-1) stable; urgency=low
+
+  * always set GO111MODULE=on (by lufia)
+    <https://github.com/mackerelio/mkr/pull/246>
+  * Bump alpine from 3.9 to 3.10.3 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/238>
+  * Bump github.com/mackerelio/mackerel-agent from 0.63.0 to 0.64.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/240>
+  * Bump gopkg.in/yaml.v2 from 2.2.4 to 2.2.5 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/242>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 21 Nov 2019 10:27:32 +0000
+
 mkr (0.39.3-1) stable; urgency=low
 
   * Build with Go 1.12.12

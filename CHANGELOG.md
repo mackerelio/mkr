@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.4 (2019-11-21)
+
+* always set GO111MODULE=on #246 (lufia)
+* Bump alpine from 3.9 to 3.10.3 #238 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.63.0 to 0.64.0 #240 (dependabot-preview[bot])
+* Bump gopkg.in/yaml.v2 from 2.2.4 to 2.2.5 #242 (dependabot-preview[bot])
+
+
 ## 0.39.3 (2019-10-24)
 
 * Build with Go 1.12.12
