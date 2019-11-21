@@ -3,17 +3,21 @@ VERSION := 0.39.3
 CURRENT_REVISION := $(shell git rev-parse --short HEAD)
 BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 
+export GO111MODULE=on
+
 .PHONY: all
 all: clean cross lint gofmt test rpm deb
 
 .PHONY: test-deps
 test-deps:
-	GO111MODULE=off go get golang.org/x/lint/golint
+	cd && \
+	go get golang.org/x/lint/golint
 
 .PHONY: devel-deps
 devel-deps: test-deps
-	GO111MODULE=off go get github.com/mattn/goveralls
-	GO111MODULE=off go get github.com/Songmu/goxz/cmd/goxz
+	cd && \
+	go get github.com/mattn/goveralls && \
+	go get github.com/Songmu/goxz/cmd/goxz
 
 .PHONY: test
 test: test-deps
