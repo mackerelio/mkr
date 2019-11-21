@@ -36,6 +36,11 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Nov 21 2019 <mackerel-developers@hatena.ne.jp> - 0.39.4
+- Bump alpine from 3.9 to 3.10.3 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.63.0 to 0.64.0 (by dependabot-preview[bot])
+- Bump gopkg.in/yaml.v2 from 2.2.4 to 2.2.5 (by dependabot-preview[bot])
+
 * Thu Oct 24 2019 <mackerel-developers@hatena.ne.jp> - 0.39.3
 - Build with Go 1.12.12
 - Bump gopkg.in/yaml.v2 from 2.2.3 to 2.2.4 (by dependabot-preview[bot])
