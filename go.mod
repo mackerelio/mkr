@@ -3,7 +3,7 @@ module github.com/mackerelio/mkr
 go 1.12
 
 require (
-	github.com/Songmu/prompter v0.2.0
+	github.com/Songmu/prompter v0.3.0
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
