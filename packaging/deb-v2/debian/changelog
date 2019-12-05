@@ -1,3 +1,16 @@
+mkr (0.39.5-1.v2) stable; urgency=low
+
+  * Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/244>
+  * Bump github.com/Songmu/prompter from 0.2.0 to 0.3.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/250>
+  * Bump github.com/urfave/cli from 1.22.1 to 1.22.2 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/248>
+  * Bump github.com/mackerelio/mackerel-agent from 0.64.0 to 0.64.1 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/249>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 05 Dec 2019 05:46:12 +0000
+
 mkr (0.39.4-1.v2) stable; urgency=low
 
   * always set GO111MODULE=on (by lufia)
