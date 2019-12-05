@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.5 (2019-12-05)
+
+* Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 #244 (dependabot-preview[bot])
+* Bump github.com/Songmu/prompter from 0.2.0 to 0.3.0 #250 (dependabot-preview[bot])
+* Bump github.com/urfave/cli from 1.22.1 to 1.22.2 #248 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.64.0 to 0.64.1 #249 (dependabot-preview[bot])
+
+
 ## 0.39.4 (2019-11-21)
 
 * always set GO111MODULE=on #246 (lufia)

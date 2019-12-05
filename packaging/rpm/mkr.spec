@@ -42,6 +42,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Dec 05 2019 <mackerel-developers@hatena.ne.jp> - 0.39.5
+- Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 (by dependabot-preview[bot])
+- Bump github.com/Songmu/prompter from 0.2.0 to 0.3.0 (by dependabot-preview[bot])
+- Bump github.com/urfave/cli from 1.22.1 to 1.22.2 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.64.0 to 0.64.1 (by dependabot-preview[bot])
+
 * Thu Nov 21 2019 <mackerel-developers@hatena.ne.jp> - 0.39.4
 - always set GO111MODULE=on (by lufia)
 - Bump alpine from 3.9 to 3.10.3 (by dependabot-preview[bot])
