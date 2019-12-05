@@ -78,6 +78,8 @@ github.com/mackerelio/go-osstat v0.0.0-20190712033226-e9f3fb840708 h1:uRV0NlSC2d
 github.com/mackerelio/go-osstat v0.0.0-20190712033226-e9f3fb840708/go.mod h1:1K3NeYLhMHPvzUu+ePYXtoB58wkaRpxZsGClZBJyIFw=
 github.com/mackerelio/go-osstat v0.0.0-20191011055430-af968620273d h1:vMSB9DSN4dlKcPtj5BM1dLL8XoNzCKQ1Ne/R/sy0dLE=
 github.com/mackerelio/go-osstat v0.0.0-20191011055430-af968620273d/go.mod h1:1K3NeYLhMHPvzUu+ePYXtoB58wkaRpxZsGClZBJyIFw=
+github.com/mackerelio/go-osstat v0.0.0-20191128064056-9345daf7831a h1:AwbzFbpRdhswEAgzzvYqCAizQWVRBHRUAh3xY/5admY=
+github.com/mackerelio/go-osstat v0.0.0-20191128064056-9345daf7831a/go.mod h1:1K3NeYLhMHPvzUu+ePYXtoB58wkaRpxZsGClZBJyIFw=
 github.com/mackerelio/golib v0.0.0-20190411032134-c87047ca454e h1:MwWzFCq2tENDy2YPU01FDOSkt0At4mpLyvAFsFdB66A=
 github.com/mackerelio/golib v0.0.0-20190411032134-c87047ca454e/go.mod h1:kbqYA8VcFqcMt07v+GPSZQwqtwc7Wr0V0vzxUNMrk7E=
 github.com/mackerelio/golib v0.0.0-20191002020229-a65782d392ca h1:yKZK7Zhsaa9oE96//J0xnSJdUfGWRbb9rIv2/VCr/sA=
@@ -90,6 +92,8 @@ github.com/mackerelio/mackerel-agent v0.64.0 h1:+wWOdbBSQJ6CT/Daob9ejgtpycTUwBh2
 github.com/mackerelio/mackerel-agent v0.64.0/go.mod h1:5BR9kuk8xBZJ+PCGAD+uBhqG06qg6VCoK74IRg6FB24=
 github.com/mackerelio/mackerel-agent v0.64.1 h1:6P7aVBR1y8Qx3CVKIzGxR47J1dEVwziZ995dsHScwqE=
 github.com/mackerelio/mackerel-agent v0.64.1/go.mod h1:QE40vSVnvInerrKtpcNhujwrVl2Lagp1qV4aYNbBE6A=
+github.com/mackerelio/mackerel-agent v0.65.0 h1:iX4ARSvKmPFrKenFIJ+NTHNZILKFHPs91o52e/0Gbu4=
+github.com/mackerelio/mackerel-agent v0.65.0/go.mod h1:98ECUlbRtesasEwCYlSdKdLIIe2ugQbZ5jIQn5A8Uok=
 github.com/mackerelio/mackerel-client-go v0.6.0 h1:Zzer4jmHdDucOpO5Qco7r0MdIg0TExbQem1nLX8dtYE=
 github.com/mackerelio/mackerel-client-go v0.6.0/go.mod h1:/FVnUK7nsg/MEBpIVOCZLYzdIwY5mg/SyAlXDnxVcAI=
 github.com/mackerelio/mackerel-client-go v0.7.0 h1:iccCwvdDArIoXj6sdpdGMw5qhidFhT9au2hXbxf+Avs=
@@ -139,6 +143,8 @@ github.com/shirou/gopsutil v2.18.12+incompatible h1:1eaJvGomDnH74/5cF4CTmTbLHAri
 github.com/shirou/gopsutil v2.18.12+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/gopsutil v2.19.10+incompatible h1:lA4Pi29JEVIQIgATSeftHSY0rMGI9CLrl2ZvDLiahto=
 github.com/shirou/gopsutil v2.19.10+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
+github.com/shirou/gopsutil v2.19.11+incompatible h1:lJHR0foqAjI4exXqWsU3DbH7bX1xvdhGdnXTIARA9W4=
+github.com/shirou/gopsutil v2.19.11+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 h1:udFKJ0aHUL60LboW/A+DfgoHVedieIzIXE8uylPue0U=
 github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4/go.mod h1:qsXQc7+bwAM3Q1u/4XEfrquwF8Lw7D7y5cD8CuHnfIc=
 github.com/shurcooL/sanitized_anchor_name v1.0.0 h1:PdmoCO6wvbs+7yrJyMORt4/BmY5IYyJwS/kOiWx8mHo=
@@ -177,6 +183,7 @@ golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586 h1:7KByu05hhLed2MO29w7p1X
 golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20191112222119-e1110fd1c708 h1:pXVtWnwHkrWD9ru3sDxY/qFK/bfc0egRovX91EjWjf4=
 golang.org/x/crypto v0.0.0-20191112222119-e1110fd1c708/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
+golang.org/x/crypto v0.0.0-20191122220453-ac88ee75c92c/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/crypto v0.0.0-20191202143827-86a70503ff7e h1:egKlR8l7Nu9vHGWbcUV8lqR4987UfUbBd7GbhqGzNYU=
 golang.org/x/crypto v0.0.0-20191202143827-86a70503ff7e/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
