@@ -8,7 +8,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
-	github.com/fatih/color v1.8.0
+	github.com/fatih/color v1.9.0
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/golangplus/bytes v0.0.0-20160111154220-45c989fe5450 // indirect
