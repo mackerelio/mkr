@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/Songmu/prompter"
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/hosts"
@@ -214,7 +214,7 @@ func doUpdate(c *cli.Context) error {
 			} else {
 				displayname = optDisplayName
 			}
-			param := &mkr.UpdateHostParam{
+			param := &mackerel.UpdateHostParam{
 				Name:        name,
 				DisplayName: displayname,
 				Meta:        host.Meta,
@@ -282,7 +282,7 @@ func doFetch(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	allMetricValues := make(mkr.LatestMetricValues)
+	allMetricValues := make(mackerel.LatestMetricValues)
 	// Fetches 100 hosts per one request (to avoid URL maximum length).
 	for _, hostIds := range split(argHostIDs, 100) {
 		metricValues, err := mackerelclient.NewFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)

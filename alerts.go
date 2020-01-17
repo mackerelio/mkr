@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -74,18 +74,18 @@ var commandAlerts = cli.Command{
 const defaultAlertsLimit int = 100
 
 type alertSet struct {
-	Alert   *mkr.Alert
-	Host    *mkr.Host
-	Monitor mkr.Monitor
+	Alert   *mackerel.Alert
+	Host    *mackerel.Host
+	Monitor mackerel.Monitor
 }
 
-func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
-	hostsJSON, err := client.FindHosts(&mkr.FindHostsParam{
+func joinMonitorsAndHosts(client *mackerel.Client, alerts []*mackerel.Alert) []*alertSet {
+	hostsJSON, err := client.FindHosts(&mackerel.FindHostsParam{
 		Statuses: []string{"working", "standby", "poweroff", "maintenance"},
 	})
 	logger.DieIf(err)
 
-	hosts := map[string]*mkr.Host{}
+	hosts := map[string]*mackerel.Host{}
 	for _, host := range hostsJSON {
 		hosts[host.ID] = host
 	}
@@ -93,7 +93,7 @@ func joinMonitorsAndHosts(client *mkr.Client, alerts []*mkr.Alert) []*alertSet {
 	monitorsJSON, err := client.FindMonitors()
 	logger.DieIf(err)
 
-	monitors := map[string]mkr.Monitor{}
+	monitors := map[string]mackerel.Monitor{}
 	for _, monitor := range monitorsJSON {
 		monitors[monitor.MonitorID()] = monitor
 	}
@@ -144,9 +144,9 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	monitorMsg := ""
 	if monitor != nil {
 		switch m := monitor.(type) {
-		case *mkr.MonitorConnectivity:
+		case *mackerel.MonitorConnectivity:
 			monitorMsg = ""
-		case *mkr.MonitorHostMetric:
+		case *mackerel.MonitorHostMetric:
 			if alert.Status == "CRITICAL" && m.Critical != nil {
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", m.Metric, alert.Value, m.Operator, *m.Critical)
 			} else if alert.Status == "WARNING" && m.Warning != nil {
@@ -154,7 +154,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			} else {
 				monitorMsg = fmt.Sprintf("%s %.2f", m.Metric, alert.Value)
 			}
-		case *mkr.MonitorServiceMetric:
+		case *mackerel.MonitorServiceMetric:
 			if alert.Status == "CRITICAL" && m.Critical != nil {
 				monitorMsg = fmt.Sprintf("%s %s %.2f %s %.2f", m.Service, m.Metric, alert.Value, m.Operator, *m.Critical)
 			} else if alert.Status == "WARNING" && m.Warning != nil {
@@ -162,7 +162,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			} else {
 				monitorMsg = fmt.Sprintf("%s %s %.2f", m.Service, m.Metric, alert.Value)
 			}
-		case *mkr.MonitorExternalHTTP:
+		case *mackerel.MonitorExternalHTTP:
 			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
 			switch alert.Status {
 			case "CRITICAL":
@@ -180,7 +180,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			default:
 				monitorMsg = fmt.Sprintf("%.2f msec, status:%s", alert.Value, alert.Message)
 			}
-		case *mkr.MonitorExpression:
+		case *mackerel.MonitorExpression:
 			expression := formatExpressionOneline(m.Expression)
 			if alert.Status == "CRITICAL" && m.Critical != nil {
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, *m.Critical)
@@ -191,7 +191,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			} else {
 				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
 			}
-		case *mkr.MonitorAnomalyDetection:
+		case *mackerel.MonitorAnomalyDetection:
 			monitorMsg = ""
 		default:
 			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
@@ -274,9 +274,9 @@ func doAlertsList(c *cli.Context) error {
 					}
 				} else {
 					var service string
-					if m, ok := joinAlert.Monitor.(*mkr.MonitorServiceMetric); ok {
+					if m, ok := joinAlert.Monitor.(*mackerel.MonitorServiceMetric); ok {
 						service = m.Service
-					} else if m, ok := joinAlert.Monitor.(*mkr.MonitorExternalHTTP); ok {
+					} else if m, ok := joinAlert.Monitor.(*mackerel.MonitorExternalHTTP); ok {
 						service = m.Service
 					}
 					found = service == filterService
@@ -313,11 +313,11 @@ func getAlertsLimit(c *cli.Context, withClosed bool) int {
 	return math.MaxInt32
 }
 
-func fetchAlerts(client *mkr.Client, withClosed bool, limit int) ([]*mkr.Alert, error) {
+func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*mackerel.Alert, error) {
 	if limit < 0 {
 		return nil, errors.New("limit should not be negative")
 	}
-	var resp *mkr.AlertsResp
+	var resp *mackerel.AlertsResp
 	var err error
 	if withClosed {
 		if resp, err = client.FindWithClosedAlerts(); err != nil {

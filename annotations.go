@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -119,7 +119,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 	}
 
 	client := mackerelclient.NewFromContext(c)
-	annotation, err := client.CreateGraphAnnotation(&mkr.GraphAnnotation{
+	annotation, err := client.CreateGraphAnnotation(&mackerel.GraphAnnotation{
 		Title:       title,
 		Description: description,
 		From:        from,
@@ -189,7 +189,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	}
 
 	client := mackerelclient.NewFromContext(c)
-	annotation, err := client.UpdateGraphAnnotation(annotationID, &mkr.GraphAnnotation{
+	annotation, err := client.UpdateGraphAnnotation(annotationID, &mackerel.GraphAnnotation{
 		Title:       title,
 		Description: description,
 		From:        from,
