@@ -10,7 +10,7 @@ import (
 
 	"github.com/Songmu/retry"
 	"github.com/Songmu/wrapcommander"
-	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/urfave/cli"
 	"golang.org/x/sync/errgroup"
