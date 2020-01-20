@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 )
 
 func init() {
@@ -121,7 +121,7 @@ func TestRequestWithRetry_Status(t *testing.T) {
 	var status int
 	f0 := func() error {
 		counter++
-		return &mkr.APIError{StatusCode: status, Message: "ohno"}
+		return &mackerel.APIError{StatusCode: status, Message: "ohno"}
 	}
 
 	counter = 0

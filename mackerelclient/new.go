@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 
 	"github.com/mackerelio/mackerel-agent/config"
-	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 
 	"github.com/mackerelio/mkr/logger"
 )

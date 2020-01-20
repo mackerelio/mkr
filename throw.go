@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/jpillora/backoff"
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -38,7 +38,7 @@ func doThrow(c *cli.Context) error {
 	optService := c.String("service")
 	optMaxRetry := c.Int("retry")
 
-	var metricValues []*(mkr.MetricValue)
+	var metricValues []*(mackerel.MetricValue)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -66,7 +66,7 @@ func doThrow(c *cli.Context) error {
 			name = "custom." + name
 		}
 
-		metricValue := &mkr.MetricValue{
+		metricValue := &mackerel.MetricValue{
 			Name:  name,
 			Value: value,
 			Time:  time,
@@ -120,7 +120,7 @@ func requestWithRetry(f func() error, maxRetry int) error {
 		if err = f(); err == nil {
 			// SUCCESS!!
 			break
-		} else if e, isAPIError := err.(*mkr.APIError); isAPIError {
+		} else if e, isAPIError := err.(*mackerel.APIError); isAPIError {
 			// Do not retry when status is 4XX
 			if e.StatusCode >= 400 && e.StatusCode < 500 {
 				break

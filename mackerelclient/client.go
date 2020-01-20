@@ -1,6 +1,6 @@
 package mackerelclient
 
-import mackerel "github.com/mackerelio/mackerel-client-go"
+import "github.com/mackerelio/mackerel-client-go"
 
 // Client represents a client of Mackerel API
 type Client interface {

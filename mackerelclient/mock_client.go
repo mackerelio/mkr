@@ -1,6 +1,6 @@
 package mackerelclient
 
-import mackerel "github.com/mackerelio/mackerel-client-go"
+import "github.com/mackerelio/mackerel-client-go"
 
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {

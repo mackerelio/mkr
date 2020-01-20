@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/mackerelio/mkr/mackerelclient"

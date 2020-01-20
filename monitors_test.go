@@ -4,12 +4,12 @@ import (
 	"io/ioutil"
 	"testing"
 
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 )
 
 func TestIsSameMonitor(t *testing.T) {
-	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
-	b := &mkr.MonitorConnectivity{Name: "foo", Type: "connectivity"}
+	a := &mackerel.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
+	b := &mackerel.MonitorConnectivity{Name: "foo", Type: "connectivity"}
 
 	_, ret := isSameMonitor(a, b, true)
 	if ret != true {
@@ -24,27 +24,27 @@ func TestIsSameMonitor(t *testing.T) {
 
 func TestValidateRoles(t *testing.T) {
 	{
-		a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
+		a := &mackerel.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 
-		ret, err := validateRules([](mkr.Monitor){a}, "test monitor")
+		ret, err := validateRules([](mackerel.Monitor){a}, "test monitor")
 		if ret != true {
 			t.Errorf("should validate the rule: %s", err.Error())
 		}
 	}
 
 	{
-		a := &mkr.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive", Scopes: []string{"MyService: MyRole"}}
+		a := &mackerel.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive", Scopes: []string{"MyService: MyRole"}}
 
-		ret, err := validateRules([](mkr.Monitor){a}, "anomaly detection monitor")
+		ret, err := validateRules([](mackerel.Monitor){a}, "anomaly detection monitor")
 		if ret != true {
 			t.Errorf("should validate the rule: %s", err.Error())
 		}
 	}
 
 	{
-		a := &mkr.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive"}
+		a := &mackerel.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive"}
 
-		ret, err := validateRules([](mkr.Monitor){a}, "anomaly detection monitor")
+		ret, err := validateRules([](mackerel.Monitor){a}, "anomaly detection monitor")
 		if ret == true || err == nil {
 			t.Error("should invalidate the rule")
 		}
@@ -69,8 +69,8 @@ func TestDiffMonitors(t *testing.T) {
    "type": "external",
    "url": "http://example.com"
  },`
-	a := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: pfloat64(1000), Headers: []mkr.HeaderField{}}
-	b := &mkr.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", Headers: []mkr.HeaderField{}}
+	a := &mackerel.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", ResponseTimeCritical: pfloat64(1000), Headers: []mackerel.HeaderField{}}
+	b := &mackerel.MonitorExternalHTTP{ID: "12345", Name: "foo", Type: "external", URL: "http://example.com", Service: "bar", Headers: []mackerel.HeaderField{}}
 	if got := diffMonitor(a, b); got != want {
 		t.Errorf("diffMonitor: got\n%s\nwant \n%s", got, want)
 	}
@@ -81,16 +81,16 @@ func TestMonitorSaveRules(t *testing.T) {
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
-	a := &mkr.MonitorExternalHTTP{
+	a := &mackerel.MonitorExternalHTTP{
 		ID:                   "12345",
 		Name:                 "foo",
 		Type:                 "external",
 		URL:                  "http://example.com",
 		Service:              "bar",
 		ResponseTimeCritical: pfloat64(1000),
-		Headers:              []mkr.HeaderField{},
+		Headers:              []mackerel.HeaderField{},
 	}
-	monitorSaveRules([]mkr.Monitor{a}, tmpFile.Name())
+	monitorSaveRules([]mackerel.Monitor{a}, tmpFile.Name())
 
 	byt, _ := ioutil.ReadFile(tmpFile.Name())
 	content := string(byt)
@@ -114,7 +114,7 @@ func TestMonitorSaveRules(t *testing.T) {
 }
 
 func TestStringifyMonitor(t *testing.T) {
-	a := &mkr.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
+	a := &mackerel.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 	expected := `+{
 +  "id": "12345",
 +  "name": "foo",
@@ -128,12 +128,12 @@ func TestStringifyMonitor(t *testing.T) {
 }
 
 func TestDiffMonitorsWithScopes(t *testing.T) {
-	a := &mkr.MonitorConnectivity{
+	a := &mackerel.MonitorConnectivity{
 		ID:   "12345",
 		Name: "foo",
 		Type: "connectivity",
 	}
-	b := &mkr.MonitorConnectivity{
+	b := &mackerel.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",
@@ -163,7 +163,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
-	c := &mkr.MonitorConnectivity{
+	c := &mackerel.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",
@@ -183,7 +183,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 
-	d := &mkr.MonitorConnectivity{
+	d := &mackerel.MonitorConnectivity{
 		ID:     "12345",
 		Name:   "foo",
 		Type:   "connectivity",

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/urfave/cli"
 )
 

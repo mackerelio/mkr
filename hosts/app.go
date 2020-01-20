@@ -5,7 +5,7 @@ import (
 	"io"
 	"text/template"
 
-	mackerel "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/mackerelclient"

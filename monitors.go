@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	mkr "github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -71,7 +71,7 @@ var commandMonitors = cli.Command{
 	},
 }
 
-func monitorSaveRules(rules []mkr.Monitor, optFilePath string) error {
+func monitorSaveRules(rules []mackerel.Monitor, optFilePath string) error {
 	filePath := "monitors.json"
 	if optFilePath != "" {
 		filePath = optFilePath
@@ -92,7 +92,7 @@ func monitorSaveRules(rules []mkr.Monitor, optFilePath string) error {
 	return nil
 }
 
-func monitorLoadRules(optFilePath string) ([]mkr.Monitor, error) {
+func monitorLoadRules(optFilePath string) ([]mackerel.Monitor, error) {
 	filePath := "monitors.json"
 	if optFilePath != "" {
 		filePath = optFilePath
@@ -108,14 +108,14 @@ func monitorLoadRules(optFilePath string) ([]mkr.Monitor, error) {
 // decodeMonitors decodes monitors JSON.
 //
 // There are almost same code in mackerel-client-go.
-func decodeMonitors(r io.Reader) ([]mkr.Monitor, error) {
+func decodeMonitors(r io.Reader) ([]mackerel.Monitor, error) {
 	var data struct {
 		Monitors []json.RawMessage `json:"monitors"`
 	}
 	if err := json.NewDecoder(r).Decode(&data); err != nil {
 		return nil, err
 	}
-	ms := make([]mkr.Monitor, 0, len(data.Monitors))
+	ms := make([]mackerel.Monitor, 0, len(data.Monitors))
 	for _, rawmes := range data.Monitors {
 		m, err := decodeMonitor(rawmes)
 		if err != nil {
@@ -129,27 +129,27 @@ func decodeMonitors(r io.Reader) ([]mkr.Monitor, error) {
 // decodeMonitor decodes json.RawMessage and returns monitor.
 //
 // There are almost same code in mackerel-client-go.
-func decodeMonitor(mes json.RawMessage) (mkr.Monitor, error) {
+func decodeMonitor(mes json.RawMessage) (mackerel.Monitor, error) {
 	var typeData struct {
 		Type string `json:"type"`
 	}
 	if err := json.Unmarshal(mes, &typeData); err != nil {
 		return nil, err
 	}
-	var m mkr.Monitor
+	var m mackerel.Monitor
 	switch typeData.Type {
 	case "connectivity":
-		m = &mkr.MonitorConnectivity{}
+		m = &mackerel.MonitorConnectivity{}
 	case "host":
-		m = &mkr.MonitorHostMetric{}
+		m = &mackerel.MonitorHostMetric{}
 	case "service":
-		m = &mkr.MonitorServiceMetric{}
+		m = &mackerel.MonitorServiceMetric{}
 	case "external":
-		m = &mkr.MonitorExternalHTTP{}
+		m = &mackerel.MonitorExternalHTTP{}
 	case "expression":
-		m = &mkr.MonitorExpression{}
+		m = &mackerel.MonitorExpression{}
 	case "anomalyDetection":
-		m = &mkr.MonitorAnomalyDetection{}
+		m = &mackerel.MonitorAnomalyDetection{}
 	}
 	if err := json.Unmarshal(mes, m); err != nil {
 		return nil, err
@@ -185,14 +185,14 @@ func doMonitorsPull(c *cli.Context) error {
 	return nil
 }
 
-func stringifyMonitor(a mkr.Monitor, prefix string) string {
+func stringifyMonitor(a mackerel.Monitor, prefix string) string {
 	return prefix + format.JSONMarshalIndent(a, prefix, "  ") + ","
 }
 
 // diffMonitor returns JSON diff between monitors.
 // In order to use `mkr monitors` without pull and to manage monitors by name
 // only, it skips top level "id" field
-func diffMonitor(a mkr.Monitor, b mkr.Monitor) string {
+func diffMonitor(a mackerel.Monitor, b mackerel.Monitor) string {
 	as := filterIDLine(format.JSONMarshalIndent(a, " ", "  "))
 	bs := filterIDLine(format.JSONMarshalIndent(b, " ", "  "))
 	diff, err := gojsondiff.New().Compare([]byte(as), []byte(bs))
@@ -220,7 +220,7 @@ func filterIDLine(s string) string {
 	return strings.Join(filtered, "\n")
 }
 
-func isSameMonitor(a mkr.Monitor, b mkr.Monitor, flagNameUniqueness bool) (string, bool) {
+func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniqueness bool) (string, bool) {
 	if a == nil || b == nil {
 		return "", false
 	}
@@ -254,7 +254,7 @@ func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) (bool, er
 	return true, nil
 }
 
-func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
+func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 
 	flagNameUniqueness := true
 	// check each monitor
@@ -267,28 +267,28 @@ func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 			}
 		}
 		switch m := monitor.(type) {
-		case *mkr.MonitorHostMetric, *mkr.MonitorServiceMetric:
+		case *mackerel.MonitorHostMetric, *mackerel.MonitorServiceMetric:
 			for _, f := range []string{"Name", "Metric"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case *mkr.MonitorExternalHTTP:
+		case *mackerel.MonitorExternalHTTP:
 			for _, f := range []string{"Name", "URL"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case *mkr.MonitorExpression:
+		case *mackerel.MonitorExpression:
 			for _, f := range []string{"Name", "Expression"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-		case *mkr.MonitorAnomalyDetection:
+		case *mackerel.MonitorAnomalyDetection:
 			for _, f := range []string{"Name"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
@@ -296,7 +296,7 @@ func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 				}
 			}
 			return validateRuleAnomalyDetectionScopes(v, label)
-		case *mkr.MonitorConnectivity:
+		case *mackerel.MonitorConnectivity:
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
 		}
@@ -316,13 +316,13 @@ func validateRules(monitors []mkr.Monitor, label string) (bool, error) {
 }
 
 type monitorDiffPair struct {
-	remote mkr.Monitor
-	local  mkr.Monitor
+	remote mackerel.Monitor
+	local  mackerel.Monitor
 }
 
 type monitorDiff struct {
-	onlyRemote []mkr.Monitor
-	onlyLocal  []mkr.Monitor
+	onlyRemote []mackerel.Monitor
+	onlyLocal  []mackerel.Monitor
 	diff       []*monitorDiffPair
 }
 
@@ -385,8 +385,8 @@ func doMonitorsDiff(c *cli.Context) error {
 		diffs = append(diffs, diff)
 	}
 
-	var monitorOnlyFrom []mkr.Monitor
-	var monitorOnlyTo []mkr.Monitor
+	var monitorOnlyFrom []mackerel.Monitor
+	var monitorOnlyTo []mackerel.Monitor
 	if isReverse {
 		monitorOnlyFrom = monitorDiff.onlyLocal
 		monitorOnlyTo = monitorDiff.onlyRemote
