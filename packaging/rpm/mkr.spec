@@ -42,6 +42,16 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jan 22 2020 <mackerel-developers@hatena.ne.jp> - 0.39.6
+- Bump github.com/pkg/errors from 0.8.1 to 0.9.1 (by dependabot-preview[bot])
+- Bump alpine from 3.11.2 to 3.11.3 (by dependabot-preview[bot])
+- Stop using alias imports for mackerel-client-go for simplicity (by stefafafan)
+- Bump github.com/fatih/color from 1.8.0 to 1.9.0 (by dependabot-preview[bot])
+- Bump github.com/fatih/color from 1.7.0 to 1.8.0 (by dependabot-preview[bot])
+- Bump alpine from 3.11.0 to 3.11.2 (by dependabot-preview[bot])
+- Bump alpine from 3.10.3 to 3.11.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.64.1 to 0.65.0 (by dependabot-preview[bot])
+
 * Thu Dec 05 2019 <mackerel-developers@hatena.ne.jp> - 0.39.5
 - Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 (by dependabot-preview[bot])
 - Bump github.com/Songmu/prompter from 0.2.0 to 0.3.0 (by dependabot-preview[bot])
