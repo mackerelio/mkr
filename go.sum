@@ -98,6 +98,8 @@ github.com/mackerelio/mackerel-agent v0.64.1 h1:6P7aVBR1y8Qx3CVKIzGxR47J1dEVwziZ
 github.com/mackerelio/mackerel-agent v0.64.1/go.mod h1:QE40vSVnvInerrKtpcNhujwrVl2Lagp1qV4aYNbBE6A=
 github.com/mackerelio/mackerel-agent v0.65.0 h1:iX4ARSvKmPFrKenFIJ+NTHNZILKFHPs91o52e/0Gbu4=
 github.com/mackerelio/mackerel-agent v0.65.0/go.mod h1:98ECUlbRtesasEwCYlSdKdLIIe2ugQbZ5jIQn5A8Uok=
+github.com/mackerelio/mackerel-agent v0.66.0 h1:aLcY0Im6pFEP56gF7/ya2EXiakhrXFD1Ue/eQz34uA0=
+github.com/mackerelio/mackerel-agent v0.66.0/go.mod h1:xwmOxSHzL0ORT+hcWbCSoVTRKev61EbQSzPl5NNS3SQ=
 github.com/mackerelio/mackerel-client-go v0.6.0 h1:Zzer4jmHdDucOpO5Qco7r0MdIg0TExbQem1nLX8dtYE=
 github.com/mackerelio/mackerel-client-go v0.6.0/go.mod h1:/FVnUK7nsg/MEBpIVOCZLYzdIwY5mg/SyAlXDnxVcAI=
 github.com/mackerelio/mackerel-client-go v0.7.0 h1:iccCwvdDArIoXj6sdpdGMw5qhidFhT9au2hXbxf+Avs=
@@ -157,6 +159,8 @@ github.com/shirou/gopsutil v2.19.10+incompatible h1:lA4Pi29JEVIQIgATSeftHSY0rMGI
 github.com/shirou/gopsutil v2.19.10+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/gopsutil v2.19.11+incompatible h1:lJHR0foqAjI4exXqWsU3DbH7bX1xvdhGdnXTIARA9W4=
 github.com/shirou/gopsutil v2.19.11+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
+github.com/shirou/gopsutil v2.19.12+incompatible h1:WRstheAymn1WOPesh+24+bZKFkqrdCR8JOc77v4xV3Q=
+github.com/shirou/gopsutil v2.19.12+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 h1:udFKJ0aHUL60LboW/A+DfgoHVedieIzIXE8uylPue0U=
 github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4/go.mod h1:qsXQc7+bwAM3Q1u/4XEfrquwF8Lw7D7y5cD8CuHnfIc=
 github.com/shurcooL/sanitized_anchor_name v1.0.0 h1:PdmoCO6wvbs+7yrJyMORt4/BmY5IYyJwS/kOiWx8mHo=
