@@ -1,3 +1,24 @@
+mkr (0.39.6-1) stable; urgency=low
+
+  * Bump github.com/pkg/errors from 0.8.1 to 0.9.1 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/262>
+  * Bump alpine from 3.11.2 to 3.11.3 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/264>
+  * Stop using alias imports for mackerel-client-go for simplicity (by stefafafan)
+    <https://github.com/mackerelio/mkr/pull/263>
+  * Bump github.com/fatih/color from 1.8.0 to 1.9.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/258>
+  * Bump github.com/fatih/color from 1.7.0 to 1.8.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/257>
+  * Bump alpine from 3.11.0 to 3.11.2 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/255>
+  * Bump alpine from 3.10.3 to 3.11.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/254>
+  * Bump github.com/mackerelio/mackerel-agent from 0.64.1 to 0.65.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/252>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 22 Jan 2020 07:19:36 +0000
+
 mkr (0.39.5-1) stable; urgency=low
 
   * Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 (by dependabot-preview[bot])
