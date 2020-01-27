@@ -13,14 +13,13 @@ var commandChannels = cli.Command{
 	Name:  "channels",
 	Usage: "List notification channels",
 	Description: `
-	Lists notification channels.
+	Lists notification channels. With no subcommand specified, this will show all channels.
 	Requests APIs under "/api/v0/channels". See https://mackerel.io/api-docs/entry/channels .
 	`,
 	Action: doChannelsList,
 }
 
 func doChannelsList(c *cli.Context) error {
-	// Waiting for mackerel-client-go to be bumped to version supporting FindChannels.
 	client := mackerelclient.NewFromContext(c)
 	channels, err := client.FindChannels()
 	logger.DieIf(err)
