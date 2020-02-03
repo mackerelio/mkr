@@ -21,7 +21,7 @@ var commandAnnotations = cli.Command{
 		{
 			Name:      "create",
 			Usage:     "create a graph annotation",
-			ArgsUsage: "[--title <title>] [--description <descriptio>] [--from <from>] [--to <to>] [--service -s <service>] [--role -r <role>]",
+			ArgsUsage: "--title <title> [--description <descriptio>] --from <from> --to <to> --service -s <service> [--role -r <role>]",
 			Description: `
     Creates a graph annotation.
 `,
@@ -42,7 +42,7 @@ var commandAnnotations = cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list annotations",
-			ArgsUsage: "[--from <from>] [--to <to>] [--service -s <service>]",
+			ArgsUsage: "--from <from> --to <to> --service -s <service>",
 			Description: `
     Shows annotations by service name and duration (from and to)
 `,
@@ -56,7 +56,7 @@ var commandAnnotations = cli.Command{
 		{
 			Name:      "update",
 			Usage:     "update annotation",
-			ArgsUsage: "[--id <id>] [--title <title>] [--description <descriptio>] [--from <from>] [--to <to>] [--service -s <service>] [--role -r <role>]",
+			ArgsUsage: "--id <id> [--title <title>] [--description <descriptio>] --from <from> --to <to> --service -s <service> [--role -r <role>]",
 			Description: `
     Updates an annotation
 `,
@@ -78,7 +78,7 @@ var commandAnnotations = cli.Command{
 		{
 			Name:      "delete",
 			Usage:     "delete annotation",
-			ArgsUsage: "[--id <id>]",
+			ArgsUsage: "--id <id>",
 			Description: `
     Delete graph annotation by annotation id
 `,
