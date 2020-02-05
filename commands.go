@@ -31,7 +31,7 @@ var Commands = []cli.Command{
 	commandRetire,
 	services.Command,
 	commandMonitors,
-	commandChannels,
+	channels.Command,
 	commandAlerts,
 	commandDashboards,
 	commandAnnotations,
