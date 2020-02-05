@@ -1,3 +1,12 @@
+mkr (0.39.7-1) stable; urgency=low
+
+  * show mandantory flags usage in modern CLI manner (by aereal)
+    <https://github.com/mackerelio/mkr/pull/273>
+  * rename: github.com/motemen/gobump -> github.com/x-motemen/gobump (by lufia)
+    <https://github.com/mackerelio/mkr/pull/268>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 05 Feb 2020 08:01:03 +0000
+
 mkr (0.39.6-1) stable; urgency=low
 
   * Bump github.com/pkg/errors from 0.8.1 to 0.9.1 (by dependabot-preview[bot])

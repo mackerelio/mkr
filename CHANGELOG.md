@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.39.7 (2020-02-05)
+
+* show mandantory flags usage in modern CLI manner #273 (aereal)
+* rename: github.com/motemen/gobump -> github.com/x-motemen/gobump #268 (lufia)
+
+
 ## 0.39.6 (2020-01-22)
 
 * Bump github.com/pkg/errors from 0.8.1 to 0.9.1 #262 (dependabot-preview[bot])

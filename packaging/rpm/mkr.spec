@@ -42,6 +42,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Feb 05 2020 <mackerel-developers@hatena.ne.jp> - 0.39.7
+- show mandantory flags usage in modern CLI manner (by aereal)
+- rename: github.com/motemen/gobump -> github.com/x-motemen/gobump (by lufia)
+
 * Wed Jan 22 2020 <mackerel-developers@hatena.ne.jp> - 0.39.6
 - Bump github.com/pkg/errors from 0.8.1 to 0.9.1 (by dependabot-preview[bot])
 - Bump alpine from 3.11.2 to 3.11.3 (by dependabot-preview[bot])
