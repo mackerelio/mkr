@@ -1,5 +1,12 @@
 package channels
 
+import (
+	"io"
+
+	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/mackerelclient"
+)
+
 type channelsApp struct {
 	client    mackerelclient.Client
 	outStream io.Writer
