@@ -31,24 +31,22 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 	channels, err := mackerelclient.NewFromContext(c).FindChannels()
 	logger.DieIf(err)
 
-	channelSaveRules(channels, optFilePath)
+	filePath := "channels.json"
+	if optFilePath != "" {
+		filePath = optFilePath
+	}
+
+	channelSaveRules(channels, filePath)
 
 	if isVerbose {
 		format.PrettyPrintJSON(os.Stdout, channels)
 	}
 
-	if optFilePath == "" {
-		optFilePath = "channels.json"
-	}
-	logger.Log("info", fmt.Sprintf("Channels are saved to '%s' (%d rules).", optFilePath, len(channels)))
+	logger.Log("info", fmt.Sprintf("Channels are saved to '%s' (%d rules).", filePath, len(channels)))
 	return nil
 }
 
-func channelSaveRules(rules []*mackerel.Channel, optFilePath string) error {
-	filePath := "channels.json"
-	if optFilePath != "" {
-		filePath = optFilePath
-	}
+func channelSaveRules(rules []*mackerel.Channel, filePath string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatal(err)
