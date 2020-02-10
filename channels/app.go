@@ -21,3 +21,8 @@ func (app *channelsApp) run() error {
 	format.PrettyPrintJSON(app.outStream, channels)
 	return nil
 }
+
+func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
+	// TODO
+	return nil
+}
