@@ -28,7 +28,7 @@ func (app *channelsApp) run() error {
 }
 
 func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
-	channels, err := mackerelclient.NewFromContext(c).FindChannels()
+	channels, err := app.client.FindChannels()
 	logger.DieIf(err)
 
 	filePath := "channels.json"
