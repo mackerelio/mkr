@@ -7,7 +7,8 @@ import (
 	"github.com/urfave/cli"
 )
 
-var commandChannels = cli.Command{
+// Command is the definition of channels subcommand
+var Command = cli.Command{
 	Name:  "channels",
 	Usage: "List notification channels",
 	Description: `
