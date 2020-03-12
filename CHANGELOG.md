@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.39.7 (2020-02-05)
+
+* show mandantory flags usage in modern CLI manner #273 (aereal)
+* rename: github.com/motemen/gobump -> github.com/x-motemen/gobump #268 (lufia)
+
+
+## 0.39.6 (2020-01-22)
+
+* Bump github.com/pkg/errors from 0.8.1 to 0.9.1 #262 (dependabot-preview[bot])
+* Bump alpine from 3.11.2 to 3.11.3 #264 (dependabot-preview[bot])
+* Stop using alias imports for mackerel-client-go for simplicity #263 (stefafafan)
+* Bump github.com/fatih/color from 1.8.0 to 1.9.0 #258 (dependabot-preview[bot])
+* Bump github.com/fatih/color from 1.7.0 to 1.8.0 #257 (dependabot-preview[bot])
+* Bump alpine from 3.11.0 to 3.11.2 #255 (dependabot-preview[bot])
+* Bump alpine from 3.10.3 to 3.11.0 #254 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.64.1 to 0.65.0 #252 (dependabot-preview[bot])
+
+
 ## 0.39.5 (2019-12-05)
 
 * Bump gopkg.in/yaml.v2 from 2.2.5 to 2.2.7 #244 (dependabot-preview[bot])

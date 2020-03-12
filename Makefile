@@ -1,5 +1,5 @@
 BIN := mkr
-VERSION := 0.39.5
+VERSION := 0.39.7
 CURRENT_REVISION := $(shell git rev-parse --short HEAD)
 BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 
@@ -41,7 +41,9 @@ gofmt: test-deps
 
 .PHONY: cross
 cross: devel-deps
-	goxz -d snapshot -os darwin,linux -arch 386,amd64 \
+	goxz -d snapshot -os darwin -arch amd64 \
+	  -build-ldflags=$(BUILD_LDFLAGS)
+	goxz -d snapshot -os linux -arch 386,amd64 \
 	  -build-ldflags=$(BUILD_LDFLAGS)
 
 .PHONY: rpm
