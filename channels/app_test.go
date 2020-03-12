@@ -2,6 +2,7 @@ package channels
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -132,4 +133,45 @@ func TestChannelsApp_Run(t *testing.T) {
 	}
 }
 
-// TODO: write tests for pullChannels
+func TestChannelsApp_PullChannels(t *testing.T) {
+	testCases := []struct {
+		input    string
+		expected string
+	}{
+		{
+			input:    "",
+			expected: "channels.json",
+		},
+		{
+			input:    "some_file.json",
+			expected: "some_file.json",
+		},
+		{
+			input:    "hoge.txt",
+			expected: "hoge.txt",
+		},
+	}
+
+	for _, tc := range testCases {
+		out := new(bytes.Buffer)
+
+		// override saveChannels to simply print filePath
+		saveChannels = func(rules []*mackerel.Channel, filePath string) error {
+			fmt.Fprint(out, filePath)
+			return nil
+		}
+
+		client := mackerelclient.NewMockClient(
+			mackerelclient.MockFindChannels(func() ([]*mackerel.Channel, error) {
+				return []*mackerel.Channel{}, nil
+			}),
+		)
+		app := &channelsApp{
+			client:    client,
+			outStream: out,
+		}
+
+		assert.NoError(t, app.pullChannels(false, tc.input))
+		assert.Equal(t, tc.expected, out.String())
+	}
+}

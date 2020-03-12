@@ -36,7 +36,7 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 		filePath = optFilePath
 	}
 
-	channelSaveRules(channels, filePath)
+	saveChannels(channels, filePath)
 
 	if isVerbose {
 		format.PrettyPrintJSON(os.Stdout, channels)
@@ -45,6 +45,8 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 	logger.Log("info", fmt.Sprintf("Channels are saved to '%s' (%d rules).", filePath, len(channels)))
 	return nil
 }
+
+var saveChannels = channelSaveRules
 
 func channelSaveRules(rules []*mackerel.Channel, filePath string) error {
 	file, err := os.Create(filePath)
