@@ -132,4 +132,4 @@ func TestChannelsApp_Run(t *testing.T) {
 	}
 }
 
-// TODO: write tests for pullChannels/channelSaveRules
+// TODO: write tests for pullChannels
