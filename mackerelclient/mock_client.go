@@ -6,6 +6,7 @@ import "github.com/mackerelio/mackerel-client-go"
 type MockClient struct {
 	findHostsCallback        func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
 	findServicesCallback     func() ([]*mackerel.Service, error)
+	findChannelsCallback     func() ([]*mackerel.Channel, error)
 	getOrgCallback           func() (*mackerel.Org, error)
 	createHostCallback       func(param *mackerel.CreateHostParam) (string, error)
 	updateHostStatusCallback func(hostID string, status string) error
@@ -61,6 +62,21 @@ func (c *MockClient) FindServices() ([]*mackerel.Service, error) {
 func MockFindServices(callback func() ([]*mackerel.Service, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findServicesCallback = callback
+	}
+}
+
+// FindChannels ...
+func (c *MockClient) FindChannels() ([]*mackerel.Channel, error) {
+	if c.findChannelsCallback != nil {
+		return c.findChannelsCallback()
+	}
+	return nil, errCallbackNotFound("FindChannels")
+}
+
+// MockFindChannels returns an option to set the callback of FindChannels
+func MockFindChannels(callback func() ([]*mackerel.Channel, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.findChannelsCallback = callback
 	}
 }
 

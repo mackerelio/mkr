@@ -7,6 +7,7 @@ import (
 
 	"github.com/Songmu/prompter"
 	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/hosts"
@@ -31,6 +32,7 @@ var Commands = []cli.Command{
 	commandRetire,
 	services.Command,
 	commandMonitors,
+	channels.Command,
 	commandAlerts,
 	commandDashboards,
 	commandAnnotations,
