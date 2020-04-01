@@ -2,7 +2,7 @@ version: "{build}"
 clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
   GOPATH: c:\gopath
-  GOROOT: c:\go112
+  GOROOT: c:\go114
   GO111MODULE: on
 build: off
 install:

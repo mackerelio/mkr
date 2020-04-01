@@ -1,6 +1,6 @@
 module github.com/mackerelio/mkr
 
-go 1.12
+go 1.14
 
 require (
 	github.com/Songmu/prompter v0.3.0
