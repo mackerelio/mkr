@@ -3,13 +3,12 @@ clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
   VERSION: go1.14.1
   GOPATH: c:\gopath
-  GOROOT: c:\go
+  GOROOT: c:\tools\go
   GO111MODULE: on
 build: off
 install:
-  - rmdir %GOROOT% /s /q
   - appveyor DownloadFile https://dl.google.com/go/%VERSION%.windows-amd64.zip
-  - 7z x %VERSION%.windows-amd64.zip -oC:\
+  - 7z x %VERSION%.windows-amd64.zip -oC:\tools\
   - set PATH=%GOROOT%\bin;%GOPATH%\bin;C:\msys64\mingw64\bin;%PATH%
 test_script:
   - go test -v ./...
