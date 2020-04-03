@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.40.0 (2020-04-03)
+
+* Bump alpine from 3.11.3 to 3.11.5 #285 (dependabot-preview[bot])
+* Implement `mkr channels pull` command #270 (stefafafan)
+* Bump github.com/urfave/cli from 1.22.2 to 1.22.3 #283 (dependabot-preview[bot])
+* Stop building 32bit Darwin artifacts #282 (astj)
+* Bump github.com/mackerelio/mackerel-client-go from 0.8.0 to 0.9.1 #276 (dependabot-preview[bot])
+* Bump github.com/stretchr/testify from 1.4.0 to 1.5.1 #280 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.65.0 to 0.67.0 #275 (dependabot-preview[bot])
+* Bump gopkg.in/yaml.v2 from 2.2.7 to 2.2.8 #267 (dependabot-preview[bot])
+
+
 ## 0.39.7 (2020-02-05)
 
 * show mandantory flags usage in modern CLI manner #273 (aereal)
