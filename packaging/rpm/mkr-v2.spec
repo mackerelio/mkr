@@ -36,6 +36,16 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Fri Apr 03 2020 <mackerel-developers@hatena.ne.jp> - 0.40.0
+- Bump alpine from 3.11.3 to 3.11.5 (by dependabot-preview[bot])
+- Implement `mkr channels pull` command (by stefafafan)
+- Bump github.com/urfave/cli from 1.22.2 to 1.22.3 (by dependabot-preview[bot])
+- Stop building 32bit Darwin artifacts (by astj)
+- Bump github.com/mackerelio/mackerel-client-go from 0.8.0 to 0.9.1 (by dependabot-preview[bot])
+- Bump github.com/stretchr/testify from 1.4.0 to 1.5.1 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.65.0 to 0.67.0 (by dependabot-preview[bot])
+- Bump gopkg.in/yaml.v2 from 2.2.7 to 2.2.8 (by dependabot-preview[bot])
+
 * Wed Feb 05 2020 <mackerel-developers@hatena.ne.jp> - 0.39.7
 - show mandantory flags usage in modern CLI manner (by aereal)
 - rename: github.com/motemen/gobump -> github.com/x-motemen/gobump (by lufia)

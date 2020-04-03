@@ -1,5 +1,5 @@
 BIN := mkr
-VERSION := 0.39.7
+VERSION := 0.40.0
 CURRENT_REVISION := $(shell git rev-parse --short HEAD)
 BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 
