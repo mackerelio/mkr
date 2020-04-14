@@ -21,7 +21,6 @@ require (
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
 	github.com/mackerelio/mackerel-agent v0.67.1
 	github.com/mackerelio/mackerel-client-go v0.9.1
-	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/nwaples/rardecode v1.0.0 // indirect
