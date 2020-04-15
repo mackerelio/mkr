@@ -1,7 +1,7 @@
 version: "{build}"
 clone_folder: c:\gopath\src\github.com\mackerelio\mkr
 environment:
-  VERSION: go1.14.1
+  VERSION: go1.14.2
   GOPATH: c:\gopath
   GOROOT: c:\tools\go
   GO111MODULE: on
