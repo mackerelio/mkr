@@ -36,6 +36,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu May 14 2020 <mackerel-developers@hatena.ne.jp> - 0.40.1
+- Bump gopkg.in/yaml.v2 from 2.2.8 to 2.3.0 (by dependabot-preview[bot])
+- Bump alpine from 3.11.5 to 3.11.6 (by dependabot-preview[bot])
+- Build with Go 1.14 (by lufia)
+- Bump github.com/urfave/cli from 1.22.3 to 1.22.4 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.67.0 to 0.67.1 (by dependabot-preview[bot])
+
 * Fri Apr 03 2020 <mackerel-developers@hatena.ne.jp> - 0.40.0
 - Bump alpine from 3.11.3 to 3.11.5 (by dependabot-preview[bot])
 - Implement `mkr channels pull` command (by stefafafan)
