@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.40.1 (2020-05-14)
+
+* Bump gopkg.in/yaml.v2 from 2.2.8 to 2.3.0 #293 (dependabot-preview[bot])
+* Bump alpine from 3.11.5 to 3.11.6 #292 (dependabot-preview[bot])
+* Build with Go 1.14 #286 (lufia)
+* Bump github.com/urfave/cli from 1.22.3 to 1.22.4 #287 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.67.0 to 0.67.1 #289 (dependabot-preview[bot])
+
+
 ## 0.40.0 (2020-04-03)
 
 * Bump alpine from 3.11.3 to 3.11.5 #285 (dependabot-preview[bot])
