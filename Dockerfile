@@ -5,7 +5,7 @@ COPY . .
 ENV GO111MODULE=on
 RUN make build
 
-FROM alpine:3.11.6
+FROM alpine:3.12.0
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /go/src/github.com/mackerelio/mkr/mkr /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/mkr"]
