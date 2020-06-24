@@ -23,35 +23,35 @@ mkr output format is JSON, so it can be filtered with a JSON processor such as [
 ### CentOS 7 (or later)
 
 ```bash
-curl -fsSL https://mackerel.io/file/scripts/setup-yum-v2.sh | sh
+curl -fsSL https://mackerel.io/file/script/setup-yum-v2.sh | sh
 yum install mkr
 ```
 
 ### CentOS 6
 
 ```bash
-curl -fsSL https://mackerel.io/file/scripts/setup-yum.sh | sh
+curl -fsSL https://mackerel.io/file/script/setup-yum.sh | sh
 yum install mkr
 ```
 
 ### Debian / Ubuntu
 
 ```bash
-curl -fsSL https://mackerel.io/file/scripts/setup-apt-v2.sh | sh
+curl -fsSL https://mackerel.io/file/script/setup-apt-v2.sh | sh
 apt-get install mkr
 ```
 
 ### Amazon Linux 2 LTS
 
 ```bash
-curl -fsSL https://mackerel.io/file/scripts/amznlinux/setup-yum-v2.sh | sh
+curl -fsSL https://mackerel.io/file/script/amznlinux/setup-yum-v2.sh | sh
 yum install mkr
 ```
 
 ### Amazon Linux
 
 ```bash
-curl -fsSL https://mackerel.io/file/scripts/amznlinux/setup-yum.sh | sh
+curl -fsSL https://mackerel.io/file/script/amznlinux/setup-yum.sh | sh
 yum install mkr
 ```
 
