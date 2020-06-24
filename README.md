@@ -18,24 +18,47 @@ mkr output format is JSON, so it can be filtered with a JSON processor such as [
 
 # INSTALLATION
 
-Install the plugin package from either the yum or the apt repository.
+## apt / yum (for Linux)
 
-## CentOS 5/6
+### CentOS 7 (or later)
 
 ```bash
-curl -fsSL https://mackerel.io/assets/files/scripts/setup-yum.sh | sh
+curl -fsSL https://mackerel.io/file/scripts/setup-yum-v2.sh | sh
 yum install mkr
 ```
 
-## Debian 6/7
+### CentOS 6
 
 ```bash
-curl -fsSL https://mackerel.io/assets/files/scripts/setup-apt.sh | sh
+curl -fsSL https://mackerel.io/file/scripts/setup-yum.sh | sh
+yum install mkr
+```
+
+### Debian / Ubuntu
+
+```bash
+curl -fsSL https://mackerel.io/file/scripts/setup-apt-v2.sh | sh
 apt-get install mkr
 ```
 
-## Homebrew
+### Amazon Linux 2 LTS
+
+```bash
+curl -fsSL https://mackerel.io/file/scripts/amznlinux/setup-yum-v2.sh | sh
+yum install mkr
+```
+
+### Amazon Linux
+
+```bash
+curl -fsSL https://mackerel.io/file/scripts/amznlinux/setup-yum.sh | sh
+yum install mkr
+```
+
+## Homebrew (for macOS)
+
 You can also install from the brew rule we maintain, but we don't officially support the environment.
+
 ```bash
 brew tap mackerelio/mackerel-agent
 brew install mkr
