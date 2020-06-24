@@ -42,9 +42,9 @@ brew install mkr
 ```
 
 ## Build from source
+
 ```bash
-$ go get github.com/mackerelio/mkr
-$ go install github.com/mackerelio/mkr
+$ GO111MODULE=on go get github.com/mackerelio/mkr
 ```
 
 # USAGE
