@@ -71,11 +71,7 @@ var commandMonitors = cli.Command{
 	},
 }
 
-func monitorSaveRules(rules []mackerel.Monitor, optFilePath string) error {
-	filePath := "monitors.json"
-	if optFilePath != "" {
-		filePath = optFilePath
-	}
+func monitorSaveRules(rules []mackerel.Monitor, filePath string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatal(err)
@@ -172,15 +168,15 @@ func doMonitorsPull(c *cli.Context) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
+	if filePath == "" {
+		filePath = "monitors.json"
+	}
 	monitorSaveRules(monitors, filePath)
 
 	if isVerbose {
 		format.PrettyPrintJSON(os.Stdout, monitors)
 	}
 
-	if filePath == "" {
-		filePath = "monitors.json"
-	}
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
 	return nil
 }
