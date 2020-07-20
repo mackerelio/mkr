@@ -75,6 +75,8 @@ github.com/mackerelio/golib v1.0.0 h1:wiJv4l8xU9jmMn/JZV6gfpJeLUQxVFG0kVFWnsoF9w
 github.com/mackerelio/golib v1.0.0/go.mod h1:Udb4zyFG2ui7TNTMOX8In0U8AT4woLu53/46ncRwNzE=
 github.com/mackerelio/mackerel-agent v0.68.0 h1:GVgb8rEuAZOf2qIRYukp6C02LiUA3U3bgLMrcpBz9mU=
 github.com/mackerelio/mackerel-agent v0.68.0/go.mod h1:dXf9hLn93htJhgQQWrmrwk82i+CO+wKT8BJBl+WSjhs=
+github.com/mackerelio/mackerel-agent v0.68.1 h1:PB+FY/mVKDwYNQ0g7NGuoj3Y4LdLvHgjK3CdUVv+00Y=
+github.com/mackerelio/mackerel-agent v0.68.1/go.mod h1:eu97/MLHzKXg0YGlHNC1+kGA82T97imhLD8mKjoCANQ=
 github.com/mackerelio/mackerel-client-go v0.9.1 h1:IkH7EZMCmu/PWStwSq+ICfwNLGGNSXfSE24ar4eVDCc=
 github.com/mackerelio/mackerel-client-go v0.9.1/go.mod h1:/FVnUK7nsg/MEBpIVOCZLYzdIwY5mg/SyAlXDnxVcAI=
 github.com/mackerelio/mackerel-client-go v0.10.0 h1:coEuJle/etf0g8PoyTfwKs7eDBFBGz3ox6DN1rKaaLk=
@@ -197,6 +199,8 @@ golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
+golang.org/x/text v0.3.3 h1:cokOdA+Jmi5PJGXLlLllQSgYigAEfHXJAERHVMaCc2k=
+golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20190606124116-d0a3d012864b/go.mod h1:/rFqwRUd4F7ZHNgwSSTFct+R/Kf4OFW1sUzUTQQTgfc=
 golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=

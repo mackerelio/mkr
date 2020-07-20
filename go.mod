@@ -19,7 +19,7 @@ require (
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
-	github.com/mackerelio/mackerel-agent v0.68.0
+	github.com/mackerelio/mackerel-agent v0.68.1
 	github.com/mackerelio/mackerel-client-go v0.10.1
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
