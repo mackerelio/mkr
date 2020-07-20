@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.40.2 (2020-07-20)
+
+* Bump github.com/mackerelio/mackerel-client-go from 0.10.0 to 0.10.1 #305 (dependabot-preview[bot])
+* define default file name while doMonitorsPull() at once #304 (hgsgtk)
+* Update `Installation` section of README  #303 (astj)
+* Bump github.com/stretchr/testify from 1.6.0 to 1.6.1 #300 (dependabot-preview[bot])
+* Update go.sum #301 (shibayu36)
+* Bump alpine from 3.11.6 to 3.12.0 #299 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.9.1 to 0.10.0 #296 (dependabot-preview[bot])
+* Bump github.com/stretchr/testify from 1.5.1 to 1.6.0 #298 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.67.1 to 0.68.0 #295 (dependabot-preview[bot])
+
+
 ## 0.40.1 (2020-05-14)
 
 * Bump gopkg.in/yaml.v2 from 2.2.8 to 2.3.0 #293 (dependabot-preview[bot])
