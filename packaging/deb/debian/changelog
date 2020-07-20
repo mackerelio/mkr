@@ -1,3 +1,26 @@
+mkr (0.40.2-1) stable; urgency=low
+
+  * Bump github.com/mackerelio/mackerel-client-go from 0.10.0 to 0.10.1 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/305>
+  * define default file name while doMonitorsPull() at once (by hgsgtk)
+    <https://github.com/mackerelio/mkr/pull/304>
+  * Update `Installation` section of README  (by astj)
+    <https://github.com/mackerelio/mkr/pull/303>
+  * Bump github.com/stretchr/testify from 1.6.0 to 1.6.1 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/300>
+  * Update go.sum (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/301>
+  * Bump alpine from 3.11.6 to 3.12.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/299>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.9.1 to 0.10.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/296>
+  * Bump github.com/stretchr/testify from 1.5.1 to 1.6.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/298>
+  * Bump github.com/mackerelio/mackerel-agent from 0.67.1 to 0.68.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/295>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 20 Jul 2020 03:09:19 +0000
+
 mkr (0.40.1-1) stable; urgency=low
 
   * Bump gopkg.in/yaml.v2 from 2.2.8 to 2.3.0 (by dependabot-preview[bot])
