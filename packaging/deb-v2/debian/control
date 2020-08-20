@@ -7,7 +7,7 @@ Standards-Version: 3.9.4
 Homepage: https://mackerel.io
 
 Package: mkr
-Architecture: amd64
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: macekrel.io api client tool
  api client tool for makerel.io

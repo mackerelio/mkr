@@ -8,7 +8,10 @@ env:
   - secure: "PDv5k+Wp7fEHGN2oszqpN/7Lvcc6bY4wT9PgT0w+G8AUNOhprXzPzIHVP2qNIBfhIDjECrbw4T6h1PeumIZYXg3wqLElGe+24OfDjSPjB3nal40Sx9PLLG5h7ywsJlPMqV0bfKyYTxs0lmUhE5XaaBvHEJGv6MHNjBc2H0bVMsE="
 install:
 - sudo apt-get update
-- DEBIAN_FRONTEND=noninteractive sudo apt-get install -y rpm devscripts debhelper fakeroot
+- >-
+  DEBIAN_FRONTEND=noninteractive
+  sudo apt-get install -y
+  rpm devscripts debhelper fakeroot crossbuild-essential-arm64
 - mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 script:
 - make all
