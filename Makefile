@@ -57,7 +57,10 @@ rpm-v1:
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch x86_64" --target x86_64  -bb packaging/rpm/mkr.spec
 
 .PHONY: rpm-v2
-rpm-v2:
+rpm-v2: rpm-v2-x86 rpm-v2-arm
+
+.PHONY: rpm-v2-x86
+rpm-v2-x86:
 	GOOS=linux GOARCH=amd64 make build
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
 	  --define "buildarch x86_64" --target x86_64 --define "dist .el7.centos" \
@@ -65,6 +68,9 @@ rpm-v2:
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
 	  --define "buildarch x86_64" --target x86_64 --define "dist .amzn2" \
 	  -bb packaging/rpm/mkr-v2.spec
+
+.PHONY: rpm-v2-arm
+rpm-v2-arm:
 	GOOS=linux GOARCH=arm64 make build
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
 	  --define "buildarch aarch64" --target aarch64 --define "dist .el7.centos" \
@@ -83,10 +89,16 @@ deb-v1:
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
 
 .PHONY: deb-v2
-deb-v2:
+deb-v2: deb-v2-x86 deb-v2-arm
+
+.PHONY: deb-v2-x86
+deb-v2-x86:
 	GOOS=linux GOARCH=amd64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
+
+.PHONY: deb-v2-arm
+deb-v2-arm:
 	GOOS=linux GOARCH=arm64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarm64
