@@ -43,7 +43,7 @@ gofmt: test-deps
 cross: devel-deps
 	goxz -d snapshot -os darwin -arch amd64 \
 	  -build-ldflags=$(BUILD_LDFLAGS)
-	goxz -d snapshot -os linux -arch 386,amd64 \
+	goxz -d snapshot -os linux -arch 386,amd64,arm64 \
 	  -build-ldflags=$(BUILD_LDFLAGS)
 
 .PHONY: rpm
@@ -52,18 +52,31 @@ rpm: rpm-v1 rpm-v2
 .PHONY: rpm-v1
 rpm-v1:
 	GOOS=linux GOARCH=386 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch noarch" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch noarch" --target noarch -bb packaging/rpm/mkr.spec
 	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch x86_64" -bb packaging/rpm/mkr.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch x86_64" --target x86_64  -bb packaging/rpm/mkr.spec
 
 .PHONY: rpm-v2
-rpm-v2:
+rpm-v2: rpm-v2-x86 rpm-v2-arm
+
+.PHONY: rpm-v2-x86
+rpm-v2-x86:
 	GOOS=linux GOARCH=amd64 make build
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
-	  --define "buildarch x86_64" --define "dist .el7.centos" \
+	  --define "buildarch x86_64" --target x86_64 --define "dist .el7.centos" \
 	  -bb packaging/rpm/mkr-v2.spec
 	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
-	  --define "buildarch x86_64" --define "dist .amzn2" \
+	  --define "buildarch x86_64" --target x86_64 --define "dist .amzn2" \
+	  -bb packaging/rpm/mkr-v2.spec
+
+.PHONY: rpm-v2-arm
+rpm-v2-arm:
+	GOOS=linux GOARCH=arm64 make build
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
+	  --define "buildarch aarch64" --target aarch64 --define "dist .el7.centos" \
+	  -bb packaging/rpm/mkr-v2.spec
+	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" \
+	  --define "buildarch aarch64" --target aarch64 --define "dist .amzn2" \
 	  -bb packaging/rpm/mkr-v2.spec
 
 .PHONY: deb
@@ -76,10 +89,19 @@ deb-v1:
 	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
 
 .PHONY: deb-v2
-deb-v2:
+deb-v2: deb-v2-x86 deb-v2-arm
+
+.PHONY: deb-v2-x86
+deb-v2-x86:
 	GOOS=linux GOARCH=amd64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
+
+.PHONY: deb-v2-arm
+deb-v2-arm:
+	GOOS=linux GOARCH=arm64 make build
+	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
+	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarm64
 
 .PHONY: check-release-deps
 check-release-deps:

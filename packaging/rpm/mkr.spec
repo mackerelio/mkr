@@ -12,7 +12,6 @@ Summary:   macekrel.io api client tool
 URL:       https://mackerel.io
 Group:     Hatena
 Packager:  Hatena
-BuildArch: %{buildarch}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
