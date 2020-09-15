@@ -1,3 +1,22 @@
+mkr (0.40.3-1) stable; urgency=low
+
+  * revert go1.15-alpine (by lufia)
+    <https://github.com/mackerelio/mkr/pull/315>
+  * revert changing filename (by lufia)
+    <https://github.com/mackerelio/mkr/pull/314>
+  * Bump golang from 1.15.0-alpine to 1.15.2-alpine (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/313>
+  * Bump github.com/Songmu/prompter from 0.3.0 to 0.4.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/311>
+  * Bump golang from 1.14-alpine to 1.15.0-alpine (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/309>
+  * add arm64 packages, and fix Architecture field of deb (by lufia)
+    <https://github.com/mackerelio/mkr/pull/310>
+  * Bump github.com/mackerelio/mackerel-agent from 0.68.0 to 0.68.2 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/308>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 15 Sep 2020 06:17:56 +0000
+
 mkr (0.40.2-1) stable; urgency=low
 
   * Bump github.com/mackerelio/mackerel-client-go from 0.10.0 to 0.10.1 (by dependabot-preview[bot])
