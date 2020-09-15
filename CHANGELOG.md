@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.40.3 (2020-09-15)
+
+* revert go1.15-alpine #315 (lufia)
+* revert changing filename #314 (lufia)
+* Bump golang from 1.15.0-alpine to 1.15.2-alpine #313 (dependabot-preview[bot])
+* Bump github.com/Songmu/prompter from 0.3.0 to 0.4.0 #311 (dependabot-preview[bot])
+* Bump golang from 1.14-alpine to 1.15.0-alpine #309 (dependabot-preview[bot])
+* add arm64 packages, and fix Architecture field of deb #310 (lufia)
+* Bump github.com/mackerelio/mackerel-agent from 0.68.0 to 0.68.2 #308 (dependabot-preview[bot])
+
+
 ## 0.40.2 (2020-07-20)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.10.0 to 0.10.1 #305 (dependabot-preview[bot])

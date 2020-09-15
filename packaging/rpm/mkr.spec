@@ -41,6 +41,15 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Sep 15 2020 <mackerel-developers@hatena.ne.jp> - 0.40.3
+- revert go1.15-alpine (by lufia)
+- revert changing filename (by lufia)
+- Bump golang from 1.15.0-alpine to 1.15.2-alpine (by dependabot-preview[bot])
+- Bump github.com/Songmu/prompter from 0.3.0 to 0.4.0 (by dependabot-preview[bot])
+- Bump golang from 1.14-alpine to 1.15.0-alpine (by dependabot-preview[bot])
+- add arm64 packages, and fix Architecture field of deb (by lufia)
+- Bump github.com/mackerelio/mackerel-agent from 0.68.0 to 0.68.2 (by dependabot-preview[bot])
+
 * Mon Jul 20 2020 <mackerel-developers@hatena.ne.jp> - 0.40.2
 - Bump github.com/mackerelio/mackerel-client-go from 0.10.0 to 0.10.1 (by dependabot-preview[bot])
 - define default file name while doMonitorsPull() at once (by hgsgtk)
