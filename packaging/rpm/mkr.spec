@@ -41,6 +41,10 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Oct 01 2020 <mackerel-developers@hatena.ne.jp> - 0.40.4
+- Bump github.com/mackerelio/mackerel-client-go from 0.10.1 to 0.11.0 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.68.2 to 0.69.1 (by dependabot-preview[bot])
+
 * Tue Sep 15 2020 <mackerel-developers@hatena.ne.jp> - 0.40.3
 - revert go1.15-alpine (by lufia)
 - revert changing filename (by lufia)

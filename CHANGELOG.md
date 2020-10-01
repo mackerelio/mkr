@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.40.4 (2020-10-01)
+
+* Bump github.com/mackerelio/mackerel-client-go from 0.10.1 to 0.11.0 #319 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.68.2 to 0.69.1 #317 (dependabot-preview[bot])
+
+
 ## 0.40.3 (2020-09-15)
 
 * revert go1.15-alpine #315 (lufia)
