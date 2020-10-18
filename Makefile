@@ -107,7 +107,7 @@ deb-v2-arm64:
 deb-v2-arm:
 	GOOS=linux GOARCH=arm ARM=6 make build # Build ARMv6 binary for Raspbian
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
-	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarm
+	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarmhf
 
 .PHONY: check-release-deps
 check-release-deps:
