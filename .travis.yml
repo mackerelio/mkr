@@ -11,7 +11,7 @@ install:
 - >-
   DEBIAN_FRONTEND=noninteractive
   sudo apt-get install -y
-  rpm devscripts debhelper fakeroot crossbuild-essential-arm64
+  rpm devscripts debhelper fakeroot crossbuild-essential-arm64 crossbuild-essential-armhf
 - mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 script:
 - make all
