@@ -54,7 +54,7 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 	case param.verbose:
 		return format.PrettyPrintJSON(ha.outStream, hosts)
 	default:
-		var hostsFormat []*format.Host
+		hostsFormat := make([]*format.Host, 0)
 		for _, host := range hosts {
 			hostsFormat = append(hostsFormat, &format.Host{
 				ID:            host.ID,
