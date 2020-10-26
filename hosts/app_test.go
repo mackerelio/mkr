@@ -163,25 +163,25 @@ bar sample.app2 standby 1552000000
 			id:       "name",
 			hosts:    []*mackerel.Host{},
 			name:     "Sample.app",
-			expected: "null\n",
+			expected: "[]\n",
 		},
 		{
 			id:       "service",
 			hosts:    []*mackerel.Host{},
 			service:  "SampleService",
-			expected: "null\n",
+			expected: "[]\n",
 		},
 		{
 			id:       "roles",
 			hosts:    []*mackerel.Host{},
 			roles:    []string{"role1", "role2"},
-			expected: "null\n",
+			expected: "[]\n",
 		},
 		{
 			id:       "statuses",
 			hosts:    []*mackerel.Host{},
 			statuses: []string{mackerel.HostStatusPoweroff, mackerel.HostStatusMaintenance},
-			expected: "null\n",
+			expected: "[]\n",
 		},
 	}
 	for _, tc := range testCases {
