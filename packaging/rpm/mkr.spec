@@ -41,6 +41,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Oct 28 2020 <mackerel-developers@hatena.ne.jp> - 0.41.0
+- Print empty array if hosts not found (by kazeburo)
+- Add armhf Debian package to GitHub release (by hnw)
+- Bump alpine from 3.12.0 to 3.12.1 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.69.1 to 0.69.2 (by dependabot-preview[bot])
+
 * Thu Oct 01 2020 <mackerel-developers@hatena.ne.jp> - 0.40.4
 - Bump github.com/mackerelio/mackerel-client-go from 0.10.1 to 0.11.0 (by dependabot-preview[bot])
 - Bump github.com/mackerelio/mackerel-agent from 0.68.2 to 0.69.1 (by dependabot-preview[bot])
