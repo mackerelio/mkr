@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.41.0 (2020-10-28)
+
+* Print empty array if hosts not found #326 (kazeburo)
+* Add armhf Debian package to GitHub release #323 (hnw)
+* Bump alpine from 3.12.0 to 3.12.1 #325 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.69.1 to 0.69.2 #321 (dependabot-preview[bot])
+
+
 ## 0.40.4 (2020-10-01)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.10.1 to 0.11.0 #319 (dependabot-preview[bot])
