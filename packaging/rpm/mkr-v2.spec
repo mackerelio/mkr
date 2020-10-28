@@ -2,14 +2,14 @@ Name:      mkr
 Version:   %{_version}
 Release:   1%{?dist}
 License:   ASL 2.0
-Summary:   macekrel.io api client tool
+Summary:   mackerel.io api client tool
 URL:       https://mackerel.io
 Group:     Application/System
 Packager:  Hatena
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
-macekrel.io api client tool
+mackerel.io api client tool
 
 %prep
 

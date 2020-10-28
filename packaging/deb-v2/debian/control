@@ -9,5 +9,5 @@ Homepage: https://mackerel.io
 Package: mkr
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: macekrel.io api client tool
- api client tool for makerel.io
+Description: mackerel.io api client tool
+ api client tool for mackerel.io
