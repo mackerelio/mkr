@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: golang
+    versions:
+    - "> 1.14.pre.alpine"
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 10
