@@ -41,6 +41,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Nov 25 2020 <mackerel-developers@hatena.ne.jp> - 0.42.0
+- Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.69.3 to 0.70.2 (by dependabot[bot])
+- Bump github.com/urfave/cli from 1.22.4 to 1.22.5 (by dependabot-preview[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.69.2 to 0.69.3 (by dependabot-preview[bot])
+- Update Dependabot config file (by dependabot-preview[bot])
+
 * Wed Oct 28 2020 <mackerel-developers@hatena.ne.jp> - 0.41.0
 - Print empty array if hosts not found (by kazeburo)
 - Add armhf Debian package to GitHub release (by hnw)
