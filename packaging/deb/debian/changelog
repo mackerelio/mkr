@@ -1,3 +1,18 @@
+mkr (0.42.0-1) stable; urgency=low
+
+  * Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/335>
+  * Bump github.com/mackerelio/mackerel-agent from 0.69.3 to 0.70.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/334>
+  * Bump github.com/urfave/cli from 1.22.4 to 1.22.5 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/331>
+  * Bump github.com/mackerelio/mackerel-agent from 0.69.2 to 0.69.3 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/329>
+  * Update Dependabot config file (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/332>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 25 Nov 2020 06:44:23 +0000
+
 mkr (0.41.0-1) stable; urgency=low
 
   * Print empty array if hosts not found (by kazeburo)

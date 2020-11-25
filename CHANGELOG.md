@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.42.0 (2020-11-25)
+
+* Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 #335 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.69.3 to 0.70.2 #334 (dependabot[bot])
+* Bump github.com/urfave/cli from 1.22.4 to 1.22.5 #331 (dependabot-preview[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.69.2 to 0.69.3 #329 (dependabot-preview[bot])
+* Update Dependabot config file #332 (dependabot-preview[bot])
+
+
 ## 0.41.0 (2020-10-28)
 
 * Print empty array if hosts not found #326 (kazeburo)
