@@ -1,12 +1,12 @@
 mkr
 ===
 [![Latest Version](https://img.shields.io/github/release/mackerelio/mkr.svg?style=flat-square)][release]
-[![Build Status](https://img.shields.io/travis/mackerelio/mkr.svg?style=flat-square)][travis]
-[![Go Documentation](https://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)][godocs]
+[![Build Status](https://github.com/mackerelio/mkr/workflows/Build/badge.svg)][actions]
+[![Go Documentation](https://pkg.go.dev/badge/github.com/mackerelio/mkr)][godocs]
 
 [release]: https://github.com/mackerelio/mkr/releases
-[travis]: http://travis-ci.org/mackerelio/mkr
-[godocs]: http://godoc.org/github.com/mackerelio/mkr
+[actions]: https://github.com/mackerelio/mkr/actions?workflow=Build
+[godocs]: https://pkg.go.dev/github.com/mackerelio/mkr
 
 mkr - Command Line Tool For Mackerel written in Go.
 

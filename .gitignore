@@ -1,6 +1,6 @@
 .*
-!.dependabot
-!.travis.yml
+!.gitattributes
+!.github
 mkr
 build
 snapshot
