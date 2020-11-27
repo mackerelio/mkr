@@ -67,6 +67,9 @@ jobs:
         # TODO: uncomment
         #mackerel-github-release && mackerel-github-release -staging
         mackerel-github-release -dry-run && mackerel-github-release -staging -dry-run
+      env:
+        GITHUB_USER: mackerelbot
+        GITHUB_TOKEN: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
