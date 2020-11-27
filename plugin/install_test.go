@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -103,6 +104,9 @@ func TestDownloadPluginArtifact(t *testing.T) {
 }
 
 func TestInstallByArtifact(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip()
+	}
 	{
 		bindir := tempd(t)
 		defer os.RemoveAll(bindir)
