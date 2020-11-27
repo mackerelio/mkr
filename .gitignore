@@ -1,4 +1,5 @@
 .*
+!.gitattributes
 !.github
 mkr
 build
