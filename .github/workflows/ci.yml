@@ -47,8 +47,7 @@ jobs:
   release:
     needs: test
     runs-on: ubuntu-latest
-    # TODO: uncomment
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
     - run: |
         sudo apt-get update
@@ -64,9 +63,7 @@ jobs:
         go get github.com/x-motemen/gobump/cmd/gobump
         go get github.com/mackerelio/golib/cmd/mackerel-github-release
         make all
-        # TODO: uncomment
-        #mackerel-github-release && mackerel-github-release -staging
-        mackerel-github-release -dry-run && mackerel-github-release -staging -dry-run
+        mackerel-github-release && mackerel-github-release -staging
       env:
         GITHUB_USER: mackerelbot
         GITHUB_TOKEN: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
