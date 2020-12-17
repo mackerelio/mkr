@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Dec 17 2020 <mackerel-developers@hatena.ne.jp> - 0.43.0
+- Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 (by dependabot[bot])
+- Bump gopkg.in/yaml.v2 from 2.3.0 to 2.4.0 (by dependabot[bot])
+- Bump alpine from 3.12.1 to 3.12.2 (by dependabot[bot])
+- migrate to GitHub Actions (by lufia)
+- Bump github.com/fatih/color from 1.9.0 to 1.10.0 (by dependabot-preview[bot])
+
 * Wed Nov 25 2020 <mackerel-developers@hatena.ne.jp> - 0.42.0
 - Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 (by dependabot[bot])
 - Bump github.com/mackerelio/mackerel-agent from 0.69.3 to 0.70.2 (by dependabot[bot])

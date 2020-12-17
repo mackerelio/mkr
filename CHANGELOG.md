@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.43.0 (2020-12-17)
+
+* Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 #342 (dependabot[bot])
+* Bump gopkg.in/yaml.v2 from 2.3.0 to 2.4.0 #338 (dependabot[bot])
+* Bump alpine from 3.12.1 to 3.12.2 #341 (dependabot[bot])
+* migrate to GitHub Actions #339 (lufia)
+* Bump github.com/fatih/color from 1.9.0 to 1.10.0 #330 (dependabot-preview[bot])
+
+
 ## 0.42.0 (2020-11-25)
 
 * Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 #335 (dependabot[bot])
