@@ -1,3 +1,18 @@
+mkr (0.43.0-1.v2) stable; urgency=low
+
+  * Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/342>
+  * Bump gopkg.in/yaml.v2 from 2.3.0 to 2.4.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/338>
+  * Bump alpine from 3.12.1 to 3.12.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/341>
+  * migrate to GitHub Actions (by lufia)
+    <https://github.com/mackerelio/mkr/pull/339>
+  * Bump github.com/fatih/color from 1.9.0 to 1.10.0 (by dependabot-preview[bot])
+    <https://github.com/mackerelio/mkr/pull/330>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 17 Dec 2020 03:42:34 +0000
+
 mkr (0.42.0-1.v2) stable; urgency=low
 
   * Add AlertStatusOnGone by updating mackerel-client-go to v0.12.0 (by dependabot[bot])
