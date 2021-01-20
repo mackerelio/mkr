@@ -6,7 +6,7 @@ BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 export GO111MODULE=on
 
 .PHONY: all
-all: clean cross gofmt test rpm deb
+all: clean cross test rpm deb
 
 .PHONY: devel-deps
 devel-deps:
@@ -21,13 +21,6 @@ test:
 .PHONY: build
 build:
 	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
-
-GOFMT_RET = .gofmt.txt
-.PHONY: gofmt
-gofmt:
-	rm -f $(GOFMT_RET)
-	gofmt -s -d *.go | tee $(GOFMT_RET)
-	test ! -s $(GOFMT_RET)
 
 .PHONY: cross
 cross: devel-deps

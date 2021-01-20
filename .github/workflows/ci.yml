@@ -34,7 +34,6 @@ jobs:
       with:
         go-version: ${{ matrix.go }}
     - run: |
-        make gofmt
         go test -race -covermode atomic -coverprofile=profile.cov ./...
       shell: bash
     - uses: shogo82148/actions-goveralls@v1
