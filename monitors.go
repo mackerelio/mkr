@@ -199,7 +199,10 @@ func diffMonitor(a mackerel.Monitor, b mackerel.Monitor) string {
 		return ""
 	}
 	var left map[string]interface{}
-	json.Unmarshal([]byte(as), &left)
+	err = json.Unmarshal([]byte(as), &left)
+	if err != nil {
+		return ""
+	}
 	result, err := formatter.NewAsciiFormatter(left, formatter.AsciiFormatterDefaultConfig).Format(diff)
 	if err != nil {
 		return ""

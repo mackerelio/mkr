@@ -37,7 +37,8 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 		filePath = optFilePath
 	}
 
-	saveChannels(channels, filePath)
+	err = saveChannels(channels, filePath)
+	logger.DieIf(err)
 
 	if isVerbose {
 		err := format.PrettyPrintJSON(os.Stdout, channels)
