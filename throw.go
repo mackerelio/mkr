@@ -95,8 +95,7 @@ func doThrow(c *cli.Context) error {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
-		cli.ShowCommandHelp(c, "throw")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "throw", 1)
 	}
 	return nil
 }

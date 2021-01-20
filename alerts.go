@@ -374,8 +374,7 @@ func doAlertsClose(c *cli.Context) error {
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
-		cli.ShowCommandHelp(c, "alerts")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
