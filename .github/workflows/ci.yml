@@ -9,6 +9,13 @@ env:
   GO111MODULE: on
   DEBIAN_FRONTEND: noninteractive
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.35
   test:
     strategy:
       matrix:
@@ -27,7 +34,7 @@ jobs:
       with:
         go-version: ${{ matrix.go }}
     - run: |
-        make gofmt lint
+        make gofmt
         go test -race -covermode atomic -coverprofile=profile.cov ./...
       shell: bash
     - uses: shogo82148/actions-goveralls@v1
@@ -45,7 +52,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         parallel-finished: true
   release:
-    needs: test
+    needs: [lint, test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
