@@ -216,7 +216,7 @@ func filterIDLine(s string) string {
 	return strings.Join(filtered, "\n")
 }
 
-func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniqueness bool) (string, bool) {
+func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniquenessEnabled bool) (string, bool) {
 	if a == nil || b == nil {
 		return "", false
 	}
@@ -225,7 +225,7 @@ func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniqueness bo
 	}
 	aID := a.MonitorID()
 	bID := b.MonitorID()
-	if aID == bID || (flagNameUniqueness == true && bID == "" && a.MonitorName() == b.MonitorName()) {
+	if aID == bID || (flagNameUniquenessEnabled && bID == "" && a.MonitorName() == b.MonitorName()) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
@@ -352,7 +352,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 				break
 			}
 		}
-		if found == false {
+		if found {
 			monitorDiff.onlyRemote = append(monitorDiff.onlyRemote, remote)
 		}
 	}
@@ -405,7 +405,7 @@ func doMonitorsDiff(c *cli.Context) error {
 		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
-	if isExitCode == true && noDiff == false {
+	if isExitCode == true && noDiff == false { //nolint:gosimple
 		os.Exit(1)
 	}
 	return nil

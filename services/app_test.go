@@ -20,17 +20,17 @@ func TestServicesApp_Run(t *testing.T) {
 		{
 			id: "default",
 			services: []*mackerel.Service{
-				&mackerel.Service{
+				{
 					Name:  "sample-service-1",
 					Memo:  "sample memo 1",
 					Roles: []string{"role1", "role2", "role3"},
 				},
-				&mackerel.Service{
+				{
 					Name:  "sample-service-2",
 					Memo:  "sample memo 2",
 					Roles: []string{"role"},
 				},
-				&mackerel.Service{
+				{
 					Name:  "sample-service-3",
 					Memo:  "",
 					Roles: []string{},

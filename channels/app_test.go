@@ -24,7 +24,7 @@ func TestChannelsApp_Run(t *testing.T) {
 		{
 			id: "default",
 			channels: []*mackerel.Channel{
-				&mackerel.Channel{
+				{
 					ID:      "abcdefabc",
 					Name:    "email channel",
 					Type:    "email",
@@ -32,7 +32,7 @@ func TestChannelsApp_Run(t *testing.T) {
 					UserIDs: &[]string{"1234", "2345"},
 					Events:  &[]string{"alert"},
 				},
-				&mackerel.Channel{
+				{
 					ID:   "bcdefabcd",
 					Name: "slack channel",
 					Type: "slack",
@@ -44,14 +44,14 @@ func TestChannelsApp_Run(t *testing.T) {
 					EnabledGraphImage: boolPointer(true),
 					Events:            &[]string{"alert"},
 				},
-				&mackerel.Channel{
+				{
 					ID:     "cdefabcde",
 					Name:   "webhook channel",
 					Type:   "webhook",
 					URL:    "http://example.com/webhook",
 					Events: &[]string{"alertGroup"},
 				},
-				&mackerel.Channel{
+				{
 					ID:   "defabcdef",
 					Name: "line channel",
 					Type: "line",
