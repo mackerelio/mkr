@@ -10,9 +10,7 @@ all: clean cross test rpm deb
 
 .PHONY: devel-deps
 devel-deps:
-	cd && \
-	go get github.com/mattn/goveralls && \
-	go get github.com/Songmu/goxz/cmd/goxz
+	cd && go get github.com/Songmu/goxz/cmd/goxz
 
 .PHONY: test
 test:
@@ -112,7 +110,3 @@ release: check-release-deps
 clean:
 	rm -fr build snapshot
 	go clean
-
-.PHONY: cover
-cover: devel-deps
-	goveralls
