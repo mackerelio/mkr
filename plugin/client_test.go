@@ -25,12 +25,12 @@ func TestClientGet(t *testing.T) {
 	{
 		// Response is 200
 		resp, err := c.get(ts.URL + "/200")
-		defer resp.Body.Close()
-
 		assert.NoError(t, err, "get finished successfully")
 
 		b, _ := ioutil.ReadAll(resp.Body)
 		assert.Equal(t, "200 OK from mkr-plugin-installer/0.0.0", string(b), "Getting response is success, and request has valid User-Agent")
+		err = resp.Body.Close()
+		assert.NoError(t, err)
 	}
 
 	{
