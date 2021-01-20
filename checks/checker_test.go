@@ -22,7 +22,9 @@ func TestRunChecks(t *testing.T) {
 		ExitCode: 0,
 	}}
 	buf := &bytes.Buffer{}
-	runChecks([]checker{te}, buf)
+	if err := runChecks([]checker{te}, buf); err != nil {
+		t.Fatal(err)
+	}
 
 	expect := `TAP version 13
 1..1

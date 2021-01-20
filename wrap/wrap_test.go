@@ -14,7 +14,8 @@ import (
 	"github.com/urfave/cli"
 )
 
-func newWrapContext(args []string) *cli.Context {
+func newWrapContext(t testing.TB, args []string) *cli.Context {
+	t.Helper()
 	app := cli.NewApp()
 	parentFs := flag.NewFlagSet("mockmkr", flag.ContinueOnError)
 	for _, f := range []cli.Flag{
@@ -22,7 +23,9 @@ func newWrapContext(args []string) *cli.Context {
 	} {
 		f.Apply(parentFs)
 	}
-	parentFs.Parse(args)
+	if err := parentFs.Parse(args); err != nil {
+		t.Fatal(err)
+	}
 	for i, v := range parentFs.Args() {
 		if v == "wrap" {
 			args = parentFs.Args()[i+1:]
@@ -35,7 +38,9 @@ func newWrapContext(args []string) *cli.Context {
 	for _, f := range Command.Flags {
 		f.Apply(fs)
 	}
-	fs.Parse(args)
+	if err := fs.Parse(args); err != nil {
+		t.Fatal(err)
+	}
 	return cli.NewContext(app, fs, parentCtx)
 }
 
@@ -166,9 +171,12 @@ Note: This is note
 				}
 
 				res.Header()["Content-Type"] = []string{"application/json"}
-				json.NewEncoder(res).Encode(map[string]bool{
+				err = json.NewEncoder(res).Encode(map[string]bool{
 					"success": true,
 				})
+				if err != nil {
+					t.Fatal(err)
+				}
 			}))
 			defer ts.Close()
 
@@ -177,7 +185,7 @@ Note: This is note
 				tc.Args...,
 			)
 
-			c := newWrapContext(args)
+			c := newWrapContext(t, args)
 			err := Command.Action.(func(*cli.Context) error)(c)
 			var exitCode int
 			if err != nil {
@@ -194,7 +202,7 @@ Note: This is note
 }
 
 func TestCommand_Action_withoutConf(t *testing.T) {
-	c := newWrapContext([]string{
+	c := newWrapContext(t, []string{
 		"-conf=notfound", "-apibase=http://localhost", "wrap",
 		"--detail", "--",
 		"go", "run", "testdata/stub.go",

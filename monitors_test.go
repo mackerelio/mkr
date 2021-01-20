@@ -90,7 +90,9 @@ func TestMonitorSaveRules(t *testing.T) {
 		ResponseTimeCritical: pfloat64(1000),
 		Headers:              []mackerel.HeaderField{},
 	}
-	monitorSaveRules([]mackerel.Monitor{a}, tmpFile.Name())
+	if err := monitorSaveRules([]mackerel.Monitor{a}, tmpFile.Name()); err != nil {
+		t.Fatal(err)
+	}
 
 	byt, _ := ioutil.ReadFile(tmpFile.Name())
 	content := string(byt)
