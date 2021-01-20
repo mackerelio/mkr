@@ -157,7 +157,8 @@ func doMonitorsList(c *cli.Context) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
-	format.PrettyPrintJSON(os.Stdout, monitors)
+	err = format.PrettyPrintJSON(os.Stdout, monitors)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -171,10 +172,12 @@ func doMonitorsPull(c *cli.Context) error {
 	if filePath == "" {
 		filePath = "monitors.json"
 	}
-	monitorSaveRules(monitors, filePath)
+	err = monitorSaveRules(monitors, filePath)
+	logger.DieIf(err)
 
 	if isVerbose {
-		format.PrettyPrintJSON(os.Stdout, monitors)
+		err := format.PrettyPrintJSON(os.Stdout, monitors)
+		logger.DieIf(err)
 	}
 
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))

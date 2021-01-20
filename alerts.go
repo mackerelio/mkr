@@ -251,7 +251,8 @@ func doAlertsRetrieve(c *cli.Context) error {
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, alerts)
+	err = format.PrettyPrintJSON(os.Stdout, alerts)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -384,7 +385,8 @@ func doAlertsClose(c *cli.Context) error {
 
 		logger.Log("Alert closed", alertID)
 		if isVerbose {
-			format.PrettyPrintJSON(os.Stdout, alert)
+			err := format.PrettyPrintJSON(os.Stdout, alert)
+			logger.DieIf(err)
 		}
 	}
 	return nil

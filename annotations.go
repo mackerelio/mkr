@@ -128,7 +128,8 @@ func doAnnotationsCreate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -155,7 +156,8 @@ func doAnnotationsList(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotations, err := client.FindGraphAnnotations(service, from, to)
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, annotations)
+	err = format.PrettyPrintJSON(os.Stdout, annotations)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -198,7 +200,8 @@ func doAnnotationsUpdate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -213,6 +216,7 @@ func doAnnotationsDelete(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.DeleteGraphAnnotation(annotationID)
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	logger.DieIf(err)
 	return nil
 }

@@ -367,7 +367,7 @@ func doGenerateDashboards(c *cli.Context) error {
 
 	argFilePath := c.Args()
 	if len(argFilePath) < 1 {
-		cli.ShowCommandHelp(c, "generate")
+		_ = cli.ShowCommandHelp(c, "generate")
 		return cli.NewExitError("specify a yaml file.", 1)
 	}
 

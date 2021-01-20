@@ -144,9 +144,10 @@ func doStatus(c *cli.Context) error {
 	logger.DieIf(err)
 
 	if isVerbose {
-		format.PrettyPrintJSON(os.Stdout, host)
+		err := format.PrettyPrintJSON(os.Stdout, host)
+		logger.DieIf(err)
 	} else {
-		format.PrettyPrintJSON(os.Stdout, &format.Host{
+		err := format.PrettyPrintJSON(os.Stdout, &format.Host{
 			ID:            host.ID,
 			Name:          host.Name,
 			DisplayName:   host.DisplayName,
@@ -156,6 +157,7 @@ func doStatus(c *cli.Context) error {
 			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
 		})
+		logger.DieIf(err)
 	}
 	return nil
 }
@@ -259,12 +261,14 @@ func doMetrics(c *cli.Context) error {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		logger.DieIf(err)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		logger.DieIf(err)
 	} else {
 		cli.ShowCommandHelpAndExit(c, "metrics", 1)
 	}
@@ -289,7 +293,8 @@ func doFetch(c *cli.Context) error {
 		}
 	}
 
-	format.PrettyPrintJSON(os.Stdout, allMetricValues)
+	err := format.PrettyPrintJSON(os.Stdout, allMetricValues)
+	logger.DieIf(err)
 	return nil
 }
 

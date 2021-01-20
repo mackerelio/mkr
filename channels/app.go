@@ -23,7 +23,8 @@ func (app *channelsApp) run() error {
 		return err
 	}
 
-	format.PrettyPrintJSON(app.outStream, channels)
+	err = format.PrettyPrintJSON(app.outStream, channels)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -39,7 +40,8 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 	saveChannels(channels, filePath)
 
 	if isVerbose {
-		format.PrettyPrintJSON(os.Stdout, channels)
+		err := format.PrettyPrintJSON(os.Stdout, channels)
+		logger.DieIf(err)
 	}
 
 	logger.Log("info", fmt.Sprintf("Channels are saved to '%s' (%d rules).", filePath, len(channels)))
