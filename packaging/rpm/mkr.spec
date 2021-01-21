@@ -41,6 +41,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jan 21 2021 <mackerel-developers@hatena.ne.jp> - 0.43.1
+- Bump alpine from 3.12.2 to 3.13.0 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-client-go from 0.12.0 to 0.13.0 (by dependabot[bot])
+- Bump github.com/stretchr/testify from 1.6.1 to 1.7.0 (by dependabot[bot])
+
 * Thu Dec 17 2020 <mackerel-developers@hatena.ne.jp> - 0.43.0
 - Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 (by dependabot[bot])
 - Bump gopkg.in/yaml.v2 from 2.3.0 to 2.4.0 (by dependabot[bot])

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.43.1 (2021-01-21)
+
+* Bump alpine from 3.12.2 to 3.13.0 #347 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.12.0 to 0.13.0 #346 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.6.1 to 1.7.0 #345 (dependabot[bot])
+
+
 ## 0.43.0 (2020-12-17)
 
 * Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 #342 (dependabot[bot])

@@ -1,3 +1,14 @@
+mkr (0.43.1-1) stable; urgency=low
+
+  * Bump alpine from 3.12.2 to 3.13.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/347>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.12.0 to 0.13.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/346>
+  * Bump github.com/stretchr/testify from 1.6.1 to 1.7.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/345>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 21 Jan 2021 07:16:28 +0000
+
 mkr (0.43.0-1) stable; urgency=low
 
   * Bump github.com/mackerelio/mackerel-agent from 0.70.2 to 0.71.0 (by dependabot[bot])
