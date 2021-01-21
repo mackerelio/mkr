@@ -94,6 +94,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 		defer os.RemoveAll(tmpd)
 
 		fpath, err := downloadPluginArtifact(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd)
+		assert.NoError(t, err)
 		assert.Equal(t, filepath.Join(tmpd, "/mackerel-plugin-sample_linux_amd64.zip"), fpath, "Returns fpath correctly")
 
 		_, err = os.Stat(fpath)
@@ -192,7 +193,8 @@ func TestInstallByArtifact(t *testing.T) {
 		workdir := tempd(t)
 		defer os.RemoveAll(workdir)
 
-		installByArtifact("testdata/mackerel-plugin-sample-multi_darwin_386.zip", bindir, workdir, false)
+		err := installByArtifact("testdata/mackerel-plugin-sample-multi_darwin_386.zip", bindir, workdir, false)
+		assert.Nil(t, err, "installByArtifact finished successfully")
 
 		// check-sample, mackerel-plugin-sample-multi-1 and plugins/mackerel-plugin-sample-multi-2
 		// are installed.  But followings are not installed
@@ -214,14 +216,15 @@ func TestInstallByArtifact(t *testing.T) {
 			"mackerel-plugin-sample-multi-2 is installed",
 		)
 
-		_, err := os.Stat(filepath.Join(bindir, "mackerel-plugin-not-executable"))
+		_, err = os.Stat(filepath.Join(bindir, "mackerel-plugin-not-executable"))
 		assert.NotNil(t, err, "mackerel-plugin-not-executable is not installed")
 		_, err = os.Stat(filepath.Join(bindir, "not-mackerel-plugin-sample"))
 		assert.NotNil(t, err, "not-mackerel-plugin-sample is not installed")
 	})
 }
 
-func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context {
+func newPluginInstallContext(t testing.TB, target, prefix string, overwrite bool) *cli.Context {
+	t.Helper()
 	fs := flag.NewFlagSet("name", flag.ContinueOnError)
 	for _, f := range commandPluginInstall.Flags {
 		f.Apply(fs)
@@ -236,7 +239,9 @@ func newPluginInstallContext(target, prefix string, overwrite bool) *cli.Context
 	if target != "" {
 		argv = append(argv, target)
 	}
-	fs.Parse(argv)
+	if err := fs.Parse(argv); err != nil {
+		t.Fatal(err)
+	}
 	return cli.NewContext(nil, fs, nil)
 }
 
@@ -247,7 +252,7 @@ func TestDoPluginInstall(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
-		ctx := newPluginInstallContext(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
+		ctx := newPluginInstallContext(t, ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
 		err := doPluginInstall(ctx)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
@@ -275,7 +280,7 @@ func TestDoPluginInstall(t *testing.T) {
 		tmpd := tempd(t)
 		defer os.RemoveAll(tmpd)
 
-		ctx := newPluginInstallContext(scheme+fpath, tmpd, false)
+		ctx := newPluginInstallContext(t, scheme+fpath, tmpd, false)
 		err = doPluginInstall(ctx)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 

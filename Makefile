@@ -6,38 +6,19 @@ BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 export GO111MODULE=on
 
 .PHONY: all
-all: clean cross lint gofmt test rpm deb
-
-.PHONY: test-deps
-test-deps:
-	cd && \
-	go get golang.org/x/lint/golint
+all: clean cross test rpm deb
 
 .PHONY: devel-deps
-devel-deps: test-deps
-	cd && \
-	go get github.com/mattn/goveralls && \
-	go get github.com/Songmu/goxz/cmd/goxz
+devel-deps:
+	cd && go get github.com/Songmu/goxz/cmd/goxz
 
 .PHONY: test
-test: test-deps
+test:
 	go test -v ./...
 
 .PHONY: build
 build:
 	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
-
-.PHONY: lint
-lint: test-deps
-	go vet ./...
-	golint -set_exit_status ./...
-
-GOFMT_RET = .gofmt.txt
-.PHONY: gofmt
-gofmt: test-deps
-	rm -f $(GOFMT_RET)
-	gofmt -s -d *.go | tee $(GOFMT_RET)
-	test ! -s $(GOFMT_RET)
 
 .PHONY: cross
 cross: devel-deps
@@ -129,7 +110,3 @@ release: check-release-deps
 clean:
 	rm -fr build snapshot
 	go clean
-
-.PHONY: cover
-cover: devel-deps
-	goveralls

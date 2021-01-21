@@ -44,7 +44,8 @@ func TestGetGithubClient(t *testing.T) {
 		os.Setenv("GITHUB_TOKEN", "tokenFromEnv")
 		client := getGithubClient(ctx)
 		client.BaseURL, _ = url.Parse(ts.URL + "/")
-		client.Repositories.GetLatestRelease(ctx, "owner", "repo")
+		_, _, err := client.Repositories.GetLatestRelease(ctx, "owner", "repo")
+		assert.NoError(t, err)
 		assert.Equal(t, "Bearer tokenFromEnv", authHeader, "token is included in request")
 		os.Unsetenv("GITHUB_TOKEN")
 	}
@@ -54,7 +55,8 @@ func TestGetGithubClient(t *testing.T) {
 		os.Setenv("GIT_CONFIG", "testdata/not_exists")
 		client := getGithubClient(ctx)
 		client.BaseURL, _ = url.Parse(ts.URL + "/")
-		client.Repositories.GetLatestRelease(ctx, "owner", "repo")
+		_, _, err := client.Repositories.GetLatestRelease(ctx, "owner", "repo")
+		assert.NoError(t, err)
 		assert.Equal(t, "", authHeader, "token is not included in request")
 		os.Unsetenv("GIT_CONFIG")
 	}

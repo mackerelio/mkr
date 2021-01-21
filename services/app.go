@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 )
 
@@ -18,6 +19,7 @@ func (app *servicesApp) run() error {
 		return err
 	}
 
-	format.PrettyPrintJSON(app.outStream, services)
+	err = format.PrettyPrintJSON(app.outStream, services)
+	logger.DieIf(err)
 	return nil
 }

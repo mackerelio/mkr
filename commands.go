@@ -136,8 +136,7 @@ func doStatus(c *cli.Context) error {
 
 	if argHostID == "" {
 		if argHostID = mackerelclient.LoadHostIDFromConfig(confFile); argHostID == "" {
-			cli.ShowCommandHelp(c, "status")
-			os.Exit(1)
+			cli.ShowCommandHelpAndExit(c, "status", 1)
 		}
 	}
 
@@ -145,9 +144,10 @@ func doStatus(c *cli.Context) error {
 	logger.DieIf(err)
 
 	if isVerbose {
-		format.PrettyPrintJSON(os.Stdout, host)
+		err := format.PrettyPrintJSON(os.Stdout, host)
+		logger.DieIf(err)
 	} else {
-		format.PrettyPrintJSON(os.Stdout, &format.Host{
+		err := format.PrettyPrintJSON(os.Stdout, &format.Host{
 			ID:            host.ID,
 			Name:          host.Name,
 			DisplayName:   host.DisplayName,
@@ -157,6 +157,7 @@ func doStatus(c *cli.Context) error {
 			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
 		})
+		logger.DieIf(err)
 	}
 	return nil
 }
@@ -173,8 +174,7 @@ func doUpdate(c *cli.Context) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelp(c, "update")
-			os.Exit(1)
+			cli.ShowCommandHelpAndExit(c, "update", 1)
 		}
 	}
 
@@ -184,8 +184,7 @@ func doUpdate(c *cli.Context) error {
 
 	if !needUpdateHostStatus && !needUpdateHost {
 		logger.Log("update", "at least one argumet is required.")
-		cli.ShowCommandHelp(c, "update")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "update", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -262,15 +261,16 @@ func doMetrics(c *cli.Context) error {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		logger.DieIf(err)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		logger.DieIf(err)
 	} else {
-		cli.ShowCommandHelp(c, "metrics")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "metrics", 1)
 	}
 	return nil
 }
@@ -280,8 +280,7 @@ func doFetch(c *cli.Context) error {
 	optMetricNames := c.StringSlice("name")
 
 	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {
-		cli.ShowCommandHelp(c, "fetch")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "fetch", 1)
 	}
 
 	allMetricValues := make(mackerel.LatestMetricValues)
@@ -294,7 +293,8 @@ func doFetch(c *cli.Context) error {
 		}
 	}
 
-	format.PrettyPrintJSON(os.Stdout, allMetricValues)
+	err := format.PrettyPrintJSON(os.Stdout, allMetricValues)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -306,8 +306,7 @@ func doRetire(c *cli.Context) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelp(c, "retire")
-			os.Exit(1)
+			cli.ShowCommandHelpAndExit(c, "retire", 1)
 		}
 	}
 

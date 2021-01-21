@@ -118,7 +118,7 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	hostMsg := ""
 	if host != nil {
 		statusMsg := host.Status
-		if host.IsRetired == true {
+		if host.IsRetired {
 			statusMsg = "retired"
 		}
 		if colorize {
@@ -187,14 +187,14 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			} else if alert.Status == "WARNING" && m.Warning != nil {
 				monitorMsg = fmt.Sprintf("%s %.2f %s %.2f", expression, alert.Value, m.Operator, *m.Warning)
 			} else if alert.Status == "UNKNOWN" {
-				monitorMsg = fmt.Sprintf("%s", expression)
+				monitorMsg = expression
 			} else {
 				monitorMsg = fmt.Sprintf("%s %.2f", expression, alert.Value)
 			}
 		case *mackerel.MonitorAnomalyDetection:
 			monitorMsg = ""
 		default:
-			monitorMsg = fmt.Sprintf("%s", monitor.MonitorType())
+			monitorMsg = monitor.MonitorType()
 		}
 		if monitorMsg == "" {
 			monitorMsg = monitor.MonitorName()
@@ -251,7 +251,8 @@ func doAlertsRetrieve(c *cli.Context) error {
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
-	format.PrettyPrintJSON(os.Stdout, alerts)
+	err = format.PrettyPrintJSON(os.Stdout, alerts)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -374,8 +375,7 @@ func doAlertsClose(c *cli.Context) error {
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
-		cli.ShowCommandHelp(c, "alerts")
-		os.Exit(1)
+		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -384,8 +384,9 @@ func doAlertsClose(c *cli.Context) error {
 		logger.DieIf(err)
 
 		logger.Log("Alert closed", alertID)
-		if isVerbose == true {
-			format.PrettyPrintJSON(os.Stdout, alert)
+		if isVerbose {
+			err := format.PrettyPrintJSON(os.Stdout, alert)
+			logger.DieIf(err)
 		}
 	}
 	return nil

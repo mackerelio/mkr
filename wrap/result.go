@@ -103,7 +103,7 @@ func init() {
 	msgTpl = template.Must(template.New("msg").Parse(msgTplText))
 }
 
-func (re *result) buildMsg(detail bool) string {
+func (re *result) buildMsg(detail bool) (string, error) {
 	s := struct {
 		Msg, Note, Command, Output string
 		Detail                     bool
@@ -112,9 +112,11 @@ func (re *result) buildMsg(detail bool) string {
 		detail,
 	}
 	buf := &bytes.Buffer{}
-	template.Must(msgTpl.Clone()).Execute(buf, s)
+	if err := template.Must(msgTpl.Clone()).Execute(buf, s); err != nil {
+		return "", err
+	}
 	const messageLengthLimit = 1024 // https://mackerel.io/api-docs/entry/check-monitoring#post
-	return truncate(buf.String(), messageLengthLimit, "\n...\n")
+	return truncate(buf.String(), messageLengthLimit, "\n...\n"), nil
 }
 
 func truncate(src string, limit int, sep string) string {

@@ -157,7 +157,8 @@ func doMonitorsList(c *cli.Context) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
-	format.PrettyPrintJSON(os.Stdout, monitors)
+	err = format.PrettyPrintJSON(os.Stdout, monitors)
+	logger.DieIf(err)
 	return nil
 }
 
@@ -171,10 +172,12 @@ func doMonitorsPull(c *cli.Context) error {
 	if filePath == "" {
 		filePath = "monitors.json"
 	}
-	monitorSaveRules(monitors, filePath)
+	err = monitorSaveRules(monitors, filePath)
+	logger.DieIf(err)
 
 	if isVerbose {
-		format.PrettyPrintJSON(os.Stdout, monitors)
+		err := format.PrettyPrintJSON(os.Stdout, monitors)
+		logger.DieIf(err)
 	}
 
 	logger.Log("info", fmt.Sprintf("Monitor rules are saved to '%s' (%d rules).", filePath, len(monitors)))
@@ -196,7 +199,10 @@ func diffMonitor(a mackerel.Monitor, b mackerel.Monitor) string {
 		return ""
 	}
 	var left map[string]interface{}
-	json.Unmarshal([]byte(as), &left)
+	err = json.Unmarshal([]byte(as), &left)
+	if err != nil {
+		return ""
+	}
 	result, err := formatter.NewAsciiFormatter(left, formatter.AsciiFormatterDefaultConfig).Format(diff)
 	if err != nil {
 		return ""
@@ -216,7 +222,7 @@ func filterIDLine(s string) string {
 	return strings.Join(filtered, "\n")
 }
 
-func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniqueness bool) (string, bool) {
+func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniquenessEnabled bool) (string, bool) {
 	if a == nil || b == nil {
 		return "", false
 	}
@@ -225,7 +231,7 @@ func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniqueness bo
 	}
 	aID := a.MonitorID()
 	bID := b.MonitorID()
-	if aID == bID || (flagNameUniqueness == true && bID == "" && a.MonitorName() == b.MonitorName()) {
+	if aID == bID || (flagNameUniquenessEnabled && bID == "" && a.MonitorName() == b.MonitorName()) {
 		diff := diffMonitor(a, b)
 		if diff != "" {
 			return diff, false
@@ -352,7 +358,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 				break
 			}
 		}
-		if found == false {
+		if found {
 			monitorDiff.onlyRemote = append(monitorDiff.onlyRemote, remote)
 		}
 	}
@@ -405,7 +411,7 @@ func doMonitorsDiff(c *cli.Context) error {
 		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
-	if isExitCode == true && noDiff == false {
+	if isExitCode == true && noDiff == false { //nolint:gosimple
 		os.Exit(1)
 	}
 	return nil

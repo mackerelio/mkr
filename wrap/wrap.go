@@ -34,8 +34,8 @@ type wrap struct {
 func (wr *wrap) run() error {
 	re := wr.runCmd()
 	if err := wr.report(re); err != nil {
-		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s",
-			err, re.buildMsg(wr.detail))
+		msg, _ := re.buildMsg(wr.detail)
+		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s", err, msg)
 	}
 	if !re.Success {
 		return cli.NewExitError(re.Msg, re.ExitCode)
@@ -83,7 +83,10 @@ func (wr *wrap) runCmd() *result {
 		_, err := io.Copy(wr.errStream, stderrPipe2)
 		return err
 	})
-	eg.Wait()
+	err = eg.Wait()
+	if err != nil {
+		return re.errorEnd("command invocation failed with follwing error: %s", err)
+	}
 
 	cmdErr := cmd.Wait()
 	re.ExitCode = wrapcommander.ResolveExitCode(cmdErr)
@@ -151,6 +154,10 @@ func (wr *wrap) doReport(re *result) error {
 		niInMinutes = 10
 	}
 
+	msg, err := re.buildMsg(wr.detail)
+	if err != nil {
+		return err
+	}
 	payload := &mackerel.CheckReports{
 		Reports: []*mackerel.CheckReport{
 			{
@@ -158,7 +165,7 @@ func (wr *wrap) doReport(re *result) error {
 				Name:                 re.checkName(),
 				Status:               checkSt,
 				OccurredAt:           time.Now().Unix(),
-				Message:              re.buildMsg(wr.detail),
+				Message:              msg,
 				NotificationInterval: niInMinutes,
 			},
 		},
