@@ -1,13 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -32,6 +35,41 @@ var commandDashboards = cli.Command{
 			Action: doGenerateDashboards,
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "print, p", Usage: "markdown is output in standard output."},
+			},
+		},
+		{
+			Name:  "list",
+			Usage: "list dashboards",
+			Description: `
+	List custom dashboards to STDOUT.
+`,
+			Action: doListDashboards,
+		},
+		{
+			Name:      "pull",
+			Usage:     "Pull custom dashboard",
+			ArgsUsage: "--id <id> [--file-path | -F <file>]",
+			Description: `
+    Pull custom dashboards from Mackerel server and output it to a specified file.
+`,
+			Action: doPullDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "id", Usage: "dashboard ID"},
+				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
+			},
+		},
+		{
+			Name:      "push",
+			Usage:     "Push custom dashboard",
+			ArgsUsage: "--file-path | F <file>",
+			Description: `
+	Push custom dashboards to Mackerel server from a specified file.
+	When "id" is defined in the file, updates the dashboard.
+	Otherwise creates a new dashboard.
+`,
+			Action: doPushDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
 			},
 		},
 	},
@@ -530,4 +568,61 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 
 func generateAlignmentLine(count int) string {
 	return strings.Repeat("|:-:", count) + "|\n"
+}
+
+func doListDashboards(c *cli.Context) error {
+	client := mackerelclient.NewFromContext(c)
+
+	dashboards, err := client.FindDashboards()
+	logger.DieIf(err)
+
+	fmt.Println(format.JSONMarshalIndent(dashboards, "", "    "))
+	return nil
+}
+
+func doPullDashboard(c *cli.Context) error {
+	id := c.String("id")
+	if id == "" {
+		return cli.NewExitError("--id is required", 1)
+	}
+	client := mackerelclient.NewFromContext(c)
+
+	filePath := c.String("file-path")
+	if filePath == "" {
+		return cli.NewExitError("--file-path is required", 1)
+	}
+
+	dashboard, err := client.FindDashboard(id)
+	logger.DieIf(err)
+
+	file, err := os.Create(filePath)
+	logger.DieIf(err)
+	defer file.Close()
+
+	_, err = file.WriteString(format.JSONMarshalIndent(dashboard, "", "    "))
+	return err
+}
+
+func doPushDashboard(c *cli.Context) error {
+	client := mackerelclient.NewFromContext(c)
+
+	f := c.String("file-path")
+	src, err := os.Open(f)
+	logger.DieIf(err)
+
+	dec := json.NewDecoder(src)
+	var dashboard mackerel.Dashboard
+	err = dec.Decode(&dashboard)
+	logger.DieIf(err)
+	if id := dashboard.ID; id != "" {
+		_, err := client.FindDashboard(id)
+		logger.DieIf(err)
+
+		_, err = client.UpdateDashboard(id, &dashboard)
+		logger.DieIf(err)
+	} else {
+		_, err := client.CreateDashboard(&dashboard)
+		logger.DieIf(err)
+	}
+	return nil
 }
