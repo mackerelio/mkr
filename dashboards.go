@@ -72,6 +72,18 @@ var commandDashboards = cli.Command{
 				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
 			},
 		},
+		{
+			Name:      "migrate",
+			Usage:     "Migrate a legacy dashboard",
+			ArgsUsage: "--id <id>",
+			Description: `
+	Migrate a legacy dashboart to a custom dashboard which have a markdown type widget.
+`,
+			Action: doMigrateDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "id", Usage: "dashboard ID"},
+			},
+		},
 	},
 }
 
@@ -625,4 +637,70 @@ func doPushDashboard(c *cli.Context) error {
 		logger.DieIf(err)
 	}
 	return nil
+}
+
+func doMigrateDashboard(c *cli.Context) error {
+	id := c.String("id")
+	if id == "" {
+		return cli.NewExitError("--id is required", 1)
+	}
+	client := mackerelclient.NewFromContext(c)
+
+	dashboard, err := client.FindDashboard(id)
+	logger.DieIf(err)
+
+	if !dashboard.IsLegacy {
+		return cli.NewExitError("not a lagacy dashboard", 1)
+	}
+
+	logger.Log("info", fmt.Sprintf("Deleting legacy dashboard %s", id))
+	_, err = client.DeleteDashboard(id)
+	logger.DieIf(err)
+
+	current := migrateDashboard(dashboard)
+	logger.Log("info", fmt.Sprintf("Creating new dashboard %s", id))
+	_, err = client.CreateDashboard(current)
+	if err == nil {
+		return nil
+	}
+
+	// failed to create. dump migrated JSON to file.
+	filename := fmt.Sprintf("dashboard-%s.json", id)
+	logger.Log("error", "Failed to create a new dashboard. "+err.Error())
+	logger.Log("warning", fmt.Sprintf("A new dashboard JSON saving to %s", filename))
+	logger.Log("warning", fmt.Sprintf("Please try later. > mkr dashboards push --file-path %s", filename))
+
+	file, err := os.Create(filename)
+	if err != nil {
+		logger.Log("warning", "Failed to create a new file. "+err.Error())
+		logger.Log("warning", "Dump to STDOUT")
+		file = os.Stdout
+	}
+	defer file.Close()
+	file.WriteString(format.JSONMarshalIndent(current, "", "    "))
+
+	return cli.NewExitError("Failed to create a new dashboard.", 1)
+}
+
+func migrateDashboard(legacy *mackerel.Dashboard) (current *mackerel.Dashboard) {
+	current = &mackerel.Dashboard{
+		Title:    legacy.Title,
+		Memo:     legacy.Memo,
+		URLPath:  legacy.URLPath,
+		IsLegacy: false,
+		Widgets: []mackerel.Widget{
+			{
+				Type:  "markdown",
+				Title: "",
+				Layout: mackerel.Layout{
+					X:      0,
+					Y:      0,
+					Width:  24,
+					Height: 24,
+				},
+				Markdown: legacy.BodyMarkDown,
+			},
+		},
+	}
+	return
 }
