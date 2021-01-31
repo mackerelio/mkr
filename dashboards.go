@@ -677,7 +677,12 @@ func doMigrateDashboard(c *cli.Context) error {
 		file = os.Stdout
 	}
 	defer file.Close()
-	file.WriteString(format.JSONMarshalIndent(current, "", "    "))
+
+	content := format.JSONMarshalIndent(current, "", "    ")
+	if _, err := file.WriteString(content); err != nil {
+		logger.Log("warning", "Failed to write to file. "+err.Error())
+		logger.Log("warning", content)
+	}
 
 	return cli.NewExitError("Failed to create a new dashboard.", 1)
 }
