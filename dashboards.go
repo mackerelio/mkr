@@ -46,17 +46,12 @@ var commandDashboards = cli.Command{
 			Action: doListDashboards,
 		},
 		{
-			Name:      "pull",
-			Usage:     "Pull custom dashboard",
-			ArgsUsage: "--id <id> [--file-path | -F <file>]",
+			Name:  "pull",
+			Usage: "Pull custom dashboards",
 			Description: `
-    Pull custom dashboards from Mackerel server and output it to a specified file.
+	Pull custom dashboards from Mackerel server and output these to local files.
 `,
 			Action: doPullDashboard,
-			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Usage: "dashboard ID"},
-				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
-			},
 		},
 		{
 			Name:      "push",
@@ -593,26 +588,22 @@ func doListDashboards(c *cli.Context) error {
 }
 
 func doPullDashboard(c *cli.Context) error {
-	id := c.String("id")
-	if id == "" {
-		return cli.NewExitError("--id is required", 1)
-	}
 	client := mackerelclient.NewFromContext(c)
 
-	filePath := c.String("file-path")
-	if filePath == "" {
-		return cli.NewExitError("--file-path is required", 1)
+	dashboards, err := client.FindDashboards()
+	logger.DieIf(err)
+	for _, d := range dashboards {
+		dashboard, err := client.FindDashboard(d.ID)
+		logger.DieIf(err)
+		filename := fmt.Sprintf("dashboard-%s.json", d.ID)
+		file, err := os.Create(filename)
+		logger.DieIf(err)
+		_, err = file.WriteString(format.JSONMarshalIndent(dashboard, "", "    "))
+		logger.DieIf(err)
+		file.Close()
+		logger.Log("info", fmt.Sprintf("Dashboard file is saved to '%s'(title:%s)", filename, d.Title))
 	}
-
-	dashboard, err := client.FindDashboard(id)
-	logger.DieIf(err)
-
-	file, err := os.Create(filePath)
-	logger.DieIf(err)
-	defer file.Close()
-
-	_, err = file.WriteString(format.JSONMarshalIndent(dashboard, "", "    "))
-	return err
+	return nil
 }
 
 func doPushDashboard(c *cli.Context) error {
