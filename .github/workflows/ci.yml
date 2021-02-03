@@ -135,6 +135,14 @@ jobs:
           console.log("::endgroup::");
           console.log("staging release", newStaging.data.html_url);
 
+    - name: mackerel-github-release
+      run: |
+        go get github.com/x-motemen/gobump/cmd/gobump
+        go get github.com/mackerelio/golib/cmd/mackerel-github-release
+        mackerel-github-release artifacts/
+      env:
+        GITHUB_TOKEN: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
+
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
