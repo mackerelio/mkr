@@ -53,7 +53,7 @@ jobs:
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
-#   if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
     - run: |
         sudo apt-get update
@@ -85,7 +85,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-#   if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
     - uses: actions/download-artifact@v2
       with:
@@ -110,31 +110,30 @@ jobs:
           const commit = await github.repos.getCommit({ owner, repo, ref });
 
           const staging = await github.repos.getReleaseByTag({ owner, repo, tag: "staging" });
-          // await github.repos.deleteRelease({ owner, repo, release_id: staging.data.id });
-          console.log(staging);
+          await github.repos.deleteRelease({ owner, repo, release_id: staging.data.id });
 
-          // const newStaging = await github.repos.createRelease({
-          //   owner,
-          //   repo,
-          //   tag_name: "staging",
-          //   prerelease: true,
-          //   body: commit.data.commit.message,
-          // });
+          const newStaging = await github.repos.createRelease({
+            owner,
+            repo,
+            tag_name: "staging",
+            prerelease: true,
+            body: commit.data.commit.message,
+          });
 
           const artifactsTexts = await fs.readFile("artifacts.txt", "utf8");
           console.log("::group::assets");
           for (let file of artifactsTexts.split(/\r?\n/).filter(x => !!x)) {
             console.log('uploading', file);
 
-            // await github.repos.uploadReleaseAsset({
-            //   owner, repo,
-            //   release_id: newStaging.data.id,
-            //   name: path.basename(file),
-            //   data: await fs.readFile(file),
-            // });
+            await github.repos.uploadReleaseAsset({
+              owner, repo,
+              release_id: newStaging.data.id,
+              name: path.basename(file),
+              data: await fs.readFile(file),
+            });
           }
           console.log("::endgroup::");
-          // console.log("staging release", newStaging.data.html_url);
+          console.log("staging release", newStaging.data.html_url);
 
     - uses: 8398a7/action-slack@v3
       with:
