@@ -21,8 +21,9 @@ var commandDashboards = cli.Command{
 	Name:  "dashboards",
 	Usage: "Generating custom dashboards",
 	Description: `
-    Generating dashboards. See https://mackerel.io/docs/entry/advanced/cli
+    Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
+	Action: doListDashboards,
 	Subcommands: []cli.Command{
 		{
 			Name:      "generate",
@@ -36,14 +37,6 @@ var commandDashboards = cli.Command{
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "print, p", Usage: "markdown is output in standard output."},
 			},
-		},
-		{
-			Name:  "list",
-			Usage: "list dashboards",
-			Description: `
-	List custom dashboards to STDOUT.
-`,
-			Action: doListDashboards,
 		},
 		{
 			Name:  "pull",
