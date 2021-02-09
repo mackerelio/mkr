@@ -92,48 +92,12 @@ jobs:
         name: linux-build-artifacts
         path: artifacts/
 
-    - name: Get artifacts
-      run: |
-        echo "::group::assets"
-        find artifacts/ -type f | tee artifacts.txt
-        echo "::endgroup::"
-
     - name: Update Staging Release
-      uses: actions/github-script@v3
+      uses: mackerelio/staging-release-update-action@main
       with:
+        directory: artifacts/
         github-token: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
-        script: |
-          const fs = require('fs').promises;
-          const path = require('path');
-          const { repo: { owner, repo }, ref } = context;
-
-          const commit = await github.repos.getCommit({ owner, repo, ref });
-
-          const staging = await github.repos.getReleaseByTag({ owner, repo, tag: "staging" });
-          await github.repos.deleteRelease({ owner, repo, release_id: staging.data.id });
-
-          const newStaging = await github.repos.createRelease({
-            owner,
-            repo,
-            tag_name: "staging",
-            prerelease: true,
-            body: commit.data.commit.message,
-          });
-
-          const artifactsTexts = await fs.readFile("artifacts.txt", "utf8");
-          console.log("::group::assets");
-          for (let file of artifactsTexts.split(/\r?\n/).filter(x => !!x)) {
-            console.log('uploading', file);
-
-            await github.repos.uploadReleaseAsset({
-              owner, repo,
-              release_id: newStaging.data.id,
-              name: path.basename(file),
-              data: await fs.readFile(file),
-            });
-          }
-          console.log("::endgroup::");
-          console.log("staging release", newStaging.data.html_url);
+        tag: staging
 
     - name: mackerel-github-release
       run: |
