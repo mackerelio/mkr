@@ -1,13 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -18,8 +21,9 @@ var commandDashboards = cli.Command{
 	Name:  "dashboards",
 	Usage: "Generating custom dashboards",
 	Description: `
-    Generating dashboards. See https://mackerel.io/docs/entry/advanced/cli
+    Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
+	Action: doListDashboards,
 	Subcommands: []cli.Command{
 		{
 			Name:      "generate",
@@ -32,6 +36,40 @@ var commandDashboards = cli.Command{
 			Action: doGenerateDashboards,
 			Flags: []cli.Flag{
 				cli.BoolFlag{Name: "print, p", Usage: "markdown is output in standard output."},
+			},
+		},
+		{
+			Name:  "pull",
+			Usage: "Pull custom dashboards",
+			Description: `
+	Pull custom dashboards from Mackerel server and output these to local files.
+`,
+			Action: doPullDashboard,
+		},
+		{
+			Name:      "push",
+			Usage:     "Push custom dashboard",
+			ArgsUsage: "--file-path | F <file>",
+			Description: `
+	Push custom dashboards to Mackerel server from a specified file.
+	When "id" is defined in the file, updates the dashboard.
+	Otherwise creates a new dashboard.
+`,
+			Action: doPushDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
+			},
+		},
+		{
+			Name:      "migrate",
+			Usage:     "Migrate a legacy dashboard",
+			ArgsUsage: "--id <id>",
+			Description: `
+	Migrate a legacy dashboart to a custom dashboard which have a markdown type widget.
+`,
+			Action: doMigrateDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "id", Usage: "dashboard ID"},
 			},
 		},
 	},
@@ -530,4 +568,128 @@ func generateGraphsMarkdownFactory(graphs *graphFormat, graphType string, height
 
 func generateAlignmentLine(count int) string {
 	return strings.Repeat("|:-:", count) + "|\n"
+}
+
+func doListDashboards(c *cli.Context) error {
+	client := mackerelclient.NewFromContext(c)
+
+	dashboards, err := client.FindDashboards()
+	logger.DieIf(err)
+
+	fmt.Println(format.JSONMarshalIndent(dashboards, "", "    "))
+	return nil
+}
+
+func doPullDashboard(c *cli.Context) error {
+	client := mackerelclient.NewFromContext(c)
+
+	dashboards, err := client.FindDashboards()
+	logger.DieIf(err)
+	for _, d := range dashboards {
+		dashboard, err := client.FindDashboard(d.ID)
+		logger.DieIf(err)
+		filename := fmt.Sprintf("dashboard-%s.json", d.ID)
+		file, err := os.Create(filename)
+		logger.DieIf(err)
+		_, err = file.WriteString(format.JSONMarshalIndent(dashboard, "", "    "))
+		logger.DieIf(err)
+		file.Close()
+		logger.Log("info", fmt.Sprintf("Dashboard file is saved to '%s'(title:%s)", filename, d.Title))
+	}
+	return nil
+}
+
+func doPushDashboard(c *cli.Context) error {
+	client := mackerelclient.NewFromContext(c)
+
+	f := c.String("file-path")
+	src, err := os.Open(f)
+	logger.DieIf(err)
+
+	dec := json.NewDecoder(src)
+	var dashboard mackerel.Dashboard
+	err = dec.Decode(&dashboard)
+	logger.DieIf(err)
+	if id := dashboard.ID; id != "" {
+		_, err := client.FindDashboard(id)
+		logger.DieIf(err)
+
+		_, err = client.UpdateDashboard(id, &dashboard)
+		logger.DieIf(err)
+	} else {
+		_, err := client.CreateDashboard(&dashboard)
+		logger.DieIf(err)
+	}
+	return nil
+}
+
+func doMigrateDashboard(c *cli.Context) error {
+	id := c.String("id")
+	if id == "" {
+		return cli.NewExitError("--id is required", 1)
+	}
+	client := mackerelclient.NewFromContext(c)
+
+	dashboard, err := client.FindDashboard(id)
+	logger.DieIf(err)
+
+	if !dashboard.IsLegacy {
+		return cli.NewExitError("not a lagacy dashboard", 1)
+	}
+
+	logger.Log("info", fmt.Sprintf("Deleting legacy dashboard %s", id))
+	_, err = client.DeleteDashboard(id)
+	logger.DieIf(err)
+
+	current := migrateDashboard(dashboard)
+	logger.Log("info", fmt.Sprintf("Creating new dashboard %s", id))
+	_, err = client.CreateDashboard(current)
+	if err == nil {
+		return nil
+	}
+
+	// failed to create. dump migrated JSON to file.
+	filename := fmt.Sprintf("dashboard-%s.json", id)
+	logger.Log("error", "Failed to create a new dashboard. "+err.Error())
+	logger.Log("warning", fmt.Sprintf("A new dashboard JSON saving to %s", filename))
+	logger.Log("warning", fmt.Sprintf("Please try later. > mkr dashboards push --file-path %s", filename))
+
+	file, err := os.Create(filename)
+	if err != nil {
+		logger.Log("warning", "Failed to create a new file. "+err.Error())
+		logger.Log("warning", "Dump to STDOUT")
+		file = os.Stdout
+	}
+	defer file.Close()
+
+	content := format.JSONMarshalIndent(current, "", "    ")
+	if _, err := file.WriteString(content); err != nil {
+		logger.Log("warning", "Failed to write to file. "+err.Error())
+		logger.Log("warning", content)
+	}
+
+	return cli.NewExitError("Failed to create a new dashboard.", 1)
+}
+
+func migrateDashboard(legacy *mackerel.Dashboard) (current *mackerel.Dashboard) {
+	current = &mackerel.Dashboard{
+		Title:    legacy.Title,
+		Memo:     legacy.Memo,
+		URLPath:  legacy.URLPath,
+		IsLegacy: false,
+		Widgets: []mackerel.Widget{
+			{
+				Type:  "markdown",
+				Title: "",
+				Layout: mackerel.Layout{
+					X:      0,
+					Y:      0,
+					Width:  24,
+					Height: 24,
+				},
+				Markdown: legacy.BodyMarkDown,
+			},
+		},
+	}
+	return
 }
