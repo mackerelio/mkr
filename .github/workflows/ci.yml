@@ -95,6 +95,7 @@ jobs:
         path: artifacts/
 
     - uses: mackerelio/staging-release-update-action@main
+      if: github.ref == 'refs/heads/master'
       with:
         directory: artifacts/
         github-token: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
