@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.44.0 (2021-02-16)
+
+* replace mackerel-github-release #357 (yseto)
+* add dashboard list, pull, push, and migrate commands for current dashboards. #353 (fujiwara)
+* Bump github.com/mackerelio/mackerel-agent from 0.71.0 to 0.71.1 #351 (dependabot[bot])
+* Update environments #348 (lufia)
+
+
 ## 0.43.1 (2021-01-21)
 
 * Bump alpine from 3.12.2 to 3.13.0 #347 (dependabot[bot])

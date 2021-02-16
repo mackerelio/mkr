@@ -1,3 +1,16 @@
+mkr (0.44.0-1.v2) stable; urgency=low
+
+  * replace mackerel-github-release (by yseto)
+    <https://github.com/mackerelio/mkr/pull/357>
+  * add dashboard list, pull, push, and migrate commands for current dashboards. (by fujiwara)
+    <https://github.com/mackerelio/mkr/pull/353>
+  * Bump github.com/mackerelio/mackerel-agent from 0.71.0 to 0.71.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/351>
+  * Update environments (by lufia)
+    <https://github.com/mackerelio/mkr/pull/348>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 16 Feb 2021 05:41:05 +0000
+
 mkr (0.43.1-1.v2) stable; urgency=low
 
   * Bump alpine from 3.12.2 to 3.13.0 (by dependabot[bot])

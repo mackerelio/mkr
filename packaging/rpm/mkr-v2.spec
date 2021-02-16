@@ -35,6 +35,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Feb 16 2021 <mackerel-developers@hatena.ne.jp> - 0.44.0
+- replace mackerel-github-release (by yseto)
+- add dashboard list, pull, push, and migrate commands for current dashboards. (by fujiwara)
+- Bump github.com/mackerelio/mackerel-agent from 0.71.0 to 0.71.1 (by dependabot[bot])
+- Update environments (by lufia)
+
 * Thu Jan 21 2021 <mackerel-developers@hatena.ne.jp> - 0.43.1
 - Bump alpine from 3.12.2 to 3.13.0 (by dependabot[bot])
 - Bump github.com/mackerelio/mackerel-client-go from 0.12.0 to 0.13.0 (by dependabot[bot])
