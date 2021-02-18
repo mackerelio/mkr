@@ -358,7 +358,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 				break
 			}
 		}
-		if found {
+		if !found {
 			monitorDiff.onlyRemote = append(monitorDiff.onlyRemote, remote)
 		}
 	}
