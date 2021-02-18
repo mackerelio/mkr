@@ -1,3 +1,10 @@
+mkr (0.44.1-1) stable; urgency=low
+
+  * fix condition to delete monitors (by lufia)
+    <https://github.com/mackerelio/mkr/pull/360>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 18 Feb 2021 06:40:55 +0000
+
 mkr (0.44.0-1) stable; urgency=low
 
   * replace mackerel-github-release (by yseto)

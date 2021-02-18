@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.44.1 (2021-02-18)
+
+* fix condition to delete monitors #360 (lufia)
+
+
 ## 0.44.0 (2021-02-16)
 
 * replace mackerel-github-release #357 (yseto)
