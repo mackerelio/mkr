@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Feb 18 2021 <mackerel-developers@hatena.ne.jp> - 0.44.1
+- fix condition to delete monitors (by lufia)
+
 * Tue Feb 16 2021 <mackerel-developers@hatena.ne.jp> - 0.44.0
 - replace mackerel-github-release (by yseto)
 - add dashboard list, pull, push, and migrate commands for current dashboards. (by fujiwara)
