@@ -104,7 +104,7 @@ check-release-deps:
 .PHONY: release
 release: check-release-deps
 	(cd script && cpanm -qn --installdeps .)
-	perl script/create-release-pullrequest
+	perl script/create-release-pullrequest $(ARGS)
 
 .PHONY: clean
 clean:

@@ -28,4 +28,4 @@ create_release_pull_request 'mkr' => sub {
     move
         "packaging/mkr_$current_version.orig.tar.gz",
         "packaging/mkr_$next_version.orig.tar.gz";
-};
+}, @ARGV;
