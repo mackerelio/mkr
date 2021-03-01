@@ -8,7 +8,6 @@ on:
     - v*
   pull_request:
 env:
-  GO111MODULE: on
   DEBIAN_FRONTEND: noninteractive
 jobs:
   lint:
