@@ -10,7 +10,7 @@ all: clean cross test rpm deb
 
 .PHONY: devel-deps
 devel-deps:
-	cd && go get github.com/Songmu/goxz/cmd/goxz
+	go install github.com/Songmu/goxz/cmd/goxz
 
 .PHONY: test
 test:
