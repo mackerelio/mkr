@@ -9,7 +9,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
 	github.com/fatih/color v1.10.0
-	github.com/golangci/golangci-lint v1.37.1
+	github.com/golangci/golangci-lint v1.38.0
 	github.com/golangplus/bytes v0.0.0-20160111154220-45c989fe5450 // indirect
 	github.com/golangplus/fmt v0.0.0-20150411045040-2a5d6d7d2995 // indirect
 	github.com/golangplus/testing v0.0.0-20180327235837-af21d9c3145e // indirect
