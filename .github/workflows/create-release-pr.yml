@@ -30,7 +30,7 @@ jobs:
           ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**\go.sum') }}
         restore-keys: |
-          ${{ runner.os }}-go-${{ hashFiles('**\go.sum') }}
+          ${{ runner.os }}-go-
 
     - run: go get github.com/x-motemen/gobump/cmd/gobump
     - run: go get github.com/Songmu/ghch/cmd/ghch
@@ -43,4 +43,3 @@ jobs:
       run: make release ARGS="${{ github.event.inputs.version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
