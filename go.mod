@@ -3,6 +3,7 @@ module github.com/mackerelio/mkr
 go 1.16
 
 require (
+	github.com/Songmu/goxz v0.6.0
 	github.com/Songmu/prompter v0.4.0
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
@@ -18,7 +19,7 @@ require (
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
 	github.com/mackerelio/mackerel-agent v0.71.1
-	github.com/mackerelio/mackerel-client-go v0.14.0
+	github.com/mackerelio/mackerel-client-go v0.15.0
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
