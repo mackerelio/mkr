@@ -112,6 +112,7 @@ jobs:
         token: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
         event-type: release
         client-payload: '{"product": "mkr"}'
+        repository: mackerelio/homebrew-mackerel-agent
 
     - uses: 8398a7/action-slack@v3
       with:
