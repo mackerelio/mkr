@@ -41,6 +41,16 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Fri Mar 05 2021 <mackerel-developers@hatena.ne.jp> - 0.44.2
+- Bump github.com/golangci/golangci-lint from 1.37.1 to 1.38.0 (by dependabot[bot])
+- Bump alpine from 3.13.0 to 3.13.2 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-client-go from 0.14.0 to 0.15.0 (by dependabot[bot])
+- fix CI build stage. (by yseto)
+- refactor: CI and dependency management (by lufia)
+- build / test with Go 1.16 (by astj)
+- added repository_dispatch to homebrew-mackerel-agent (by yseto)
+- replace token (by yseto)
+
 * Thu Feb 18 2021 <mackerel-developers@hatena.ne.jp> - 0.44.1
 - fix condition to delete monitors (by lufia)
 

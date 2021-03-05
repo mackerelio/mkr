@@ -1,3 +1,24 @@
+mkr (0.44.2-1.v2) stable; urgency=low
+
+  * Bump github.com/golangci/golangci-lint from 1.37.1 to 1.38.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/369>
+  * Bump alpine from 3.13.0 to 3.13.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/362>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.14.0 to 0.15.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/370>
+  * fix CI build stage. (by yseto)
+    <https://github.com/mackerelio/mkr/pull/367>
+  * refactor: CI and dependency management (by lufia)
+    <https://github.com/mackerelio/mkr/pull/366>
+  * build / test with Go 1.16 (by astj)
+    <https://github.com/mackerelio/mkr/pull/365>
+  * added repository_dispatch to homebrew-mackerel-agent (by yseto)
+    <https://github.com/mackerelio/mkr/pull/363>
+  * replace token (by yseto)
+    <https://github.com/mackerelio/mkr/pull/364>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Fri, 05 Mar 2021 06:23:21 +0000
+
 mkr (0.44.1-1.v2) stable; urgency=low
 
   * fix condition to delete monitors (by lufia)
