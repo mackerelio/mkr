@@ -108,7 +108,7 @@ func TestHostApp_FindHosts(t *testing.T) {
         "id": "foo",
         "name": "sample.app1",
         "displayName": "Sample Host foo",
-        "type": "",
+        "size": "",
         "status": "working",
         "memo": "",
         "roles": {
@@ -130,7 +130,7 @@ func TestHostApp_FindHosts(t *testing.T) {
         "id": "bar",
         "name": "sample.app2",
         "displayName": "Sample Host bar",
-        "type": "",
+        "size": "",
         "status": "standby",
         "memo": "",
         "roles": {
