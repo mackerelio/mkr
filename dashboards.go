@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"strconv"
@@ -14,7 +13,6 @@ import (
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
-	yaml "gopkg.in/yaml.v2"
 )
 
 var commandDashboards = cli.Command{
@@ -25,19 +23,6 @@ var commandDashboards = cli.Command{
 `,
 	Action: doListDashboards,
 	Subcommands: []cli.Command{
-		{
-			Name:      "generate",
-			Usage:     "Generate custom dashboard",
-			ArgsUsage: "[--print | -p] <file>",
-			Description: `
-    A custom dashboard is registered from a yaml file.
-    Requests "POST /api/v0/dashboards". See https://mackerel.io/api-docs/entry/dashboards#create.
-`,
-			Action: doGenerateDashboards,
-			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "print, p", Usage: "markdown is output in standard output."},
-			},
-		},
 		{
 			Name:  "pull",
 			Usage: "Pull custom dashboards",
@@ -398,100 +383,6 @@ func makeIframeTag(orgName string, g baseGraph) string {
 
 func makeImageMarkdown(orgName string, g baseGraph) string {
 	return fmt.Sprintf("[![graph](%s)](%s)", g.getURL(orgName, true), g.getPermalink(orgName))
-}
-
-func doGenerateDashboards(c *cli.Context) error {
-	isStdout := c.Bool("print")
-
-	argFilePath := c.Args()
-	if len(argFilePath) < 1 {
-		_ = cli.ShowCommandHelp(c, "generate")
-		return cli.NewExitError("specify a yaml file.", 1)
-	}
-
-	buf, err := ioutil.ReadFile(argFilePath[0])
-	logger.DieIf(err)
-
-	yml := graphsConfig{}
-	err = yaml.Unmarshal(buf, &yml)
-	logger.DieIf(err)
-
-	client := mackerelclient.NewFromContext(c)
-
-	org, err := client.GetOrg()
-	logger.DieIf(err)
-
-	if yml.ConfigVersion == "" {
-		return cli.NewExitError("config_version is required in yaml.", 1)
-	}
-	if yml.ConfigVersion != "0.9" {
-		return cli.NewExitError(fmt.Sprintf("config_version %s is not suport.", yml.ConfigVersion), 1)
-	}
-	if yml.Title == "" {
-		return cli.NewExitError("title is required in yaml.", 1)
-	}
-	if yml.URLPath == "" {
-		return cli.NewExitError("url_path is required in yaml.", 1)
-	}
-	if yml.Format == "" {
-		yml.Format = "iframe"
-	}
-	if yml.Format != "iframe" && yml.Format != "image" {
-		return cli.NewExitError("graph_type should be 'iframe' or 'image'.", 1)
-	}
-	if yml.Height == 0 {
-		yml.Height = 200
-	}
-	if yml.Width == 0 {
-		yml.Width = 400
-	}
-
-	if yml.HostGraphFormat != nil && yml.GraphFormat != nil {
-		return cli.NewExitError("you cannot specify both 'graphs' and host_graphs'.", 1)
-	}
-
-	var markdown string
-	for _, h := range yml.HostGraphFormat {
-		mdf := generateHostGraphsMarkdownFactory(h, yml.Format, yml.Height, yml.Width)
-		markdown += mdf.generate(org.Name)
-	}
-	for _, g := range yml.GraphFormat {
-		mdf, err := generateGraphsMarkdownFactory(g, yml.Format, yml.Height, yml.Width)
-		if err != nil {
-			return err
-		}
-		markdown += mdf.generate(org.Name)
-	}
-
-	if isStdout {
-		fmt.Println(markdown)
-	} else {
-		updateDashboard := &mackerel.Dashboard{
-			Title:        yml.Title,
-			BodyMarkDown: markdown,
-			URLPath:      yml.URLPath,
-		}
-
-		dashboards, fetchError := client.FindDashboards()
-		logger.DieIf(fetchError)
-
-		dashboardID := ""
-		for _, ds := range dashboards {
-			if ds.URLPath == yml.URLPath {
-				dashboardID = ds.ID
-			}
-		}
-
-		if dashboardID == "" {
-			_, createError := client.CreateDashboard(updateDashboard)
-			logger.DieIf(createError)
-		} else {
-			_, updateError := client.UpdateDashboard(dashboardID, updateDashboard)
-			logger.DieIf(updateError)
-		}
-	}
-
-	return nil
 }
 
 func generateHostGraphsMarkdownFactory(hostGraphs *hostGraphFormat, graphType string, height int, width int) *markdownFactory {
