@@ -14,7 +14,7 @@ import (
 
 var commandDashboards = cli.Command{
 	Name:  "dashboards",
-	Usage: "Generating custom dashboards",
+	Usage: "Manipulate custom dashboards",
 	Description: `
     Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
