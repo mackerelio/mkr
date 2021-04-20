@@ -42,6 +42,18 @@ var commandDashboards = cli.Command{
 				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
 			},
 		},
+
+		// urfave/cli will call default Action when running undefined subcommands,
+		// So we leave command defintion to cause error when executing `mkr dashboards generate`.
+		{
+			Name:   "generate",
+			Hidden: true,
+			Action: func(c *cli.Context) error {
+				logger.Log("error", "`mkr dashboards generate` command has been obsolete")
+				os.Exit(1)
+				return nil
+			},
+		},
 	},
 }
 
