@@ -10,7 +10,7 @@ require (
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
 	github.com/fatih/color v1.10.0
 	github.com/golangci/golangci-lint v1.39.0
-	github.com/golangplus/testing v0.0.0-20180327235837-af21d9c3145e // indirect
+	github.com/golangplus/bytes v1.0.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
