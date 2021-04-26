@@ -3,14 +3,14 @@ module github.com/mackerelio/mkr
 go 1.16
 
 require (
-	github.com/Songmu/goxz v0.6.0
+	github.com/Songmu/goxz v0.7.0
 	github.com/Songmu/prompter v0.5.0
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
 	github.com/fatih/color v1.10.0
 	github.com/golangci/golangci-lint v1.39.0
-	github.com/golangplus/bytes v1.0.0 // indirect
+	github.com/golangplus/testing v1.0.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7

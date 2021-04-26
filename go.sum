@@ -51,8 +51,9 @@ github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAE
 github.com/OpenPeeDeeP/depguard v1.0.1 h1:VlW4R6jmBIv3/u1JNlawEvJMM4J+dPORPaZasQee8Us=
 github.com/OpenPeeDeeP/depguard v1.0.1/go.mod h1:xsIw86fROiiwelg+jB2uM9PiKihMMmUx/1V+TNhjQvM=
 github.com/Songmu/gocredits v0.2.0/go.mod h1:JBywHzwOmBMF9uidu1EgS3mwVNqZCKOPLPrFd1h7qQo=
-github.com/Songmu/goxz v0.6.0 h1:I08xXVriE93kFquOWRzzykvEDdbIsIqw5u4R/HVnwmk=
 github.com/Songmu/goxz v0.6.0/go.mod h1:w3B0/8DQ/SwHp9uAL9iEY0nJOWv/fWpfS/vxDSIM/PU=
+github.com/Songmu/goxz v0.7.0 h1:Pzt3xw/ijVa2pQ4EGvK13ruVwmcrkXfDMryxpeHfTpc=
+github.com/Songmu/goxz v0.7.0/go.mod h1:w3B0/8DQ/SwHp9uAL9iEY0nJOWv/fWpfS/vxDSIM/PU=
 github.com/Songmu/prompter v0.4.0/go.mod h1:qXRyRoOsLZIF5fWoylqmM6xtUzwjvV+dg2hxfS3xikM=
 github.com/Songmu/prompter v0.5.0 h1:uf60xlFItY5nW+rlLJ2XIUfaUReo4gUEeftuUeHpio8=
 github.com/Songmu/prompter v0.5.0/go.mod h1:S4Eg25l60kPlnfB2ttFVpvBKYw7RKJexzB3gzpAansY=
@@ -256,9 +257,6 @@ github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5/go.mod h1:LK+zW4M
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4 h1:zwtduBRr5SSWhqsYNgcuWO2kFlpdOZbP0+yRjmvPGys=
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4/go.mod h1:Izgrg8RkN3rCIMLGE9CyYmU9pY2Jer6DgANEnZ/L/cQ=
 github.com/golangplus/bytes v0.0.0-20160111154220-45c989fe5450/go.mod h1:Bk6SMAONeMXrxql8uvOKuAZSu8aM5RUGv+1C6IJaEho=
-github.com/golangplus/bytes v1.0.0 h1:YQKBijBVMsBxIiXT4IEhlKR2zHohjEqPole4umyDX+c=
-github.com/golangplus/bytes v1.0.0/go.mod h1:AdRaCFwmc/00ZzELMWb01soso6W1R/++O1XL80yAn+A=
-github.com/golangplus/fmt v1.0.0 h1:FnUKtw86lXIPfBMc3FimNF3+ABcV+aH5F17OOitTN+E=
 github.com/golangplus/fmt v1.0.0/go.mod h1:zpM0OfbMCjPtd2qkTD/jX2MgiFCqklhSUFyDW44gVQE=
 github.com/golangplus/testing v1.0.0 h1:+ZeeiKZENNOMkTTELoSySazi+XaEhVO0mb+eanrSEUQ=
 github.com/golangplus/testing v1.0.0/go.mod h1:ZDreixUV3YzhoVraIDyOzHrr76p6NUh6k/pPg/Q3gYA=
@@ -386,7 +384,6 @@ github.com/juju/ratelimit v1.0.1/go.mod h1:qapgC/Gy+xNh9UxzV13HGGl/6UXNN+ct+vwSg
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/julz/importas v0.0.0-20210228071311-d0bf5cb4e1db h1:ZmwBthGFMVAieuVpLzuedUH9l4pY/0iFG16DN9dS38o=
 github.com/julz/importas v0.0.0-20210228071311-d0bf5cb4e1db/go.mod h1:oSFU2R4XK/P7kNBrnL/FEQlDGN1/6WoxXEjSSXO0DV0=
-github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 h1:uC1QfSlInpQF+M0ao65imhwqKnz3Q2z/d8PWZRMQvDM=
 github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88/go.mod h1:3w7q1U84EfirKl04SVQ/s7nPm1ZPhiXd34z40TNz36k=
 github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod h1:CzGEWj7cYgsdH8dAjBGEr58BoE7ScuLd+fwFZ44+/x8=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
