@@ -1,3 +1,18 @@
+mkr (0.45.0-1.v2) stable; urgency=low
+
+  * Bump github.com/mackerelio/mackerel-client-go from 0.16.0 to 0.17.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/383>
+  * [Breaking changes] Remove `mkr dashboards generate` and `mkr dashboards migrate` (by shibayu36)
+    <https://github.com/mackerelio/mkr/pull/380>
+  * Bump github.com/golangci/golangci-lint from 1.38.0 to 1.39.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/377>
+  * Bump github.com/Songmu/prompter from 0.4.0 to 0.5.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/375>
+  * update mackerel-client-go 0.16.0 (by yseto)
+    <https://github.com/mackerelio/mkr/pull/374>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 26 Apr 2021 03:09:32 +0000
+
 mkr (0.44.2-1.v2) stable; urgency=low
 
   * Bump github.com/golangci/golangci-lint from 1.37.1 to 1.38.0 (by dependabot[bot])
