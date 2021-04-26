@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Apr 26 2021 <mackerel-developers@hatena.ne.jp> - 0.45.0
+- Bump github.com/mackerelio/mackerel-client-go from 0.16.0 to 0.17.0 (by dependabot[bot])
+- [Breaking changes] Remove `mkr dashboards generate` and `mkr dashboards migrate` (by shibayu36)
+- Bump github.com/golangci/golangci-lint from 1.38.0 to 1.39.0 (by dependabot[bot])
+- Bump github.com/Songmu/prompter from 0.4.0 to 0.5.0 (by dependabot[bot])
+- update mackerel-client-go 0.16.0 (by yseto)
+
 * Fri Mar 05 2021 <mackerel-developers@hatena.ne.jp> - 0.44.2
 - Bump github.com/golangci/golangci-lint from 1.37.1 to 1.38.0 (by dependabot[bot])
 - Bump alpine from 3.13.0 to 3.13.2 (by dependabot[bot])
