@@ -9,7 +9,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v0.0.0-20180409174941-186a3d44e920 // indirect
 	github.com/fatih/color v1.10.0
-	github.com/golangci/golangci-lint v1.39.0
+	github.com/golangci/golangci-lint v1.40.1
 	github.com/golangplus/testing v1.0.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.0.0 // indirect
@@ -25,6 +25,6 @@ require (
 	github.com/urfave/cli v1.22.5
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gopkg.in/yaml.v2 v2.4.0
 )
