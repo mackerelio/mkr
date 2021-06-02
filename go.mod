@@ -7,7 +7,7 @@ require (
 	github.com/Songmu/prompter v0.5.0
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
-	github.com/fatih/color v1.11.0
+	github.com/fatih/color v1.12.0
 	github.com/golangci/golangci-lint v1.40.1
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
