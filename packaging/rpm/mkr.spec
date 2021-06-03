@@ -41,6 +41,14 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Jun 03 2021 <mackerel-developers@hatena.ne.jp> - 0.45.1
+- Bump github.com/fatih/color from 1.11.0 to 1.12.0 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.71.1 to 0.71.2 (by dependabot[bot])
+- Bump github.com/fatih/color from 1.10.0 to 1.11.0 (by dependabot[bot])
+- Bump github.com/golangci/golangci-lint from 1.39.0 to 1.40.1 (by dependabot[bot])
+- Bump alpine from 3.13.2 to 3.13.5 (by dependabot[bot])
+- Bump github.com/Songmu/goxz from 0.6.0 to 0.7.0 (by dependabot[bot])
+
 * Mon Apr 26 2021 <mackerel-developers@hatena.ne.jp> - 0.45.0
 - Bump github.com/mackerelio/mackerel-client-go from 0.16.0 to 0.17.0 (by dependabot[bot])
 - [Breaking changes] Remove `mkr dashboards generate` and `mkr dashboards migrate` (by shibayu36)
