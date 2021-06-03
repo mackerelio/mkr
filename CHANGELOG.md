@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.45.1 (2021-06-03)
+
+* Bump github.com/fatih/color from 1.11.0 to 1.12.0 #388 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.71.1 to 0.71.2 #389 (dependabot[bot])
+* Bump github.com/fatih/color from 1.10.0 to 1.11.0 #386 (dependabot[bot])
+* Bump github.com/golangci/golangci-lint from 1.39.0 to 1.40.1 #387 (dependabot[bot])
+* Bump alpine from 3.13.2 to 3.13.5 #379 (dependabot[bot])
+* Bump github.com/Songmu/goxz from 0.6.0 to 0.7.0 #382 (dependabot[bot])
+
+
 ## 0.45.0 (2021-04-26)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.16.0 to 0.17.0 #383 (dependabot[bot])
