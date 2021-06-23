@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.45.2 (2021-06-23)
+
+* Bump alpine from 3.13.5 to 3.14.0 #391 (dependabot[bot])
+* Bump github.com/golangci/golangci-lint from 1.40.1 to 1.41.1 #394 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.71.2 to 0.72.0 #393 (dependabot[bot])
+
+
 ## 0.45.1 (2021-06-03)
 
 * Bump github.com/fatih/color from 1.11.0 to 1.12.0 #388 (dependabot[bot])

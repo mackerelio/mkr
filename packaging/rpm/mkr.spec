@@ -41,6 +41,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jun 23 2021 <mackerel-developers@hatena.ne.jp> - 0.45.2
+- Bump alpine from 3.13.5 to 3.14.0 (by dependabot[bot])
+- Bump github.com/golangci/golangci-lint from 1.40.1 to 1.41.1 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.71.2 to 0.72.0 (by dependabot[bot])
+
 * Thu Jun 03 2021 <mackerel-developers@hatena.ne.jp> - 0.45.1
 - Bump github.com/fatih/color from 1.11.0 to 1.12.0 (by dependabot[bot])
 - Bump github.com/mackerelio/mackerel-agent from 0.71.1 to 0.71.2 (by dependabot[bot])
