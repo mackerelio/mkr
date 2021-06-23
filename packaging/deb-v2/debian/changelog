@@ -1,3 +1,14 @@
+mkr (0.45.2-1.v2) stable; urgency=low
+
+  * Bump alpine from 3.13.5 to 3.14.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/391>
+  * Bump github.com/golangci/golangci-lint from 1.40.1 to 1.41.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/394>
+  * Bump github.com/mackerelio/mackerel-agent from 0.71.2 to 0.72.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/393>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 23 Jun 2021 06:37:20 +0000
+
 mkr (0.45.1-1.v2) stable; urgency=low
 
   * Bump github.com/fatih/color from 1.11.0 to 1.12.0 (by dependabot[bot])
