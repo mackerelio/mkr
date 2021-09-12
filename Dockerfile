@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine AS builder
+FROM golang:1.17.1-alpine AS builder
 RUN apk add --no-cache make git
 WORKDIR /go/src/github.com/mackerelio/mkr/
 COPY . .
