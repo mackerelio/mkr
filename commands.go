@@ -11,6 +11,7 @@ import (
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/hosts"
+	"github.com/mackerelio/mkr/integration"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/mackerelio/mkr/org"
@@ -40,6 +41,7 @@ var Commands = []cli.Command{
 	plugin.CommandPlugin,
 	checks.Command,
 	wrap.Command,
+	integration.CommandIntegration,
 }
 
 var commandStatus = cli.Command{

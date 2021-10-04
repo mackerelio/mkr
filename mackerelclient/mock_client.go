@@ -4,12 +4,13 @@ import "github.com/mackerelio/mackerel-client-go"
 
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {
-	findHostsCallback        func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
-	findServicesCallback     func() ([]*mackerel.Service, error)
-	findChannelsCallback     func() ([]*mackerel.Channel, error)
-	getOrgCallback           func() (*mackerel.Org, error)
-	createHostCallback       func(param *mackerel.CreateHostParam) (string, error)
-	updateHostStatusCallback func(hostID string, status string) error
+	findAWSIntegrationsCallback func() ([]*mackerel.AWSIntegration, error)
+	findHostsCallback           func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
+	findServicesCallback        func() ([]*mackerel.Service, error)
+	findChannelsCallback        func() ([]*mackerel.Channel, error)
+	getOrgCallback              func() (*mackerel.Org, error)
+	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
+	updateHostStatusCallback    func(hostID string, status string) error
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -122,5 +123,20 @@ func (c *MockClient) UpdateHostStatus(hostID string, status string) error {
 func MockUpdateHostStatus(callback func(string, string) error) MockClientOption {
 	return func(c *MockClient) {
 		c.updateHostStatusCallback = callback
+	}
+}
+
+// FindAWSIntegrations ...
+func (c *MockClient) FindAWSIntegrations() ([]*mackerel.AWSIntegration, error) {
+	if c.findAWSIntegrationsCallback != nil {
+		return c.findAWSIntegrationsCallback()
+	}
+	return nil, errCallbackNotFound("FindAWSIntegrations")
+}
+
+// MockFindAWSIntegrations returns an option to set the callback of FindAWSIntegrations
+func MockFindAWSIntegrations(callback func() ([]*mackerel.AWSIntegration, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.findAWSIntegrationsCallback = callback
 	}
 }
