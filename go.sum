@@ -548,6 +548,8 @@ github.com/mackerelio/mackerel-agent-plugins v0.64.2/go.mod h1:8tAjjRYmdYaQr86vI
 github.com/mackerelio/mackerel-client-go v0.13.0/go.mod h1:/GNOj+y1eFsd3CK8c6IQ/uS38/GT0+NWImk5YGJs5Lk=
 github.com/mackerelio/mackerel-client-go v0.17.0 h1:OpxUMGQuH6y9NjLnV1ZI4trm3qNKzvilP1Pjxp9e+eA=
 github.com/mackerelio/mackerel-client-go v0.17.0/go.mod h1:/GNOj+y1eFsd3CK8c6IQ/uS38/GT0+NWImk5YGJs5Lk=
+github.com/mackerelio/mackerel-client-go v0.19.0 h1:DkYVD07fmklFTMKLaHcjtkU53Nt+nhvXNUSEeKfRSZs=
+github.com/mackerelio/mackerel-client-go v0.19.0/go.mod h1:/GNOj+y1eFsd3CK8c6IQ/uS38/GT0+NWImk5YGJs5Lk=
 github.com/mackerelio/mackerel-plugin-aws-ec2 v1.0.1/go.mod h1:Hw/mRzxK6cW2gCXZd6Cg+GlpB59ik8b4ir7sVDCz160=
 github.com/mackerelio/mackerel-plugin-aws-kinesis-firehose v1.0.1/go.mod h1:LaTl9MFn1bUH1A15/0ymqdf0+uAVdkE0Fm16aODdZOU=
 github.com/mackerelio/mackerel-plugin-aws-rekognition v1.0.1/go.mod h1:AAh31HDCFyLcne6QqKrFzkJR6bXPa052BmkiQLcWgfU=

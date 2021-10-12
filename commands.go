@@ -7,6 +7,7 @@ import (
 
 	"github.com/Songmu/prompter"
 	"github.com/mackerelio/mackerel-client-go"
+	"github.com/mackerelio/mkr/aws_integrations"
 	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/format"
@@ -40,6 +41,7 @@ var Commands = []cli.Command{
 	plugin.CommandPlugin,
 	checks.Command,
 	wrap.Command,
+	aws_integrations.Command,
 }
 
 var commandStatus = cli.Command{
