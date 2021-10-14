@@ -41,6 +41,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu Oct 14 2021 <mackerel-developers@hatena.ne.jp> - 0.45.3
+- implement list cloud integration settings subcommand (by Gompei)
+- Bump alpine from 3.14.0 to 3.14.2 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.72.0 to 0.72.1 (by dependabot[bot])
+
 * Wed Jun 23 2021 <mackerel-developers@hatena.ne.jp> - 0.45.2
 - Bump alpine from 3.13.5 to 3.14.0 (by dependabot[bot])
 - Bump github.com/golangci/golangci-lint from 1.40.1 to 1.41.1 (by dependabot[bot])

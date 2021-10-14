@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.45.3 (2021-10-14)
+
+* implement list cloud integration settings subcommand #407 (Gompei)
+* Bump alpine from 3.14.0 to 3.14.2 #405 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.0 to 0.72.1 #396 (dependabot[bot])
+
+
 ## 0.45.2 (2021-06-23)
 
 * Bump alpine from 3.13.5 to 3.14.0 #391 (dependabot[bot])
