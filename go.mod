@@ -11,8 +11,8 @@ require (
 	github.com/golangci/golangci-lint v1.41.1
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
-	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
-	github.com/mackerelio/mackerel-agent v0.72.1
+	github.com/mackerelio/checkers v0.0.2
+	github.com/mackerelio/mackerel-agent v0.72.3
 	github.com/mackerelio/mackerel-client-go v0.19.0
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
