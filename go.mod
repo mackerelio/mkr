@@ -8,7 +8,7 @@ require (
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/daviddengcn/go-colortext v1.0.0 // indirect
-	github.com/fatih/color v1.12.0
+	github.com/fatih/color v1.13.0
 	github.com/golangci/golangci-lint v1.41.1
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
