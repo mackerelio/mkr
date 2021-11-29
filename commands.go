@@ -61,7 +61,7 @@ var commandStatus = cli.Command{
 var commandUpdate = cli.Command{
 	Name:      "update",
 	Usage:     "Update the host",
-	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [<hostIds...>]",
+	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [--memo <memo>] [<hostIds...>]",
 	Description: `
     Update the host identified with <hostId>.
     Requests "PUT /api/v0/hosts/<hostId>". See https://mackerel.io/api-docs/entry/hosts#update-information .
@@ -77,6 +77,7 @@ var commandUpdate = cli.Command{
 			Usage: "Update rolefullname.",
 		},
 		cli.BoolFlag{Name: "overwriteRoles, o", Usage: "Overwrite roles instead of adding specified roles."},
+		cli.StringFlag{Name: "memo", Value: "", Usage: "memo for the Host"},
 	},
 }
 
@@ -172,6 +173,7 @@ func doUpdate(c *cli.Context) error {
 	optStatus := c.String("status")
 	optRoleFullnames := c.StringSlice("roleFullname")
 	overwriteRoles := c.Bool("overwriteRoles")
+	optMemo := c.String("memo")
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
@@ -182,7 +184,7 @@ func doUpdate(c *cli.Context) error {
 
 	needUpdateHostStatus := optStatus != ""
 	needUpdateRolesInHostUpdate := !overwriteRoles && len(optRoleFullnames) > 0
-	needUpdateHost := (optName != "" || optDisplayName != "" || overwriteRoles || needUpdateRolesInHostUpdate)
+	needUpdateHost := (optName != "" || optDisplayName != "" || overwriteRoles || optMemo != "" || needUpdateRolesInHostUpdate)
 
 	if !needUpdateHostStatus && !needUpdateHost {
 		logger.Log("update", "at least one argumet is required.")
@@ -217,11 +219,18 @@ func doUpdate(c *cli.Context) error {
 			} else {
 				displayname = optDisplayName
 			}
+			memo := ""
+			if optMemo == "" {
+				memo = host.Memo
+			} else {
+				memo = optMemo
+			}
 			param := &mackerel.UpdateHostParam{
 				Name:        name,
 				DisplayName: displayname,
 				Meta:        host.Meta,
 				Interfaces:  host.Interfaces,
+				Memo:        memo,
 			}
 			if needUpdateRolesInHostUpdate {
 				param.RoleFullnames = optRoleFullnames
