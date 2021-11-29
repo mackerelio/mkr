@@ -12,9 +12,9 @@ import (
 var CommandCreate = cli.Command{
 	Name:      "create",
 	Usage:     "Create a new host",
-	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] <hostName>",
+	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] [--memo <memo>] <hostName>",
 	Description: `
-    Create a new host with status, roleFullname and/or customIdentifier.
+    Create a new host with status, roleFullname, customIdentifier and/or memo.
     Requests "POST /api/v0/hosts". See https://mackerel.io/api-docs/entry/hosts#create .
 `,
 	Action: doCreate,
@@ -26,6 +26,7 @@ var CommandCreate = cli.Command{
 			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
 		cli.StringFlag{Name: "customIdentifier", Value: "", Usage: "CustomIdentifier for the Host"},
+		cli.StringFlag{Name: "memo", Value: "", Usage: "memo for the Host"},
 	},
 }
 
@@ -49,5 +50,6 @@ func doCreate(c *cli.Context) error {
 		roleFullnames:    c.StringSlice("roleFullname"),
 		status:           c.String("status"),
 		customIdentifier: c.String("customIdentifier"),
+		memo:             c.String("memo"),
 	})
 }

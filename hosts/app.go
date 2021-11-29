@@ -76,6 +76,7 @@ type createHostParam struct {
 	roleFullnames    []string
 	status           string
 	customIdentifier string
+	memo             string
 }
 
 func (ha *hostApp) createHost(param createHostParam) error {
@@ -83,6 +84,7 @@ func (ha *hostApp) createHost(param createHostParam) error {
 		Name:             param.name,
 		RoleFullnames:    param.roleFullnames,
 		CustomIdentifier: param.customIdentifier,
+		Memo:             param.memo,
 	})
 	if err != nil {
 		ha.error(err)
