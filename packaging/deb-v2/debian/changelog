@@ -1,3 +1,18 @@
+mkr (0.46.0-1.v2) stable; urgency=low
+
+  * added memo on host (by yseto)
+    <https://github.com/mackerelio/mkr/pull/418>
+  * Bump github.com/fatih/color from 1.12.0 to 1.13.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/416>
+  * Bump github.com/golangci/golangci-lint from 1.41.1 to 1.43.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/415>
+  * Bump mackerel-agent from 0.72.1 to 0.72.4 (by susisu)
+    <https://github.com/mackerelio/mkr/pull/414>
+  * Add arm64/darwin build artifacts to GitHub release (by astj)
+    <https://github.com/mackerelio/mkr/pull/413>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 1 Dec 2021 05:26:19 +0000
+
 mkr (0.45.3-1.v2) stable; urgency=low
 
   * implement list cloud integration settings subcommand (by Gompei)

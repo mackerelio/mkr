@@ -41,6 +41,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Dec 1 2021 <mackerel-developers@hatena.ne.jp> - 0.46.0
+- added memo on host (by yseto)
+- Bump github.com/fatih/color from 1.12.0 to 1.13.0 (by dependabot[bot])
+- Bump github.com/golangci/golangci-lint from 1.41.1 to 1.43.0 (by dependabot[bot])
+- Bump mackerel-agent from 0.72.1 to 0.72.4 (by susisu)
+- Add arm64/darwin build artifacts to GitHub release (by astj)
+
 * Thu Oct 14 2021 <mackerel-developers@hatena.ne.jp> - 0.45.3
 - implement list cloud integration settings subcommand (by Gompei)
 - Bump alpine from 3.14.0 to 3.14.2 (by dependabot[bot])
