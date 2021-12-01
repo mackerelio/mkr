@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.46.0 (2021-12-01)
+
+* added memo on host #418 (yseto)
+* Bump github.com/fatih/color from 1.12.0 to 1.13.0 #416 (dependabot[bot])
+* Bump github.com/golangci/golangci-lint from 1.41.1 to 1.43.0 #415 (dependabot[bot])
+* Bump mackerel-agent from 0.72.1 to 0.72.4 #414 (susisu)
+* Add arm64/darwin build artifacts to GitHub release #413 (astj)
+
+
 ## 0.45.3 (2021-10-14)
 
 * implement list cloud integration settings subcommand #407 (Gompei)
