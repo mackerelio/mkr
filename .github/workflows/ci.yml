@@ -4,6 +4,8 @@ on:
   push:
     branches:
     - master
+    # TODO: remove this branch
+    - build-and-push-on-gha
     tags:
     - v*
   pull_request:
@@ -121,3 +123,35 @@ jobs:
         username: mkr-release
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.MACKEREL_SLACK_WEBHOOK_URL }}
+
+  # This job is under construction now.
+  build_images_and_push:
+    # if: startsWith(github.ref, 'refs/tags/v')
+    # needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Get tag
+        id: get_tag
+        run: echo "::set-output name=tag::${GITHUB_REF##*/}"
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: |
+            linux/amd64
+            linux/arm64
+          # push: true
+          tags: |
+            mackerel/mkr:latest
+            mackerel/mkr:${{ steps.get_tag.outputs.tag }}
