@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.46.1 (2022-01-12)
+
+* Add a job to build docker images and push to DockerHub #425 (Krout0n)
+
+
 ## 0.46.0 (2021-12-01)
 
 * added memo on host #418 (yseto)

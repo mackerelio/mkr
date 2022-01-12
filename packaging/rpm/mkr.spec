@@ -41,6 +41,9 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jan 12 2022 <mackerel-developers@hatena.ne.jp> - 0.46.1
+- Add a job to build docker images and push to DockerHub (by Krout0n)
+
 * Wed Dec 1 2021 <mackerel-developers@hatena.ne.jp> - 0.46.0
 - added memo on host (by yseto)
 - Bump github.com/fatih/color from 1.12.0 to 1.13.0 (by dependabot[bot])
