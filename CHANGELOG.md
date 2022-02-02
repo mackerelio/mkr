@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.46.2 (2022-02-02)
+
+* Bump github.com/golangci/golangci-lint from 1.43.0 to 1.44.0 #429 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.4 to 0.72.6 #428 (dependabot[bot])
+* Bump github.com/Songmu/goxz from 0.7.0 to 0.8.1 #424 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.20.0 to 0.21.0 #423 (dependabot[bot])
+
+
 ## 0.46.1 (2022-01-12)
 
 * Add a job to build docker images and push to DockerHub #425 (Krout0n)
