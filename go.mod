@@ -12,7 +12,7 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
-	github.com/mackerelio/mackerel-agent v0.72.7
+	github.com/mackerelio/mackerel-agent v0.72.8
 	github.com/mackerelio/mackerel-client-go v0.21.0
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
@@ -99,7 +99,7 @@ require (
 	github.com/julz/importas v0.1.0 // indirect
 	github.com/kisielk/errcheck v1.6.0 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/klauspost/compress v1.14.2 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/kulti/thelper v0.5.0 // indirect
 	github.com/kunwardeep/paralleltest v1.0.3 // indirect
@@ -131,7 +131,7 @@ require (
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/phayes/checkstyle v0.0.0-20170904204023-bfd46e6a821d // indirect
 	github.com/pierrec/lz4 v2.4.0+incompatible // indirect
-	github.com/pierrec/lz4/v4 v4.1.12 // indirect
+	github.com/pierrec/lz4/v4 v4.1.13 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/polyfloyd/go-errorlint v0.0.0-20211125173453-6d6d39c5bb8b // indirect
 	github.com/prometheus/client_golang v1.7.1 // indirect
@@ -180,10 +180,10 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
-	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b // indirect
+	golang.org/x/sys v0.0.0-20220204135822-1c1b9b1eba6a // indirect
+	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.9-0.20211228192929-ee1ca4ffc4da // indirect
+	golang.org/x/tools v0.1.9 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
