@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.46.3 (2022-02-16)
+
+* upgrade Go version: 1.16 -> 1.17 #432 (lufia)
+* Bump github.com/mackerelio/mackerel-agent from 0.72.6 to 0.72.7 #431 (dependabot[bot])
+* Bump alpine from 3.14.2 to 3.15.0 #417 (dependabot[bot])
+
+
 ## 0.46.2 (2022-02-02)
 
 * Bump github.com/golangci/golangci-lint from 1.43.0 to 1.44.0 #429 (dependabot[bot])
