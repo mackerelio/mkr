@@ -1,3 +1,14 @@
+mkr (0.46.3-1) stable; urgency=low
+
+  * upgrade Go version: 1.16 -> 1.17 (by lufia)
+    <https://github.com/mackerelio/mkr/pull/432>
+  * Bump github.com/mackerelio/mackerel-agent from 0.72.6 to 0.72.7 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/431>
+  * Bump alpine from 3.14.2 to 3.15.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/417>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 16 Feb 2022 02:48:38 +0000
+
 mkr (0.46.2-1) stable; urgency=low
 
   * Bump github.com/golangci/golangci-lint from 1.43.0 to 1.44.0 (by dependabot[bot])
