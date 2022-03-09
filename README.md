@@ -27,13 +27,6 @@ curl -fsSL https://mackerel.io/file/script/setup-yum-v2.sh | sh
 yum install mkr
 ```
 
-### CentOS 6
-
-```bash
-curl -fsSL https://mackerel.io/file/script/setup-yum.sh | sh
-yum install mkr
-```
-
 ### Debian / Ubuntu
 
 ```bash
@@ -67,7 +60,7 @@ brew install mkr
 ## Build from source
 
 ```bash
-$ GO111MODULE=on go get github.com/mackerelio/mkr
+$ go install github.com/mackerelio/mkr@latest
 ```
 
 # USAGE
@@ -200,7 +193,7 @@ $ mkr update --st working $(mkr hosts -s My-Service -r proxy | jq -r '.[].id')
 
 ## Using Docker Image
 
-https://registry.hub.docker.com/u/mackerel/mkr/
+https://hub.docker.com/r/mackerel/mkr/
 
 ```bash
 $ docker run --rm --env MACKEREL_APIKEY=<API key> mackerel/mkr help
