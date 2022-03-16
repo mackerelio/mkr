@@ -41,6 +41,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Mar 15 2022 <mackerel-developers@hatena.ne.jp> - 0.46.4
+- refine README and others (by lufia)
+- Bump github.com/golangci/golangci-lint from 1.44.0 to 1.44.2 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.72.7 to 0.72.8 (by dependabot[bot])
+
 * Wed Feb 16 2022 <mackerel-developers@hatena.ne.jp> - 0.46.3
 - upgrade Go version: 1.16 -> 1.17 (by lufia)
 - Bump github.com/mackerelio/mackerel-agent from 0.72.6 to 0.72.7 (by dependabot[bot])

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.46.4 (2022-03-15)
+
+* refine README and others #437 (lufia)
+* Bump github.com/golangci/golangci-lint from 1.44.0 to 1.44.2 #436 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.7 to 0.72.8 #434 (dependabot[bot])
+
+
 ## 0.46.3 (2022-02-16)
 
 * upgrade Go version: 1.16 -> 1.17 #432 (lufia)
