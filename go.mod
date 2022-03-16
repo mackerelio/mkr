@@ -12,7 +12,7 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
-	github.com/mackerelio/mackerel-agent v0.72.8
+	github.com/mackerelio/mackerel-agent v0.72.9
 	github.com/mackerelio/mackerel-client-go v0.21.0
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
