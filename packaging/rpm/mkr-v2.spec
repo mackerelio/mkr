@@ -35,6 +35,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Mar 30 2022 <mackerel-developers@hatena.ne.jp> - 0.46.5
+- Bump github.com/golangci/golangci-lint from 1.45.0 to 1.45.2 (by dependabot[bot])
+- Bump github.com/golangci/golangci-lint from 1.44.2 to 1.45.0 (by dependabot[bot])
+- Bump alpine from 3.15.0 to 3.15.1 (by dependabot[bot])
+- Bump github.com/stretchr/testify from 1.7.0 to 1.7.1 (by dependabot[bot])
+
 * Tue Mar 15 2022 <mackerel-developers@hatena.ne.jp> - 0.46.4
 - refine README and others (by lufia)
 - Bump github.com/golangci/golangci-lint from 1.44.0 to 1.44.2 (by dependabot[bot])

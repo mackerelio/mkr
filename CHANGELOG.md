@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.46.5 (2022-03-30)
+
+* Bump github.com/golangci/golangci-lint from 1.45.0 to 1.45.2 #445 (dependabot[bot])
+* Bump github.com/golangci/golangci-lint from 1.44.2 to 1.45.0 #443 (dependabot[bot])
+* Bump alpine from 3.15.0 to 3.15.1 #441 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.7.0 to 1.7.1 #439 (dependabot[bot])
+
+
 ## 0.46.4 (2022-03-15)
 
 * refine README and others #437 (lufia)
