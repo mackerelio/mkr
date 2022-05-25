@@ -3,7 +3,7 @@ module github.com/mackerelio/mkr
 go 1.17
 
 require (
-	github.com/Songmu/goxz v0.8.1
+	github.com/Songmu/goxz v0.8.2
 	github.com/Songmu/prompter v0.5.0
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
