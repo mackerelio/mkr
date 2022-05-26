@@ -1,3 +1,18 @@
+mkr (0.46.6-1) stable; urgency=low
+
+  * Bump github.com/golangci/golangci-lint from 1.45.2 to 1.46.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/460>
+  * Bump github.com/Songmu/goxz from 0.8.1 to 0.8.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/456>
+  * Bump github.com/urfave/cli from 1.22.5 to 1.22.9 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/455>
+  * [ci] Fix: Input 'job-number' has been deprecated with message: use flag-name instead (by ne-sachirou)
+    <https://github.com/mackerelio/mkr/pull/452>
+  * Bump github.com/mackerelio/mackerel-agent from 0.72.8 to 0.72.11 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/451>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 26 May 2022 02:29:13 +0000
+
 mkr (0.46.5-1) stable; urgency=low
 
   * Bump github.com/golangci/golangci-lint from 1.45.0 to 1.45.2 (by dependabot[bot])

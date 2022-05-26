@@ -41,6 +41,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Thu May 26 2022 <mackerel-developers@hatena.ne.jp> - 0.46.6
+- Bump github.com/golangci/golangci-lint from 1.45.2 to 1.46.2 (by dependabot[bot])
+- Bump github.com/Songmu/goxz from 0.8.1 to 0.8.2 (by dependabot[bot])
+- Bump github.com/urfave/cli from 1.22.5 to 1.22.9 (by dependabot[bot])
+- [ci] Fix: Input 'job-number' has been deprecated with message: use flag-name instead (by ne-sachirou)
+- Bump github.com/mackerelio/mackerel-agent from 0.72.8 to 0.72.11 (by dependabot[bot])
+
 * Wed Mar 30 2022 <mackerel-developers@hatena.ne.jp> - 0.46.5
 - Bump github.com/golangci/golangci-lint from 1.45.0 to 1.45.2 (by dependabot[bot])
 - Bump github.com/golangci/golangci-lint from 1.44.2 to 1.45.0 (by dependabot[bot])
