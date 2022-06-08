@@ -35,6 +35,11 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jun 8 2022 <mackerel-developers@hatena.ne.jp> - 0.46.7
+- Bump github.com/stretchr/testify from 1.7.1 to 1.7.2 (by dependabot[bot])
+- Bump github.com/Songmu/prompter from 0.5.0 to 0.5.1 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.72.11 to 0.72.12 (by dependabot[bot])
+
 * Thu May 26 2022 <mackerel-developers@hatena.ne.jp> - 0.46.6
 - Bump github.com/golangci/golangci-lint from 1.45.2 to 1.46.2 (by dependabot[bot])
 - Bump github.com/Songmu/goxz from 0.8.1 to 0.8.2 (by dependabot[bot])
