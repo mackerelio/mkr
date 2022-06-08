@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.46.7 (2022-06-08)
+
+* Bump github.com/stretchr/testify from 1.7.1 to 1.7.2 #466 (dependabot[bot])
+* Bump github.com/Songmu/prompter from 0.5.0 to 0.5.1 #464 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.11 to 0.72.12 #463 (dependabot[bot])
+
+
 ## 0.46.6 (2022-05-26)
 
 * Bump github.com/golangci/golangci-lint from 1.45.2 to 1.46.2 #460 (dependabot[bot])
