@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.46.8 (2022-06-22)
+
+* Bump github.com/mackerelio/mackerel-agent from 0.72.12 to 0.72.13 #468 (dependabot[bot])
+
+
 ## 0.46.7 (2022-06-08)
 
 * Bump github.com/stretchr/testify from 1.7.1 to 1.7.2 #466 (dependabot[bot])
