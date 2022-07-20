@@ -586,8 +586,8 @@ github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456/go.mod h1:diyN
 github.com/mackerelio/go-osstat v0.2.2/go.mod h1:G2A1f01HIHVRhMdS1qnigXxS6C8ahppy5lCwBrbRp0s=
 github.com/mackerelio/golib v1.2.1 h1:SDcDn6Jw3p9bi1N0bg1Z/ilG5qcBB23qL8xNwrU0gg4=
 github.com/mackerelio/golib v1.2.1/go.mod h1:b8ZaapsHGH1FlEJlCqfD98CqafLeyMevyATDlID2BsM=
-github.com/mackerelio/mackerel-agent v0.72.13 h1:mxwKn9pqZh+/VySr7IHyaY25ErzsGCIBkcbrr0eerc4=
-github.com/mackerelio/mackerel-agent v0.72.13/go.mod h1:4yajwbSgB3LmnYlKZcTNcI21ji9AuihOm2jgmz1Zsrg=
+github.com/mackerelio/mackerel-agent v0.72.14 h1:cv2BDcaEk9GboqmjkoDhv0JXQS9Zyh+FPxTHrnTq+dQ=
+github.com/mackerelio/mackerel-agent v0.72.14/go.mod h1:4yajwbSgB3LmnYlKZcTNcI21ji9AuihOm2jgmz1Zsrg=
 github.com/mackerelio/mackerel-client-go v0.21.0/go.mod h1:/GNOj+y1eFsd3CK8c6IQ/uS38/GT0+NWImk5YGJs5Lk=
 github.com/mackerelio/mackerel-client-go v0.21.1 h1:VeWwvXEvFSABD68HxCZYKE3f+yOVpXWp6imUe5IjNBo=
 github.com/mackerelio/mackerel-client-go v0.21.1/go.mod h1:/GNOj+y1eFsd3CK8c6IQ/uS38/GT0+NWImk5YGJs5Lk=
