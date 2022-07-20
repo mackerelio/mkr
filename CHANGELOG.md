@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.46.9 (2022-07-20)
+
+* Bump github.com/golangci/golangci-lint from 1.46.2 to 1.47.1 #479 (dependabot[bot])
+* Bump alpine from 3.16.0 to 3.16.1 #478 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.7.2 to 1.8.0 #475 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.21.0 to 0.21.1 #473 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.13 to 0.72.14 #472 (dependabot[bot])
+* Bump alpine from 3.15.1 to 3.16.0 #461 (dependabot[bot])
+
+
 ## 0.46.8 (2022-06-22)
 
 * Bump github.com/mackerelio/mackerel-agent from 0.72.12 to 0.72.13 #468 (dependabot[bot])
