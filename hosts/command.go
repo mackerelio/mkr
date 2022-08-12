@@ -79,6 +79,7 @@ var CommandHosts = cli.Command{
 		},
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
 	},
 }
 
@@ -92,6 +93,7 @@ func doHosts(c *cli.Context) error {
 		client:    client,
 		logger:    logger.New(),
 		outStream: os.Stdout,
+		jq:        c.String("jq"),
 	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
 

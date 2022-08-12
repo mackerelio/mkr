@@ -14,6 +14,7 @@ type statussApp struct {
 
 	argHostID string
 	isVerbose bool
+	jq        string
 }
 
 func (app *statussApp) run() error {
@@ -23,7 +24,7 @@ func (app *statussApp) run() error {
 	}
 
 	if app.isVerbose {
-		err := format.PrettyPrintJSON(app.outStream, host)
+		err := format.PrettyPrintJSON(app.outStream, host, app.jq)
 		logger.DieIf(err)
 	} else {
 		err := format.PrettyPrintJSON(app.outStream, &format.Host{
@@ -35,7 +36,7 @@ func (app *statussApp) run() error {
 			IsRetired:     host.IsRetired,
 			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
 			IPAddresses:   host.IPAddresses(),
-		})
+		}, app.jq)
 		logger.DieIf(err)
 	}
 	return nil

@@ -16,6 +16,9 @@ var Command = cli.Command{
 	Requests "GET /api/v0/aws-integrations". See https://mackerel.io/api-docs/entry/aws-integration#list.
 `,
 	Action: doAWSIntegrations,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+	},
 }
 
 func doAWSIntegrations(c *cli.Context) error {
@@ -26,5 +29,6 @@ func doAWSIntegrations(c *cli.Context) error {
 	return (&awsIntegrationsApp{
 		client:    client,
 		outStream: os.Stdout,
+		jq:        c.String("jq"),
 	}).run()
 }

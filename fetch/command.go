@@ -25,6 +25,7 @@ var Command = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
 	},
 }
 
@@ -46,7 +47,7 @@ func doFetch(c *cli.Context) error {
 		}
 	}
 
-	err := format.PrettyPrintJSON(os.Stdout, allMetricValues)
+	err := format.PrettyPrintJSON(os.Stdout, allMetricValues, c.String("jq"))
 	logger.DieIf(err)
 	return nil
 }

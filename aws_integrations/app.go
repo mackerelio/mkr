@@ -11,6 +11,7 @@ import (
 type awsIntegrationsApp struct {
 	client    mackerelclient.Client
 	outStream io.Writer
+	jq        string
 }
 
 func (app *awsIntegrationsApp) run() error {
@@ -19,7 +20,7 @@ func (app *awsIntegrationsApp) run() error {
 		return err
 	}
 
-	err = format.PrettyPrintJSON(app.outStream, awsIntegrations)
+	err = format.PrettyPrintJSON(app.outStream, awsIntegrations, app.jq)
 	logger.DieIf(err)
 	return nil
 }

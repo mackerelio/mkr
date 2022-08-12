@@ -51,6 +51,7 @@ var Command = cli.Command{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
 				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
+				cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
 			},
 		},
 		{
@@ -128,7 +129,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation, "")
 	logger.DieIf(err)
 	return nil
 }
@@ -156,7 +157,7 @@ func doAnnotationsList(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotations, err := client.FindGraphAnnotations(service, from, to)
 	logger.DieIf(err)
-	err = format.PrettyPrintJSON(os.Stdout, annotations)
+	err = format.PrettyPrintJSON(os.Stdout, annotations, c.String("jq"))
 	logger.DieIf(err)
 	return nil
 }
@@ -200,7 +201,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 		Roles:       roles,
 	})
 	logger.DieIf(err)
-	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation, "")
 	logger.DieIf(err)
 	return nil
 }
@@ -216,7 +217,7 @@ func doAnnotationsDelete(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 	annotation, err := client.DeleteGraphAnnotation(annotationID)
 	logger.DieIf(err)
-	err = format.PrettyPrintJSON(os.Stdout, annotation)
+	err = format.PrettyPrintJSON(os.Stdout, annotation, "")
 	logger.DieIf(err)
 	return nil
 }

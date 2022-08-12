@@ -26,6 +26,7 @@ var Command = cli.Command{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
 		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
 		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
 	},
 }
 
@@ -39,6 +40,7 @@ func doMetrics(c *cli.Context) error {
 	if to == 0 {
 		to = time.Now().Unix()
 	}
+	jq := c.String("jq")
 
 	client := mackerelclient.NewFromContext(c)
 
@@ -46,13 +48,13 @@ func doMetrics(c *cli.Context) error {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else {
 		cli.ShowCommandHelpAndExit(c, "metrics", 1)

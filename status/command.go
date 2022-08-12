@@ -18,6 +18,7 @@ var Command = cli.Command{
 	Action: doStatus,
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
 	},
 }
 
@@ -39,5 +40,7 @@ func doStatus(c *cli.Context) error {
 		outStream: os.Stdout,
 		isVerbose: isVerbose,
 		argHostID: argHostID,
+
+		jq: c.String("jq"),
 	}).run()
 }

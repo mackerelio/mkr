@@ -19,7 +19,7 @@ func (app *orgApp) run() error {
 		return err
 	}
 
-	err = format.PrettyPrintJSON(app.outStream, org)
+	err = format.PrettyPrintJSON(app.outStream, org, "")
 	logger.DieIf(err)
 	return nil
 }

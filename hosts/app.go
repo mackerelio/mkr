@@ -20,6 +20,7 @@ type hostApp struct {
 	client    mackerelclient.Client
 	logger    appLogger
 	outStream io.Writer
+	jq        string
 }
 
 type findHostsParam struct {
@@ -45,6 +46,8 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 	}
 
 	switch {
+	case param.format != "" && ha.jq != "":
+		return fmt.Errorf("--format and --jq are exclusive use.")
 	case param.format != "":
 		t, err := template.New("format").Parse(param.format)
 		if err != nil {
@@ -52,7 +55,7 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 		}
 		return t.Execute(ha.outStream, hosts)
 	case param.verbose:
-		return format.PrettyPrintJSON(ha.outStream, hosts)
+		return format.PrettyPrintJSON(ha.outStream, hosts, ha.jq)
 	default:
 		hostsFormat := make([]*format.Host, 0)
 		for _, host := range hosts {
@@ -67,7 +70,7 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 				IPAddresses:   host.IPAddresses(),
 			})
 		}
-		return format.PrettyPrintJSON(ha.outStream, hostsFormat)
+		return format.PrettyPrintJSON(ha.outStream, hostsFormat, ha.jq)
 	}
 }
 

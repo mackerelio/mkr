@@ -16,6 +16,9 @@ var Command = cli.Command{
 	Requests APIs under "/api/v0/channels". See https://mackerel.io/api-docs/entry/channels .
 	`,
 	Action: doChannels,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+	},
 	Subcommands: []cli.Command{
 		{
 			Name:      "pull",
@@ -42,6 +45,7 @@ func doChannels(c *cli.Context) error {
 	return (&channelsApp{
 		client:    client,
 		outStream: os.Stdout,
+		jq:        c.String("jq"),
 	}).run()
 }
 
