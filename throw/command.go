@@ -1,4 +1,4 @@
-package main
+package throw
 
 import (
 	"bufio"
@@ -15,7 +15,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var commandThrow = cli.Command{
+var Command = cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--retry | -r N ] stdin",
