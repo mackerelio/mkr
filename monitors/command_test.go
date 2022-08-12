@@ -55,10 +55,6 @@ func pfloat64(x float64) *float64 {
 	return &x
 }
 
-func puint64(x uint64) *uint64 {
-	return &x
-}
-
 func TestDiffMonitors(t *testing.T) {
 	const want = ` {
    "headers": [
