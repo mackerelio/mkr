@@ -20,7 +20,7 @@ import (
 var Command = cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
-	ArgsUsage: "[--with-closed | -w] [--limit | -l]",
+	ArgsUsage: "[--with-closed | -w] [--limit | -l] [--jq <formula>]",
 	Description: `
     Retrieve/Close alerts. With no subcommand specified, this will show all alerts.
     Requests APIs under "/api/v0/alerts". See https://mackerel.io/api-docs/entry/alerts .

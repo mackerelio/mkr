@@ -11,7 +11,7 @@ import (
 var Command = cli.Command{
 	Name:      "services",
 	Usage:     "List services",
-	ArgsUsage: "",
+	ArgsUsage: "[--jq <formula>]",
 	Description: `
     List the information of the services.
     Requests "GET /api/v0/services". See https://mackerel.io/api-docs/entry/services#list.

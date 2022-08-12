@@ -42,7 +42,7 @@ var Command = cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list annotations",
-			ArgsUsage: "--from <from> --to <to> --service|-s <service>",
+			ArgsUsage: "--from <from> --to <to> --service|-s <service> [--jq <formula>]",
 			Description: `
     Shows annotations by service name and duration (from and to)
 `,

@@ -13,7 +13,7 @@ import (
 var Command = cli.Command{
 	Name:      "fetch",
 	Usage:     "Fetch latest metric values",
-	ArgsUsage: "[--name | -n <metricName>] hostIds...",
+	ArgsUsage: "[--name | -n <metricName>] [--jq <formula>] hostIds...",
 	Description: `
     Fetch latest metric values about the hosts.
     Requests "GET /api/v0/tsdb/latest". See https://mackerel.io/api-docs/entry/host-metrics#get-latest .

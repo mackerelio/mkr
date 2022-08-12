@@ -10,7 +10,7 @@ import (
 var Command = cli.Command{
 	Name:      "aws-integrations",
 	Usage:     "List aws integration settings",
-	ArgsUsage: "",
+	ArgsUsage: "[--jq <formula>]",
 	Description: `
 	List the information of the aws integration settings.
 	Requests "GET /api/v0/aws-integrations". See https://mackerel.io/api-docs/entry/aws-integration#list.

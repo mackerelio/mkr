@@ -10,7 +10,7 @@ import (
 var Command = cli.Command{
 	Name:      "status",
 	Usage:     "Show the host",
-	ArgsUsage: "[--verbose | -v] <hostId>",
+	ArgsUsage: "[--verbose | -v] [--jq <formula>] <hostId>",
 	Description: `
     Show the information of the host identified with <hostId>.
     Requests "GET /api/v0/hosts/<hostId>". See https://mackerel.io/api-docs/entry/hosts#get .

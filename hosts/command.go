@@ -58,7 +58,7 @@ func doCreate(c *cli.Context) error {
 var CommandHosts = cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",
-	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]",
+	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...] [--jq <formula>]",
 	Description: `
     List the information of the hosts refined by host name, service name, role name and/or status.
     Requests "GET /api/v0/hosts.json". See https://mackerel.io/api-docs/entry/hosts#list .

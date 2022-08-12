@@ -13,7 +13,7 @@ import (
 var Command = cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
-	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] --from int --to int",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] [--jq <formula>] --from int --to int",
 	Description: `
     Fetch metric values of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
