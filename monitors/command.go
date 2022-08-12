@@ -1,4 +1,4 @@
-package main
+package monitors
 
 import (
 	"encoding/json"
@@ -18,7 +18,7 @@ import (
 	"github.com/yudai/gojsondiff/formatter"
 )
 
-var commandMonitors = cli.Command{
+var Command = cli.Command{
 	Name:  "monitors",
 	Usage: "Manipulate monitors",
 	Description: `
