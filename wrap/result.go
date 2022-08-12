@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -66,7 +65,7 @@ func (re *result) loadLastResult() (*result, error) {
 
 func (re *result) saveResult() error {
 	fname := re.resultFile()
-	tmpf, err := ioutil.TempFile(filepath.Dir(fname), "tmp-mkrwrap")
+	tmpf, err := os.CreateTemp(filepath.Dir(fname), "tmp-mkrwrap")
 	if err != nil {
 		return err
 	}

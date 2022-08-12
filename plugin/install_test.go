@@ -3,7 +3,6 @@ package plugin
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -17,7 +16,7 @@ import (
 )
 
 func tempd(t *testing.T) string {
-	tmpd, err := ioutil.TempDir("", "mkr-plugin-install")
+	tmpd, err := os.MkdirTemp("", "mkr-plugin-install")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,11 +24,11 @@ func tempd(t *testing.T) string {
 }
 
 func assertEqualFileContent(t *testing.T, aFile, bFile, message string) {
-	aContent, err := ioutil.ReadFile(aFile)
+	aContent, err := os.ReadFile(aFile)
 	if err != nil {
 		t.Fatal(err)
 	}
-	bContent, err := ioutil.ReadFile(bFile)
+	bContent, err := os.ReadFile(bFile)
 	if err != nil {
 		t.Fatal(err)
 	}
