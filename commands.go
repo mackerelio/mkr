@@ -5,6 +5,7 @@ import (
 	"github.com/mackerelio/mkr/aws_integrations"
 	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
+	"github.com/mackerelio/mkr/dashboards"
 	"github.com/mackerelio/mkr/fetch"
 	"github.com/mackerelio/mkr/hosts"
 	"github.com/mackerelio/mkr/metrics"
@@ -34,7 +35,7 @@ var Commands = []cli.Command{
 	monitors.Command,
 	channels.Command,
 	alerts.Command,
-	commandDashboards,
+	dashboards.Command,
 	commandAnnotations,
 	org.Command,
 	plugin.CommandPlugin,
