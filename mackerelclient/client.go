@@ -6,6 +6,7 @@ import "github.com/mackerelio/mackerel-client-go"
 type Client interface {
 	FindAWSIntegrations() ([]*mackerel.AWSIntegration, error)
 	FindHosts(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
+	FindHost(id string) (*mackerel.Host, error)
 	FindServices() ([]*mackerel.Service, error)
 	FindChannels() ([]*mackerel.Channel, error)
 	GetOrg() (*mackerel.Org, error)

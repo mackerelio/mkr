@@ -3,8 +3,6 @@ package status
 import (
 	"os"
 
-	"github.com/mackerelio/mkr/format"
-	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -34,24 +32,12 @@ func doStatus(c *cli.Context) error {
 		}
 	}
 
-	host, err := mackerelclient.NewFromContext(c).FindHost(argHostID)
-	logger.DieIf(err)
+	client := mackerelclient.NewFromContext(c)
 
-	if isVerbose {
-		err := format.PrettyPrintJSON(os.Stdout, host)
-		logger.DieIf(err)
-	} else {
-		err := format.PrettyPrintJSON(os.Stdout, &format.Host{
-			ID:            host.ID,
-			Name:          host.Name,
-			DisplayName:   host.DisplayName,
-			Status:        host.Status,
-			RoleFullnames: host.GetRoleFullnames(),
-			IsRetired:     host.IsRetired,
-			CreatedAt:     format.ISO8601Extended(host.DateFromCreatedAt()),
-			IPAddresses:   host.IPAddresses(),
-		})
-		logger.DieIf(err)
-	}
-	return nil
+	return (&statussApp{
+		client:    client,
+		outStream: os.Stdout,
+		isVerbose: isVerbose,
+		argHostID: argHostID,
+	}).run()
 }
