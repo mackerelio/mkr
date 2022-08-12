@@ -1,4 +1,4 @@
-package main
+package annotations
 
 import (
 	"os"
@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var commandAnnotations = cli.Command{
+var Command = cli.Command{
 	Name:  "annotations",
 	Usage: "Manipulate graph annotations",
 	Description: `
