@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/mackerelio/mkr/alerts"
 	"github.com/mackerelio/mkr/aws_integrations"
 	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
@@ -32,7 +33,7 @@ var Commands = []cli.Command{
 	services.Command,
 	monitors.Command,
 	channels.Command,
-	commandAlerts,
+	alerts.Command,
 	commandDashboards,
 	commandAnnotations,
 	org.Command,
