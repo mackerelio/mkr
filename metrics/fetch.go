@@ -1,4 +1,4 @@
-package fetch
+package metrics
 
 import (
 	"os"
@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var Command = cli.Command{
+var FetchCommand = cli.Command{
 	Name:      "fetch",
 	Usage:     "Fetch latest metric values",
 	ArgsUsage: "[--name | -n <metricName>] hostIds...",

@@ -7,7 +7,6 @@ import (
 	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/dashboards"
-	"github.com/mackerelio/mkr/fetch"
 	"github.com/mackerelio/mkr/hosts"
 	"github.com/mackerelio/mkr/metrics"
 	"github.com/mackerelio/mkr/monitors"
@@ -29,7 +28,7 @@ var Commands = []cli.Command{
 	update.Command,
 	metrics.ThrowCommand,
 	metrics.Command,
-	fetch.Command,
+	metrics.FetchCommand,
 	retire.Command,
 	services.Command,
 	monitors.Command,
