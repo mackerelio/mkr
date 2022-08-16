@@ -15,7 +15,6 @@ import (
 	"github.com/mackerelio/mkr/retire"
 	"github.com/mackerelio/mkr/services"
 	"github.com/mackerelio/mkr/status"
-	"github.com/mackerelio/mkr/update"
 	"github.com/mackerelio/mkr/wrap"
 	"github.com/urfave/cli"
 )
@@ -25,7 +24,7 @@ var Commands = []cli.Command{
 	status.Command,
 	hosts.CommandHosts,
 	hosts.CommandCreate,
-	update.Command,
+	hosts.UpdateCommand,
 	metrics.ThrowCommand,
 	metrics.Command,
 	metrics.FetchCommand,
