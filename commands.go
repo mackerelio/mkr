@@ -12,7 +12,6 @@ import (
 	"github.com/mackerelio/mkr/monitors"
 	"github.com/mackerelio/mkr/org"
 	"github.com/mackerelio/mkr/plugin"
-	"github.com/mackerelio/mkr/retire"
 	"github.com/mackerelio/mkr/services"
 	"github.com/mackerelio/mkr/status"
 	"github.com/mackerelio/mkr/wrap"
@@ -28,7 +27,7 @@ var Commands = []cli.Command{
 	metrics.ThrowCommand,
 	metrics.Command,
 	metrics.FetchCommand,
-	retire.Command,
+	hosts.RetireCommand,
 	services.Command,
 	monitors.Command,
 	channels.Command,
