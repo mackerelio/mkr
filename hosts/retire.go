@@ -1,4 +1,4 @@
-package retire
+package hosts
 
 import (
 	"strings"
@@ -9,7 +9,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var Command = cli.Command{
+var CommandRetire = cli.Command{
 	Name:      "retire",
 	Usage:     "Retire hosts",
 	ArgsUsage: "[--force] hostIds...",

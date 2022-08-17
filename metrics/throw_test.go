@@ -1,4 +1,4 @@
-package throw
+package metrics
 
 import (
 	"fmt"

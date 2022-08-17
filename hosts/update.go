@@ -1,4 +1,4 @@
-package update
+package hosts
 
 import (
 	"github.com/mackerelio/mackerel-client-go"
@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var Command = cli.Command{
+var CommandUpdate = cli.Command{
 	Name:      "update",
 	Usage:     "Update the host",
 	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [--memo <memo>] [<hostIds...>]",
