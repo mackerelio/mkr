@@ -1,4 +1,4 @@
-package main
+package alerts
 
 import (
 	"errors"
@@ -17,7 +17,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var commandAlerts = cli.Command{
+var Command = cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
 	ArgsUsage: "[--with-closed | -w] [--limit | -l]",

@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -31,7 +30,7 @@ func newMetaDataStore(pluginDir string, target *installTarget) (*metaDataStore, 
 }
 
 func (m *metaDataStore) load(key string) (string, error) {
-	b, err := ioutil.ReadFile(filepath.Join(m.dir, key))
+	b, err := os.ReadFile(filepath.Join(m.dir, key))
 	if os.IsNotExist(err) {
 		return "", nil
 	} else if err != nil {
@@ -41,7 +40,7 @@ func (m *metaDataStore) load(key string) (string, error) {
 }
 
 func (m *metaDataStore) store(key, value string) error {
-	return ioutil.WriteFile(
+	return os.WriteFile(
 		filepath.Join(m.dir, key),
 		[]byte(value),
 		0644,

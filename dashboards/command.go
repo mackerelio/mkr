@@ -1,4 +1,4 @@
-package main
+package dashboards
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var commandDashboards = cli.Command{
+var Command = cli.Command{
 	Name:  "dashboards",
 	Usage: "Manipulate custom dashboards",
 	Description: `

@@ -1,4 +1,4 @@
-package main
+package alerts
 
 import (
 	"testing"
@@ -6,6 +6,14 @@ import (
 
 	"github.com/mackerelio/mackerel-client-go"
 )
+
+func pfloat64(x float64) *float64 {
+	return &x
+}
+
+func puint64(x uint64) *uint64 {
+	return &x
+}
 
 func TestFormatJoinedAlert(t *testing.T) {
 

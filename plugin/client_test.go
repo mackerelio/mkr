@@ -2,12 +2,12 @@ package plugin
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 )
 
 func TestClientGet(t *testing.T) {
@@ -27,7 +27,7 @@ func TestClientGet(t *testing.T) {
 		resp, err := c.get(ts.URL + "/200")
 		assert.NoError(t, err, "get finished successfully")
 
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		assert.Equal(t, "200 OK from mkr-plugin-installer/0.0.0", string(b), "Getting response is success, and request has valid User-Agent")
 		err = resp.Body.Close()
 		assert.NoError(t, err)

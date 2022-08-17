@@ -3,7 +3,6 @@ package plugin
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -103,7 +102,7 @@ func doPluginInstall(c *cli.Context) error {
 	}
 
 	// Create a work directory for downloading and extracting an artifact
-	workdir, err := ioutil.TempDir(filepath.Join(pluginDir, "work"), "mkr-plugin-installer-")
+	workdir, err := os.MkdirTemp(filepath.Join(pluginDir, "work"), "mkr-plugin-installer-")
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while creating a work directory")
 	}

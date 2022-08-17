@@ -3,7 +3,7 @@ package wrap
 import (
 	"encoding/json"
 	"flag"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -156,7 +156,7 @@ Note: This is note
 					t.Errorf("request URL should be %s but: %s", reqPath, req.URL.Path)
 				}
 
-				body, _ := ioutil.ReadAll(req.Body)
+				body, _ := io.ReadAll(req.Body)
 				var treq testReq
 
 				err := json.Unmarshal(body, &treq)

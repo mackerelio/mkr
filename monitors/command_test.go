@@ -1,7 +1,7 @@
-package main
+package monitors
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -55,10 +55,6 @@ func pfloat64(x float64) *float64 {
 	return &x
 }
 
-func puint64(x uint64) *uint64 {
-	return &x
-}
-
 func TestDiffMonitors(t *testing.T) {
 	const want = ` {
    "headers": [
@@ -77,7 +73,7 @@ func TestDiffMonitors(t *testing.T) {
 }
 
 func TestMonitorSaveRules(t *testing.T) {
-	tmpFile, err := ioutil.TempFile("", "")
+	tmpFile, err := os.CreateTemp("", "")
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
@@ -94,7 +90,7 @@ func TestMonitorSaveRules(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	byt, _ := ioutil.ReadFile(tmpFile.Name())
+	byt, _ := os.ReadFile(tmpFile.Name())
 	content := string(byt)
 	expected := `{
     "monitors": [
