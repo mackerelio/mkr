@@ -15,7 +15,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var ThrowCommand = cli.Command{
+var CommandThrow = cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--retry | -r N ] stdin",

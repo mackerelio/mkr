@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var UpdateCommand = cli.Command{
+var CommandUpdate = cli.Command{
 	Name:      "update",
 	Usage:     "Update the host",
 	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [--memo <memo>] [<hostIds...>]",
