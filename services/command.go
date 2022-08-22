@@ -32,6 +32,6 @@ func doServices(c *cli.Context) error {
 	return (&servicesApp{
 		client:    client,
 		outStream: os.Stdout,
-		jq:        c.String("jq"),
+		jqFilter:  c.String("jq"),
 	}).run()
 }

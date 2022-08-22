@@ -94,7 +94,7 @@ func doHosts(c *cli.Context) error {
 		client:    client,
 		logger:    logger.New(),
 		outStream: os.Stdout,
-		jq:        c.String("jq"),
+		jqFilter:  c.String("jq"),
 	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
 

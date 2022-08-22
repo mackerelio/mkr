@@ -30,6 +30,6 @@ func doAWSIntegrations(c *cli.Context) error {
 	return (&awsIntegrationsApp{
 		client:    client,
 		outStream: os.Stdout,
-		jq:        c.String("jq"),
+		jqFilter:  c.String("jq"),
 	}).run()
 }

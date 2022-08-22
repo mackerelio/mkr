@@ -46,7 +46,7 @@ func doChannels(c *cli.Context) error {
 	return (&channelsApp{
 		client:    client,
 		outStream: os.Stdout,
-		jq:        c.String("jq"),
+		jqFilter:  c.String("jq"),
 	}).run()
 }
 

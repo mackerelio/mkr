@@ -42,6 +42,6 @@ func doStatus(c *cli.Context) error {
 		isVerbose: isVerbose,
 		argHostID: argHostID,
 
-		jq: c.String("jq"),
+		jqFilter: c.String("jq"),
 	}).run()
 }
