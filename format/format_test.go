@@ -64,10 +64,7 @@ func TestPrettyPrintJSON(t *testing.T) {
 		{
 			id:      "array with select object",
 			srcJson: `[{"id": 1, "string": "foo"},{"id": 2, "string": "bar"}]`,
-			expected: `{
-    "id": 2,
-    "string": "bar"
-}
+			expected: `{"id":2,"string":"bar"}
 `,
 			query: ".[] | select(.id == 2)",
 		},
