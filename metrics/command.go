@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -26,7 +27,7 @@ var Command = cli.Command{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
 		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
 		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 }
 

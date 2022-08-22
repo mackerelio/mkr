@@ -3,6 +3,7 @@ package hosts
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -79,7 +80,7 @@ var CommandHosts = cli.Command{
 		},
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 }
 

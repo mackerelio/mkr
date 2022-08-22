@@ -3,6 +3,7 @@ package channels
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -17,7 +18,7 @@ var Command = cli.Command{
 	`,
 	Action: doChannels,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 	Subcommands: []cli.Command{
 		{

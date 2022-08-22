@@ -5,6 +5,7 @@ import (
 
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -25,7 +26,7 @@ var CommandFetch = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 }
 

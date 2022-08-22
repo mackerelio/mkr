@@ -5,6 +5,7 @@ import (
 
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -51,7 +52,7 @@ var Command = cli.Command{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
 				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
-				cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+				jq.CommandLineFlag,
 			},
 		},
 		{

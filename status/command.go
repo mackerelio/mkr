@@ -3,6 +3,7 @@ package status
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -18,7 +19,7 @@ var Command = cli.Command{
 	Action: doStatus,
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 }
 

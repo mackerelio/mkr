@@ -12,6 +12,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -29,7 +30,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
 		cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 	Subcommands: []cli.Command{
 		{

@@ -3,6 +3,7 @@ package services
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -18,7 +19,7 @@ var Command = cli.Command{
 `,
 	Action: doServices,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "jq", Usage: "Query to select values from the response using jq syntax"},
+		jq.CommandLineFlag,
 	},
 }
 
