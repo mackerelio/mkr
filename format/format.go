@@ -24,7 +24,8 @@ type Host struct {
 	IPAddresses   map[string]string `json:"ipAddresses,omitempty"`
 }
 
-// PrettyPrintJSON output indented json via stdout.
+// PrettyPrintJSON output json via stdout
+// or json is filtered according to query and output.
 func PrettyPrintJSON(outStream io.Writer, src interface{}, query string) error {
 	if query == "" {
 		_, err := fmt.Fprintln(outStream, JSONMarshalIndent(src, "", "    "))
