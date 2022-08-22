@@ -17,12 +17,7 @@ func FilterJSON(outStream io.Writer, src interface{}, queryStr string) error {
 		return err
 	}
 
-	var dst interface{}
-	jsonObj, err := json.Marshal(src)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(jsonObj, &dst)
+	dst, err := normalize(src)
 	if err != nil {
 		return err
 	}
@@ -55,4 +50,19 @@ func FilterJSON(outStream io.Writer, src interface{}, queryStr string) error {
 		}
 	}
 	return nil
+}
+
+// gojq.TypeOf solves only a part of builtin types, or slices or maps.
+// Therefore we should convert arbitary structs to map[string]interface{}.
+func normalize(src interface{}) (interface{}, error) {
+	var dst interface{}
+	jsonObj, err := json.Marshal(src)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(jsonObj, &dst)
+	if err != nil {
+		return nil, err
+	}
+	return dst, nil
 }
