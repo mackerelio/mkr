@@ -47,7 +47,7 @@ func (ha *hostApp) findHosts(param findHostsParam) error {
 
 	switch {
 	case param.format != "" && ha.jq != "":
-		return fmt.Errorf("--format and --jq are exclusive use.")
+		return fmt.Errorf("--format and --jq options are incompatible.")
 	case param.format != "":
 		t, err := template.New("format").Parse(param.format)
 		if err != nil {
