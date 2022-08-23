@@ -11,6 +11,7 @@ import (
 
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -26,6 +27,9 @@ var Command = cli.Command{
     Requests APIs under "/api/v0/monitors". See https://mackerel.io/api-docs/entry/monitors .
 `,
 	Action: doMonitorsList,
+	Flags: []cli.Flag{
+		jq.CommandLineFlag,
+	},
 	Subcommands: []cli.Command{
 		{
 			Name:      "pull",
@@ -157,7 +161,7 @@ func doMonitorsList(c *cli.Context) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
-	err = format.PrettyPrintJSON(os.Stdout, monitors)
+	err = format.PrettyPrintJSON(os.Stdout, monitors, c.String("jq"))
 	logger.DieIf(err)
 	return nil
 }
@@ -176,7 +180,7 @@ func doMonitorsPull(c *cli.Context) error {
 	logger.DieIf(err)
 
 	if isVerbose {
-		err := format.PrettyPrintJSON(os.Stdout, monitors)
+		err := format.PrettyPrintJSON(os.Stdout, monitors, "")
 		logger.DieIf(err)
 	}
 

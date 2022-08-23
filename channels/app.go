@@ -15,6 +15,7 @@ import (
 type channelsApp struct {
 	client    mackerelclient.Client
 	outStream io.Writer
+	jqFilter  string
 }
 
 func (app *channelsApp) run() error {
@@ -23,7 +24,7 @@ func (app *channelsApp) run() error {
 		return err
 	}
 
-	err = format.PrettyPrintJSON(app.outStream, channels)
+	err = format.PrettyPrintJSON(app.outStream, channels, app.jqFilter)
 	logger.DieIf(err)
 	return nil
 }
@@ -41,7 +42,7 @@ func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
 	logger.DieIf(err)
 
 	if isVerbose {
-		err := format.PrettyPrintJSON(os.Stdout, channels)
+		err := format.PrettyPrintJSON(os.Stdout, channels, "")
 		logger.DieIf(err)
 	}
 

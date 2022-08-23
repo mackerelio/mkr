@@ -3,6 +3,7 @@ package channels
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -16,6 +17,9 @@ var Command = cli.Command{
 	Requests APIs under "/api/v0/channels". See https://mackerel.io/api-docs/entry/channels .
 	`,
 	Action: doChannels,
+	Flags: []cli.Flag{
+		jq.CommandLineFlag,
+	},
 	Subcommands: []cli.Command{
 		{
 			Name:      "pull",
@@ -42,6 +46,7 @@ func doChannels(c *cli.Context) error {
 	return (&channelsApp{
 		client:    client,
 		outStream: os.Stdout,
+		jqFilter:  c.String("jq"),
 	}).run()
 }
 

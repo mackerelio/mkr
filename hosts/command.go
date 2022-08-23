@@ -3,6 +3,7 @@ package hosts
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -58,7 +59,7 @@ func doCreate(c *cli.Context) error {
 var CommandHosts = cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",
-	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...]",
+	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...] [--jq <formula>]",
 	Description: `
     List the information of the hosts refined by host name, service name, role name and/or status.
     Requests "GET /api/v0/hosts.json". See https://mackerel.io/api-docs/entry/hosts#list .
@@ -79,6 +80,7 @@ var CommandHosts = cli.Command{
 		},
 		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		jq.CommandLineFlag,
 	},
 }
 
@@ -92,6 +94,7 @@ func doHosts(c *cli.Context) error {
 		client:    client,
 		logger:    logger.New(),
 		outStream: os.Stdout,
+		jqFilter:  c.String("jq"),
 	}).findHosts(findHostsParam{
 		verbose: c.Bool("verbose"),
 

@@ -11,6 +11,7 @@ import (
 type servicesApp struct {
 	client    mackerelclient.Client
 	outStream io.Writer
+	jqFilter  string
 }
 
 func (app *servicesApp) run() error {
@@ -19,7 +20,7 @@ func (app *servicesApp) run() error {
 		return err
 	}
 
-	err = format.PrettyPrintJSON(app.outStream, services)
+	err = format.PrettyPrintJSON(app.outStream, services, app.jqFilter)
 	logger.DieIf(err)
 	return nil
 }

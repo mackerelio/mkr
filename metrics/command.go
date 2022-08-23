@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -13,7 +14,7 @@ import (
 var Command = cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
-	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] --from int --to int",
+	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] [--jq <formula>] --from int --to int",
 	Description: `
     Fetch metric values of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metrics" or "/api/v0/services/<serviceName>/tsdb".
@@ -26,6 +27,7 @@ var Command = cli.Command{
 		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
 		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
 		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
+		jq.CommandLineFlag,
 	},
 }
 
@@ -39,6 +41,7 @@ func doMetrics(c *cli.Context) error {
 	if to == 0 {
 		to = time.Now().Unix()
 	}
+	jq := c.String("jq")
 
 	client := mackerelclient.NewFromContext(c)
 
@@ -46,13 +49,13 @@ func doMetrics(c *cli.Context) error {
 		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
-		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else if optService != "" {
 		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
 		logger.DieIf(err)
 
-		err = format.PrettyPrintJSON(os.Stdout, metricValue)
+		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else {
 		cli.ShowCommandHelpAndExit(c, "metrics", 1)

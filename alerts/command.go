@@ -12,6 +12,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
@@ -20,7 +21,7 @@ import (
 var Command = cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
-	ArgsUsage: "[--with-closed | -w] [--limit | -l]",
+	ArgsUsage: "[--with-closed | -w] [--limit | -l] [--jq <formula>]",
 	Description: `
     Retrieve/Close alerts. With no subcommand specified, this will show all alerts.
     Requests APIs under "/api/v0/alerts". See https://mackerel.io/api-docs/entry/alerts .
@@ -29,6 +30,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
 		cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
+		jq.CommandLineFlag,
 	},
 	Subcommands: []cli.Command{
 		{
@@ -251,7 +253,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
-	err = format.PrettyPrintJSON(os.Stdout, alerts)
+	err = format.PrettyPrintJSON(os.Stdout, alerts, c.String("jq"))
 	logger.DieIf(err)
 	return nil
 }
@@ -385,7 +387,7 @@ func doAlertsClose(c *cli.Context) error {
 
 		logger.Log("Alert closed", alertID)
 		if isVerbose {
-			err := format.PrettyPrintJSON(os.Stdout, alert)
+			err := format.PrettyPrintJSON(os.Stdout, alert, "")
 			logger.DieIf(err)
 		}
 	}

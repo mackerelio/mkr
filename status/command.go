@@ -3,6 +3,7 @@ package status
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
@@ -10,7 +11,7 @@ import (
 var Command = cli.Command{
 	Name:      "status",
 	Usage:     "Show the host",
-	ArgsUsage: "[--verbose | -v] <hostId>",
+	ArgsUsage: "[--verbose | -v] [--jq <formula>] <hostId>",
 	Description: `
     Show the information of the host identified with <hostId>.
     Requests "GET /api/v0/hosts/<hostId>". See https://mackerel.io/api-docs/entry/hosts#get .
@@ -18,6 +19,7 @@ var Command = cli.Command{
 	Action: doStatus,
 	Flags: []cli.Flag{
 		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		jq.CommandLineFlag,
 	},
 }
 
@@ -39,5 +41,7 @@ func doStatus(c *cli.Context) error {
 		outStream: os.Stdout,
 		isVerbose: isVerbose,
 		argHostID: argHostID,
+
+		jqFilter: c.String("jq"),
 	}).run()
 }

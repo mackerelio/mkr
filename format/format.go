@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 )
 
@@ -23,10 +24,14 @@ type Host struct {
 	IPAddresses   map[string]string `json:"ipAddresses,omitempty"`
 }
 
-// PrettyPrintJSON output indented json via stdout.
-func PrettyPrintJSON(outStream io.Writer, src interface{}) error {
-	_, err := fmt.Fprintln(outStream, JSONMarshalIndent(src, "", "    "))
-	return err
+// PrettyPrintJSON outputs JSON or filtered result by jq query via stdout.
+func PrettyPrintJSON(outStream io.Writer, src interface{}, query string) error {
+	if query == "" {
+		_, err := fmt.Fprintln(outStream, JSONMarshalIndent(src, "", "    "))
+		return err
+	}
+
+	return jq.FilterJSON(outStream, src, query)
 }
 
 // JSONMarshalIndent call json.MarshalIndent and replace encoded angle brackets
