@@ -118,7 +118,7 @@ func (wr *wrap) report(re *result) error {
 	}
 
 	if wr.apikey == "" || wr.hostID == "" {
-		return fmt.Errorf("Both of apikey and hostID are needed to report result to Mackerel")
+		return fmt.Errorf("both of apikey and hostID are needed to report result to Mackerel")
 	}
 	var lastRe *result
 	if wr.autoClose {

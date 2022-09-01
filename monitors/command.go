@@ -249,13 +249,13 @@ func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) (bool, er
 	f := "Scopes"
 	vf := v.FieldByName("Scopes")
 	if !vf.IsValid() {
-		return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+		return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 	}
 	scopes, ok := vf.Interface().([]string)
 	if !ok {
-		return false, fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
+		return false, fmt.Errorf("monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
 	} else if len(scopes) == 0 {
-		return false, fmt.Errorf("Monitor '%s' has empty '%s'", label, f)
+		return false, fmt.Errorf("monitor '%s' has empty '%s'", label, f)
 	}
 	return true, nil
 }
@@ -269,7 +269,7 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 		for _, f := range []string{"Type"} {
 			vf := v.FieldByName(f)
 			if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-				return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+				return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 			}
 		}
 		switch m := monitor.(type) {
@@ -277,34 +277,34 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 			for _, f := range []string{"Name", "Metric"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 		case *mackerel.MonitorExternalHTTP:
 			for _, f := range []string{"Name", "URL"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 		case *mackerel.MonitorExpression:
 			for _, f := range []string{"Name", "Expression"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 		case *mackerel.MonitorAnomalyDetection:
 			for _, f := range []string{"Name"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
 			return validateRuleAnomalyDetectionScopes(v, label)
 		case *mackerel.MonitorConnectivity:
 		default:
-			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
+			return false, fmt.Errorf("unknown type is found: %s", m.MonitorType())
 		}
 	}
 

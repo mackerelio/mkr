@@ -25,7 +25,7 @@ func New(conffile, apibase string) (Client, error) {
 		apikey = conf.Apikey
 	}
 	if apikey == "" {
-		return nil, fmt.Errorf("No mackerel apikeys are specified from MACKEREL_APIKEY or config")
+		return nil, fmt.Errorf("no mackerel apikeys are specified from MACKEREL_APIKEY or config")
 	}
 	if apibase == "" {
 		if conf == nil {

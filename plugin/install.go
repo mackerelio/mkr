@@ -88,7 +88,7 @@ var errSkipInstall = errors.New("skip installing for now")
 func doPluginInstall(c *cli.Context) error {
 	argInstallTarget := c.Args().First()
 	if argInstallTarget == "" {
-		return fmt.Errorf("Specify install target")
+		return fmt.Errorf("specify install target")
 	}
 
 	it, err := newInstallTargetFromString(argInstallTarget)

@@ -142,7 +142,7 @@ func runChecks(checkers []checker, w io.Writer) error {
 		}
 	}
 	if errNum > 0 {
-		return fmt.Errorf("Failed %d/%d tests, %3.2f%% okay",
+		return fmt.Errorf("failed %d/%d tests, %3.2f%% okay",
 			errNum, total, float64(100*(total-errNum))/float64(total))
 	}
 	return nil
