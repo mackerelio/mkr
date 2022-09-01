@@ -415,7 +415,7 @@ func doMonitorsDiff(c *cli.Context) error {
 		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
-	if isExitCode == true && noDiff == false { //nolint:gosimple
+	if isExitCode && !noDiff { //nolint:gosimple
 		os.Exit(1)
 	}
 	return nil
