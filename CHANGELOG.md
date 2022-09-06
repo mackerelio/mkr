@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.47.0 (2022-09-06)
+
+* Go 1.17 -> 1.19 #496 (yseto)
+* added filter by gojq #490 (yseto)
+* Organize flat packages in layers #489 (yseto)
+
+
 ## 0.46.9 (2022-07-20)
 
 * Bump github.com/golangci/golangci-lint from 1.46.2 to 1.47.1 #479 (dependabot[bot])
