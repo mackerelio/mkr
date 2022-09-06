@@ -41,6 +41,11 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Tue Sep 6 2022 <mackerel-developers@hatena.ne.jp> - 0.47.0
+- Go 1.17 -> 1.19 (by yseto)
+- added filter by gojq (by yseto)
+- Organize flat packages in layers (by yseto)
+
 * Wed Jul 20 2022 <mackerel-developers@hatena.ne.jp> - 0.46.9
 - Bump github.com/golangci/golangci-lint from 1.46.2 to 1.47.1 (by dependabot[bot])
 - Bump alpine from 3.16.0 to 3.16.1 (by dependabot[bot])
