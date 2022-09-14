@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Sep 14 2022 <mackerel-developers@hatena.ne.jp> - 0.47.1
+- Bump github.com/mackerelio/mackerel-client-go from 0.21.1 to 0.21.2 (by dependabot[bot])
+
 * Tue Sep 6 2022 <mackerel-developers@hatena.ne.jp> - 0.47.0
 - Go 1.17 -> 1.19 (by yseto)
 - added filter by gojq (by yseto)
