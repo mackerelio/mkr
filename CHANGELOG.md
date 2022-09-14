@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.47.1 (2022-09-14)
+
+* Bump github.com/mackerelio/mackerel-client-go from 0.21.1 to 0.21.2 #494 (dependabot[bot])
+
+
 ## 0.47.0 (2022-09-06)
 
 * Go 1.17 -> 1.19 #496 (yseto)
