@@ -3,8 +3,6 @@ VERSION := 0.47.1
 CURRENT_REVISION := $(shell git rev-parse --short HEAD)
 BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
 
-export GO111MODULE=on
-
 .PHONY: all
 all: clean cross test rpm deb
 
