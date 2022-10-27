@@ -389,8 +389,8 @@ github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456 h1:TN6fEPX3sQR
 github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456/go.mod h1:diyNFS/RRid22TaIOKvNf0GfzpJ2Yo91JuKxg9Q8gGI=
 github.com/mackerelio/golib v1.2.1 h1:SDcDn6Jw3p9bi1N0bg1Z/ilG5qcBB23qL8xNwrU0gg4=
 github.com/mackerelio/golib v1.2.1/go.mod h1:b8ZaapsHGH1FlEJlCqfD98CqafLeyMevyATDlID2BsM=
-github.com/mackerelio/mackerel-agent v0.72.14 h1:cv2BDcaEk9GboqmjkoDhv0JXQS9Zyh+FPxTHrnTq+dQ=
-github.com/mackerelio/mackerel-agent v0.72.14/go.mod h1:4yajwbSgB3LmnYlKZcTNcI21ji9AuihOm2jgmz1Zsrg=
+github.com/mackerelio/mackerel-agent v0.73.1 h1:ubat3fbmvI48ubUTS83ENQyZ/9M7H96r6V/WWnthKxg=
+github.com/mackerelio/mackerel-agent v0.73.1/go.mod h1:wTm2fAH6QLJDm2IAN6CCUbNKdxggrSr3g//5SeAQpF4=
 github.com/mackerelio/mackerel-client-go v0.22.0 h1:j3iScNKH9ugmraTSh+SIeYh1PC39/NjHKWgmQgna4XU=
 github.com/mackerelio/mackerel-client-go v0.22.0/go.mod h1:VM9KAjzs7wkROQ9WdZRvkY8K/bIUllN82dxyK36ZU3s=
 github.com/magiconair/properties v1.8.6 h1:5ibWZ6iY0NctNGWo87LalDlEZ6R41TqbbDamhfG/Qzo=
