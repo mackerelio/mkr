@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.47.2 (2022-11-04)
+
+* Bump github.com/stretchr/testify from 1.8.0 to 1.8.1 #505 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-client-go from 0.21.2 to 0.22.0 #503 (dependabot[bot])
+* Bump github.com/golangci/golangci-lint from 1.47.1 to 1.50.0 #502 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.72.14 to 0.73.1 #501 (dependabot[bot])
+* Bump github.com/urfave/cli from 1.22.9 to 1.22.10 #498 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.8 to 0.12.9 #497 (dependabot[bot])
+* Bump github.com/Songmu/goxz from 0.8.2 to 0.9.1 #492 (dependabot[bot])
+* Bump alpine from 3.16.1 to 3.16.2 #488 (dependabot[bot])
+
+
 ## 0.47.1 (2022-09-14)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.21.1 to 0.21.2 #494 (dependabot[bot])
