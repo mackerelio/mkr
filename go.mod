@@ -12,7 +12,7 @@ require (
 	github.com/itchyny/gojq v0.12.10
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
-	github.com/mackerelio/mackerel-agent v0.73.1
+	github.com/mackerelio/mackerel-agent v0.73.3
 	github.com/mackerelio/mackerel-client-go v0.22.0
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
@@ -29,6 +29,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
