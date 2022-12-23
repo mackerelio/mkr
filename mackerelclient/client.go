@@ -12,4 +12,5 @@ type Client interface {
 	GetOrg() (*mackerel.Org, error)
 	CreateHost(param *mackerel.CreateHostParam) (string, error)
 	UpdateHostStatus(hostID string, status string) error
+	ListHostMetricNames(id string) ([]string, error)
 }

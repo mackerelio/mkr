@@ -22,6 +22,7 @@ type Host struct {
 	IsRetired     bool              `json:"isRetired"` // 'omitempty' regard boolean 'false' as empty.
 	CreatedAt     string            `json:"createdAt,omitempty"`
 	IPAddresses   map[string]string `json:"ipAddresses,omitempty"`
+	Metrics       []string          `json:"metrics,omitempty"`
 }
 
 // PrettyPrintJSON outputs JSON or filtered result by jq query via stdout.

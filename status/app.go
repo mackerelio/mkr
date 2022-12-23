@@ -24,6 +24,8 @@ func (app *statussApp) run() error {
 	}
 
 	if app.isVerbose {
+		metrics, _ := app.client.ListHostMetricNames(host.ID)
+		host.Metrics = metrics
 		err := format.PrettyPrintJSON(app.outStream, host, app.jqFilter)
 		logger.DieIf(err)
 	} else {
