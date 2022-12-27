@@ -6,6 +6,9 @@
 
 package=mkr
 
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
+
 override_dh_auto_install:
 	dh_auto_install
 	install -d -m 755 debian/${package}/usr/bin/
