@@ -12,6 +12,7 @@ type MockClient struct {
 	getOrgCallback              func() (*mackerel.Org, error)
 	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
 	updateHostStatusCallback    func(hostID string, status string) error
+	listHostMetricNamesCallback func(id string) ([]string, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -154,5 +155,20 @@ func (c *MockClient) FindAWSIntegrations() ([]*mackerel.AWSIntegration, error) {
 func MockFindAWSIntegrations(callback func() ([]*mackerel.AWSIntegration, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findAWSIntegrationsCallback = callback
+	}
+}
+
+// ListHostMetricNames ...
+func (c *MockClient) ListHostMetricNames(hostID string) ([]string, error) {
+	if c.listHostMetricNamesCallback != nil {
+		return c.listHostMetricNamesCallback(hostID)
+	}
+	return nil, errCallbackNotFound("ListHostMetricNames")
+}
+
+// MockListHostMetricNames returns an option to set the callback of ListHostMetricNames
+func MockListHostMetricNames(callback func(string) ([]string, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.listHostMetricNamesCallback = callback
 	}
 }

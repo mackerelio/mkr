@@ -3,6 +3,8 @@ package status
 import (
 	"io"
 
+	"github.com/mackerelio/mackerel-client-go"
+
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -17,6 +19,11 @@ type statussApp struct {
 	jqFilter  string
 }
 
+type HostWithMetrics struct {
+	*mackerel.Host
+	Metrics []string `json:"metrics,omitempty"`
+}
+
 func (app *statussApp) run() error {
 	host, err := app.client.FindHost(app.argHostID)
 	if err != nil {
@@ -24,7 +31,10 @@ func (app *statussApp) run() error {
 	}
 
 	if app.isVerbose {
-		err := format.PrettyPrintJSON(app.outStream, host, app.jqFilter)
+		metrics, err := app.client.ListHostMetricNames(host.ID)
+		logger.DieIf(err)
+		hostWithMetrics := HostWithMetrics{Host: host, Metrics: metrics}
+		err = format.PrettyPrintJSON(app.outStream, hostWithMetrics, app.jqFilter)
 		logger.DieIf(err)
 	} else {
 		err := format.PrettyPrintJSON(app.outStream, &format.Host{
