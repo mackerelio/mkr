@@ -8,7 +8,7 @@ require (
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/fatih/color v1.13.0
-	github.com/google/go-github v17.0.0+incompatible
+	github.com/google/go-github/v49 v49.0.0
 	github.com/itchyny/gojq v0.12.10
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.0.0-20190411030116-60cbd7b55456
@@ -38,7 +38,6 @@ require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/itchyny/timefmt-go v0.1.5 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
@@ -61,6 +60,7 @@ require (
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
 	golang.org/x/sys v0.2.0 // indirect
