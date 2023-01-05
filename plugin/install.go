@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/mackerelio/mkr/logger"
-	"github.com/mholt/archiver"
+	"github.com/mholt/archiver/v3"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
