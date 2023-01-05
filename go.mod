@@ -12,7 +12,7 @@ require (
 	github.com/itchyny/gojq v0.12.10
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.0.4
-	github.com/mackerelio/mackerel-agent v0.73.1
+	github.com/mackerelio/mackerel-agent v0.74.0
 	github.com/mackerelio/mackerel-client-go v0.23.0
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
@@ -21,7 +21,7 @@ require (
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.10
 	github.com/yudai/gojsondiff v1.0.0
-	golang.org/x/oauth2 v0.3.0
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	golang.org/x/sync v0.1.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -29,6 +29,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -59,11 +60,11 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
-	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
-	golang.org/x/tools v0.4.0 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/tools v0.1.9 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
