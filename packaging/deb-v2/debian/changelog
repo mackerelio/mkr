@@ -1,3 +1,16 @@
+mkr (0.48.0-1.v2) stable; urgency=low
+
+  * Update some libraries (by yseto)
+    <https://github.com/mackerelio/mkr/pull/518>
+  * improve `mkr status -v` to show host metrics (by kmuto)
+    <https://github.com/mackerelio/mkr/pull/517>
+  * added compile option, fix packaging format (by yseto)
+    <https://github.com/mackerelio/mkr/pull/515>
+  * Bump github.com/itchyny/gojq from 0.12.9 to 0.12.10 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/513>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 18 Jan 2023 06:21:43 +0000
+
 mkr (0.47.2-1.v2) stable; urgency=low
 
   * Bump github.com/stretchr/testify from 1.8.0 to 1.8.1 (by dependabot[bot])

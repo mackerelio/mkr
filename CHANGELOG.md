@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.0 (2023-01-18)
+
+* Update some libraries #518 (yseto)
+* improve `mkr status -v` to show host metrics #517 (kmuto)
+* added compile option, fix packaging format #515 (yseto)
+* Bump github.com/itchyny/gojq from 0.12.9 to 0.12.10 #513 (dependabot[bot])
+
+
 ## 0.47.2 (2022-11-04)
 
 * Bump github.com/stretchr/testify from 1.8.0 to 1.8.1 #505 (dependabot[bot])
