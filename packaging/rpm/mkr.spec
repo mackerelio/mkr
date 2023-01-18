@@ -41,6 +41,12 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Jan 18 2023 <mackerel-developers@hatena.ne.jp> - 0.48.0
+- Update some libraries (by yseto)
+- improve `mkr status -v` to show host metrics (by kmuto)
+- added compile option, fix packaging format (by yseto)
+- Bump github.com/itchyny/gojq from 0.12.9 to 0.12.10 (by dependabot[bot])
+
 * Fri Nov 4 2022 <mackerel-developers@hatena.ne.jp> - 0.47.2
 - Bump github.com/stretchr/testify from 1.8.0 to 1.8.1 (by dependabot[bot])
 - Bump github.com/mackerelio/mackerel-client-go from 0.21.2 to 0.22.0 (by dependabot[bot])
