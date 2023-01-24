@@ -7,7 +7,7 @@ require (
 	github.com/Songmu/prompter v0.5.1
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
-	github.com/fatih/color v1.13.0
+	github.com/fatih/color v1.14.1
 	github.com/google/go-github/v49 v49.0.0
 	github.com/itchyny/gojq v0.12.10
 	github.com/jpillora/backoff v1.0.0
@@ -44,7 +44,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mackerelio/golib v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/nwaples/rardecode v1.1.3 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
