@@ -59,16 +59,7 @@ rpm-v2-arm64:
 	  -bb packaging/rpm/mkr-v2.spec
 
 .PHONY: deb
-deb: deb-v1 deb-v2
-
-.PHONY: deb-v1
-deb-v1:
-	GOOS=linux GOARCH=386 make build
-	cp $(BIN) packaging/deb/debian/$(BIN).bin
-	cd packaging/deb && debuild --no-tgz-check -rfakeroot -uc -us
-
-.PHONY: deb-v2
-deb-v2: deb-v2-x86 deb-v2-arm64 deb-v2-arm
+deb: deb-v2-x86 deb-v2-arm64 deb-v2-arm
 
 .PHONY: deb-v2-x86
 deb-v2-x86:
