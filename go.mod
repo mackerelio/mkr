@@ -13,7 +13,7 @@ require (
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.0.4
 	github.com/mackerelio/mackerel-agent v0.74.1
-	github.com/mackerelio/mackerel-client-go v0.23.0
+	github.com/mackerelio/mackerel-client-go v0.24.0
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
@@ -59,12 +59,10 @@ require (
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
-	golang.org/x/tools v0.4.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
