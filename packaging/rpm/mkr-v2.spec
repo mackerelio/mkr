@@ -35,6 +35,24 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Feb 1 2023 <mackerel-developers@hatena.ne.jp> - 0.49.0
+- Bump docker/build-push-action from 2 to 3 (by dependabot[bot])
+- Bump docker/setup-buildx-action from 1 to 2 (by dependabot[bot])
+- Bump actions/upload-artifact from 2 to 3 (by dependabot[bot])
+- Bump docker/login-action from 1 to 2 (by dependabot[bot])
+- Bump actions/cache from 2 to 3 (by dependabot[bot])
+- Enables Dependabot version updates for GitHub Actions (by Arthur1)
+- Remove debian package v1 process. (by yseto)
+- remove useless packaging script (by yseto)
+- Bump github.com/fatih/color from 1.13.0 to 1.14.1 (by dependabot[bot])
+- Bump github.com/urfave/cli from 1.22.10 to 1.22.12 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.73.1 to 0.74.1 (by dependabot[bot])
+- Bump github.com/google/go-github/v49 from 49.0.0 to 49.1.0 (by dependabot[bot])
+- Bump alpine from 3.16.2 to 3.17.1 (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.3.0 to 0.4.0 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-client-go from 0.23.0 to 0.24.0 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.10 to 0.12.11 (by dependabot[bot])
+
 * Wed Jan 18 2023 <mackerel-developers@hatena.ne.jp> - 0.48.0
 - Update some libraries (by yseto)
 - improve `mkr status -v` to show host metrics (by kmuto)
