@@ -1,3 +1,20 @@
+mkr (0.49.1-1.v2) stable; urgency=low
+
+  * Bump alpine from 3.17.1 to 3.17.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/544>
+  * Bump golang.org/x/oauth2 from 0.4.0 to 0.5.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/543>
+  * Bump docker/setup-qemu-action from 1 to 2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/541>
+  * Bump actions/download-artifact from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/540>
+  * Bump peter-evans/repository-dispatch from 1 to 2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/539>
+  * Bump github.com/mackerelio/mackerel-agent from 0.74.1 to 0.75.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/537>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 15 Feb 2023 03:42:56 +0000
+
 mkr (0.49.0-1.v2) stable; urgency=low
 
   * Bump docker/build-push-action from 2 to 3 (by dependabot[bot])

@@ -35,6 +35,14 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Feb 15 2023 <mackerel-developers@hatena.ne.jp> - 0.49.1
+- Bump alpine from 3.17.1 to 3.17.2 (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.4.0 to 0.5.0 (by dependabot[bot])
+- Bump docker/setup-qemu-action from 1 to 2 (by dependabot[bot])
+- Bump actions/download-artifact from 2 to 3 (by dependabot[bot])
+- Bump peter-evans/repository-dispatch from 1 to 2 (by dependabot[bot])
+- Bump github.com/mackerelio/mackerel-agent from 0.74.1 to 0.75.0 (by dependabot[bot])
+
 * Wed Feb 1 2023 <mackerel-developers@hatena.ne.jp> - 0.49.0
 - Bump docker/build-push-action from 2 to 3 (by dependabot[bot])
 - Bump docker/setup-buildx-action from 1 to 2 (by dependabot[bot])

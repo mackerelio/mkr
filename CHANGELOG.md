@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.49.1 (2023-02-15)
+
+* Bump alpine from 3.17.1 to 3.17.2 #544 (dependabot[bot])
+* Bump golang.org/x/oauth2 from 0.4.0 to 0.5.0 #543 (dependabot[bot])
+* Bump docker/setup-qemu-action from 1 to 2 #541 (dependabot[bot])
+* Bump actions/download-artifact from 2 to 3 #540 (dependabot[bot])
+* Bump peter-evans/repository-dispatch from 1 to 2 #539 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.74.1 to 0.75.0 #537 (dependabot[bot])
+
+
 ## 0.49.0 (2023-02-01)
 
 * Bump docker/build-push-action from 2 to 3 #535 (dependabot[bot])
