@@ -17,7 +17,7 @@ require (
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.12
 	github.com/yudai/gojsondiff v1.0.0
