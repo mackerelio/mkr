@@ -1,3 +1,20 @@
+mkr (0.49.2-1.v2) stable; urgency=low
+
+  * Bump golang.org/x/crypto from 0.0.0-20210817164053-32db794688a5 to 0.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/550>
+  * Bump golang.org/x/net from 0.6.0 to 0.7.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/549>
+  * Bump actions/checkout from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/548>
+  * Bump github.com/stretchr/testify from 1.8.1 to 1.8.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/547>
+  * Bump github.com/mackerelio/mackerel-agent from 0.75.0 to 0.75.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/546>
+  * Bump docker/build-push-action from 3 to 4 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/542>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 27 Feb 2023 08:57:35 +0000
+
 mkr (0.49.1-1.v2) stable; urgency=low
 
   * Bump alpine from 3.17.1 to 3.17.2 (by dependabot[bot])
