@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.49.2 (2023-02-27)
+
+* Bump golang.org/x/crypto from 0.0.0-20210817164053-32db794688a5 to 0.1.0 #550 (dependabot[bot])
+* Bump golang.org/x/net from 0.6.0 to 0.7.0 #549 (dependabot[bot])
+* Bump actions/checkout from 2 to 3 #548 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.8.1 to 1.8.2 #547 (dependabot[bot])
+* Bump github.com/mackerelio/mackerel-agent from 0.75.0 to 0.75.1 #546 (dependabot[bot])
+* Bump docker/build-push-action from 3 to 4 #542 (dependabot[bot])
+
+
 ## 0.49.1 (2023-02-15)
 
 * Bump alpine from 3.17.1 to 3.17.2 #544 (dependabot[bot])
