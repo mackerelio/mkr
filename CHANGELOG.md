@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.49.3 (2023-04-12)
+
+* Bump github.com/mackerelio/mackerel-client-go from 0.24.0 to 0.25.0 #558 (dependabot[bot])
+* Bump golang.org/x/oauth2 from 0.5.0 to 0.7.0 #557 (dependabot[bot])
+* Bump alpine from 3.17.2 to 3.17.3 #556 (dependabot[bot])
+* Bump github.com/fatih/color from 1.14.1 to 1.15.0 #554 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.11 to 0.12.12 #552 (dependabot[bot])
+
+
 ## 0.49.2 (2023-02-27)
 
 * Bump golang.org/x/crypto from 0.0.0-20210817164053-32db794688a5 to 0.1.0 #550 (dependabot[bot])
