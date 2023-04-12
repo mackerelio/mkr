@@ -41,6 +41,13 @@ rm -f %{buildroot}%{_bindir}/${name}
 %{_localbindir}/%{name}
 
 %changelog
+* Wed Apr 12 2023 <mackerel-developers@hatena.ne.jp> - 0.49.3
+- Bump github.com/mackerelio/mackerel-client-go from 0.24.0 to 0.25.0 (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.5.0 to 0.7.0 (by dependabot[bot])
+- Bump alpine from 3.17.2 to 3.17.3 (by dependabot[bot])
+- Bump github.com/fatih/color from 1.14.1 to 1.15.0 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.11 to 0.12.12 (by dependabot[bot])
+
 * Mon Feb 27 2023 <mackerel-developers@hatena.ne.jp> - 0.49.2
 - Bump golang.org/x/crypto from 0.0.0-20210817164053-32db794688a5 to 0.1.0 (by dependabot[bot])
 - Bump golang.org/x/net from 0.6.0 to 0.7.0 (by dependabot[bot])
