@@ -17,7 +17,7 @@ var Command = cli.Command{
 	Description: `
     Fetch metric names of 'host metric' or 'service metric'.
     Requests "/api/v0/hosts/<hostId>/metric-names" or "/api/v0/services/<serviceName>/metric-names".
-    See https://mackerel.io/ja/api-docs/entry/hosts#metric-names, https://mackerel.io/ja/api-docs/entry/services#metric-names
+    See https://mackerel.io/api-docs/entry/hosts#metric-names, https://mackerel.io/api-docs/entry/services#metric-names
 `,
 	Action: doMetricNames,
 	Flags: []cli.Flag{
