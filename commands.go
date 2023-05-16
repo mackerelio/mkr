@@ -8,6 +8,7 @@ import (
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/dashboards"
 	"github.com/mackerelio/mkr/hosts"
+	"github.com/mackerelio/mkr/metric_names"
 	"github.com/mackerelio/mkr/metrics"
 	"github.com/mackerelio/mkr/monitors"
 	"github.com/mackerelio/mkr/org"
@@ -39,4 +40,5 @@ var Commands = []cli.Command{
 	checks.Command,
 	wrap.Command,
 	aws_integrations.Command,
+	metric_names.Command,
 }
