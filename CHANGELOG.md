@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.50.0 (2023-05-17)
+
+* update macos,windows Actions Runner Image. #566 (yseto)
+* Add metric-names subcommand. #561 (fujiwara)
+
+
 ## 0.49.3 (2023-04-12)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.24.0 to 0.25.0 #558 (dependabot[bot])
