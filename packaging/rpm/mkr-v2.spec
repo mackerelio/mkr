@@ -35,6 +35,10 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed May 17 2023 <mackerel-developers@hatena.ne.jp> - 0.50.0
+- update macos,windows Actions Runner Image. (by yseto)
+- Add metric-names subcommand. (by fujiwara)
+
 * Wed Apr 12 2023 <mackerel-developers@hatena.ne.jp> - 0.49.3
 - Bump github.com/mackerelio/mackerel-client-go from 0.24.0 to 0.25.0 (by dependabot[bot])
 - Bump golang.org/x/oauth2 from 0.5.0 to 0.7.0 (by dependabot[bot])
