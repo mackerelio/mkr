@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.51.0 (2023-05-31)
+
+* Bump github.com/mackerelio/mackerel-client-go from 0.25.0 to 0.26.0 #568 (dependabot[bot])
+
+
 ## 0.50.0 (2023-05-17)
 
 * update macos,windows Actions Runner Image. #566 (yseto)
