@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Jul 13 2023 <mackerel-developers@hatena.ne.jp> - 0.51.1
+- Bump github.com/mackerelio/mackerel-agent from 0.75.1 to 0.77.0 (by dependabot[bot])
+
 * Wed May 31 2023 <mackerel-developers@hatena.ne.jp> - 0.51.0
 - Bump github.com/mackerelio/mackerel-client-go from 0.25.0 to 0.26.0 (by dependabot[bot])
 

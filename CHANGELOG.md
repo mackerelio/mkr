@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.51.1 (2023-07-13)
+
+* Bump github.com/mackerelio/mackerel-agent from 0.75.1 to 0.77.0 #576 (dependabot[bot])
+
+
 ## 0.51.0 (2023-05-31)
 
 * Bump github.com/mackerelio/mackerel-client-go from 0.25.0 to 0.26.0 #568 (dependabot[bot])
