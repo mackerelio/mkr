@@ -23,7 +23,7 @@ var Command = cli.Command{
 		{
 			Name:      "create",
 			Usage:     "create a graph annotation",
-			ArgsUsage: "--title <title> [--description <descriptio>] --from <from> --to <to> --service|-s <service> [--role|-r <role>]",
+			ArgsUsage: "--title <title> [--description <description>] [--description-file <file-path>] --from <from> --to <to> --service|-s <service> [--role|-r <role>]",
 			Description: `
     Creates a graph annotation.
 `,
@@ -60,7 +60,7 @@ var Command = cli.Command{
 		{
 			Name:      "update",
 			Usage:     "update annotation",
-			ArgsUsage: "--id <id> [--title <title>] [--description <descriptio>] --from <from> --to <to> --service|-s <service> [--role|-r <role>]",
+			ArgsUsage: "--id <id> [--title <title>] [--description <description>] [--description-file <file-path>] --from <from> --to <to> --service|-s <service> [--role|-r <role>]",
 			Description: `
     Updates an annotation
 `,
