@@ -1,6 +1,7 @@
 package annotations
 
 import (
+	"io"
 	"os"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -30,6 +31,7 @@ var Command = cli.Command{
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
 				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
+				cli.StringFlag{Name: "description-file", Usage: `Read description text for annotation from file (use "-" to read from stdin)`},
 				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
 				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
@@ -68,6 +70,7 @@ var Command = cli.Command{
 				cli.StringFlag{Name: "service, s", Usage: "Service name for annotation"},
 				cli.StringFlag{Name: "title", Usage: "Title for annotation"},
 				cli.StringFlag{Name: "description", Usage: "Description for annotation"},
+				cli.StringFlag{Name: "description-file", Usage: `Read description text for annotation from file (use "-" to read from stdin)`},
 				cli.IntFlag{Name: "from", Usage: "Starting time (epoch seconds)"},
 				cli.IntFlag{Name: "to", Usage: "Ending time (epoch seconds)"},
 				cli.StringSliceFlag{
@@ -95,6 +98,7 @@ var Command = cli.Command{
 func doAnnotationsCreate(c *cli.Context) error {
 	title := c.String("title")
 	description := c.String("description")
+	descriptionFile := c.String("description-file")
 	from := c.Int64("from")
 	to := c.Int64("to")
 	service := c.String("service")
@@ -118,6 +122,25 @@ func doAnnotationsCreate(c *cli.Context) error {
 	if to == 0 {
 		_ = cli.ShowCommandHelp(c, "create")
 		return cli.NewExitError("`to` is a required field to create a graph annotation.", 1)
+	}
+
+	if description != "" && descriptionFile != "" {
+		_ = cli.ShowCommandHelp(c, "create")
+		return cli.NewExitError("specify one of `description` or `description-file`.", 1)
+	}
+
+	if descriptionFile != "" {
+		var (
+			b   []byte
+			err error
+		)
+		if descriptionFile == "-" {
+			b, err = io.ReadAll(os.Stdin)
+		} else {
+			b, err = os.ReadFile(descriptionFile)
+		}
+		logger.DieIf(err)
+		description = string(b)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -167,6 +190,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	annotationID := c.String("id")
 	title := c.String("title")
 	description := c.String("description")
+	descriptionFile := c.String("description-file")
 	from := c.Int64("from")
 	to := c.Int64("to")
 	service := c.String("service")
@@ -190,6 +214,25 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	if to == 0 {
 		_ = cli.ShowCommandHelp(c, "update")
 		return cli.NewExitError("`to` is a required field to update a graph annotation.", 1)
+	}
+
+	if description != "" && descriptionFile != "" {
+		_ = cli.ShowCommandHelp(c, "create")
+		return cli.NewExitError("specify one of `description` or `description-file`.", 1)
+	}
+
+	if descriptionFile != "" {
+		var (
+			b   []byte
+			err error
+		)
+		if descriptionFile == "-" {
+			b, err = io.ReadAll(os.Stdin)
+		} else {
+			b, err = os.ReadFile(descriptionFile)
+		}
+		logger.DieIf(err)
+		description = string(b)
 	}
 
 	client := mackerelclient.NewFromContext(c)
