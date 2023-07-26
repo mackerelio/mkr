@@ -19,7 +19,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
 	github.com/tcnksm/go-gitconfig v0.1.2
-	github.com/urfave/cli v1.22.12
+	github.com/urfave/cli v1.22.14
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.7.0
 	golang.org/x/sync v0.1.0
@@ -27,7 +27,7 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.3.0 // indirect
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
