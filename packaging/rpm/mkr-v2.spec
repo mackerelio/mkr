@@ -35,6 +35,15 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jul 26 2023 <mackerel-developers@hatena.ne.jp> - 0.52.0
+- read annotation's description from file or stdin (by Arthur1)
+- Bump github.com/mackerelio/mackerel-agent from 0.77.0 to 0.77.1 (by dependabot[bot])
+- Bump golang.org/x/sync from 0.1.0 to 0.3.0 (by dependabot[bot])
+- Bump github.com/urfave/cli from 1.22.12 to 1.22.14 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.12 to 0.12.13 (by dependabot[bot])
+- Bump github.com/stretchr/testify from 1.8.2 to 1.8.4 (by dependabot[bot])
+- Bump actions/setup-go from 3 to 4 (by dependabot[bot])
+
 * Thu Jul 13 2023 <mackerel-developers@hatena.ne.jp> - 0.51.1
 - Bump github.com/mackerelio/mackerel-agent from 0.75.1 to 0.77.0 (by dependabot[bot])
 
