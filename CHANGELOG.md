@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.52.0 (2023-07-26)
+
+* read annotation's description from file or stdin #582 (Arthur1)
+* Bump github.com/mackerelio/mackerel-agent from 0.77.0 to 0.77.1 #581 (dependabot[bot])
+* Bump golang.org/x/sync from 0.1.0 to 0.3.0 #577 (dependabot[bot])
+* Bump github.com/urfave/cli from 1.22.12 to 1.22.14 #574 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.12 to 0.12.13 #573 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.8.2 to 1.8.4 #570 (dependabot[bot])
+* Bump actions/setup-go from 3 to 4 #555 (dependabot[bot])
+
+
 ## 0.51.1 (2023-07-13)
 
 * Bump github.com/mackerelio/mackerel-agent from 0.75.1 to 0.77.0 #576 (dependabot[bot])
