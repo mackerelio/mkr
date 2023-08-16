@@ -26,14 +26,7 @@ cross: devel-deps
 	  -build-ldflags=$(BUILD_LDFLAGS)
 
 .PHONY: rpm
-rpm: rpm-v1 rpm-v2
-
-.PHONY: rpm-v1
-rpm-v1:
-	GOOS=linux GOARCH=386 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch noarch" --target noarch -bb packaging/rpm/mkr.spec
-	GOOS=linux GOARCH=amd64 make build
-	rpmbuild --define "_builddir `pwd`" --define "_version ${VERSION}" --define "buildarch x86_64" --target x86_64  -bb packaging/rpm/mkr.spec
+rpm: rpm-v2
 
 .PHONY: rpm-v2
 rpm-v2: rpm-v2-x86 rpm-v2-arm64
