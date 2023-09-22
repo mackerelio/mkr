@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.53.0 (2023-09-22)
+
+* Bump docker/login-action from 2 to 3 #593 (dependabot[bot])
+* Bump docker/setup-buildx-action from 2 to 3 #592 (dependabot[bot])
+* Bump docker/setup-qemu-action from 2 to 3 #590 (dependabot[bot])
+* Bump actions/checkout from 3 to 4 #589 (dependabot[bot])
+* Bump golang.org/x/oauth2 from 0.7.0 to 0.12.0 #588 (dependabot[bot])
+* Remove old rpm packaging #585 (yseto)
+
+
 ## 0.52.0 (2023-07-26)
 
 * read annotation's description from file or stdin #582 (Arthur1)

@@ -35,6 +35,14 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Fri Sep 22 2023 <mackerel-developers@hatena.ne.jp> - 0.53.0
+- Bump docker/login-action from 2 to 3 (by dependabot[bot])
+- Bump docker/setup-buildx-action from 2 to 3 (by dependabot[bot])
+- Bump docker/setup-qemu-action from 2 to 3 (by dependabot[bot])
+- Bump actions/checkout from 3 to 4 (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.7.0 to 0.12.0 (by dependabot[bot])
+- Remove old rpm packaging (by yseto)
+
 * Wed Jul 26 2023 <mackerel-developers@hatena.ne.jp> - 0.52.0
 - read annotation's description from file or stdin (by Arthur1)
 - Bump github.com/mackerelio/mackerel-agent from 0.77.0 to 0.77.1 (by dependabot[bot])

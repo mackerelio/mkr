@@ -1,3 +1,20 @@
+mkr (0.53.0-1.v2) stable; urgency=low
+
+  * Bump docker/login-action from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/593>
+  * Bump docker/setup-buildx-action from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/592>
+  * Bump docker/setup-qemu-action from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/590>
+  * Bump actions/checkout from 3 to 4 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/589>
+  * Bump golang.org/x/oauth2 from 0.7.0 to 0.12.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/588>
+  * Remove old rpm packaging (by yseto)
+    <https://github.com/mackerelio/mkr/pull/585>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Fri, 22 Sep 2023 03:58:59 +0000
+
 mkr (0.52.0-1.v2) stable; urgency=low
 
   * read annotation's description from file or stdin (by Arthur1)
