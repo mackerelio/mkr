@@ -11,7 +11,7 @@ require (
 	github.com/google/go-github/v49 v49.1.0
 	github.com/itchyny/gojq v0.12.13
 	github.com/jpillora/backoff v1.0.0
-	github.com/mackerelio/checkers v0.0.4
+	github.com/mackerelio/checkers v0.2.0
 	github.com/mackerelio/mackerel-agent v0.77.1
 	github.com/mackerelio/mackerel-client-go v0.26.0
 	github.com/mholt/archiver/v3 v3.5.1
