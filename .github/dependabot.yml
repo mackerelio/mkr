@@ -3,14 +3,14 @@ updates:
   - package-ecosystem: docker
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
       time: "01:00"
       timezone: Asia/Tokyo
     open-pull-requests-limit: 10
   - package-ecosystem: gomod
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
       time: "01:00"
       timezone: Asia/Tokyo
     open-pull-requests-limit: 10
