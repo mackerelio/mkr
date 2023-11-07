@@ -3,16 +3,25 @@ updates:
   - package-ecosystem: docker
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
       time: "01:00"
       timezone: Asia/Tokyo
     open-pull-requests-limit: 10
   - package-ecosystem: gomod
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
       time: "01:00"
       timezone: Asia/Tokyo
+    groups:
+      dev-dependencies:
+        patterns:
+          - "github.com/Songmu/goxz"
+          - "github.com/stretchr/testify"
+      stable-packages:
+        patterns:
+          - "golang.org/x/*"
+          - "github.com/mackerelio/*"
     open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: "/"
