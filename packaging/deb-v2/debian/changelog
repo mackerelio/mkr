@@ -1,3 +1,18 @@
+mkr (0.54.0-1.v2) stable; urgency=low
+
+  * Bump the stable-packages group with 1 update (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/617>
+  * Bump golang.org/x/crypto from 0.13.0 to 0.17.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/616>
+  * Bump actions/setup-go from 4 to 5 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/612>
+  * Bump the stable-packages group with 5 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/610>
+  * update Go version to 1.21 and 1.20 by using reusable workflow (by lufia)
+    <https://github.com/mackerelio/mkr/pull/604>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Fri, 22 Dec 2023 01:33:22 +0000
+
 mkr (0.53.0-1.v2) stable; urgency=low
 
   * Bump docker/login-action from 2 to 3 (by dependabot[bot])
