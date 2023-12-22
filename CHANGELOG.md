@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.54.0 (2023-12-22)
+
+* Bump the stable-packages group with 1 update #617 (dependabot[bot])
+* Bump golang.org/x/crypto from 0.13.0 to 0.17.0 #616 (dependabot[bot])
+* Bump actions/setup-go from 4 to 5 #612 (dependabot[bot])
+* Bump the stable-packages group with 5 updates #610 (dependabot[bot])
+* update Go version to 1.21 and 1.20 by using reusable workflow #604 (lufia)
+
+
 ## 0.53.0 (2023-09-22)
 
 * Bump docker/login-action from 2 to 3 #593 (dependabot[bot])

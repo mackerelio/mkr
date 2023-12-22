@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Fri Dec 22 2023 <mackerel-developers@hatena.ne.jp> - 0.54.0
+- Bump the stable-packages group with 1 update (by dependabot[bot])
+- Bump golang.org/x/crypto from 0.13.0 to 0.17.0 (by dependabot[bot])
+- Bump actions/setup-go from 4 to 5 (by dependabot[bot])
+- Bump the stable-packages group with 5 updates (by dependabot[bot])
+- update Go version to 1.21 and 1.20 by using reusable workflow (by lufia)
+
 * Fri Sep 22 2023 <mackerel-developers@hatena.ne.jp> - 0.53.0
 - Bump docker/login-action from 2 to 3 (by dependabot[bot])
 - Bump docker/setup-buildx-action from 2 to 3 (by dependabot[bot])
