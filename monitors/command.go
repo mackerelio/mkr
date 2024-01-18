@@ -17,6 +17,8 @@ import (
 	"github.com/urfave/cli"
 	"github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
 )
 
 var Command = cli.Command{
@@ -102,7 +104,9 @@ func monitorLoadRules(optFilePath string) ([]mackerel.Monitor, error) {
 	if err != nil {
 		return nil, err
 	}
-	return decodeMonitors(f)
+	fallback := unicode.UTF8.NewDecoder()
+	r := transform.NewReader(f, unicode.BOMOverride(fallback))
+	return decodeMonitors(r)
 }
 
 // decodeMonitors decodes monitors JSON.
