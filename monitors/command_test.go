@@ -200,3 +200,33 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 }
+
+func TestMonitorLoadRules(t *testing.T) {
+	tmpFile, err := os.CreateTemp("", "")
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	defer os.Remove(tmpFile.Name())
+
+	json := `{"monitors": []}`
+
+	_, err = tmpFile.WriteString(json)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	_, err = monitorLoadRules(tmpFile.Name())
+	if err != nil {
+		t.Error("should accept JSON content no BOM")
+	}
+
+	utf8bom := "\xef\xbb\xbf"
+	tmpFile.Seek(0, 0)
+	_, err = tmpFile.WriteString(utf8bom + json)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	_, err = monitorLoadRules(tmpFile.Name())
+	if err != nil {
+		t.Error("should accept JSON content with BOM")
+	}
+}
