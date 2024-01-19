@@ -220,7 +220,10 @@ func TestMonitorLoadRules(t *testing.T) {
 	}
 
 	utf8bom := "\xef\xbb\xbf"
-	tmpFile.Seek(0, 0)
+	_, err = tmpFile.Seek(0, 0)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
 	_, err = tmpFile.WriteString(utf8bom + json)
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
