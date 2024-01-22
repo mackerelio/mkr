@@ -201,7 +201,7 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 	}
 }
 
-func TestMonitorLoadRules(t *testing.T) {
+func TestMonitorLoadRulesWithBOM(t *testing.T) {
 	tmpFile, err := os.CreateTemp("", "")
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
