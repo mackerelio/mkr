@@ -200,3 +200,37 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 		t.Errorf("expected:\n%s\n, output:\n%s\n", expected, diff)
 	}
 }
+
+func TestMonitorLoadRulesWithBOM(t *testing.T) {
+	// XXX: t.TempDir is better, but it will cause "TempDir RemoveAll cleanup: remove C:\...\monitors.json: The process cannot access the file because it is being used by another process." error on Windows
+	tmpFile, err := os.CreateTemp("", "")
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	defer os.Remove(tmpFile.Name())
+
+	json := `{"monitors": []}`
+
+	_, err = tmpFile.WriteString(json)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	_, err = monitorLoadRules(tmpFile.Name())
+	if err != nil {
+		t.Error("should accept JSON content no BOM")
+	}
+
+	utf8bom := "\xef\xbb\xbf"
+	_, err = tmpFile.Seek(0, 0)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	_, err = tmpFile.WriteString(utf8bom + json)
+	if err != nil {
+		t.Errorf("should not raise error: %v", err)
+	}
+	_, err = monitorLoadRules(tmpFile.Name())
+	if err != nil {
+		t.Error("should accept JSON content with BOM")
+	}
+}

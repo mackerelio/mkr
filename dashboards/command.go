@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
+
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
@@ -92,8 +95,10 @@ func doPushDashboard(c *cli.Context) error {
 	f := c.String("file-path")
 	src, err := os.Open(f)
 	logger.DieIf(err)
+	fallback := unicode.UTF8.NewDecoder()
+	r := transform.NewReader(src, unicode.BOMOverride(fallback))
 
-	dec := json.NewDecoder(src)
+	dec := json.NewDecoder(r)
 	var dashboard mackerel.Dashboard
 	err = dec.Decode(&dashboard)
 	logger.DieIf(err)
