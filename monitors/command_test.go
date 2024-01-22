@@ -2,7 +2,6 @@ package monitors
 
 import (
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -203,14 +202,13 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 }
 
 func TestMonitorLoadRulesWithBOM(t *testing.T) {
-	dir := t.TempDir()
-	tmpFile, err := os.Create(filepath.Join(dir, "monitors.json"))
+	// XXX: t.TempDir is better, but it will cause "TempDir RemoveAll cleanup: remove C:\...\monitors.json: The process cannot access the file because it is being used by another process." error on Windows
+	tmpFile, err := os.CreateTemp("", "")
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
-	t.Cleanup(func() {
-		tmpFile.Close()
-	})
+	defer os.Remove(tmpFile.Name())
+
 	json := `{"monitors": []}`
 
 	_, err = tmpFile.WriteString(json)
