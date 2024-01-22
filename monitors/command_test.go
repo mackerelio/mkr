@@ -2,6 +2,7 @@ package monitors
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -202,11 +203,11 @@ func TestDiffMonitorsWithScopes(t *testing.T) {
 }
 
 func TestMonitorLoadRulesWithBOM(t *testing.T) {
-	tmpFile, err := os.CreateTemp("", "")
+	dir := t.TempDir()
+	tmpFile, err := os.Create(filepath.Join(dir, "monitors.json"))
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
-	defer os.Remove(tmpFile.Name())
 
 	json := `{"monitors": []}`
 
