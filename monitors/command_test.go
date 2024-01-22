@@ -208,8 +208,9 @@ func TestMonitorLoadRulesWithBOM(t *testing.T) {
 	if err != nil {
 		t.Errorf("should not raise error: %v", err)
 	}
-	defer tmpFile.Close()
-
+	t.Cleanup(func() {
+		tmpFile.Close()
+	})
 	json := `{"monitors": []}`
 
 	_, err = tmpFile.WriteString(json)
