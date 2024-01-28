@@ -4,7 +4,7 @@ WORKDIR /go/src/github.com/mackerelio/mkr/
 COPY . .
 RUN make build
 
-FROM alpine:3.17.3
+FROM alpine:3.19.1
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /go/src/github.com/mackerelio/mkr/mkr /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/mkr"]
