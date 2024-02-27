@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.55.0 (2024-02-27)
+
+* accept UTF8-BOM when reading dashboard or monitor from JSON file #622 (kmuto)
+
+
 ## 0.54.0 (2023-12-22)
 
 * Bump the stable-packages group with 1 update #617 (dependabot[bot])

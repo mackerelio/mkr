@@ -1,3 +1,10 @@
+mkr (0.55.0-1.v2) stable; urgency=low
+
+  * accept UTF8-BOM when reading dashboard or monitor from JSON file (by kmuto)
+    <https://github.com/mackerelio/mkr/pull/622>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 27 Feb 2024 06:04:12 +0000
+
 mkr (0.54.0-1.v2) stable; urgency=low
 
   * Bump the stable-packages group with 1 update (by dependabot[bot])
