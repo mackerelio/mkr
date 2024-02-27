@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Feb 27 2024 <mackerel-developers@hatena.ne.jp> - 0.55.0
+- accept UTF8-BOM when reading dashboard or monitor from JSON file (by kmuto)
+
 * Fri Dec 22 2023 <mackerel-developers@hatena.ne.jp> - 0.54.0
 - Bump the stable-packages group with 1 update (by dependabot[bot])
 - Bump golang.org/x/crypto from 0.13.0 to 0.17.0 (by dependabot[bot])
