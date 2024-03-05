@@ -2,6 +2,7 @@ BIN := mkr
 VERSION := 0.55.0
 CURRENT_REVISION := $(shell git rev-parse --short HEAD)
 BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
+export CGO_ENABLED := 0
 
 .PHONY: all
 all: clean cross test rpm deb
@@ -16,7 +17,7 @@ test:
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
+	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
 
 .PHONY: cross
 cross: devel-deps
