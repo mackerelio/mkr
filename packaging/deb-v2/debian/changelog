@@ -1,3 +1,10 @@
+mkr (0.56.0-1.v2) stable; urgency=low
+
+  * Always set CGO_ENABLED=0 (by fujiwara)
+    <https://github.com/mackerelio/mkr/pull/630>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Thu, 7 Mar 2024 05:37:03 +0000
+
 mkr (0.55.0-1.v2) stable; urgency=low
 
   * accept UTF8-BOM when reading dashboard or monitor from JSON file (by kmuto)

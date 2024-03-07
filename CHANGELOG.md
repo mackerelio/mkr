@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.56.0 (2024-03-07)
+
+* Always set CGO_ENABLED=0 #630 (fujiwara)
+
+
 ## 0.55.0 (2024-02-27)
 
 * accept UTF8-BOM when reading dashboard or monitor from JSON file #622 (kmuto)
