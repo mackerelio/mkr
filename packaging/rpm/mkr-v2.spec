@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Mar 7 2024 <mackerel-developers@hatena.ne.jp> - 0.56.0
+- Always set CGO_ENABLED=0 (by fujiwara)
+
 * Tue Feb 27 2024 <mackerel-developers@hatena.ne.jp> - 0.55.0
 - accept UTF8-BOM when reading dashboard or monitor from JSON file (by kmuto)
 
