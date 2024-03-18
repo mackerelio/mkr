@@ -35,6 +35,14 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Mar 18 2024 <mackerel-developers@hatena.ne.jp> - 0.57.0
+- Bump the stable-packages group with 4 updates (by dependabot[bot])
+- Bump the dev-dependencies group with 1 update (by dependabot[bot])
+- Bump mackerelio/workflows from 1.0.2 to 1.1.0 (by dependabot[bot])
+- Bump golang from 1.21-alpine to 1.22-alpine (by dependabot[bot])
+- Bump alpine from 3.17.3 to 3.19.1 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.13 to 0.12.14 (by dependabot[bot])
+
 * Thu Mar 7 2024 <mackerel-developers@hatena.ne.jp> - 0.56.0
 - Always set CGO_ENABLED=0 (by fujiwara)
 

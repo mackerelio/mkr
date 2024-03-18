@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.57.0 (2024-03-18)
+
+* Bump the stable-packages group with 4 updates #635 (dependabot[bot])
+* Bump the dev-dependencies group with 1 update #629 (dependabot[bot])
+* Bump mackerelio/workflows from 1.0.2 to 1.1.0 #627 (dependabot[bot])
+* Bump golang from 1.21-alpine to 1.22-alpine #625 (dependabot[bot])
+* Bump alpine from 3.17.3 to 3.19.1 #624 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.13 to 0.12.14 #609 (dependabot[bot])
+
+
 ## 0.56.0 (2024-03-07)
 
 * Always set CGO_ENABLED=0 #630 (fujiwara)

@@ -1,3 +1,20 @@
+mkr (0.57.0-1.v2) stable; urgency=low
+
+  * Bump the stable-packages group with 4 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/635>
+  * Bump the dev-dependencies group with 1 update (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/629>
+  * Bump mackerelio/workflows from 1.0.2 to 1.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/627>
+  * Bump golang from 1.21-alpine to 1.22-alpine (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/625>
+  * Bump alpine from 3.17.3 to 3.19.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/624>
+  * Bump github.com/itchyny/gojq from 0.12.13 to 0.12.14 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/609>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 18 Mar 2024 06:02:45 +0000
+
 mkr (0.56.0-1.v2) stable; urgency=low
 
   * Always set CGO_ENABLED=0 (by fujiwara)
