@@ -9,7 +9,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/fatih/color v1.16.0
 	github.com/google/go-github/v49 v49.1.0
-	github.com/itchyny/gojq v0.12.14
+	github.com/itchyny/gojq v0.12.15
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
 	github.com/mackerelio/mackerel-agent v0.79.0
