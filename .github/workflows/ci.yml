@@ -31,7 +31,7 @@ jobs:
           go-version: 1.21.x
           cache: true
       - run: make all
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-build-artifacts
           path: |
