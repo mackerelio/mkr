@@ -1,6 +1,8 @@
 module github.com/mackerelio/mkr
 
-go 1.20
+go 1.21.0
+
+toolchain go1.22.1
 
 require (
 	github.com/Songmu/goxz v0.9.1
