@@ -1,3 +1,26 @@
+mkr (0.57.1-1.v2) stable; urgency=low
+
+  * Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/642>
+  * Bump golang.org/x/net from 0.22.0 to 0.23.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/640>
+  * Bump the stable-packages group with 4 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/639>
+  * Bump github.com/itchyny/gojq from 0.12.14 to 0.12.15 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/638>
+  * Bump google.golang.org/protobuf from 1.31.0 to 1.33.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/634>
+  * Bump peter-evans/repository-dispatch from 2 to 3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/623>
+  * Bump actions/download-artifact from 3 to 4 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/615>
+  * Bump actions/upload-artifact from 3 to 4 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/614>
+  * Bump docker/build-push-action from 4 to 5 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/591>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 1 May 2024 07:47:57 +0000
+
 mkr (0.57.0-1.v2) stable; urgency=low
 
   * Bump the stable-packages group with 4 updates (by dependabot[bot])
