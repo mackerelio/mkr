@@ -35,6 +35,17 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed May 1 2024 <mackerel-developers@hatena.ne.jp> - 0.57.1
+- Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group (by dependabot[bot])
+- Bump golang.org/x/net from 0.22.0 to 0.23.0 (by dependabot[bot])
+- Bump the stable-packages group with 4 updates (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.14 to 0.12.15 (by dependabot[bot])
+- Bump google.golang.org/protobuf from 1.31.0 to 1.33.0 (by dependabot[bot])
+- Bump peter-evans/repository-dispatch from 2 to 3 (by dependabot[bot])
+- Bump actions/download-artifact from 3 to 4 (by dependabot[bot])
+- Bump actions/upload-artifact from 3 to 4 (by dependabot[bot])
+- Bump docker/build-push-action from 4 to 5 (by dependabot[bot])
+
 * Mon Mar 18 2024 <mackerel-developers@hatena.ne.jp> - 0.57.0
 - Bump the stable-packages group with 4 updates (by dependabot[bot])
 - Bump the dev-dependencies group with 1 update (by dependabot[bot])

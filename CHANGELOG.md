@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.57.1 (2024-05-01)
+
+* Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group #642 (dependabot[bot])
+* Bump golang.org/x/net from 0.22.0 to 0.23.0 #640 (dependabot[bot])
+* Bump the stable-packages group with 4 updates #639 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.14 to 0.12.15 #638 (dependabot[bot])
+* Bump google.golang.org/protobuf from 1.31.0 to 1.33.0 #634 (dependabot[bot])
+* Bump peter-evans/repository-dispatch from 2 to 3 #623 (dependabot[bot])
+* Bump actions/download-artifact from 3 to 4 #615 (dependabot[bot])
+* Bump actions/upload-artifact from 3 to 4 #614 (dependabot[bot])
+* Bump docker/build-push-action from 4 to 5 #591 (dependabot[bot])
+
+
 ## 0.57.0 (2024-03-18)
 
 * Bump the stable-packages group with 4 updates #635 (dependabot[bot])
