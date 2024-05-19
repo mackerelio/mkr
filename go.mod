@@ -9,7 +9,7 @@ require (
 	github.com/Songmu/prompter v0.5.1
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
-	github.com/fatih/color v1.16.0
+	github.com/fatih/color v1.17.0
 	github.com/google/go-github/v49 v49.1.0
 	github.com/itchyny/gojq v0.12.15
 	github.com/jpillora/backoff v1.0.0
