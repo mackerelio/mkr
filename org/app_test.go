@@ -15,14 +15,36 @@ func TestOrgApp_Run(t *testing.T) {
 	testCases := []struct {
 		id       string
 		org      *mackerel.Org
+		jqFilter string
 		expected string
 	}{
 		{
-			id:  "default",
-			org: &mackerel.Org{Name: "sample-org"},
+			id:       "default",
+			org:      &mackerel.Org{Name: "sample-org"},
+			jqFilter: "",
 			expected: `{
     "name": "sample-org"
 }
+`,
+		},
+		{
+			id:       "jq_orgName",
+			org:      &mackerel.Org{Name: "sample-org"},
+			jqFilter: ".name",
+			expected: `sample-org
+`,
+		},
+		{
+			id:       "jq_emptyDisplayName",
+			org:      &mackerel.Org{Name: "sample-org"},
+			jqFilter: ".displayName",
+			expected: "\n",
+		},
+		{
+			id:       "jq_displayName",
+			org:      &mackerel.Org{Name: "sample-org", DisplayName: "Sample Org"},
+			jqFilter: ".displayName",
+			expected: `Sample Org
 `,
 		},
 	}
@@ -34,9 +56,11 @@ func TestOrgApp_Run(t *testing.T) {
 		)
 		t.Run(tc.id, func(t *testing.T) {
 			out := new(bytes.Buffer)
+			jqFilter := tc.jqFilter
 			app := &orgApp{
 				client:    client,
 				outStream: out,
+				jqFilter:  jqFilter,
 			}
 			assert.NoError(t, app.run())
 			assert.Equal(t, tc.expected, out.String())
