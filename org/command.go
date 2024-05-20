@@ -12,7 +12,7 @@ import (
 var Command = cli.Command{
 	Name:      "org",
 	Usage:     "Fetch organization",
-	ArgsUsage: "--jq <formula>",
+	ArgsUsage: "[--jq <formula>]",
 	Description: `
     Fetch organization.
     Requests APIs under "/api/v0/org". See https://mackerel.io/api-docs/entry/organizations .
