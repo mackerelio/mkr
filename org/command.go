@@ -3,19 +3,24 @@ package org
 import (
 	"os"
 
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli"
 )
 
 // Command is the definition of org subcommand
 var Command = cli.Command{
-	Name:  "org",
-	Usage: "Fetch organization",
+	Name:      "org",
+	Usage:     "Fetch organization",
+	ArgsUsage: "[--jq <formula>]",
 	Description: `
     Fetch organization.
     Requests APIs under "/api/v0/org". See https://mackerel.io/api-docs/entry/organizations .
 `,
 	Action: doOrg,
+	Flags: []cli.Flag{
+		jq.CommandLineFlag,
+	},
 }
 
 func doOrg(c *cli.Context) error {
@@ -27,5 +32,6 @@ func doOrg(c *cli.Context) error {
 	return (&orgApp{
 		client:    client,
 		outStream: os.Stdout,
+		jqFilter:  c.String("jq"),
 	}).run()
 }
