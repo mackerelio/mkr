@@ -11,7 +11,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/fatih/color v1.16.0
 	github.com/google/go-github/v49 v49.1.0
-	github.com/itchyny/gojq v0.12.15
+	github.com/itchyny/gojq v0.12.16
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
 	github.com/mackerelio/mackerel-agent v0.81.0
@@ -42,7 +42,7 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/itchyny/timefmt-go v0.1.5 // indirect
+	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/klauspost/compress v1.15.14 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/kr/text v0.2.0 // indirect
@@ -63,7 +63,7 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/net v0.23.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/term v0.18.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
