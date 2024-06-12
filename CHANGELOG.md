@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.58.0 (2024-06-12)
+
+* Bump the stable-packages group with 3 updates #651 (dependabot[bot])
+* Update Go and dependencies #650 (lufia)
+* Add `--jq` option to `org` sub command #646 (kmuto)
+* Bump github.com/urfave/cli from 1.22.14 to 1.22.15 #641 (dependabot[bot])
+
+
 ## 0.57.1 (2024-05-01)
 
 * Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group #642 (dependabot[bot])
