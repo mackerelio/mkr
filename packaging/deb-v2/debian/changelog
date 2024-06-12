@@ -1,3 +1,16 @@
+mkr (0.58.0-1.v2) stable; urgency=low
+
+  * Bump the stable-packages group with 3 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/651>
+  * Update Go and dependencies (by lufia)
+    <https://github.com/mackerelio/mkr/pull/650>
+  * Add `--jq` option to `org` sub command (by kmuto)
+    <https://github.com/mackerelio/mkr/pull/646>
+  * Bump github.com/urfave/cli from 1.22.14 to 1.22.15 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/641>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 12 Jun 2024 07:00:18 +0000
+
 mkr (0.57.1-1.v2) stable; urgency=low
 
   * Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group (by dependabot[bot])

@@ -35,6 +35,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jun 12 2024 <mackerel-developers@hatena.ne.jp> - 0.58.0
+- Bump the stable-packages group with 3 updates (by dependabot[bot])
+- Update Go and dependencies (by lufia)
+- Add `--jq` option to `org` sub command (by kmuto)
+- Bump github.com/urfave/cli from 1.22.14 to 1.22.15 (by dependabot[bot])
+
 * Wed May 1 2024 <mackerel-developers@hatena.ne.jp> - 0.57.1
 - Bump github.com/mackerelio/mackerel-agent from 0.80.0 to 0.81.0 in the stable-packages group (by dependabot[bot])
 - Bump golang.org/x/net from 0.22.0 to 0.23.0 (by dependabot[bot])
