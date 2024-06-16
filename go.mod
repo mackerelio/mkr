@@ -14,7 +14,7 @@ require (
 	github.com/itchyny/gojq v0.12.16
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
-	github.com/mackerelio/mackerel-agent v0.81.0
+	github.com/mackerelio/mackerel-agent v0.82.0
 	github.com/mackerelio/mackerel-client-go v0.33.1
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
