@@ -49,6 +49,24 @@ func TestValidateRoles(t *testing.T) {
 			t.Error("should invalidate the rule")
 		}
 	})
+
+	t.Run("valid query monitoring rule", func(t *testing.T) {
+		a := &mackerel.MonitorQuery{Name: "name", Type: "query", Query: "http.monitor.count", Operator: "<"}
+
+		ret, err := validateRules([](mackerel.Monitor){a}, "query monitor")
+		if !ret {
+			t.Errorf("should validate the rule: %v", err)
+		}
+	})
+
+	t.Run("invalid query monitoring rule", func(t *testing.T) {
+		a := &mackerel.MonitorQuery{Name: "name", Type: "query", Operator: "<"}
+
+		ret, err := validateRules([](mackerel.Monitor){a}, "query monitor")
+		if ret == true || err == nil {
+			t.Error("should invalidate the rule")
+		}
+	})
 }
 
 func pfloat64(x float64) *float64 {
