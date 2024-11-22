@@ -321,7 +321,7 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 				return false, fmt.Errorf("Query Monitoring '%s' should have 'query'", m.Name)
 			}
 			if m.Operator == "" {
-				return false, fmt.Errorf("Query monitoring '%s' should have 'operator'", m.Operator)
+				return false, fmt.Errorf("Query monitoring '%s' should have 'operator'", m.Name)
 			}
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
