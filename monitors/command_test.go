@@ -23,32 +23,32 @@ func TestIsSameMonitor(t *testing.T) {
 }
 
 func TestValidateRoles(t *testing.T) {
-	{
+	t.Run("connectivitiy", func(t *testing.T) {
 		a := &mackerel.MonitorConnectivity{ID: "12345", Name: "foo", Type: "connectivity"}
 
 		ret, err := validateRules([](mackerel.Monitor){a}, "test monitor")
 		if ret != true {
 			t.Errorf("should validate the rule: %s", err.Error())
 		}
-	}
+	})
 
-	{
+	t.Run("valid anomalyDetection", func(t *testing.T) {
 		a := &mackerel.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive", Scopes: []string{"MyService: MyRole"}}
 
 		ret, err := validateRules([](mackerel.Monitor){a}, "anomaly detection monitor")
 		if ret != true {
 			t.Errorf("should validate the rule: %s", err.Error())
 		}
-	}
+	})
 
-	{
+	t.Run("invalid anomalyDetection", func(t *testing.T) {
 		a := &mackerel.MonitorAnomalyDetection{ID: "12345", Name: "anomaly", Type: "anomalyDetection", WarningSensitivity: "sensitive"}
 
 		ret, err := validateRules([](mackerel.Monitor){a}, "anomaly detection monitor")
 		if ret == true || err == nil {
 			t.Error("should invalidate the rule")
 		}
-	}
+	})
 }
 
 func pfloat64(x float64) *float64 {
