@@ -249,19 +249,19 @@ func isSameMonitor(a mackerel.Monitor, b mackerel.Monitor, flagNameUniquenessEna
 	return "", false
 }
 
-func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) (bool, error) {
+func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) error {
 	f := "Scopes"
 	vf := v.FieldByName("Scopes")
 	if !vf.IsValid() {
-		return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+		return fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 	}
 	scopes, ok := vf.Interface().([]string)
 	if !ok {
-		return false, fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
+		return fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
 	} else if len(scopes) == 0 {
-		return false, fmt.Errorf("Monitor '%s' has empty '%s'", label, f)
+		return fmt.Errorf("Monitor '%s' has empty '%s'", label, f)
 	}
-	return true, nil
+	return nil
 }
 
 func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
@@ -305,7 +305,9 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
 				}
 			}
-			return validateRuleAnomalyDetectionScopes(v, label)
+			if err := validateRuleAnomalyDetectionScopes(v, label); err != nil {
+				return false, err
+			}
 		case *mackerel.MonitorConnectivity:
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
