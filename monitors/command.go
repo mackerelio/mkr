@@ -154,6 +154,10 @@ func decodeMonitor(mes json.RawMessage) (mackerel.Monitor, error) {
 		m = &mackerel.MonitorExpression{}
 	case "anomalyDetection":
 		m = &mackerel.MonitorAnomalyDetection{}
+	case "query":
+		m = &mackerel.MonitorQuery{}
+	default:
+		return nil, fmt.Errorf("unknown type: %q", typeData.Type)
 	}
 	if err := json.Unmarshal(mes, m); err != nil {
 		return nil, err
@@ -309,6 +313,16 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 				return false, err
 			}
 		case *mackerel.MonitorConnectivity:
+		case *mackerel.MonitorQuery:
+			if m.Name == "" {
+				return false, fmt.Errorf("Query Monitoring should have 'name'")
+			}
+			if m.Query == "" {
+				return false, fmt.Errorf("Query Monitoring '%s' should have 'query'", m.Name)
+			}
+			if m.Operator == "" {
+				return false, fmt.Errorf("Query monitoring '%s' should have 'operator'", m.Operator)
+			}
 		default:
 			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
 		}
