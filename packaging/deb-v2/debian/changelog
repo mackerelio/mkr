@@ -1,3 +1,12 @@
+mkr (0.59.0-1.v2) stable; urgency=low
+
+  * Support query monitorings (by rmatsuoka)
+    <https://github.com/mackerelio/mkr/pull/664>
+  * fix unintentionally return in validateRules (by rmatsuoka)
+    <https://github.com/mackerelio/mkr/pull/663>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 26 Nov 2024 06:13:27 +0000
+
 mkr (0.58.0-1.v2) stable; urgency=low
 
   * Bump the stable-packages group with 3 updates (by dependabot[bot])

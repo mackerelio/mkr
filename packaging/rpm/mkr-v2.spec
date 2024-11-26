@@ -35,6 +35,10 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Nov 26 2024 <mackerel-developers@hatena.ne.jp> - 0.59.0
+- Support query monitorings (by rmatsuoka)
+- fix unintentionally return in validateRules (by rmatsuoka)
+
 * Wed Jun 12 2024 <mackerel-developers@hatena.ne.jp> - 0.58.0
 - Bump the stable-packages group with 3 updates (by dependabot[bot])
 - Update Go and dependencies (by lufia)

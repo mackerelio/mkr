@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.59.0 (2024-11-26)
+
+* Support query monitorings #664 (rmatsuoka)
+* fix unintentionally return in validateRules #663 (rmatsuoka)
+
+
 ## 0.58.0 (2024-06-12)
 
 * Bump the stable-packages group with 3 updates #651 (dependabot[bot])
