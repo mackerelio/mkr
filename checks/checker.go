@@ -75,7 +75,7 @@ func (re *result) tapFormat(num int) string {
 	}
 	b, _ := yaml.Marshal(re)
 	// indent
-	yamlStr := "  " + strings.Replace(strings.TrimSpace(string(b)), "\n", "\n  ", -1)
+	yamlStr := "  " + strings.ReplaceAll(strings.TrimSpace(string(b)), "\n", "\n  ")
 	return fmt.Sprintf("%s %d - %s\n  ---\n%s\n  ...",
 		okOrNot, num, re.Name, yamlStr)
 }

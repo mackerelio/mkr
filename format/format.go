@@ -34,16 +34,13 @@ func PrettyPrintJSON(outStream io.Writer, src interface{}, query string) error {
 	return jq.FilterJSON(outStream, src, query)
 }
 
+var angleBracketReplacer = strings.NewReplacer(`\u003c`, "<", `\u003e`, ">")
+
 // JSONMarshalIndent call json.MarshalIndent and replace encoded angle brackets
 func JSONMarshalIndent(src interface{}, prefix, indent string) string {
 	dataRaw, err := json.MarshalIndent(src, prefix, indent)
 	logger.DieIf(err)
-	return replaceAngleBrackets(string(dataRaw))
-}
-
-func replaceAngleBrackets(s string) string {
-	s = strings.Replace(s, "\\u003c", "<", -1)
-	return strings.Replace(s, "\\u003e", ">", -1)
+	return angleBracketReplacer.Replace(string(dataRaw))
 }
 
 // ISO8601Extended format

@@ -110,6 +110,8 @@ func joinMonitorsAndHosts(client *mackerel.Client, alerts []*mackerel.Alert) []*
 	return alertSets
 }
 
+var statusRegexp = regexp.MustCompile("^[2-5][0-9][0-9]$")
+
 func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	const layout = "2006-01-02 15:04:05"
 
@@ -165,7 +167,6 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 				monitorMsg = fmt.Sprintf("%s %s %.2f", m.Service, m.Metric, alert.Value)
 			}
 		case *mackerel.MonitorExternalHTTP:
-			statusRegexp, _ := regexp.Compile("^[2345][0-9][0-9]$")
 			switch alert.Status {
 			case "CRITICAL":
 				if statusRegexp.MatchString(alert.Message) && m.ResponseTimeCritical != nil {
@@ -225,11 +226,14 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 	return fmt.Sprintf("%s %s %s %s%s", alert.ID, time.Unix(alert.OpenedAt, 0).Format(layout), statusMsg, monitorMsg, hostMsg)
 }
 
-var expressionNewlinePattern = regexp.MustCompile(`\s*[\r\n]+\s*`)
+var (
+	expressionNewlinePattern      = regexp.MustCompile(`\s*[\r\n]+\s*`)
+	expressionParenthesisReplacer = strings.NewReplacer("( ", "(", " )", ")")
+)
 
 func formatExpressionOneline(expr string) string {
-	expr = strings.Trim(expressionNewlinePattern.ReplaceAllString(expr, " "), " ")
-	return strings.Replace(strings.Replace(expr, "( ", "(", -1), " )", ")", -1)
+	expr = strings.TrimSpace(expressionNewlinePattern.ReplaceAllString(expr, " "))
+	return expressionParenthesisReplacer.Replace(expr)
 }
 
 func formatCheckMessage(msg string) string {
@@ -243,7 +247,7 @@ func formatCheckMessage(msg string) string {
 		truncated = true
 	}
 	if truncated {
-		msg = msg + "..."
+		msg += "..."
 	}
 	return msg
 }
