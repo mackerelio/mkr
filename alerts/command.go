@@ -36,7 +36,7 @@ var Command = cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",
-			ArgsUsage: "[--service | -s <service>] [--host-status | -S <file>] [--color | -c] [--with-closed | -w] [--limit | -l]",
+			ArgsUsage: "[--service | -s <service>] [--host-status | -S <host-status>] [--color | -c] [--with-closed | -w] [--limit | -l]",
 			Description: `
     Shows alerts in human-readable format.
 `,
