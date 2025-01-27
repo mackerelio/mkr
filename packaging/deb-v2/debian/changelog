@@ -1,3 +1,26 @@
+mkr (0.59.1-1.v2) stable; urgency=low
+
+  * Bump the stable-packages group across 1 directory with 3 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/672>
+  * Fix CI build (by ne-sachirou)
+    <https://github.com/mackerelio/mkr/pull/671>
+  * Bump golang.org/x/net from 0.23.0 to 0.33.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/669>
+  * host-status option doesn't receive File in alerts command (by do-su-0805)
+    <https://github.com/mackerelio/mkr/pull/668>
+  * Use strings.Replacer and strings.ReplaceAll where appropriate (by itchyny)
+    <https://github.com/mackerelio/mkr/pull/667>
+  * use mackerelio/workflows@v1.2.0 (by yseto)
+    <https://github.com/mackerelio/mkr/pull/666>
+  * Bump alpine from 3.19.1 to 3.20.3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/661>
+  * Bump golang from 1.22-alpine to 1.23-alpine (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/660>
+  * Bump docker/build-push-action from 5 to 6 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/654>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 27 Jan 2025 15:50:52 +0000
+
 mkr (0.59.0-1.v2) stable; urgency=low
 
   * Support query monitorings (by rmatsuoka)

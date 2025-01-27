@@ -35,6 +35,17 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Jan 27 2025 <mackerel-developers@hatena.ne.jp> - 0.59.1
+- Bump the stable-packages group across 1 directory with 3 updates (by dependabot[bot])
+- Fix CI build (by ne-sachirou)
+- Bump golang.org/x/net from 0.23.0 to 0.33.0 (by dependabot[bot])
+- host-status option doesn't receive File in alerts command (by do-su-0805)
+- Use strings.Replacer and strings.ReplaceAll where appropriate (by itchyny)
+- use mackerelio/workflows@v1.2.0 (by yseto)
+- Bump alpine from 3.19.1 to 3.20.3 (by dependabot[bot])
+- Bump golang from 1.22-alpine to 1.23-alpine (by dependabot[bot])
+- Bump docker/build-push-action from 5 to 6 (by dependabot[bot])
+
 * Tue Nov 26 2024 <mackerel-developers@hatena.ne.jp> - 0.59.0
 - Support query monitorings (by rmatsuoka)
 - fix unintentionally return in validateRules (by rmatsuoka)
