@@ -9,13 +9,13 @@ require (
 	github.com/Songmu/prompter v0.5.1
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
-	github.com/fatih/color v1.17.0
+	github.com/fatih/color v1.18.0
 	github.com/google/go-github/v49 v49.1.0
 	github.com/itchyny/gojq v0.12.16
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
-	github.com/mackerelio/mackerel-agent v0.81.0
-	github.com/mackerelio/mackerel-client-go v0.33.1
+	github.com/mackerelio/mackerel-agent v0.84.0
+	github.com/mackerelio/mackerel-client-go v0.34.0
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
@@ -23,7 +23,7 @@ require (
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.15
 	github.com/yudai/gojsondiff v1.0.0
-	golang.org/x/oauth2 v0.21.0
+	golang.org/x/oauth2 v0.25.0
 	golang.org/x/sync v0.10.0
 	golang.org/x/text v0.21.0
 	gopkg.in/yaml.v2 v2.4.0
