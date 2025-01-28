@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.59.1 (2025-01-27)
+
+* Bump the stable-packages group across 1 directory with 3 updates #672 (dependabot[bot])
+* Fix CI build #671 (ne-sachirou)
+* Bump golang.org/x/net from 0.23.0 to 0.33.0 #669 (dependabot[bot])
+* host-status option doesn't receive File in alerts command #668 (do-su-0805)
+* Use strings.Replacer and strings.ReplaceAll where appropriate #667 (itchyny)
+* use mackerelio/workflows@v1.2.0 #666 (yseto)
+* Bump alpine from 3.19.1 to 3.20.3 #661 (dependabot[bot])
+* Bump golang from 1.22-alpine to 1.23-alpine #660 (dependabot[bot])
+* Bump docker/build-push-action from 5 to 6 #654 (dependabot[bot])
+
+
 ## 0.59.0 (2024-11-26)
 
 * Support query monitorings #664 (rmatsuoka)
