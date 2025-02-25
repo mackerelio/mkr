@@ -1,5 +1,10 @@
 name: Build
 
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
 on:
   push:
     branches:
@@ -114,6 +119,13 @@ jobs:
         env:
           AWS_REGION: us-east-1
 
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get tag
         id: get_tag
         run: echo "::set-output name=tag::${GITHUB_REF##*/}"
@@ -130,3 +142,5 @@ jobs:
             mackerel/mkr:${{ steps.get_tag.outputs.tag }}
             public.ecr.aws/mackerel/mkr:latest
             public.ecr.aws/mackerel/mkr:${{ steps.get_tag.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/mkr:latest
+            ghcr.io/${{ github.repository_owner }}/mkr:${{ steps.get_tag.outputs.tag }}
