@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.59.2 (2025-03-04)
+
+* fix permission #686 (yseto)
+* added container registry GHCR #684 (yseto)
+* added container registry ECR Public #683 (yseto)
+* Bump mackerelio/workflows from 1.2.0 to 1.4.0 #682 (dependabot[bot])
+
+
 ## 0.59.1 (2025-01-27)
 
 * Bump the stable-packages group across 1 directory with 3 updates #672 (dependabot[bot])

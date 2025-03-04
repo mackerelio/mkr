@@ -1,3 +1,16 @@
+mkr (0.59.2-1.v2) stable; urgency=low
+
+  * fix permission (by yseto)
+    <https://github.com/mackerelio/mkr/pull/686>
+  * added container registry GHCR (by yseto)
+    <https://github.com/mackerelio/mkr/pull/684>
+  * added container registry ECR Public (by yseto)
+    <https://github.com/mackerelio/mkr/pull/683>
+  * Bump mackerelio/workflows from 1.2.0 to 1.4.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/682>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 4 Mar 2025 02:14:09 +0000
+
 mkr (0.59.1-1.v2) stable; urgency=low
 
   * Bump the stable-packages group across 1 directory with 3 updates (by dependabot[bot])

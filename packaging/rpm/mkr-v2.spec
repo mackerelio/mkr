@@ -35,6 +35,12 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Mar 4 2025 <mackerel-developers@hatena.ne.jp> - 0.59.2
+- fix permission (by yseto)
+- added container registry GHCR (by yseto)
+- added container registry ECR Public (by yseto)
+- Bump mackerelio/workflows from 1.2.0 to 1.4.0 (by dependabot[bot])
+
 * Mon Jan 27 2025 <mackerel-developers@hatena.ne.jp> - 0.59.1
 - Bump the stable-packages group across 1 directory with 3 updates (by dependabot[bot])
 - Fix CI build (by ne-sachirou)
