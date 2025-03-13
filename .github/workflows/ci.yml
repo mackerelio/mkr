@@ -21,14 +21,14 @@ jobs:
     uses: mackerelio/workflows/.github/workflows/go-test.yml@v1.4.0
   build:
     needs: [lint, test]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
     steps:
       - run: |
           sudo apt-get update
           sudo apt-get install -y \
             rpm devscripts debhelper fakeroot \
-            crossbuild-essential-arm64 crossbuild-essential-armhf
+            crossbuild-essential-arm64 crossbuild-essential-armhf build-essential
           mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -48,7 +48,7 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/download-artifact@v4
@@ -91,7 +91,7 @@ jobs:
   build_images_and_push:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
