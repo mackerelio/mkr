@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.60.0 (2025-03-31)
+
+* update mackerel-client-go to v0.36.0 #691 (fujiwara)
+* replace to newer runner-images #690 (yseto)
+* Bump golang.org/x/net from 0.33.0 to 0.36.0 #689 (dependabot[bot])
+
+
 ## 0.59.2 (2025-03-04)
 
 * fix permission #686 (yseto)

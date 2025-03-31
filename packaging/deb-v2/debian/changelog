@@ -1,3 +1,14 @@
+mkr (0.60.0-1.v2) stable; urgency=low
+
+  * update mackerel-client-go to v0.36.0 (by fujiwara)
+    <https://github.com/mackerelio/mkr/pull/691>
+  * replace to newer runner-images (by yseto)
+    <https://github.com/mackerelio/mkr/pull/690>
+  * Bump golang.org/x/net from 0.33.0 to 0.36.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/689>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 31 Mar 2025 06:35:18 +0000
+
 mkr (0.59.2-1.v2) stable; urgency=low
 
   * fix permission (by yseto)

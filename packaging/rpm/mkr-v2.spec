@@ -35,6 +35,11 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Mar 31 2025 <mackerel-developers@hatena.ne.jp> - 0.60.0
+- update mackerel-client-go to v0.36.0 (by fujiwara)
+- replace to newer runner-images (by yseto)
+- Bump golang.org/x/net from 0.33.0 to 0.36.0 (by dependabot[bot])
+
 * Tue Mar 4 2025 <mackerel-developers@hatena.ne.jp> - 0.59.2
 - fix permission (by yseto)
 - added container registry GHCR (by yseto)
