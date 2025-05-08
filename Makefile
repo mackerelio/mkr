@@ -53,18 +53,21 @@ deb: deb-v2-x86 deb-v2-arm64 deb-v2-arm
 
 .PHONY: deb-v2-x86
 deb-v2-x86:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=amd64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
 .PHONY: deb-v2-arm64
 deb-v2-arm64:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=arm64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarm64
 
 .PHONY: deb-v2-arm
 deb-v2-arm:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=arm ARM=6 make build # Build ARMv6 binary for Raspbian
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarmhf
@@ -72,4 +75,5 @@ deb-v2-arm:
 .PHONY: clean
 clean:
 	rm -fr build snapshot
+	git clean -f -d ./packaging
 	go clean
