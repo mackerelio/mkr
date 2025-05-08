@@ -397,3 +397,20 @@ func doAlertsClose(c *cli.Context) error {
 	}
 	return nil
 }
+
+func findAlertLogs(c *cli.Context) error {
+	if len(c.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(c, "alerts", 1)
+	}
+
+	alertId := c.Args()[0]
+
+	client := mackerelclient.NewFromContext(c)
+	logs, err := client.FindAlertLogs(alertId, nil)
+	logger.DieIf(err)
+
+	err = format.PrettyPrintJSON(os.Stdout, logs, "")
+	logger.DieIf(err)
+
+	return nil
+}
