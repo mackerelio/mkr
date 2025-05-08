@@ -70,6 +70,15 @@ var Command = cli.Command{
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
+		{
+			Name:      "logs",
+			Usage:     "get alert logs",
+			ArgsUsage: "<alertId>",
+			Description: `
+		Get alert logs.
+			`,
+			Action: findAlertLogs,
+		},
 	},
 }
 
@@ -403,7 +412,7 @@ func findAlertLogs(c *cli.Context) error {
 		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 
-	alertId := c.Args()[0]
+	alertId := c.Args().Get(0)
 
 	client := mackerelclient.NewFromContext(c)
 	logs, err := client.FindAlertLogs(alertId, nil)
