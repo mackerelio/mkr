@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
@@ -12,6 +13,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "mkr"
+	version, gitcommit := fromVCS()
 	app.Version = fmt.Sprintf("%s (rev:%s)", version, gitcommit)
 	app.Usage = "A CLI tool for mackerel.io"
 	app.Author = "Hatena Co., Ltd."
@@ -38,4 +40,21 @@ func main() {
 		logger.Log("error", err.Error())
 		os.Exit(exitCode)
 	}
+}
+
+func fromVCS() (version, rev string) {
+	version = "unknown"
+	rev = "unknown"
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return
+	}
+	version = info.Main.Version
+	for _, s := range info.Settings {
+		if s.Key == "vcs.revision" {
+			rev = s.Value
+			return
+		}
+	}
+	return
 }
