@@ -24,11 +24,6 @@ jobs:
           next_version: ${{ github.event.inputs.release_version }}
           package_name: mkr
 
-      - run: |
-          CURRENT=${{ steps.start.outputs.currentVersion }}
-          NEXT=${{ steps.start.outputs.nextVersion }}
-          mv packaging/mkr_$CURRENT.orig.tar.gz packaging/mkr_$NEXT.orig.tar.gz
-
       - uses: mackerelio/mackerel-create-release-pull-request-action@main
         with:
           github_token: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
