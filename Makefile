@@ -1,7 +1,7 @@
 BIN := mkr
-VERSION := 0.60.0
-CURRENT_REVISION := $(shell git rev-parse --short HEAD)
-BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
+# This VERSION variable indicates the latest tag.
+VERSION := $(subst v,,$(shell git describe --abbrev=0 --tags))
+BUILD_LDFLAGS := "-w -s"
 export CGO_ENABLED := 0
 
 .PHONY: all
