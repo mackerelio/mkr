@@ -73,16 +73,20 @@ var Command = cli.Command{
 		{
 			Name:      "logs",
 			Usage:     "get alert logs",
-			ArgsUsage: "<alertId>",
+			ArgsUsage: "<alertId> [--limit | -l]",
 			Description: `
 		Get alert logs.
-			`,
+`,
 			Action: findAlertLogs,
+			Flags: []cli.Flag{
+				cli.IntFlag{Name: "limit, l", Value: defaultAlertLogsLimit, Usage: "Set the number of alert logs to display"},
+			},
 		},
 	},
 }
 
 const defaultAlertsLimit int = 100
+const defaultAlertLogsLimit int = 100
 
 type alertSet struct {
 	Alert   *mackerel.Alert
@@ -413,12 +417,35 @@ func findAlertLogs(c *cli.Context) error {
 	}
 
 	alertId := c.Args().Get(0)
+	limit := c.Int("limit")
+	logs := make([]*mackerel.AlertLog, 0, limit)
+	var nextId string
 
 	client := mackerelclient.NewFromContext(c)
-	logs, err := client.FindAlertLogs(alertId, nil)
-	logger.DieIf(err)
 
-	err = format.PrettyPrintJSON(os.Stdout, logs, "")
+	for len(logs) < limit {
+		requestLimit := limit - len(logs)
+		if requestLimit > defaultAlertLogsLimit {
+			requestLimit = defaultAlertLogsLimit
+		}
+
+		param := mackerel.FindAlertLogsParam{
+			NextId: &nextId,
+			Limit:  &requestLimit,
+		}
+
+		log, err := client.FindAlertLogs(alertId, &param)
+		logger.DieIf(err)
+		logs = append(logs, log.AlertLogs...)
+
+		if log.NextID == "" {
+			break
+		}
+
+		nextId = log.NextID
+	}
+
+	err := format.PrettyPrintJSON(os.Stdout, logs, "")
 	logger.DieIf(err)
 
 	return nil
