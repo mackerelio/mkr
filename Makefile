@@ -7,10 +7,6 @@ export CGO_ENABLED := 0
 .PHONY: all
 all: clean cross test rpm deb
 
-.PHONY: devel-deps
-devel-deps:
-	go install github.com/Songmu/goxz/cmd/goxz
-
 .PHONY: test
 test:
 	go test -v ./...
@@ -20,10 +16,10 @@ build:
 	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
 
 .PHONY: cross
-cross: devel-deps
-	goxz -d snapshot -os darwin -arch amd64,arm64 \
+cross:
+	go tool github.com/Songmu/goxz/cmd/goxz -d snapshot -os darwin -arch amd64,arm64 \
 	  -build-ldflags=$(BUILD_LDFLAGS)
-	goxz -d snapshot -os linux -arch 386,amd64,arm64,arm \
+	go tool github.com/Songmu/goxz/cmd/goxz -d snapshot -os linux -arch 386,amd64,arm64,arm \
 	  -build-ldflags=$(BUILD_LDFLAGS)
 
 .PHONY: rpm

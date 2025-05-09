@@ -1,11 +1,10 @@
 module github.com/mackerelio/mkr
 
-go 1.23.0
+go 1.24.0
 
-toolchain go1.23.7
+toolchain go1.24.2
 
 require (
-	github.com/Songmu/goxz v0.9.1
 	github.com/Songmu/prompter v0.5.1
 	github.com/Songmu/retry v0.1.0
 	github.com/Songmu/wrapcommander v0.1.0
@@ -31,6 +30,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/Songmu/goxz v0.9.1 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
@@ -68,3 +68,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+tool github.com/Songmu/goxz/cmd/goxz
