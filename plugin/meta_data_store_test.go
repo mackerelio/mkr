@@ -1,15 +1,13 @@
 package plugin
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewMetaData(t *testing.T) {
-	tmpd := tempd(t)
-	defer os.RemoveAll(tmpd)
+	tmpd := t.TempDir()
 
 	it, err := newInstallTargetFromString("mackerelio/mackerel-plugin-sample@v1.0.1")
 	assert.Nil(t, err, "error does not occur while newInstallTargetFromString")
