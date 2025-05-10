@@ -104,6 +104,7 @@ func monitorLoadRules(optFilePath string) ([]mackerel.Monitor, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
 	fallback := unicode.UTF8.NewDecoder()
 	r := transform.NewReader(f, unicode.BOMOverride(fallback))
 	return decodeMonitors(r)
