@@ -15,14 +15,6 @@ import (
 	"github.com/urfave/cli"
 )
 
-func tempd(t *testing.T) string {
-	tmpd, err := os.MkdirTemp("", "mkr-plugin-install")
-	if err != nil {
-		t.Fatal(err)
-	}
-	return tmpd
-}
-
 func assertEqualFileContent(t *testing.T, aFile, bFile, message string) {
 	aContent, err := os.ReadFile(aFile)
 	if err != nil {
@@ -37,8 +29,7 @@ func assertEqualFileContent(t *testing.T, aFile, bFile, message string) {
 
 func TestSetupPluginDir(t *testing.T) {
 	t.Run("Creating plugin dir is successful", func(t *testing.T) {
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 
 		pluginDir, err := setupPluginDir(tmpd)
 		assert.Equal(t, tmpd, pluginDir, "returns default plugin directory")
@@ -64,8 +55,7 @@ func TestSetupPluginDir(t *testing.T) {
 		if isWin {
 			t.Skip("skipping test on windows")
 		}
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 		err := os.Chmod(tmpd, 0500)
 		assert.Nil(t, err, "chmod finished successfully")
 
@@ -80,8 +70,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 	defer ts.Close()
 
 	t.Run("Response not found", func(t *testing.T) {
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 
 		fpath, err := downloadPluginArtifact(ts.URL+"/not_found.zip", tmpd)
 		assert.Equal(t, "", fpath, "fpath is empty")
@@ -89,8 +78,7 @@ func TestDownloadPluginArtifact(t *testing.T) {
 	})
 
 	t.Run("Download is finished successfully", func(t *testing.T) {
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 
 		fpath, err := downloadPluginArtifact(ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd)
 		assert.NoError(t, err)
@@ -234,8 +222,7 @@ func TestDoPluginInstall(t *testing.T) {
 	t.Run("specify URL directly", func(t *testing.T) {
 		ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
 		defer ts.Close()
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 
 		ctx := newPluginInstallContext(t, ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
 		err := doPluginInstall(ctx)
@@ -262,8 +249,7 @@ func TestDoPluginInstall(t *testing.T) {
 			scheme += "/"
 		}
 
-		tmpd := tempd(t)
-		defer os.RemoveAll(tmpd)
+		tmpd := t.TempDir()
 
 		ctx := newPluginInstallContext(t, scheme+fpath, tmpd, false)
 		err = doPluginInstall(ctx)
