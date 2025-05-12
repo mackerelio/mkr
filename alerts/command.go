@@ -73,13 +73,14 @@ var Command = cli.Command{
 		{
 			Name:      "logs",
 			Usage:     "get alert logs",
-			ArgsUsage: "<alertId> [--limit | -l]",
+			ArgsUsage: "<alertId> [--limit | -l] [--jq <formula>]",
 			Description: `
 		Get alert logs.
 `,
 			Action: findAlertLogs,
 			Flags: []cli.Flag{
 				cli.IntFlag{Name: "limit, l", Value: defaultAlertLogsLimit, Usage: "Set the number of alert logs to display"},
+				jq.CommandLineFlag,
 			},
 		},
 	},
@@ -416,12 +417,11 @@ func findAlertLogs(c *cli.Context) error {
 		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 
+	client := mackerelclient.NewFromContext(c)
 	alertId := c.Args().Get(0)
 	limit := c.Int("limit")
 	logs := make([]*mackerel.AlertLog, 0, limit)
 	var nextId string
-
-	client := mackerelclient.NewFromContext(c)
 
 	for len(logs) < limit {
 		requestLimit := limit - len(logs)
@@ -445,7 +445,7 @@ func findAlertLogs(c *cli.Context) error {
 		nextId = log.NextID
 	}
 
-	err := format.PrettyPrintJSON(os.Stdout, logs, "")
+	err := format.PrettyPrintJSON(os.Stdout, logs, c.String("jq"))
 	logger.DieIf(err)
 
 	return nil
