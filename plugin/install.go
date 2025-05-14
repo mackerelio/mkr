@@ -1,8 +1,10 @@
 package plugin
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path"
 	"path/filepath"
@@ -10,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/mackerelio/mkr/logger"
-	"github.com/mholt/archiver/v3"
+	"github.com/mholt/archives"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
@@ -141,7 +143,7 @@ func doPluginInstall(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
-	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), workdir, overwrite)
+	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), overwrite)
 	if err == nil {
 		if meta != nil {
 			if err := meta.store("release_tag", it.releaseTag); err != nil {
@@ -209,23 +211,25 @@ func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
 }
 
 // Extract artifact and install plugin
-func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) error {
-	var unarchiver archiver.Unarchiver
-	// unzip artifact to work directory
-	unarchiver = archiver.DefaultZip
-	if strings.HasSuffix(artifactFile, ".tar.gz") || strings.HasSuffix(artifactFile, ".tgz") {
-		unarchiver = archiver.DefaultTarGz
+func installByArtifact(artifactFile, bindir string, overwrite bool) error {
+	fd, err := os.Open(artifactFile)
+	if err != nil {
+		return err
 	}
+	defer fd.Close()
 
-	if err := unarchiver.Unarchive(artifactFile, workdir); err != nil {
+	format, stream, err := archives.Identify(context.TODO(), artifactFile, fd)
+	if err != nil {
 		return err
 	}
 
+	ex, ok := format.(archives.Extractor)
+	if !ok {
+		return fmt.Errorf("unexpected format : %s", path.Base(artifactFile))
+	}
+
 	// Look for plugin files recursively, and place those to binPath
-	return filepath.Walk(workdir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
+	return ex.Extract(context.TODO(), stream, func(ctx context.Context, info archives.FileInfo) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -234,7 +238,17 @@ func installByArtifact(artifactFile, bindir, workdir string, overwrite bool) err
 		name := info.Name()
 		isExecutable := isWin || (info.Mode()&0111) != 0
 		if isExecutable && looksLikePlugin(name) {
-			return placePlugin(path, filepath.Join(bindir, name), overwrite)
+			fd, err := info.Open()
+			if err != nil {
+				return err
+			}
+			defer fd.Close()
+			b, err := io.ReadAll(fd)
+			if err != nil {
+				return err
+			}
+
+			return placePlugin(b, info.Mode(), filepath.Join(bindir, name), overwrite)
 		}
 		// `path` is a file but not plugin.
 		return nil
@@ -248,12 +262,12 @@ func looksLikePlugin(name string) bool {
 	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
 }
 
-func placePlugin(src, dest string, overwrite bool) error {
+func placePlugin(b []byte, mode fs.FileMode, dest string, overwrite bool) error {
 	_, err := os.Stat(dest)
 	if err == nil && !overwrite {
 		logger.Log("", fmt.Sprintf("%s already exists. Skip installing for now", dest))
 		return errSkipInstall
 	}
 	logger.Log("", fmt.Sprintf("Installing %s", dest))
-	return os.Rename(src, dest)
+	return os.WriteFile(dest, b, mode)
 }
