@@ -1,7 +1,7 @@
 BIN := mkr
-VERSION := 0.60.0
-CURRENT_REVISION := $(shell git rev-parse --short HEAD)
-BUILD_LDFLAGS := "-w -s -X main.gitcommit=$(CURRENT_REVISION)"
+# This VERSION variable indicates the latest tag.
+VERSION := $(subst v,,$(shell git describe --abbrev=0 --tags))
+BUILD_LDFLAGS := "-w -s"
 export CGO_ENABLED := 0
 
 .PHONY: all
@@ -53,23 +53,30 @@ deb: deb-v2-x86 deb-v2-arm64 deb-v2-arm
 
 .PHONY: deb-v2-x86
 deb-v2-x86:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=amd64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
+	cp -f packaging/dummy-empty.tar.gz packaging/mkr_${VERSION}.orig.tar.gz
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us
 
 .PHONY: deb-v2-arm64
 deb-v2-arm64:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=arm64 make build
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
+	cp -f packaging/dummy-empty.tar.gz packaging/mkr_${VERSION}.orig.tar.gz
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarm64
 
 .PHONY: deb-v2-arm
 deb-v2-arm:
+	git clean -f -d ./packaging
 	GOOS=linux GOARCH=arm ARM=6 make build # Build ARMv6 binary for Raspbian
 	cp $(BIN) packaging/deb-v2/debian/$(BIN).bin
+	cp -f packaging/dummy-empty.tar.gz packaging/mkr_${VERSION}.orig.tar.gz
 	cd packaging/deb-v2 && debuild --no-tgz-check -rfakeroot -uc -us -aarmhf
 
 .PHONY: clean
 clean:
 	rm -fr build snapshot
+	git clean -f -d ./packaging
 	go clean
