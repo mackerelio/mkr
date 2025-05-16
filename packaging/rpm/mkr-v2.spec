@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Fri May 16 2025 <mackerel-developers@hatena.ne.jp> - 0.61.0
+- Remove rewrite some files on every releases (by yseto)
+- replace to use github.com/mholt/archives (by yseto)
+- use Go 1.24 (by yseto)
+- Implement find alert logs command (by appare45)
+- Updated mackerel-client-go to v0.37.0 (by appare45)
+
 * Mon Mar 31 2025 <mackerel-developers@hatena.ne.jp> - 0.60.0
 - update mackerel-client-go to v0.36.0 (by fujiwara)
 - replace to newer runner-images (by yseto)

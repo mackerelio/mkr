@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.61.0 (2025-05-16)
+
+* Remove rewrite some files on every releases #701 (yseto)
+* replace to use github.com/mholt/archives #700 (yseto)
+* use Go 1.24 #699 (yseto)
+* Implement find alert logs command #697 (appare45)
+* Updated mackerel-client-go to v0.37.0 #696 (appare45)
+
+
 ## 0.60.0 (2025-03-31)
 
 * update mackerel-client-go to v0.36.0 #691 (fujiwara)
