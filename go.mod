@@ -15,7 +15,7 @@ require (
 	github.com/mackerelio/checkers v0.2.0
 	github.com/mackerelio/mackerel-agent v0.84.0
 	github.com/mackerelio/mackerel-client-go v0.37.0
-	github.com/mholt/archives v0.1.1
+	github.com/mholt/archives v0.1.2
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.9.0
@@ -34,7 +34,7 @@ require (
 	github.com/Songmu/goxz v0.9.1 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
-	github.com/andybalholm/brotli v1.1.1 // indirect
+	github.com/andybalholm/brotli v1.1.2-0.20250424173009-453214e765f3 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/sevenzip v1.6.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
