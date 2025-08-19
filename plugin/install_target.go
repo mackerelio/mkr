@@ -173,8 +173,7 @@ func (it *installTarget) getTagFromReleasesURL(owner, repo string) (string, erro
 		},
 	}
 
-	ctx := context.Background()
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
+	req, err := http.NewRequest(http.MethodHead, latestURL, nil)
 	if err != nil {
 		return "", err
 	}
@@ -183,7 +182,7 @@ func (it *installTarget) getTagFromReleasesURL(owner, repo string) (string, erro
 	if err != nil {
 		return "", err
 	}
-	io.Copy(io.Discard, resp.Body)
+	io.Copy(io.Discard, resp.Body) //nolint:errcheck
 	defer resp.Body.Close()
 
 	loc := resp.Header.Get("Location")
