@@ -181,6 +181,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			owner:        "owner1",
 			repo:         "check-repo1",
 			apiGithubURL: apiGithubServer.URL,
+			githubURL:    apiGithubServer.URL,
 		}
 		url, err := it.makeDownloadURL()
 		assert.NoError(t, err, "makeDownloadURL is successful")
@@ -196,6 +197,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			owner:        "owner1",
 			repo:         "check-not-found",
 			apiGithubURL: apiGithubServer.URL,
+			githubURL:    apiGithubServer.URL,
 		}
 		_, err = it.makeDownloadURL()
 		assert.Error(t, err, "makeDownloadURL is failed")
@@ -224,6 +226,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			pluginName:   "mackerel-plugin-repo1",
 			apiGithubURL: apiGithubServer.URL,
 			rawGithubURL: rawGithubServer.URL,
+			githubURL:    rawGithubServer.URL,
 		}
 
 		url, err := it.makeDownloadURL()
@@ -324,6 +327,53 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 
 		assert.Equal(t, "mackerelio", it.owner, "owner is cached")
 		assert.Equal(t, "mackerel-plugin-sample", it.repo, "repo is cached")
+	}
+}
+
+func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/owner1/repo1/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Location", "https://github.com/owner1/repo1/releases/tag/v0.5.1")
+		w.WriteHeader(http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/owner2/repo2/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Location", "https://github.com/other/path")
+		w.WriteHeader(http.StatusMovedPermanently)
+	})
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	{
+		// it already has releaseTag
+		it := &installTarget{releaseTag: "v0.1.2"}
+		releaseTag, err := it.getTagFromReleasesURL("owner", "repo")
+		assert.NoError(t, err, "getReleaseTag is successful")
+		assert.Equal(t, "v0.1.2", releaseTag, "Returns correct releaseTag")
+	}
+
+	{
+		// Specified owner and repo is not found
+		it := &installTarget{githubURL: ts.URL}
+		releaseTag, err := it.getTagFromReleasesURL("owner1", "not-found-repo")
+		assert.Error(t, err, "Returns err if the repository is not found")
+		assert.Equal(t, "", releaseTag, "Returns empty string")
+	}
+
+	{
+		// Get latest releaseTag correctly
+		it := &installTarget{githubURL: ts.URL}
+		releaseTag, err := it.getTagFromReleasesURL("owner1", "repo1")
+		assert.NoError(t, err, "getReleaseTag is successful")
+		assert.Equal(t, "v0.5.1", releaseTag, "releaseTag is fetched correctly from api")
+	}
+
+	{
+		// Specified owner and repo is not found (wrong redirect url)
+		it := &installTarget{githubURL: ts.URL}
+		releaseTag, err := it.getTagFromReleasesURL("owner2", "repo2")
+		assert.Error(t, err, "Returns err if the repository is not found")
+		assert.Equal(t, "", releaseTag, "Returns empty string")
 	}
 }
 

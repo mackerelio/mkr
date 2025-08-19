@@ -4,10 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
+	"path"
 	"regexp"
 	"runtime"
 	"strings"
+	"time"
 )
 
 type installTarget struct {
@@ -20,11 +24,13 @@ type installTarget struct {
 	// fields for testing
 	rawGithubURL string
 	apiGithubURL string
+	githubURL    string
 }
 
 const (
 	defaultRawGithubURL = "https://raw.githubusercontent.com"
 	defaultAPIGithubURL = "https://api.github.com"
+	defaultGithubURL    = "https://github.com"
 )
 
 // the pattern of installTarget string
@@ -73,9 +79,12 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 		return "", err
 	}
 
-	releaseTag, err := it.getReleaseTag(owner, repo)
-	if err != nil {
-		return "", err
+	releaseTag, err := it.getTagFromReleasesURL(owner, repo)
+	if releaseTag == "" || err != nil {
+		releaseTag, err = it.getReleaseTag(owner, repo)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	filename := fmt.Sprintf("%s_%s_%s.zip", url.PathEscape(repo), runtime.GOOS, runtime.GOARCH)
@@ -150,11 +159,80 @@ func (it *installTarget) getReleaseTag(owner, repo string) (string, error) {
 	return it.releaseTag, nil
 }
 
+func (it *installTarget) getTagFromReleasesURL(owner, repo string) (string, error) {
+	if it.releaseTag != "" {
+		return it.releaseTag, nil
+	}
+
+	latestURL := fmt.Sprintf("%s/%s/%s/releases/latest", it.getGithubURL(), owner, repo)
+
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	ctx := context.Background()
+	req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("User-Agent", userAgent)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	io.Copy(io.Discard, resp.Body)
+	defer resp.Body.Close()
+
+	loc := resp.Header.Get("Location")
+	if loc == "" {
+		return "", fmt.Errorf("no Location header found (status=%d)", resp.StatusCode)
+	}
+
+	u, err := resp.Request.URL.Parse(loc)
+	if err != nil {
+		return "", err
+	}
+
+	tag, err := extractTagFromReleasesURL(u)
+	if err != nil {
+		return "", err
+	}
+	it.releaseTag = tag
+	return it.releaseTag, nil
+}
+
+func extractTagFromReleasesURL(u *url.URL) (string, error) {
+	// /<owner>/<repo>/releases/tag/v1.2.3
+	segments := strings.Split(strings.Trim(u.EscapedPath(), "/"), "/")
+	for i := 0; i < len(segments)-1; i++ {
+		if segments[i] == "releases" && i+1 < len(segments) && segments[i+1] == "tag" {
+			// 末尾がタグ
+			raw := path.Base(u.EscapedPath())
+			tag, err := url.PathUnescape(raw)
+			if err != nil {
+				return "", err
+			}
+			return tag, nil
+		}
+	}
+	return "", fmt.Errorf("not a releases/tag URL")
+}
+
 func (it *installTarget) getRawGithubURL() string {
 	if it.rawGithubURL != "" {
 		return it.rawGithubURL
 	}
 	return defaultRawGithubURL
+}
+
+func (it *installTarget) getGithubURL() string {
+	if it.githubURL != "" {
+		return it.githubURL
+	}
+	return defaultGithubURL
 }
 
 // Returns URL object which Github Client.BaseURL can receive as it is
