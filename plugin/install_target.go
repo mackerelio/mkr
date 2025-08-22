@@ -208,7 +208,7 @@ func extractTagFromReleasesURL(u *url.URL) (string, error) {
 	segments := strings.Split(strings.Trim(u.EscapedPath(), "/"), "/")
 	for i := 0; i < len(segments)-1; i++ {
 		if segments[i] == "releases" && i+1 < len(segments) && segments[i+1] == "tag" {
-			// 末尾がタグ
+			// Ends with a tag
 			raw := path.Base(u.EscapedPath())
 			tag, err := url.PathUnescape(raw)
 			if err != nil {
