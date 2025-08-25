@@ -13,8 +13,8 @@ require (
 	github.com/itchyny/gojq v0.12.16
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
-	github.com/mackerelio/mackerel-agent v0.84.0
-	github.com/mackerelio/mackerel-client-go v0.37.0
+	github.com/mackerelio/mackerel-agent v0.85.0
+	github.com/mackerelio/mackerel-client-go v0.37.2
 	github.com/mholt/archives v0.1.1
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
@@ -22,9 +22,9 @@ require (
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.15
 	github.com/yudai/gojsondiff v1.0.0
-	golang.org/x/oauth2 v0.27.0
-	golang.org/x/sync v0.11.0
-	golang.org/x/text v0.22.0
+	golang.org/x/oauth2 v0.30.0
+	golang.org/x/sync v0.12.0
+	golang.org/x/text v0.23.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
