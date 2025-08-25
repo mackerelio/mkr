@@ -35,6 +35,21 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Aug 25 2025 <mackerel-developers@hatena.ne.jp> - 0.62.0
+- Get plugin's releaseTag from the releases URL instead of using api (by kazeburo)
+- Bump golang from 1.24-alpine to 1.25-alpine (by dependabot[bot])
+- Bump actions/checkout from 4 to 5 (by dependabot[bot])
+- Bump actions/download-artifact from 4 to 5 (by dependabot[bot])
+- Bump alpine from 3.20.3 to 3.22.1 (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.25.0 to 0.27.0 (by dependabot[bot])
+- Bump github.com/mholt/archives from 0.1.1 to 0.1.3 (by dependabot[bot])
+- Bump the stable-packages group across 1 directory with 5 updates (by dependabot[bot])
+- Bump github.com/urfave/cli from 1.22.15 to 1.22.17 (by dependabot[bot])
+- Bump mackerelio/workflows from 1.4.0 to 1.5.0 (by dependabot[bot])
+- Bump golang.org/x/net from 0.36.0 to 0.38.0 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.16 to 0.12.17 (by dependabot[bot])
+- Bump github.com/stretchr/testify from 1.9.0 to 1.10.0 in the dev-dependencies group (by dependabot[bot])
+
 * Fri May 16 2025 <mackerel-developers@hatena.ne.jp> - 0.61.0
 - Remove rewrite some files on every releases (by yseto)
 - replace to use github.com/mholt/archives (by yseto)

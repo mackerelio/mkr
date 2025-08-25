@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.62.0 (2025-08-25)
+
+* Get plugin's releaseTag from the releases URL instead of using api #714 (kazeburo)
+* Bump golang from 1.24-alpine to 1.25-alpine #713 (dependabot[bot])
+* Bump actions/checkout from 4 to 5 #712 (dependabot[bot])
+* Bump actions/download-artifact from 4 to 5 #711 (dependabot[bot])
+* Bump alpine from 3.20.3 to 3.22.1 #710 (dependabot[bot])
+* Bump golang.org/x/oauth2 from 0.25.0 to 0.27.0 #709 (dependabot[bot])
+* Bump github.com/mholt/archives from 0.1.1 to 0.1.3 #708 (dependabot[bot])
+* Bump the stable-packages group across 1 directory with 5 updates #707 (dependabot[bot])
+* Bump github.com/urfave/cli from 1.22.15 to 1.22.17 #706 (dependabot[bot])
+* Bump mackerelio/workflows from 1.4.0 to 1.5.0 #704 (dependabot[bot])
+* Bump golang.org/x/net from 0.36.0 to 0.38.0 #694 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.16 to 0.12.17 #675 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.9.0 to 1.10.0 in the dev-dependencies group #674 (dependabot[bot])
+
+
 ## 0.61.0 (2025-05-16)
 
 * Remove rewrite some files on every releases #701 (yseto)
