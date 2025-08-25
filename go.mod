@@ -23,7 +23,7 @@ require (
 	github.com/urfave/cli v1.22.17
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/sync v0.12.0
+	golang.org/x/sync v0.16.0
 	golang.org/x/text v0.23.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -31,7 +31,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/STARRY-S/zip v0.2.1 // indirect
-	github.com/Songmu/goxz v0.9.1 // indirect
+	github.com/Songmu/goxz v0.10.1 // indirect
 	github.com/Songmu/timeout v0.4.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.1.2-0.20250424173009-453214e765f3 // indirect
@@ -43,7 +43,6 @@ require (
 	github.com/daviddengcn/go-colortext v1.0.0 // indirect
 	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
-	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -56,11 +55,9 @@ require (
 	github.com/mackerelio/golib v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mholt/archiver/v3 v3.5.1 // indirect
 	github.com/mikelolasagasti/xz v1.0.1 // indirect
 	github.com/minio/minlz v1.0.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/nwaples/rardecode v1.1.3 // indirect
 	github.com/nwaples/rardecode/v2 v2.1.0 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.20.0 // indirect
@@ -70,7 +67,6 @@ require (
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sorairolake/lzip-go v0.3.5 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
-	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
