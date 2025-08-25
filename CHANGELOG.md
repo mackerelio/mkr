@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.62.0 (2025-08-25)
+
+* Get plugin's releaseTag from the releases URL instead of using api #714 (kazeburo)
+
+
 ## 0.61.0 (2025-05-16)
 
 * Remove rewrite some files on every releases #701 (yseto)

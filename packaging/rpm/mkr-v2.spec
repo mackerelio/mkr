@@ -35,6 +35,9 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Aug 25 2025 <mackerel-developers@hatena.ne.jp> - 0.62.0
+- Get plugin's releaseTag from the releases URL instead of using api (by kazeburo)
+
 * Fri May 16 2025 <mackerel-developers@hatena.ne.jp> - 0.61.0
 - Remove rewrite some files on every releases (by yseto)
 - replace to use github.com/mholt/archives (by yseto)

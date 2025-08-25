@@ -1,3 +1,10 @@
+mkr (0.62.0-1.v2) stable; urgency=low
+
+  * Get plugin's releaseTag from the releases URL instead of using api (by kazeburo)
+    <https://github.com/mackerelio/mkr/pull/714>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Mon, 25 Aug 2025 02:23:03 +0000
+
 mkr (0.61.0-1.v2) stable; urgency=low
 
   * Remove rewrite some files on every releases (by yseto)
