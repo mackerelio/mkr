@@ -262,6 +262,37 @@ func looksLikePlugin(name string) bool {
 	return strings.HasPrefix(name, "check-") || strings.HasPrefix(name, "mackerel-plugin-")
 }
 
+// Create temporarily file and move it to destination
+// to avoid partial write or text busy error
+func safeWriteFile(dest string, data []byte, mode os.FileMode) error {
+	tmpFile, err := os.CreateTemp(filepath.Dir(dest), "tmp-*")
+	if err != nil {
+		return fmt.Errorf("failed to create temp file: %w", err)
+	}
+	tmpName := tmpFile.Name()
+	defer os.Remove(tmpName)
+
+	if err := tmpFile.Chmod(mode); err != nil {
+		tmpFile.Close()
+		return fmt.Errorf("failed to set mode: %w", err)
+	}
+
+	if _, err := tmpFile.Write(data); err != nil {
+		tmpFile.Close()
+		return fmt.Errorf("failed to write temp file: %w", err)
+	}
+
+	if err := tmpFile.Close(); err != nil {
+		return fmt.Errorf("failed to close temp file: %w", err)
+	}
+
+	if err := os.Rename(tmpName, dest); err != nil {
+		return fmt.Errorf("failed to rename temp file: %w", err)
+	}
+
+	return nil
+}
+
 func placePlugin(b []byte, mode fs.FileMode, dest string, overwrite bool) error {
 	_, err := os.Stat(dest)
 	if err == nil && !overwrite {
@@ -269,5 +300,5 @@ func placePlugin(b []byte, mode fs.FileMode, dest string, overwrite bool) error 
 		return errSkipInstall
 	}
 	logger.Log("", fmt.Sprintf("Installing %s", dest))
-	return os.WriteFile(dest, b, mode)
+	return safeWriteFile(dest, b, mode)
 }
