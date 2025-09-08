@@ -35,9 +35,6 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-* Mon Sep 8 2025 <mackerel-developers@hatena.ne.jp> - 0.62.1
-- Make plugin install safety to avoid text busy error (by kazeburo)
-
 * Mon Aug 25 2025 <mackerel-developers@hatena.ne.jp> - 0.62.0
 - Get plugin's releaseTag from the releases URL instead of using api (by kazeburo)
 - Bump golang from 1.24-alpine to 1.25-alpine (by dependabot[bot])
