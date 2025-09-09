@@ -1,3 +1,12 @@
+mkr (0.62.1-1.v2) stable; urgency=low
+
+  * fix tarball version (by yseto)
+    <https://github.com/mackerelio/mkr/pull/726>
+  * Make plugin install safety to avoid text busy error (by kazeburo)
+    <https://github.com/mackerelio/mkr/pull/720>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Tue, 9 Sep 2025 01:56:10 +0000
+
 mkr (0.62.0-1.v2) stable; urgency=low
 
   * Get plugin's releaseTag from the releases URL instead of using api (by kazeburo)

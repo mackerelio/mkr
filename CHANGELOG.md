@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.62.1 (2025-09-09)
+
+* fix tarball version #726 (yseto)
+* Make plugin install safety to avoid text busy error #720 (kazeburo)
+
+
 ## 0.62.0 (2025-08-25)
 
 * Get plugin's releaseTag from the releases URL instead of using api #714 (kazeburo)
