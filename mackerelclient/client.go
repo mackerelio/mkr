@@ -9,6 +9,7 @@ type Client interface {
 	FindHost(id string) (*mackerel.Host, error)
 	FindServices() ([]*mackerel.Service, error)
 	FindChannels() ([]*mackerel.Channel, error)
+	FindUsers() ([]*mackerel.User, error)
 	GetOrg() (*mackerel.Org, error)
 	CreateHost(param *mackerel.CreateHostParam) (string, error)
 	UpdateHostStatus(hostID string, status string) error

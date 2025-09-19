@@ -9,6 +9,7 @@ type MockClient struct {
 	findHostCallback            func(id string) (*mackerel.Host, error)
 	findServicesCallback        func() ([]*mackerel.Service, error)
 	findChannelsCallback        func() ([]*mackerel.Channel, error)
+	findUsersCallback           func() ([]*mackerel.User, error)
 	getOrgCallback              func() (*mackerel.Org, error)
 	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
 	updateHostStatusCallback    func(hostID string, status string) error
@@ -170,5 +171,20 @@ func (c *MockClient) ListHostMetricNames(hostID string) ([]string, error) {
 func MockListHostMetricNames(callback func(string) ([]string, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.listHostMetricNamesCallback = callback
+	}
+}
+
+// FindUsers ...
+func (c *MockClient) FindUsers() ([]*mackerel.User, error) {
+	if c.findUsersCallback != nil {
+		return c.findUsersCallback()
+	}
+	return nil, errCallbackNotFound("FindUsers")
+}
+
+// MockFindUsers returns an option to set the callback of FindUsers
+func MockFindUsers(callback func() ([]*mackerel.User, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.findUsersCallback = callback
 	}
 }
