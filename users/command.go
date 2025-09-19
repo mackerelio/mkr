@@ -15,7 +15,7 @@ var CommandUsers = cli.Command{
 	ArgsUsage: "[--verbose | -v] [--format | -f <format>] [--jq <formula>]",
 	Description: `
     List the information of the users.
-    Requests "GET /api/v0/users". See https://mackerel.io/ja/api-docs/entry/users#list .
+    Requests "GET /api/v0/users". See https://mackerel.io/api-docs/entry/users#list .
 `,
 	Action: doUsers,
 	Flags: []cli.Flag{
