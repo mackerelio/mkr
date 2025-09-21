@@ -13,4 +13,5 @@ type Client interface {
 	CreateHost(param *mackerel.CreateHostParam) (string, error)
 	UpdateHostStatus(hostID string, status string) error
 	ListHostMetricNames(id string) ([]string, error)
+	GetTrace(traceID string) (*mackerel.TraceResponse, error)
 }
