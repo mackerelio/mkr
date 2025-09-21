@@ -68,3 +68,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/mackerelio/mackerel-client-go => github.com/mackerelio/mackerel-client-go v0.37.4-0.20250921022114-01bdd54dfe06
