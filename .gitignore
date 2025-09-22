@@ -2,3 +2,4 @@ mkr
 build
 snapshot
 packaging/*.deb
+dist
