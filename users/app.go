@@ -45,9 +45,6 @@ func (ua *userApp) findUsers(param findUsersParam) error {
 		return err
 	}
 
-	// Ensure we have the correct type
-	//	var _ []*mackerel.User = users
-
 	switch {
 	case param.format != "" && ua.jqFilter != "":
 		return fmt.Errorf("--format and --jq options are incompatible.")
