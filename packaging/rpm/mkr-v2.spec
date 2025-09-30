@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Sep 30 2025 <mackerel-developers@hatena.ne.jp> - 0.62.2
+- Bump github.com/mholt/archives from 0.1.3 to 0.1.4 (by dependabot[bot])
+- Bump the stable-packages group across 1 directory with 5 updates (by dependabot[bot])
+- Bump aws-actions/configure-aws-credentials from 4 to 5 (by dependabot[bot])
+- Bump actions/setup-go from 5 to 6 (by dependabot[bot])
+- Bump github.com/stretchr/testify from 1.11.0 to 1.11.1 in the dev-dependencies group (by dependabot[bot])
+
 * Tue Sep 9 2025 <mackerel-developers@hatena.ne.jp> - 0.62.1
 - fix tarball version (by yseto)
 - Make plugin install safety to avoid text busy error (by kazeburo)
