@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.62.2 (2025-09-30)
+
+* Bump github.com/mholt/archives from 0.1.3 to 0.1.4 #732 (dependabot[bot])
+* Bump the stable-packages group across 1 directory with 5 updates #729 (dependabot[bot])
+* Bump aws-actions/configure-aws-credentials from 4 to 5 #723 (dependabot[bot])
+* Bump actions/setup-go from 5 to 6 #722 (dependabot[bot])
+* Bump github.com/stretchr/testify from 1.11.0 to 1.11.1 in the dev-dependencies group #718 (dependabot[bot])
+
+
 ## 0.62.1 (2025-09-09)
 
 * fix tarball version #726 (yseto)
