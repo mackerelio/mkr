@@ -18,7 +18,7 @@ require (
 	github.com/mholt/archives v0.1.4
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.17
 	github.com/yudai/gojsondiff v1.0.0
