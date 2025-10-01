@@ -16,9 +16,9 @@ env:
   DEBIAN_FRONTEND: noninteractive
 jobs:
   lint:
-    uses: mackerelio/workflows/.github/workflows/go-lint.yml@v1.5.0
+    uses: mackerelio/workflows/.github/workflows/go-lint.yml@c7e130d3908894f18068ca4a877e80539b535881 # v1.5.0
   test:
-    uses: mackerelio/workflows/.github/workflows/go-test.yml@v1.5.0
+    uses: mackerelio/workflows/.github/workflows/go-test.yml@c7e130d3908894f18068ca4a877e80539b535881 # v1.5.0
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
@@ -30,15 +30,15 @@ jobs:
             rpm devscripts debhelper fakeroot \
             crossbuild-essential-arm64 crossbuild-essential-armhf build-essential
           mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           go-version: 1.24.x
           cache: true
       - run: make all
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: linux-build-artifacts
           path: |
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: linux-build-artifacts
           path: artifacts/
@@ -75,14 +75,14 @@ jobs:
 
       - name: update homebrew-mackerel-agent
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
         with:
           token: ${{ secrets.MACKERELBOT_GITHUB_TOKEN }}
           event-type: release
           client-payload: '{"product": "mkr"}'
           repository: mackerelio/homebrew-mackerel-agent
 
-      - uses: 8398a7/action-slack@v3
+      - uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,action,eventName,ref,workflow,job,took
@@ -96,35 +96,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           role-session-name: "mkr-${{ github.run_id }}-${{ github.run_number }}"
           aws-region: ap-northeast-1
       - name: Login to Public ECR
-        uses: docker/login-action@v3
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: public.ecr.aws
         env:
           AWS_REGION: us-east-1
 
       - name: Login to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -134,7 +134,7 @@ jobs:
         id: get_tag
         run: echo "::set-output name=tag::${GITHUB_REF##*/}"
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           context: .
           platforms: |
