@@ -55,7 +55,7 @@ require (
 	github.com/mikelolasagasti/xz v1.0.1 // indirect
 	github.com/minio/minlz v1.0.1 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/nwaples/rardecode/v2 v2.1.1 // indirect
+	github.com/nwaples/rardecode/v2 v2.2.0 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.20.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
