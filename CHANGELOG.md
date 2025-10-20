@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.62.3 (2025-10-20)
+
+* Bump github.com/mholt/archives from 0.1.4 to 0.1.5 #742 (dependabot[bot])
+* Bump the stable-packages group across 1 directory with 2 updates #741 (dependabot[bot])
+* Bump aws-actions/configure-aws-credentials from 5.0.0 to 5.1.0 #740 (dependabot[bot])
+* Bump peter-evans/repository-dispatch from 3.0.0 to 4.0.0 #737 (dependabot[bot])
+* added dependabot cooldown #734 (yseto)
+
+
 ## 0.62.2 (2025-09-30)
 
 * Bump github.com/mholt/archives from 0.1.3 to 0.1.4 #732 (dependabot[bot])

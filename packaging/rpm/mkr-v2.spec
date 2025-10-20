@@ -35,6 +35,13 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Oct 20 2025 <mackerel-developers@hatena.ne.jp> - 0.62.3
+- Bump github.com/mholt/archives from 0.1.4 to 0.1.5 (by dependabot[bot])
+- Bump the stable-packages group across 1 directory with 2 updates (by dependabot[bot])
+- Bump aws-actions/configure-aws-credentials from 5.0.0 to 5.1.0 (by dependabot[bot])
+- Bump peter-evans/repository-dispatch from 3.0.0 to 4.0.0 (by dependabot[bot])
+- added dependabot cooldown (by yseto)
+
 * Tue Sep 30 2025 <mackerel-developers@hatena.ne.jp> - 0.62.2
 - Bump github.com/mholt/archives from 0.1.3 to 0.1.4 (by dependabot[bot])
 - Bump the stable-packages group across 1 directory with 5 updates (by dependabot[bot])
