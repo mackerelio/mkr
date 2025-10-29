@@ -19,6 +19,9 @@ jobs:
     uses: mackerelio/workflows/.github/workflows/go-lint.yml@7653987676cc233af59a390d142b5cf6e65a526f # v1.6.0
   test:
     uses: mackerelio/workflows/.github/workflows/go-test.yml@7653987676cc233af59a390d142b5cf6e65a526f # v1.6.0
+    with:
+      pre: |
+        echo "GOTOOLCHAIN=auto" >> $GITHUB_ENV
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
