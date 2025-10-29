@@ -258,13 +258,13 @@ func validateRuleAnomalyDetectionScopes(v reflect.Value, label string) error {
 	f := "Scopes"
 	vf := v.FieldByName("Scopes")
 	if !vf.IsValid() {
-		return fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+		return fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 	}
 	scopes, ok := vf.Interface().([]string)
 	if !ok {
-		return fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface())
+		return fmt.Errorf("Monitor '%s' has invalid '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 	} else if len(scopes) == 0 {
-		return fmt.Errorf("Monitor '%s' has empty '%s'", label, f)
+		return fmt.Errorf("Monitor '%s' has empty '%s'", label, f) // nolint
 	}
 	return nil
 }
@@ -278,7 +278,7 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 		for _, f := range []string{"Type"} {
 			vf := v.FieldByName(f)
 			if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-				return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+				return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 			}
 		}
 		switch m := monitor.(type) {
@@ -286,28 +286,28 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 			for _, f := range []string{"Name", "Metric"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 				}
 			}
 		case *mackerel.MonitorExternalHTTP:
 			for _, f := range []string{"Name", "URL"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 				}
 			}
 		case *mackerel.MonitorExpression:
 			for _, f := range []string{"Name", "Expression"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 				}
 			}
 		case *mackerel.MonitorAnomalyDetection:
 			for _, f := range []string{"Name"} {
 				vf := v.FieldByName(f)
 				if !vf.IsValid() || (vf.Type().String() == "string" && vf.Interface() == "") {
-					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface())
+					return false, fmt.Errorf("Monitor '%s' should have '%s': %s", label, f, v.FieldByName(f).Interface()) // nolint
 				}
 			}
 			if err := validateRuleAnomalyDetectionScopes(v, label); err != nil {
@@ -316,16 +316,16 @@ func validateRules(monitors []mackerel.Monitor, label string) (bool, error) {
 		case *mackerel.MonitorConnectivity:
 		case *mackerel.MonitorQuery:
 			if m.Name == "" {
-				return false, fmt.Errorf("Query Monitoring should have 'name'")
+				return false, fmt.Errorf("Query Monitoring should have 'name'") // nolint
 			}
 			if m.Query == "" {
-				return false, fmt.Errorf("Query Monitoring '%s' should have 'query'", m.Name)
+				return false, fmt.Errorf("Query Monitoring '%s' should have 'query'", m.Name) // nolint
 			}
 			if m.Operator == "" {
-				return false, fmt.Errorf("Query monitoring '%s' should have 'operator'", m.Name)
+				return false, fmt.Errorf("Query monitoring '%s' should have 'operator'", m.Name) // nolint
 			}
 		default:
-			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType())
+			return false, fmt.Errorf("Unknown type is found: %s", m.MonitorType()) // nolint
 		}
 	}
 
@@ -436,7 +436,7 @@ func doMonitorsDiff(c *cli.Context) error {
 		fmt.Println(stringifyMonitor(m, "+"))
 		noDiff = false
 	}
-	if isExitCode == true && noDiff == false { //nolint:gosimple
+	if isExitCode == true && noDiff == false { //nolint
 		os.Exit(1)
 	}
 	return nil

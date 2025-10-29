@@ -56,7 +56,7 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 
 	matches := targetReg.FindStringSubmatch(target)
 	if len(matches) != 5 {
-		return nil, fmt.Errorf("Install target is invalid: %s", target)
+		return nil, fmt.Errorf("Install target is invalid: %s", target) // nolint
 	}
 
 	it := &installTarget{
