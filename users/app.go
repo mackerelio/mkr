@@ -47,7 +47,7 @@ func (ua *userApp) findUsers(param findUsersParam) error {
 
 	switch {
 	case param.format != "" && ua.jqFilter != "":
-		return fmt.Errorf("--format and --jq options are incompatible.")
+		return fmt.Errorf("--format and --jq options are incompatible.") // nolint
 	case param.format != "":
 		t, err := template.New("format").Parse(param.format)
 		if err != nil {

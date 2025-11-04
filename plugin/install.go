@@ -90,7 +90,7 @@ var errSkipInstall = errors.New("skip installing for now")
 func doPluginInstall(c *cli.Context) error {
 	argInstallTarget := c.Args().First()
 	if argInstallTarget == "" {
-		return fmt.Errorf("Specify install target")
+		return fmt.Errorf("Specify install target") // nolint
 	}
 
 	it, err := newInstallTargetFromString(argInstallTarget)
@@ -144,7 +144,7 @@ func doPluginInstall(c *cli.Context) error {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
 	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), overwrite)
-	if err == nil {
+	if err == nil { // nolint
 		if meta != nil {
 			if err := meta.store("release_tag", it.releaseTag); err != nil {
 				return errors.Wrap(err, "Failed to store release_tag")

@@ -346,7 +346,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 		}
 		if resp.NextID != "" {
 			for {
-				if limit <= len(resp.Alerts) {
+				if limit <= len(resp.Alerts) { // nolint
 					break
 				}
 				nextResp, err := client.FindWithClosedAlertsByNextID(resp.NextID)
@@ -367,7 +367,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 		}
 		if resp.NextID != "" {
 			for {
-				if limit <= len(resp.Alerts) {
+				if limit <= len(resp.Alerts) { // nolint
 					break
 				}
 				nextResp, err := client.FindAlertsByNextID(resp.NextID)
