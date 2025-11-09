@@ -22,8 +22,8 @@ require (
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli v1.22.17
 	github.com/yudai/gojsondiff v1.0.0
-	golang.org/x/oauth2 v0.32.0
-	golang.org/x/sync v0.17.0
+	golang.org/x/oauth2 v0.33.0
+	golang.org/x/sync v0.18.0
 	golang.org/x/text v0.30.0
 	gopkg.in/yaml.v2 v2.4.0
 )
