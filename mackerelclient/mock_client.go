@@ -14,6 +14,8 @@ type MockClient struct {
 	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
 	updateHostStatusCallback    func(hostID string, status string) error
 	listHostMetricNamesCallback func(id string) ([]string, error)
+	updateChannelCallback       func(id string, param *mackerel.Channel) (*mackerel.Channel, error)
+	createChannelCallback       func(param *mackerel.Channel) (*mackerel.Channel, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -186,5 +188,32 @@ func (c *MockClient) FindUsers() ([]*mackerel.User, error) {
 func MockFindUsers(callback func() ([]*mackerel.User, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findUsersCallback = callback
+	}
+}
+func (c *MockClient) UpdateChannel(id string, param *mackerel.Channel) (*mackerel.Channel, error) {
+	if c.updateChannelCallback != nil {
+		return c.updateChannelCallback(id, param)
+	}
+	return nil, errCallbackNotFound("UpdateChannel")
+}
+
+func MockUpdateChannel(callback func(id string, param *mackerel.Channel) (*mackerel.Channel, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.updateChannelCallback = callback
+	}
+}
+
+func (c *MockClient) CreateChannel(param *mackerel.Channel) (*mackerel.Channel, error) {
+	if c.createChannelCallback != nil {
+		return c.createChannelCallback(param)
+	}
+	return nil, errCallbackNotFound("CreateChannel")
+}
+
+func MockCreateChannel(callback func(param *mackerel.Channel) (*mackerel.Channel, error)) MockClientOption {
+	{
+		return func(c *MockClient) {
+			c.createChannelCallback = callback
+		}
 	}
 }
