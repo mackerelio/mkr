@@ -34,6 +34,19 @@ var Command = cli.Command{
 				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
 			},
 		},
+		{
+			Name:      "push",
+			Usage:     "push channel settings",
+			ArgsUsage: "[--file-path | -F <file>] [--verbose | -v]",
+			Description: `
+Push channels settings to Mackerel server from a file. The file can be specified by filepath argument <file>. The default is 'channels.json'.
+					`,
+			Action: doChannelsPush,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store channel settings. default: channels.json"},
+				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+			},
+		},
 	},
 }
 
@@ -63,4 +76,19 @@ func doChannelsPull(c *cli.Context) error {
 		client:    client,
 		outStream: os.Stdout,
 	}).pullChannels(isVerbose, filePath)
+}
+
+func doChannelsPush(c *cli.Context) error {
+	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	if err != nil {
+		return err
+	}
+
+	isVerbose := c.Bool("verbose")
+	filePath := c.String("file-path")
+
+	return (&channelsApp{
+		client:    client,
+		outStream: os.Stdout,
+	}).pushChannels(isVerbose, filePath)
 }

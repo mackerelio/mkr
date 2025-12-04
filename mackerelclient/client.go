@@ -14,4 +14,6 @@ type Client interface {
 	CreateHost(param *mackerel.CreateHostParam) (string, error)
 	UpdateHostStatus(hostID string, status string) error
 	ListHostMetricNames(id string) ([]string, error)
+	UpdateChannel(id string, param *mackerel.Channel) (*mackerel.Channel, error)
+	CreateChannel(param *mackerel.Channel) (*mackerel.Channel, error)
 }

@@ -3,6 +3,7 @@ package channels
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -174,4 +175,112 @@ func TestChannelsApp_PullChannels(t *testing.T) {
 		assert.NoError(t, app.pullChannels(false, tc.input))
 		assert.Equal(t, tc.expected, out.String())
 	}
+}
+
+func TestChannelLoadChannels(t *testing.T) {
+	tmpFile, err := os.CreateTemp("", "channels_*.json")
+	if err != nil {
+		t.Fatalf("failed to create temp file: %v", err)
+	}
+	defer os.Remove(tmpFile.Name())
+
+	jsonContent := `{
+    "channels": [
+        {
+            "id": "test123",
+            "name": "test channel",
+            "type": "email",
+            "emails": ["test@example.com"],
+            "events": ["alert"]
+        }
+    ]
+}
+`
+	_, err = tmpFile.WriteString(jsonContent)
+	assert.NoError(t, err)
+	tmpFile.Close()
+
+	channels, err := channelLoadChannels(tmpFile.Name())
+	assert.NoError(t, err)
+	assert.Len(t, channels, 1)
+	assert.Equal(t, "test123", channels[0].ID)
+	assert.Equal(t, "test channel", channels[0].Name)
+	assert.Equal(t, "email", channels[0].Type)
+}
+
+func TestChannelsApp_PushChannels(t *testing.T) {
+	tmpFile, err := os.CreateTemp("", "channels_*.json")
+	if err != nil {
+		t.Fatalf("failed to create temp file: %v", err)
+	}
+	defer os.Remove(tmpFile.Name())
+
+	// Create test data file
+	jsonContent := `{
+    "channels": [
+        {
+            "id": "existing123",
+            "name": "updated channel",
+            "type": "email",
+            "emails": ["updated@example.com"],
+            "events": ["alert"]
+        },
+        {
+            "name": "new channel",
+            "type": "slack",
+            "url": "https://hooks.slack.com/services/NEW",
+            "events": ["alert"]
+        }
+    ]
+}
+`
+	_, err = tmpFile.WriteString(jsonContent)
+	assert.NoError(t, err)
+	tmpFile.Close()
+
+	var updatedID string
+	var updatedChannel *mackerel.Channel
+	var createdChannel *mackerel.Channel
+
+	client := mackerelclient.NewMockClient(
+		mackerelclient.MockFindChannels(func() ([]*mackerel.Channel, error) {
+			return []*mackerel.Channel{
+				{
+					ID:     "existing123",
+					Name:   "old channel",
+					Type:   "email",
+					Emails: &[]string{"old@example.com"},
+					Events: &[]string{"alert"},
+				},
+			}, nil
+		}),
+		mackerelclient.MockUpdateChannel(func(id string, param *mackerel.Channel) (*mackerel.Channel, error) {
+			updatedID = id
+			updatedChannel = param
+			return param, nil
+		}),
+		mackerelclient.MockCreateChannel(func(param *mackerel.Channel) (*mackerel.Channel, error) {
+			createdChannel = param
+			param.ID = "newid123"
+			return param, nil
+		}),
+	)
+
+	app := &channelsApp{
+		client:    client,
+		outStream: new(bytes.Buffer),
+	}
+
+	err = app.pushChannels(false, tmpFile.Name())
+	assert.NoError(t, err)
+
+	// Verify update was called
+	assert.Equal(t, "existing123", updatedID)
+	assert.NotNil(t, updatedChannel)
+	assert.Equal(t, "updated channel", updatedChannel.Name)
+
+	// Verify create was called
+	assert.NotNil(t, createdChannel)
+	assert.Equal(t, "new channel", createdChannel.Name)
+	assert.Equal(t, "slack", createdChannel.Type)
 }
