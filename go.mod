@@ -10,7 +10,7 @@ require (
 	github.com/Songmu/wrapcommander v0.1.0
 	github.com/fatih/color v1.18.0
 	github.com/google/go-github/v49 v49.1.0
-	github.com/itchyny/gojq v0.12.17
+	github.com/itchyny/gojq v0.12.18
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
 	github.com/mackerelio/mackerel-agent v0.85.2
@@ -45,7 +45,7 @@ require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/itchyny/timefmt-go v0.1.6 // indirect
+	github.com/itchyny/timefmt-go v0.1.7 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/kr/text v0.2.0 // indirect
