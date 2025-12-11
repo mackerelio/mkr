@@ -35,6 +35,25 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Dec 11 2025 <mackerel-developers@hatena.ne.jp> - 0.63.0
+- Add dashboard pull --id option. (by fujiwara)
+- Bump github.com/mackerelio/mackerel-agent from 0.85.2 to 0.85.3 in the stable-packages group (by dependabot[bot])
+- Bump golang.org/x/sync from 0.18.0 to 0.19.0 in the stable-packages group (by dependabot[bot])
+- Bump golang.org/x/oauth2 from 0.33.0 to 0.34.0 in the stable-packages group (by dependabot[bot])
+- Bump actions/checkout from 6.0.0 to 6.0.1 (by dependabot[bot])
+- Bump mackerelio/workflows/.github/workflows/go-lint.yml from 1.6.0 to 1.8.0 (by dependabot[bot])
+- Bump mackerelio/workflows/.github/workflows/go-test.yml from 1.6.0 to 1.8.0 (by dependabot[bot])
+- Bump github.com/itchyny/gojq from 0.12.17 to 0.12.18 (by dependabot[bot])
+- Bump aws-actions/configure-aws-credentials from 5.1.0 to 5.1.1 (by dependabot[bot])
+- Bump the stable-packages group across 1 directory with 4 updates (by dependabot[bot])
+- Bump actions/checkout from 5.0.0 to 6.0.0 (by dependabot[bot])
+- Bump actions/setup-go from 6.0.0 to 6.1.0 (by dependabot[bot])
+- Bump golang.org/x/crypto from 0.36.0 to 0.45.0 (by dependabot[bot])
+- Bump peter-evans/repository-dispatch from 4.0.0 to 4.0.1 (by dependabot[bot])
+- Bump docker/setup-qemu-action from 3.6.0 to 3.7.0 (by dependabot[bot])
+- update CI (by yseto)
+- Add users subcommand. (by kga)
+
 * Mon Oct 20 2025 <mackerel-developers@hatena.ne.jp> - 0.62.3
 - Bump github.com/mholt/archives from 0.1.4 to 0.1.5 (by dependabot[bot])
 - Bump the stable-packages group across 1 directory with 2 updates (by dependabot[bot])

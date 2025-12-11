@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.63.0 (2025-12-11)
+
+* Add dashboard pull --id option. #766 (fujiwara)
+* Bump github.com/mackerelio/mackerel-agent from 0.85.2 to 0.85.3 in the stable-packages group #765 (dependabot[bot])
+* Bump golang.org/x/sync from 0.18.0 to 0.19.0 in the stable-packages group #764 (dependabot[bot])
+* Bump golang.org/x/oauth2 from 0.33.0 to 0.34.0 in the stable-packages group #763 (dependabot[bot])
+* Bump actions/checkout from 6.0.0 to 6.0.1 #762 (dependabot[bot])
+* Bump mackerelio/workflows/.github/workflows/go-lint.yml from 1.6.0 to 1.8.0 #761 (dependabot[bot])
+* Bump mackerelio/workflows/.github/workflows/go-test.yml from 1.6.0 to 1.8.0 #760 (dependabot[bot])
+* Bump github.com/itchyny/gojq from 0.12.17 to 0.12.18 #759 (dependabot[bot])
+* Bump aws-actions/configure-aws-credentials from 5.1.0 to 5.1.1 #757 (dependabot[bot])
+* Bump the stable-packages group across 1 directory with 4 updates #756 (dependabot[bot])
+* Bump actions/checkout from 5.0.0 to 6.0.0 #755 (dependabot[bot])
+* Bump actions/setup-go from 6.0.0 to 6.1.0 #754 (dependabot[bot])
+* Bump golang.org/x/crypto from 0.36.0 to 0.45.0 #753 (dependabot[bot])
+* Bump peter-evans/repository-dispatch from 4.0.0 to 4.0.1 #752 (dependabot[bot])
+* Bump docker/setup-qemu-action from 3.6.0 to 3.7.0 #749 (dependabot[bot])
+* update CI #744 (yseto)
+* Add users subcommand. #730 (kga)
+
+
 ## 0.62.3 (2025-10-20)
 
 * Bump github.com/mholt/archives from 0.1.4 to 0.1.5 #742 (dependabot[bot])
