@@ -24,12 +24,16 @@ var Command = cli.Command{
 	Action: doListDashboards,
 	Subcommands: []cli.Command{
 		{
-			Name:  "pull",
-			Usage: "Pull custom dashboards",
+			Name:      "pull",
+			Usage:     "Pull custom dashboards",
+			ArgsUsage: "--id <id>",
 			Description: `
 	Pull custom dashboards from Mackerel server and output these to local files.
 `,
 			Action: doPullDashboard,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "id", Usage: "dashboard ID to pull (optional, if not specified, pulls all dashboards)"},
+			},
 		},
 		{
 			Name:      "push",
@@ -73,15 +77,22 @@ func doListDashboards(c *cli.Context) error {
 func doPullDashboard(c *cli.Context) error {
 	client := mackerelclient.NewFromContext(c)
 
-	dashboards, err := client.FindDashboards()
-	logger.DieIf(err)
-	for _, d := range dashboards {
-		dashboard, err := client.FindDashboard(d.ID)
+	var dashboards []*mackerel.Dashboard
+	if id := c.String("id"); id != "" {
+		dashboard, err := client.FindDashboard(id)
 		logger.DieIf(err)
+		dashboards = append(dashboards, dashboard)
+	} else {
+		var err error
+		dashboards, err = client.FindDashboards()
+		logger.DieIf(err)
+	}
+
+	for _, d := range dashboards {
 		filename := fmt.Sprintf("dashboard-%s.json", d.ID)
 		file, err := os.Create(filename)
 		logger.DieIf(err)
-		_, err = file.WriteString(format.JSONMarshalIndent(dashboard, "", "    "))
+		_, err = file.WriteString(format.JSONMarshalIndent(d, "", "    "))
 		logger.DieIf(err)
 		file.Close()
 		logger.Log("info", fmt.Sprintf("Dashboard file is saved to '%s'(title:%s)", filename, d.Title))
