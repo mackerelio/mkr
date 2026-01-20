@@ -9,7 +9,7 @@ import (
 )
 
 // Command is the definition of services subcommand
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "services",
 	Usage:     "List services",
 	ArgsUsage: "[--jq <formula>]",

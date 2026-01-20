@@ -12,14 +12,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "annotations",
 	Usage: "Manipulate graph annotations",
 	Description: `
     Manipulate graph annotations. Requests APIs under "/api/v0/graph-annotations".
     See https://mackerel.io/api-docs/entry/graph-annotations .
 `,
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "create",
 			Usage:     "create a graph annotation",

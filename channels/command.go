@@ -9,7 +9,7 @@ import (
 )
 
 // Command is the definition of channels subcommand
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "channels",
 	Usage: "List notification channels",
 	Description: `
@@ -20,7 +20,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull channel settings",

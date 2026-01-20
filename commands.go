@@ -21,7 +21,7 @@ import (
 )
 
 // Commands cli.Command object list
-var Commands = []cli.Command{
+var Commands = []*cli.Command{
 	status.Command,
 	hosts.CommandHosts,
 	hosts.CommandCreate,

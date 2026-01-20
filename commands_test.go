@@ -7,7 +7,7 @@ import (
 )
 
 func TestCommands_requirements(t *testing.T) {
-	var cs, subcs []cli.Command
+	var cs, subcs []*cli.Command
 	for _, c := range Commands {
 		if len(c.Subcommands) == 0 {
 			cs = append(cs, c)

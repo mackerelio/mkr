@@ -15,15 +15,15 @@ import (
 )
 
 // Command is command definition of mkr checks
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "checks",
 	Usage: "Utility for check plugins",
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		commandRun,
 	},
 }
 
-var commandRun = cli.Command{
+var commandRun = &cli.Command{
 	Name:  "run",
 	Usage: "run check commands in mackerel-agent.conf",
 	Description: `

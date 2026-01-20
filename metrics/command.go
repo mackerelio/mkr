@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] [--jq <formula>] --from int --to int",

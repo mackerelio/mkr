@@ -8,7 +8,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "aws-integrations",
 	Usage:     "List aws integration settings",
 	ArgsUsage: "[--jq <formula>]",

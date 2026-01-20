@@ -9,7 +9,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var CommandUsers = cli.Command{
+var CommandUsers = &cli.Command{
 	Name:      "users",
 	Usage:     "List users",
 	ArgsUsage: "[--verbose | -v] [--format | -f <format>] [--jq <formula>]",

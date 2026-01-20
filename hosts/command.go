@@ -10,7 +10,7 @@ import (
 )
 
 // CommandCreate is definition of mkr create subcommand
-var CommandCreate = cli.Command{
+var CommandCreate = &cli.Command{
 	Name:      "create",
 	Usage:     "Create a new host",
 	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] [--memo <memo>] <hostName>",
@@ -70,7 +70,7 @@ func doCreate(c *cli.Context) error {
 }
 
 // CommandHosts is definition of mkr hosts subcommand
-var CommandHosts = cli.Command{
+var CommandHosts = &cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",
 	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...] [--jq <formula>]",

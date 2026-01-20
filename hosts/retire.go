@@ -9,7 +9,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var CommandRetire = cli.Command{
+var CommandRetire = &cli.Command{
 	Name:      "retire",
 	Usage:     "Retire hosts",
 	ArgsUsage: "[--force] hostIds...",

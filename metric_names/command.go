@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "metric-names",
 	Usage:     "Fetch metric names",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--jq <formula>]",

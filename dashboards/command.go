@@ -15,14 +15,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "dashboards",
 	Usage: "Manipulate custom dashboards",
 	Description: `
     Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
 	Action: doListDashboards,
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "Pull custom dashboards",

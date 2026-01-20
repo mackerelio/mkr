@@ -18,7 +18,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
 	ArgsUsage: "[--with-closed | -w] [--limit | -l] [--jq <formula>]",
@@ -41,7 +41,7 @@ var Command = cli.Command{
 		},
 		jq.CommandLineFlag,
 	},
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",

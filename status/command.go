@@ -8,7 +8,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "status",
 	Usage:     "Show the host",
 	ArgsUsage: "[--verbose | -v] [--jq <formula>] <hostId>",

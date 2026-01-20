@@ -21,7 +21,7 @@ import (
 	"golang.org/x/text/transform"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "monitors",
 	Usage: "Manipulate monitors",
 	Description: `
@@ -32,7 +32,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull rules",

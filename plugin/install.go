@@ -29,7 +29,7 @@ var defaultPluginInstallLocation = func() string {
 	return filepath.Join(filepath.Dir(path), "plugins")
 }()
 
-var commandPluginInstall = cli.Command{
+var commandPluginInstall = &cli.Command{
 	Name:      "install",
 	Usage:     "Install a plugin from github or plugin registry",
 	ArgsUsage: "[--prefix <prefix>] [--overwrite] [--upgrade] <install_target>",

@@ -9,7 +9,7 @@ import (
 )
 
 // Command is the definition of org subcommand
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "org",
 	Usage:     "Fetch organization",
 	ArgsUsage: "[--jq <formula>]",

@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var CommandFetch = cli.Command{
+var CommandFetch = &cli.Command{
 	Name:      "fetch",
 	Usage:     "Fetch latest metric values",
 	ArgsUsage: "[--name | -n <metricName>] [--jq <formula>] hostIds...",

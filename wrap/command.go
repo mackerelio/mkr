@@ -10,7 +10,7 @@ import (
 )
 
 // Command is definition of mkr wrap
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "wrap",
 	Usage:     "Wrap and monitor batch jobs to run with cron etc",
 	ArgsUsage: "[--name|-n <name>] [OPTIONS] -- /path/to/batch",
