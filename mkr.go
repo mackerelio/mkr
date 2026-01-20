@@ -16,7 +16,11 @@ func main() {
 	version, gitcommit := fromVCS()
 	app.Version = fmt.Sprintf("%s (rev:%s)", version, gitcommit)
 	app.Usage = "A CLI tool for mackerel.io"
-	app.Author = "Hatena Co., Ltd."
+	app.Authors = []*cli.Author{
+		{
+			Name: "Hatena Co., Ltd.",
+		},
+	}
 	app.Commands = Commands
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{
