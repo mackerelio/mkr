@@ -42,8 +42,15 @@ var Command = cli.Command{
 `,
 			Action: doMonitorsPull,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				cli.StringFlag{
+					Name:  "file-path, F",
+					Value: "",
+					Usage: "Filename to store monitor rule definitions. default: monitors.json",
+				},
+				cli.BoolFlag{
+					Name:  "verbose, v",
+					Usage: "Verbose output mode",
+				},
 			},
 		},
 		{
@@ -55,9 +62,19 @@ var Command = cli.Command{
 			ArgsUsage: "[--file-path | -F <file>]",
 			Action:    doMonitorsDiff,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "exit-code, e", Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)"},
-				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "reverse", Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus"},
+				cli.BoolFlag{
+					Name:  "exit-code, e",
+					Usage: "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)",
+				},
+				cli.StringFlag{
+					Name:  "file-path, F",
+					Value: "",
+					Usage: "Filename to store monitor rule definitions. default: monitors.json",
+				},
+				cli.BoolFlag{
+					Name:  "reverse",
+					Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus",
+				},
 			},
 		},
 		{
@@ -69,9 +86,19 @@ var Command = cli.Command{
 `,
 			Action: doMonitorsPush,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store monitor rule definitions. default: monitors.json"},
-				cli.BoolFlag{Name: "dry-run, d", Usage: "Show which apis are called, but not execute."},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				cli.StringFlag{
+					Name:  "file-path, F",
+					Value: "",
+					Usage: "Filename to store monitor rule definitions. default: monitors.json",
+				},
+				cli.BoolFlag{
+					Name:  "dry-run, d",
+					Usage: "Show which apis are called, but not execute.",
+				},
+				cli.BoolFlag{
+					Name:  "verbose, v",
+					Usage: "Verbose output mode",
+				},
 			},
 		},
 	},

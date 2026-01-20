@@ -18,7 +18,10 @@ var Command = cli.Command{
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		cli.BoolFlag{
+			Name:  "verbose, v",
+			Usage: "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }

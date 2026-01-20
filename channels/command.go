@@ -30,8 +30,15 @@ var Command = cli.Command{
 `,
 			Action: doChannelsPull,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store channel settings. default: channels.json"},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				cli.StringFlag{
+					Name:  "file-path, F",
+					Value: "",
+					Usage: "Filename to store channel settings. default: channels.json",
+				},
+				cli.BoolFlag{
+					Name:  "verbose, v",
+					Usage: "Verbose output mode",
+				},
 			},
 		},
 	},

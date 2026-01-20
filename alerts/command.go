@@ -28,8 +28,15 @@ var Command = cli.Command{
 `,
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-		cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
+		cli.BoolFlag{
+			Name:  "with-closed, w",
+			Usage: "Display open alert including close alert. default: false",
+		},
+		cli.IntFlag{
+			Name:  "limit, l",
+			Value: defaultAlertsLimit,
+			Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+		},
 		jq.CommandLineFlag,
 	},
 	Subcommands: []cli.Command{
@@ -52,9 +59,19 @@ var Command = cli.Command{
 					Value: &cli.StringSlice{},
 					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
-				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
-				cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-				cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
+				cli.BoolTFlag{
+					Name:  "color, c",
+					Usage: "Colorize output. default: true",
+				},
+				cli.BoolFlag{
+					Name:  "with-closed, w",
+					Usage: "Display open alert including close alert. default: false",
+				},
+				cli.IntFlag{
+					Name:  "limit, l",
+					Value: defaultAlertsLimit,
+					Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+				},
 			},
 		},
 		{
@@ -66,8 +83,15 @@ var Command = cli.Command{
 `,
 			Action: doAlertsClose,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "reason, r", Value: "", Usage: "Reason of closing alert."},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				cli.StringFlag{
+					Name:  "reason, r",
+					Value: "",
+					Usage: "Reason of closing alert.",
+				},
+				cli.BoolFlag{
+					Name:  "verbose, v",
+					Usage: "Verbose output mode",
+				},
 			},
 		},
 		{
@@ -79,7 +103,11 @@ var Command = cli.Command{
 `,
 			Action: findAlertLogs,
 			Flags: []cli.Flag{
-				cli.IntFlag{Name: "limit, l", Value: defaultAlertLogsLimit, Usage: "Set the number of alert logs to display"},
+				cli.IntFlag{
+					Name:  "limit, l",
+					Value: defaultAlertLogsLimit,
+					Usage: "Set the number of alert logs to display",
+				},
 				jq.CommandLineFlag,
 			},
 		},

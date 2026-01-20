@@ -20,14 +20,26 @@ var CommandCreate = cli.Command{
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'maintenance')"},
+		cli.StringFlag{
+			Name:  "status, st",
+			Value: "",
+			Usage: "Host status ('working', 'standby', 'maintenance')",
+		},
 		cli.StringSliceFlag{
 			Name:  "roleFullname, R",
 			Value: &cli.StringSlice{},
 			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
-		cli.StringFlag{Name: "customIdentifier", Value: "", Usage: "CustomIdentifier for the Host"},
-		cli.StringFlag{Name: "memo", Value: "", Usage: "memo for the Host"},
+		cli.StringFlag{
+			Name:  "customIdentifier",
+			Value: "",
+			Usage: "CustomIdentifier for the Host",
+		},
+		cli.StringFlag{
+			Name:  "memo",
+			Value: "",
+			Usage: "memo for the Host",
+		},
 	},
 }
 
@@ -66,8 +78,16 @@ var CommandHosts = cli.Command{
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "List hosts only matched with <name>"},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belonging to <service>"},
+		cli.StringFlag{
+			Name:  "name, n",
+			Value: "",
+			Usage: "List hosts only matched with <name>",
+		},
+		cli.StringFlag{
+			Name:  "service, s",
+			Value: "",
+			Usage: "List hosts only belonging to <service>",
+		},
 		cli.StringSliceFlag{
 			Name:  "role, r",
 			Value: &cli.StringSlice{},
@@ -78,8 +98,15 @@ var CommandHosts = cli.Command{
 			Value: &cli.StringSlice{},
 			Usage: "List hosts only matched <status>. Multiple choices are allowed.",
 		},
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		cli.StringFlag{
+			Name:  "format, f",
+			Value: "",
+			Usage: "Output format template",
+		},
+		cli.BoolFlag{
+			Name:  "verbose, v",
+			Usage: "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }

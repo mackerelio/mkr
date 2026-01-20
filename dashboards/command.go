@@ -32,7 +32,10 @@ var Command = cli.Command{
 `,
 			Action: doPullDashboard,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Usage: "dashboard ID to pull (optional, if not specified, pulls all dashboards)"},
+				cli.StringFlag{
+					Name:  "id",
+					Usage: "dashboard ID to pull (optional, if not specified, pulls all dashboards)",
+				},
 			},
 		},
 		{
@@ -46,7 +49,10 @@ var Command = cli.Command{
 `,
 			Action: doPushDashboard,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
+				cli.StringFlag{
+					Name:  "file-path, F",
+					Usage: "read dashboard from the file",
+				},
 			},
 		},
 

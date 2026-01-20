@@ -9,7 +9,10 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var CommandLineFlag = cli.StringFlag{Name: "jq", Usage: "Filter response values using jq syntax"}
+var CommandLineFlag = cli.StringFlag{
+	Name:  "jq",
+	Usage: "Filter response values using jq syntax",
+}
 
 func FilterJSON(outStream io.Writer, src interface{}, queryStr string) error {
 	query, err := gojq.Parse(queryStr)

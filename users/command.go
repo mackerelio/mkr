@@ -19,8 +19,15 @@ var CommandUsers = cli.Command{
 `,
 	Action: doUsers,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		cli.StringFlag{
+			Name:  "format, f",
+			Value: "",
+			Usage: "Output format template",
+		},
+		cli.BoolFlag{
+			Name:  "verbose, v",
+			Usage: "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }

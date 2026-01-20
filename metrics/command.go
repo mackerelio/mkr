@@ -22,11 +22,29 @@ var Command = cli.Command{
 `,
 	Action: doMetrics,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "Fetch host metric values of <hostID>."},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "Fetch service metric values of <service>."},
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
-		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
-		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
+		cli.StringFlag{
+			Name:  "host, H",
+			Value: "",
+			Usage: "Fetch host metric values of <hostID>.",
+		},
+		cli.StringFlag{
+			Name:  "service, s",
+			Value: "",
+			Usage: "Fetch service metric values of <service>.",
+		},
+		cli.StringFlag{
+			Name:  "name, n",
+			Value: "",
+			Usage: "The name of the metric for which you want to obtain the metric.",
+		},
+		cli.Int64Flag{
+			Name:  "from",
+			Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)",
+		},
+		cli.Int64Flag{
+			Name:  "to",
+			Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)",
+		},
 		jq.CommandLineFlag,
 	},
 }

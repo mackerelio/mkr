@@ -21,13 +21,37 @@ var Command = cli.Command{
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host. If it is empty it will be automatically derived."},
-		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
-		cli.StringFlag{Name: "note, N", Value: "", Usage: "`note` of the job"},
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
-		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
-		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
-		cli.DurationFlag{Name: "notification-interval, I", Usage: "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)"},
+		cli.StringFlag{
+			Name:  "name, n",
+			Value: "",
+			Usage: "The `check-name` which must be unique on a host. If it is empty it will be automatically derived.",
+		},
+		cli.BoolFlag{
+			Name:  "detail, d",
+			Usage: "send a detailed report contains command output",
+		},
+		cli.StringFlag{
+			Name:  "note, N",
+			Value: "",
+			Usage: "`note` of the job",
+		},
+		cli.StringFlag{
+			Name:  "host, H",
+			Value: "",
+			Usage: "`hostID`",
+		},
+		cli.BoolFlag{
+			Name:  "warning, w",
+			Usage: "alerts as warning",
+		},
+		cli.BoolFlag{
+			Name:  "auto-close, a",
+			Usage: "automatically close an existing alert when the command success",
+		},
+		cli.DurationFlag{
+			Name:  "notification-interval, I",
+			Usage: "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)",
+		},
 		// XXX Implementation of maxCheckAttempts is difficult because the
 		// execution interval of cron or batches are not always one-minute.
 		// This is due to the server-side logic of the Mackerel.
