@@ -22,7 +22,7 @@ func newWrapContext(t testing.TB, args []string) *cli.Context {
 		&cli.StringFlag{Name: "conf"},
 		&cli.StringFlag{Name: "apibase"},
 	} {
-		f.Apply(parentFs)
+		f.Apply(parentFs) // nolint
 	}
 	if err := parentFs.Parse(args); err != nil {
 		t.Fatal(err)
@@ -37,7 +37,7 @@ func newWrapContext(t testing.TB, args []string) *cli.Context {
 
 	fs := flag.NewFlagSet("mockwrap", flag.ContinueOnError)
 	for _, f := range Command.Flags {
-		f.Apply(fs)
+		f.Apply(fs) // nolint
 	}
 	if err := fs.Parse(args); err != nil {
 		t.Fatal(err)

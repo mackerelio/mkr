@@ -12,9 +12,7 @@ func TestCommands_requirements(t *testing.T) {
 		if len(c.Subcommands) == 0 {
 			cs = append(cs, c)
 		} else {
-			for _, sc := range c.Subcommands {
-				cs = append(cs, sc)
-			}
+			cs = append(cs, c.Subcommands...)
 			subcs = append(subcs, c)
 		}
 	}

@@ -200,7 +200,7 @@ func newPluginInstallContext(t testing.TB, target, prefix string, overwrite bool
 	t.Helper()
 	fs := flag.NewFlagSet("name", flag.ContinueOnError)
 	for _, f := range commandPluginInstall.Flags {
-		f.Apply(fs)
+		f.Apply(fs) // nolint
 	}
 	argv := []string{}
 	if prefix != "" {
