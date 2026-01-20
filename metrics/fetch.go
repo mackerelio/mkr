@@ -32,7 +32,7 @@ var CommandFetch = &cli.Command{
 }
 
 func doFetch(c *cli.Context) error {
-	argHostIDs := c.Args()
+	argHostIDs := c.Args().Slice()
 	optMetricNames := c.StringSlice("name")
 
 	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {

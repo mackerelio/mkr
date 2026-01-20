@@ -106,7 +106,7 @@ func doWrap(c *cli.Context) error {
 	// loading is failed, or apikey or hostID is empty, we don't return errors
 	// and only output the log here.
 
-	cmd := c.Args()
+	cmd := c.Args().Slice()
 	if len(cmd) > 0 && cmd[0] == "--" {
 		cmd = cmd[1:]
 	}

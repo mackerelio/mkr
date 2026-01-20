@@ -430,7 +430,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 
 func doAlertsClose(c *cli.Context) error {
 	isVerbose := c.Bool("verbose")
-	argAlertIDs := c.Args()
+	argAlertIDs := c.Args().Slice()
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
@@ -452,7 +452,7 @@ func doAlertsClose(c *cli.Context) error {
 }
 
 func findAlertLogs(c *cli.Context) error {
-	if len(c.Args()) != 1 {
+	if c.Args().Len() != 1 {
 		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 

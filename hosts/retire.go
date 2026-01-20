@@ -29,7 +29,7 @@ var CommandRetire = &cli.Command{
 func doRetire(c *cli.Context) error {
 	confFile := c.String("conf")
 	force := c.Bool("force")
-	argHostIDs := c.Args()
+	argHostIDs := c.Args().Slice()
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)

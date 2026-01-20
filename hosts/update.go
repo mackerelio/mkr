@@ -55,7 +55,7 @@ var CommandUpdate = &cli.Command{
 
 func doUpdate(c *cli.Context) error {
 	confFile := c.String("conf")
-	argHostIDs := c.Args()
+	argHostIDs := c.Args().Slice()
 	optName := c.String("name")
 	optDisplayName := c.String("displayName")
 	optStatus := c.String("status")
