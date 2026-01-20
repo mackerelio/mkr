@@ -63,8 +63,9 @@ var Command = &cli.Command{
 					Value:   &cli.StringSlice{},
 					Usage:   "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
-				cli.BoolTFlag{
+				&cli.BoolFlag{
 					Name:    "color",
+					Value:   true,
 					Aliases: []string{"c"},
 					Usage:   "Colorize output. default: true",
 				},
@@ -356,7 +357,7 @@ func doAlertsList(c *cli.Context) error {
 				continue
 			}
 		}
-		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
+		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.Bool("color")))
 	}
 	return nil
 }
