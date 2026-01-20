@@ -19,12 +19,12 @@ func main() {
 	app.Author = "Hatena Co., Ltd."
 	app.Commands = Commands
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "conf",
 			Value: config.DefaultConfig.Conffile,
 			Usage: "Config file path",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name: "apibase",
 			// this default value is set in config.LoadApibaseFromConfigWithFallback
 			Usage: fmt.Sprintf("API Base (default: \"%s\")", config.DefaultConfig.Apibase),

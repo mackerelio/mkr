@@ -21,13 +21,13 @@ var Command = cli.Command{
 `,
 	Action: doMetricNames,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "host",
 			Aliases: []string{"H"},
 			Value:   "",
 			Usage:   "Fetch host metric names of <hostID>.",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "service",
 			Aliases: []string{"s"},
 			Value:   "",

@@ -42,13 +42,13 @@ var Command = cli.Command{
 `,
 			Action: doMonitorsPull,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "file-path",
 					Aliases: []string{"F"},
 					Value:   "",
 					Usage:   "Filename to store monitor rule definitions. default: monitors.json",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "verbose",
 					Aliases: []string{"v"},
 					Usage:   "Verbose output mode",
@@ -64,18 +64,18 @@ var Command = cli.Command{
 			ArgsUsage: "[--file-path | -F <file>]",
 			Action:    doMonitorsDiff,
 			Flags: []cli.Flag{
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "exit-code",
 					Aliases: []string{"e"},
 					Usage:   "Make mkr exit with code 1 if there are differences and 0 if there aren't. This is similar to diff(1)",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "file-path",
 					Aliases: []string{"F"},
 					Value:   "",
 					Usage:   "Filename to store monitor rule definitions. default: monitors.json",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:  "reverse",
 					Usage: "The difference on the remote server is represented by plus and the difference on the local file is represented by minus",
 				},
@@ -90,18 +90,18 @@ var Command = cli.Command{
 `,
 			Action: doMonitorsPush,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "file-path",
 					Aliases: []string{"F"},
 					Value:   "",
 					Usage:   "Filename to store monitor rule definitions. default: monitors.json",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "dry-run",
 					Aliases: []string{"d"},
 					Usage:   "Show which apis are called, but not execute.",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "verbose",
 					Aliases: []string{"v"},
 					Usage:   "Verbose output mode",

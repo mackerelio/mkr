@@ -28,12 +28,12 @@ var Command = cli.Command{
 `,
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "with-closed",
 			Aliases: []string{"w"},
 			Usage:   "Display open alert including close alert. default: false",
 		},
-		cli.IntFlag{
+		&cli.IntFlag{
 			Name:    "limit",
 			Aliases: []string{"l"},
 			Value:   defaultAlertsLimit,
@@ -51,13 +51,13 @@ var Command = cli.Command{
 `,
 			Action: doAlertsList,
 			Flags: []cli.Flag{
-				cli.StringSliceFlag{
+				&cli.StringSliceFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
 					Value:   &cli.StringSlice{},
 					Usage:   "Filters alerts by service. Multiple choices are allowed.",
 				},
-				cli.StringSliceFlag{
+				&cli.StringSliceFlag{
 					Name:    "host-status",
 					Aliases: []string{"S"},
 					Value:   &cli.StringSlice{},
@@ -68,12 +68,12 @@ var Command = cli.Command{
 					Aliases: []string{"c"},
 					Usage:   "Colorize output. default: true",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "with-closed",
 					Aliases: []string{"w"},
 					Usage:   "Display open alert including close alert. default: false",
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:    "limit",
 					Aliases: []string{"l"},
 					Value:   defaultAlertsLimit,
@@ -90,13 +90,13 @@ var Command = cli.Command{
 `,
 			Action: doAlertsClose,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "reason",
 					Aliases: []string{"r"},
 					Value:   "",
 					Usage:   "Reason of closing alert.",
 				},
-				cli.BoolFlag{
+				&cli.BoolFlag{
 					Name:    "verbose",
 					Aliases: []string{"v"},
 					Usage:   "Verbose output mode",
@@ -112,7 +112,7 @@ var Command = cli.Command{
 `,
 			Action: findAlertLogs,
 			Flags: []cli.Flag{
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:    "limit",
 					Aliases: []string{"l"},
 					Value:   defaultAlertLogsLimit,

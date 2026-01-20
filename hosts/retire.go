@@ -19,7 +19,7 @@ var CommandRetire = cli.Command{
 `,
 	Action: doRetire,
 	Flags: []cli.Flag{
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "force",
 			Usage: "Force retirement without confirmation.",
 		},

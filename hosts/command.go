@@ -20,24 +20,24 @@ var CommandCreate = cli.Command{
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "status",
 			Aliases: []string{"st"},
 			Value:   "",
 			Usage:   "Host status ('working', 'standby', 'maintenance')",
 		},
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
 			Value:   &cli.StringSlice{},
 			Usage:   "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "customIdentifier",
 			Value: "",
 			Usage: "CustomIdentifier for the Host",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "memo",
 			Value: "",
 			Usage: "memo for the Host",
@@ -80,37 +80,37 @@ var CommandHosts = cli.Command{
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
 			Value:   "",
 			Usage:   "List hosts only matched with <name>",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "service",
 			Aliases: []string{"s"},
 			Value:   "",
 			Usage:   "List hosts only belonging to <service>",
 		},
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:    "role",
 			Aliases: []string{"r"},
 			Value:   &cli.StringSlice{},
 			Usage:   "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
 		},
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:    "status",
 			Aliases: []string{"st"},
 			Value:   &cli.StringSlice{},
 			Usage:   "List hosts only matched <status>. Multiple choices are allowed.",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "format",
 			Aliases: []string{"f"},
 			Value:   "",
 			Usage:   "Output format template",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "verbose",
 			Aliases: []string{"v"},
 			Usage:   "Verbose output mode",

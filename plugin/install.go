@@ -35,15 +35,15 @@ var commandPluginInstall = cli.Command{
 	ArgsUsage: "[--prefix <prefix>] [--overwrite] [--upgrade] <install_target>",
 	Action:    doPluginInstall,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "prefix",
 			Usage: fmt.Sprintf("Plugin install location. The default is %s", defaultPluginInstallLocation),
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "overwrite",
 			Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "upgrade",
 			Usage: "Upgrade a plugin command in a plugin directory only when a release_tag is modified",
 		},

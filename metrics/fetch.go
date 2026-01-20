@@ -21,7 +21,7 @@ var CommandFetch = cli.Command{
 `,
 	Action: doFetch,
 	Flags: []cli.Flag{
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
 			Value:   &cli.StringSlice{},

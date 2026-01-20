@@ -21,40 +21,40 @@ var Command = cli.Command{
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
 			Value:   "",
 			Usage:   "The `check-name` which must be unique on a host. If it is empty it will be automatically derived.",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "detail",
 			Aliases: []string{"d"},
 			Usage:   "send a detailed report contains command output",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "note",
 			Aliases: []string{"N"},
 			Value:   "",
 			Usage:   "`note` of the job",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "host",
 			Aliases: []string{"H"},
 			Value:   "",
 			Usage:   "`hostID`",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "warning",
 			Aliases: []string{"w"},
 			Usage:   "alerts as warning",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "auto-close",
 			Aliases: []string{"a"},
 			Usage:   "automatically close an existing alert when the command success",
 		},
-		cli.DurationFlag{
+		&cli.DurationFlag{
 			Name:    "notification-interval",
 			Aliases: []string{"I"},
 			Usage:   "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)",

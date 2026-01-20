@@ -19,7 +19,8 @@ func newWrapContext(t testing.TB, args []string) *cli.Context {
 	app := cli.NewApp()
 	parentFs := flag.NewFlagSet("mockmkr", flag.ContinueOnError)
 	for _, f := range []cli.Flag{
-		cli.StringFlag{Name: "conf"}, cli.StringFlag{Name: "apibase"},
+		&cli.StringFlag{Name: "conf"},
+		&cli.StringFlag{Name: "apibase"},
 	} {
 		f.Apply(parentFs)
 	}

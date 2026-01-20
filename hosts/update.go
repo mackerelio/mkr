@@ -17,35 +17,35 @@ var CommandUpdate = cli.Command{
 `,
 	Action: doUpdate,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
 			Value:   "",
 			Usage:   "Update hostname.",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "displayName",
 			Value: "",
 			Usage: "Update displayName.",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "status",
 			Aliases: []string{"st"},
 			Value:   "",
 			Usage:   "Update status.",
 		},
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
 			Value:   &cli.StringSlice{},
 			Usage:   "Update rolefullname.",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "overwriteRoles",
 			Aliases: []string{"o"},
 			Usage:   "Overwrite roles instead of adding specified roles.",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "memo",
 			Value: "",
 			Usage: "memo for the Host",

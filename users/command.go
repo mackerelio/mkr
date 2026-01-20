@@ -19,13 +19,13 @@ var CommandUsers = cli.Command{
 `,
 	Action: doUsers,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:    "format",
 			Aliases: []string{"f"},
 			Value:   "",
 			Usage:   "Output format template",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:    "verbose",
 			Aliases: []string{"v"},
 			Usage:   "Verbose output mode",

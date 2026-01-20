@@ -29,32 +29,32 @@ var Command = cli.Command{
 `,
 			Action: doAnnotationsCreate,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "title",
 					Usage: "Title for annotation",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "description",
 					Usage: "Description for annotation",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
 					Usage:   "Service name for annotation",
 				},
-				cli.StringSliceFlag{
+				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
 					Value:   &cli.StringSlice{},
@@ -71,16 +71,16 @@ var Command = cli.Command{
 `,
 			Action: doAnnotationsList,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
 					Usage:   "Service name for annotation",
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
@@ -96,36 +96,36 @@ var Command = cli.Command{
 `,
 			Action: doAnnotationsUpdate,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "id",
 					Usage: "Annotation ID.",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
 					Usage:   "Service name for annotation",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "title",
 					Usage: "Title for annotation",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "description",
 					Usage: "Description for annotation",
 				},
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				cli.IntFlag{
+				&cli.IntFlag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
-				cli.StringSliceFlag{
+				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
 					Value:   &cli.StringSlice{},
@@ -142,7 +142,7 @@ var Command = cli.Command{
 `,
 			Action: doAnnotationsDelete,
 			Flags: []cli.Flag{
-				cli.StringFlag{
+				&cli.StringFlag{
 					Name:  "id",
 					Usage: "Graph annotation ID",
 				},
