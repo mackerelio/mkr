@@ -162,27 +162,27 @@ func doAnnotationsCreate(c *cli.Context) error {
 
 	if title == "" {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("`title` is a required field to create a graph annotation.", 1)
+		return cli.Exit("`title` is a required field to create a graph annotation.", 1)
 	}
 
 	if service == "" {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("`service` is a required field to create a graph annotation.", 1)
+		return cli.Exit("`service` is a required field to create a graph annotation.", 1)
 	}
 
 	if from == 0 {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("`from` is a required field to create a graph annotation.", 1)
+		return cli.Exit("`from` is a required field to create a graph annotation.", 1)
 	}
 
 	if to == 0 {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("`to` is a required field to create a graph annotation.", 1)
+		return cli.Exit("`to` is a required field to create a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("specify one of `description` or `description-file`.", 1)
+		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
 	if descriptionFile != "" {
@@ -221,17 +221,17 @@ func doAnnotationsList(c *cli.Context) error {
 
 	if service == "" {
 		_ = cli.ShowCommandHelp(c, "list")
-		return cli.NewExitError("`service` is a required field to list graph annotations.", 1)
+		return cli.Exit("`service` is a required field to list graph annotations.", 1)
 	}
 
 	if from == 0 {
 		_ = cli.ShowCommandHelp(c, "list")
-		return cli.NewExitError("`from` is a required field to list graph annotations.", 1)
+		return cli.Exit("`from` is a required field to list graph annotations.", 1)
 	}
 
 	if to == 0 {
 		_ = cli.ShowCommandHelp(c, "list")
-		return cli.NewExitError("`to` is a required field to list graph annotations.", 1)
+		return cli.Exit("`to` is a required field to list graph annotations.", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -254,27 +254,27 @@ func doAnnotationsUpdate(c *cli.Context) error {
 
 	if annotationID == "" {
 		_ = cli.ShowCommandHelp(c, "update")
-		return cli.NewExitError("`id` is a required field to delete a update annotation.", 1)
+		return cli.Exit("`id` is a required field to delete a update annotation.", 1)
 	}
 
 	if service == "" {
 		_ = cli.ShowCommandHelp(c, "update")
-		return cli.NewExitError("`service` is a required field to update a graph annotation.", 1)
+		return cli.Exit("`service` is a required field to update a graph annotation.", 1)
 	}
 
 	if from == 0 {
 		_ = cli.ShowCommandHelp(c, "update")
-		return cli.NewExitError("`from` is a required field to update a graph annotation.", 1)
+		return cli.Exit("`from` is a required field to update a graph annotation.", 1)
 	}
 
 	if to == 0 {
 		_ = cli.ShowCommandHelp(c, "update")
-		return cli.NewExitError("`to` is a required field to update a graph annotation.", 1)
+		return cli.Exit("`to` is a required field to update a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
 		_ = cli.ShowCommandHelp(c, "create")
-		return cli.NewExitError("specify one of `description` or `description-file`.", 1)
+		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
 	if descriptionFile != "" {
@@ -311,7 +311,7 @@ func doAnnotationsDelete(c *cli.Context) error {
 
 	if annotationID == "" {
 		_ = cli.ShowCommandHelp(c, "delete")
-		return cli.NewExitError("`id` is a required field to delete a graph annotation.", 1)
+		return cli.Exit("`id` is a required field to delete a graph annotation.", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
