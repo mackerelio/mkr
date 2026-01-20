@@ -14,7 +14,7 @@ import (
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mholt/archives"
 	"github.com/pkg/errors"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // The reason why an immediate function, not `init()` is used here is that

@@ -6,7 +6,7 @@ import (
 	"io"
 
 	"github.com/itchyny/gojq"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 var CommandLineFlag = cli.StringFlag{Name: "jq", Usage: "Filter response values using jq syntax"}

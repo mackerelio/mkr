@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func newWrapContext(t testing.TB, args []string) *cli.Context {

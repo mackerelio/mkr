@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // CommandPlugin is definition of mkr plugin
