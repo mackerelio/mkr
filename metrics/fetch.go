@@ -24,7 +24,7 @@ var CommandFetch = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
-			Value:   &cli.StringSlice{},
+			Value:   cli.NewStringSlice(),
 			Usage:   "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
 		jq.CommandLineFlag,

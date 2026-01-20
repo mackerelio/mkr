@@ -54,13 +54,13 @@ var Command = &cli.Command{
 				&cli.StringSliceFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
-					Value:   &cli.StringSlice{},
+					Value:   cli.NewStringSlice(),
 					Usage:   "Filters alerts by service. Multiple choices are allowed.",
 				},
 				&cli.StringSliceFlag{
 					Name:    "host-status",
 					Aliases: []string{"S"},
-					Value:   &cli.StringSlice{},
+					Value:   cli.NewStringSlice(),
 					Usage:   "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				&cli.BoolFlag{

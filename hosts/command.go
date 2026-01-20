@@ -29,7 +29,7 @@ var CommandCreate = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
-			Value:   &cli.StringSlice{},
+			Value:   cli.NewStringSlice(),
 			Usage:   "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
 		&cli.StringFlag{
@@ -95,13 +95,13 @@ var CommandHosts = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "role",
 			Aliases: []string{"r"},
-			Value:   &cli.StringSlice{},
+			Value:   cli.NewStringSlice(),
 			Usage:   "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
 		},
 		&cli.StringSliceFlag{
 			Name:    "status",
 			Aliases: []string{"st"},
-			Value:   &cli.StringSlice{},
+			Value:   cli.NewStringSlice(),
 			Usage:   "List hosts only matched <status>. Multiple choices are allowed.",
 		},
 		&cli.StringFlag{

@@ -57,7 +57,7 @@ var Command = &cli.Command{
 				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
-					Value:   &cli.StringSlice{},
+					Value:   cli.NewStringSlice(),
 					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
@@ -128,7 +128,7 @@ var Command = &cli.Command{
 				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
-					Value:   &cli.StringSlice{},
+					Value:   cli.NewStringSlice(),
 					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
