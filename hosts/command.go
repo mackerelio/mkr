@@ -51,7 +51,7 @@ func doCreate(c *cli.Context) error {
 		cli.ShowCommandHelpAndExit(c, "create", 1)
 	}
 
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}
@@ -120,7 +120,7 @@ var CommandHosts = &cli.Command{
 }
 
 func doHosts(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

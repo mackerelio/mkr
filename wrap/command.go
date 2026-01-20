@@ -66,7 +66,7 @@ var Command = &cli.Command{
 }
 
 func doWrap(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	var conf *config.Config
 	if _, err := os.Stat(confFile); err == nil {
 		conf, err = config.LoadConfig(confFile)
@@ -81,7 +81,7 @@ func doWrap(c *cli.Context) error {
 		conf = config.DefaultConfig
 	}
 
-	apibase := c.GlobalString("apibase")
+	apibase := c.String("apibase")
 	if apibase == "" {
 		apibase = conf.Apibase
 	}

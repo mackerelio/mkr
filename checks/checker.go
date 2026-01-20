@@ -36,7 +36,7 @@ var commandRun = &cli.Command{
 }
 
 func doRunChecks(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	conf, err := config.LoadConfig(confFile)
 	if err != nil {
 		return err

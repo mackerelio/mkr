@@ -28,7 +28,7 @@ var Command = &cli.Command{
 }
 
 func doStatus(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 

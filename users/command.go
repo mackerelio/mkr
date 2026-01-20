@@ -35,7 +35,7 @@ var CommandUsers = &cli.Command{
 }
 
 func doUsers(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

@@ -41,8 +41,8 @@ func New(conffile, apibase string) (Client, error) {
 
 // NewFromContext returns mackerel client from cli.Context
 func NewFromContext(c *cli.Context) *mackerel.Client {
-	confFile := c.GlobalString("conf")
-	apiBase := c.GlobalString("apibase")
+	confFile := c.String("conf")
+	apiBase := c.String("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(confFile)
 	if apiKey == "" {
 		logger.Log("error", `
