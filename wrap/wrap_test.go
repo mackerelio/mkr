@@ -187,7 +187,7 @@ Note: This is note
 			)
 
 			c := newWrapContext(t, args)
-			err := Command.Action.(func(*cli.Context) error)(c)
+			err := Command.Action(c)
 			var exitCode int
 			if err != nil {
 				exitCode = 1
@@ -209,7 +209,7 @@ func TestCommand_Action_withoutConf(t *testing.T) {
 		"go", "run", "testdata/stub.go",
 	})
 	expect := "command exited with code: 1"
-	err := Command.Action.(func(*cli.Context) error)(c)
+	err := Command.Action(c)
 	if err == nil {
 		t.Errorf("error should be occurred but nil")
 	} else if err.Error() != expect {
