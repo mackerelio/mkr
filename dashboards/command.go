@@ -50,8 +50,9 @@ var Command = cli.Command{
 			Action: doPushDashboard,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "file-path, F",
-					Usage: "read dashboard from the file",
+					Name:    "file-path",
+					Aliases: []string{"F"},
+					Usage:   "read dashboard from the file",
 				},
 			},
 		},

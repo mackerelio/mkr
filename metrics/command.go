@@ -23,19 +23,22 @@ var Command = cli.Command{
 	Action: doMetrics,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			Name:  "host, H",
-			Value: "",
-			Usage: "Fetch host metric values of <hostID>.",
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "Fetch host metric values of <hostID>.",
 		},
 		cli.StringFlag{
-			Name:  "service, s",
-			Value: "",
-			Usage: "Fetch service metric values of <service>.",
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "Fetch service metric values of <service>.",
 		},
 		cli.StringFlag{
-			Name:  "name, n",
-			Value: "",
-			Usage: "The name of the metric for which you want to obtain the metric.",
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "The name of the metric for which you want to obtain the metric.",
 		},
 		cli.Int64Flag{
 			Name:  "from",

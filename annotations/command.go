@@ -50,13 +50,15 @@ var Command = cli.Command{
 					Usage: "Ending time (epoch seconds)",
 				},
 				cli.StringFlag{
-					Name:  "service, s",
-					Usage: "Service name for annotation",
+					Name:    "service",
+					Aliases: []string{"s"},
+					Usage:   "Service name for annotation",
 				},
 				cli.StringSliceFlag{
-					Name:  "role, r",
-					Value: &cli.StringSlice{},
-					Usage: "Roles for annotation. Multiple choices are allowed",
+					Name:    "role",
+					Aliases: []string{"r"},
+					Value:   &cli.StringSlice{},
+					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
 		},
@@ -70,8 +72,9 @@ var Command = cli.Command{
 			Action: doAnnotationsList,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "service, s",
-					Usage: "Service name for annotation",
+					Name:    "service",
+					Aliases: []string{"s"},
+					Usage:   "Service name for annotation",
 				},
 				cli.IntFlag{
 					Name:  "from",
@@ -98,8 +101,9 @@ var Command = cli.Command{
 					Usage: "Annotation ID.",
 				},
 				cli.StringFlag{
-					Name:  "service, s",
-					Usage: "Service name for annotation",
+					Name:    "service",
+					Aliases: []string{"s"},
+					Usage:   "Service name for annotation",
 				},
 				cli.StringFlag{
 					Name:  "title",
@@ -122,9 +126,10 @@ var Command = cli.Command{
 					Usage: "Ending time (epoch seconds)",
 				},
 				cli.StringSliceFlag{
-					Name:  "role, r",
-					Value: &cli.StringSlice{},
-					Usage: "Roles for annotation. Multiple choices are allowed",
+					Name:    "role",
+					Aliases: []string{"r"},
+					Value:   &cli.StringSlice{},
+					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
 		},

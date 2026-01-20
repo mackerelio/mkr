@@ -28,18 +28,21 @@ var CommandThrow = cli.Command{
 	Action: doThrow,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			Name:  "host, H",
-			Value: "",
-			Usage: "Post host metric values to <hostID>.",
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "Post host metric values to <hostID>.",
 		},
 		cli.StringFlag{
-			Name:  "service, s",
-			Value: "",
-			Usage: "Post service metric values to <service>.",
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "Post service metric values to <service>.",
 		},
 		cli.IntFlag{
-			Name:  "retry, r",
-			Usage: "Retries up to N times when API request fails.",
+			Name:    "retry",
+			Aliases: []string{"r"},
+			Usage:   "Retries up to N times when API request fails.",
 		},
 	},
 }

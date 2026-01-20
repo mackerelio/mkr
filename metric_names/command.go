@@ -22,14 +22,16 @@ var Command = cli.Command{
 	Action: doMetricNames,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			Name:  "host, H",
-			Value: "",
-			Usage: "Fetch host metric names of <hostID>.",
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "Fetch host metric names of <hostID>.",
 		},
 		cli.StringFlag{
-			Name:  "service, s",
-			Value: "",
-			Usage: "Fetch service metric names of <service>.",
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "Fetch service metric names of <service>.",
 		},
 		jq.CommandLineFlag,
 	},

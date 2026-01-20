@@ -22,9 +22,10 @@ var CommandFetch = cli.Command{
 	Action: doFetch,
 	Flags: []cli.Flag{
 		cli.StringSliceFlag{
-			Name:  "name, n",
-			Value: &cli.StringSlice{},
-			Usage: "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   &cli.StringSlice{},
+			Usage:   "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
 		jq.CommandLineFlag,
 	},

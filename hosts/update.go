@@ -18,9 +18,10 @@ var CommandUpdate = cli.Command{
 	Action: doUpdate,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			Name:  "name, n",
-			Value: "",
-			Usage: "Update hostname.",
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "Update hostname.",
 		},
 		cli.StringFlag{
 			Name:  "displayName",
@@ -28,18 +29,21 @@ var CommandUpdate = cli.Command{
 			Usage: "Update displayName.",
 		},
 		cli.StringFlag{
-			Name:  "status, st",
-			Value: "",
-			Usage: "Update status.",
+			Name:    "status",
+			Aliases: []string{"st"},
+			Value:   "",
+			Usage:   "Update status.",
 		},
 		cli.StringSliceFlag{
-			Name:  "roleFullname, R",
-			Value: &cli.StringSlice{},
-			Usage: "Update rolefullname.",
+			Name:    "roleFullname",
+			Aliases: []string{"R"},
+			Value:   &cli.StringSlice{},
+			Usage:   "Update rolefullname.",
 		},
 		cli.BoolFlag{
-			Name:  "overwriteRoles, o",
-			Usage: "Overwrite roles instead of adding specified roles.",
+			Name:    "overwriteRoles",
+			Aliases: []string{"o"},
+			Usage:   "Overwrite roles instead of adding specified roles.",
 		},
 		cli.StringFlag{
 			Name:  "memo",
