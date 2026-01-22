@@ -39,7 +39,6 @@ var CommandUpdate = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "Update rolefullname.",
 		},
 		&cli.BoolFlag{
