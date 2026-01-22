@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"os"
 	"time"
 
@@ -52,7 +53,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doMetrics(c *cli.Context) error {
+func doMetrics(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMetricName := c.String("name")

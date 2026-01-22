@@ -1,6 +1,7 @@
 package hosts
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
@@ -45,7 +46,7 @@ var CommandCreate = &cli.Command{
 	},
 }
 
-func doCreate(c *cli.Context) error {
+func doCreate(ctx context.Context, c *cli.Command) error {
 	argHostName := c.Args().Get(0)
 	if argHostName == "" {
 		cli.ShowCommandHelpAndExit(c, "create", 1)
@@ -119,7 +120,7 @@ var CommandHosts = &cli.Command{
 	},
 }
 
-func doHosts(c *cli.Context) error {
+func doHosts(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

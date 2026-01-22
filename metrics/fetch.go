@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -31,7 +32,7 @@ var CommandFetch = &cli.Command{
 	},
 }
 
-func doFetch(c *cli.Context) error {
+func doFetch(ctx context.Context, c *cli.Command) error {
 	argHostIDs := c.Args().Slice()
 	optMetricNames := c.StringSlice("name")
 

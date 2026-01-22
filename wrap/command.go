@@ -1,6 +1,7 @@
 package wrap
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -65,7 +66,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doWrap(c *cli.Context) error {
+func doWrap(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	var conf *config.Config
 	if _, err := os.Stat(confFile); err == nil {

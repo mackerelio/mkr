@@ -1,6 +1,8 @@
 package hosts
 
 import (
+	"context"
+
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
@@ -53,7 +55,7 @@ var CommandUpdate = &cli.Command{
 	},
 }
 
-func doUpdate(c *cli.Context) error {
+func doUpdate(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	argHostIDs := c.Args().Slice()
 	optName := c.String("name")

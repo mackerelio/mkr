@@ -87,7 +87,7 @@ var isWin = runtime.GOOS == "windows"
 var errSkipInstall = errors.New("skip installing for now")
 
 // main function for mkr plugin install
-func doPluginInstall(c *cli.Context) error {
+func doPluginInstall(ctx context.Context, c *cli.Command) error {
 	argInstallTarget := c.Args().First()
 	if argInstallTarget == "" {
 		return fmt.Errorf("Specify install target") // nolint

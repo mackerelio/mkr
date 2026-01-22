@@ -1,6 +1,7 @@
 package dashboards
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -62,7 +63,7 @@ var Command = &cli.Command{
 		{
 			Name:   "generate",
 			Hidden: true,
-			Action: func(c *cli.Context) error {
+			Action: func(_ context.Context, c *cli.Command) error {
 				logger.Log("error", "`mkr dashboards generate` command has been obsolete")
 				os.Exit(1)
 				return nil
@@ -71,7 +72,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doListDashboards(c *cli.Context) error {
+func doListDashboards(ctx context.Context, c *cli.Command) error {
 	client := mackerelclient.NewFromContext(c)
 
 	dashboards, err := client.FindDashboards()
@@ -81,7 +82,7 @@ func doListDashboards(c *cli.Context) error {
 	return nil
 }
 
-func doPullDashboard(c *cli.Context) error {
+func doPullDashboard(ctx context.Context, c *cli.Command) error {
 	client := mackerelclient.NewFromContext(c)
 
 	var dashboards []*mackerel.Dashboard
@@ -107,7 +108,7 @@ func doPullDashboard(c *cli.Context) error {
 	return nil
 }
 
-func doPushDashboard(c *cli.Context) error {
+func doPushDashboard(ctx context.Context, c *cli.Command) error {
 	client := mackerelclient.NewFromContext(c)
 
 	f := c.String("file-path")

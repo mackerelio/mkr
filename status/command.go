@@ -1,6 +1,7 @@
 package status
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
@@ -27,7 +28,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doStatus(c *cli.Context) error {
+func doStatus(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")

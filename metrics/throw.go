@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"strconv"
@@ -47,7 +48,7 @@ var CommandThrow = &cli.Command{
 	},
 }
 
-func doThrow(c *cli.Context) error {
+func doThrow(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMaxRetry := c.Int("retry")

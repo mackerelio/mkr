@@ -1,6 +1,7 @@
 package org
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
@@ -23,7 +24,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doOrg(c *cli.Context) error {
+func doOrg(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

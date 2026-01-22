@@ -1,6 +1,7 @@
 package metric_names
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/format"
@@ -37,7 +38,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doMetricNames(c *cli.Context) error {
+func doMetricNames(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	jq := c.String("jq")

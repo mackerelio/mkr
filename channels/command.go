@@ -1,6 +1,7 @@
 package channels
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
@@ -46,7 +47,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doChannels(c *cli.Context) error {
+func doChannels(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
@@ -59,7 +60,7 @@ func doChannels(c *cli.Context) error {
 	}).run()
 }
 
-func doChannelsPull(c *cli.Context) error {
+func doChannelsPull(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

@@ -1,6 +1,7 @@
 package hosts
 
 import (
+	"context"
 	"strings"
 
 	"github.com/Songmu/prompter"
@@ -26,7 +27,7 @@ var CommandRetire = &cli.Command{
 	},
 }
 
-func doRetire(c *cli.Context) error {
+func doRetire(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	force := c.Bool("force")
 	argHostIDs := c.Args().Slice()

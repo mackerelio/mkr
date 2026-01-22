@@ -1,6 +1,7 @@
 package annotations
 
 import (
+	"context"
 	"io"
 	"os"
 
@@ -151,7 +152,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doAnnotationsCreate(c *cli.Context) error {
+func doAnnotationsCreate(ctx context.Context, c *cli.Command) error {
 	title := c.String("title")
 	description := c.String("description")
 	descriptionFile := c.String("description-file")
@@ -214,7 +215,7 @@ func doAnnotationsCreate(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsList(c *cli.Context) error {
+func doAnnotationsList(ctx context.Context, c *cli.Command) error {
 	service := c.String("service")
 	from := c.Int64("from")
 	to := c.Int64("to")
@@ -242,7 +243,7 @@ func doAnnotationsList(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsUpdate(c *cli.Context) error {
+func doAnnotationsUpdate(ctx context.Context, c *cli.Command) error {
 	annotationID := c.String("id")
 	title := c.String("title")
 	description := c.String("description")
@@ -306,7 +307,7 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsDelete(c *cli.Context) error {
+func doAnnotationsDelete(ctx context.Context, c *cli.Command) error {
 	annotationID := c.String("id")
 
 	if annotationID == "" {
