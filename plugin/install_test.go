@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"flag"
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -196,13 +196,10 @@ func TestInstallByArtifact(t *testing.T) {
 	})
 }
 
-func newPluginInstallContext(t testing.TB, target, prefix string, overwrite bool) *cli.Context {
+func newPluginInstallCommand(t testing.TB, target, prefix string, overwrite bool) *cli.Command {
 	t.Helper()
-	fs := flag.NewFlagSet("name", flag.ContinueOnError)
-	for _, f := range commandPluginInstall.Flags {
-		f.Apply(fs) // nolint
-	}
-	argv := []string{}
+
+	argv := []string{"$0"}
 	if prefix != "" {
 		argv = append(argv, fmt.Sprintf("-prefix=%s", prefix))
 	}
@@ -212,10 +209,18 @@ func newPluginInstallContext(t testing.TB, target, prefix string, overwrite bool
 	if target != "" {
 		argv = append(argv, target)
 	}
-	if err := fs.Parse(argv); err != nil {
-		t.Fatal(err)
+
+	var retVal cli.Command
+
+	var cmd = *commandPluginInstall
+	cmd.Action = func(_ context.Context, c *cli.Command) error {
+		retVal = *c
+		return nil
 	}
-	return cli.NewContext(nil, fs, nil)
+
+	cmd.Run(t.Context(), argv)
+
+	return &retVal
 }
 
 func TestDoPluginInstall(t *testing.T) {
@@ -224,8 +229,8 @@ func TestDoPluginInstall(t *testing.T) {
 		defer ts.Close()
 		tmpd := t.TempDir()
 
-		ctx := newPluginInstallContext(t, ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
-		err := doPluginInstall(t.Context(), ctx)
+		cmd := newPluginInstallCommand(t, ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
+		err := commandPluginInstall.Action(t.Context(), cmd)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
 		fpath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
@@ -251,8 +256,8 @@ func TestDoPluginInstall(t *testing.T) {
 
 		tmpd := t.TempDir()
 
-		ctx := newPluginInstallContext(t, scheme+fpath, tmpd, false)
-		err = doPluginInstall(t.Context(), ctx)
+		cmd := newPluginInstallCommand(t, scheme+fpath, tmpd, false)
+		err = commandPluginInstall.Action(t.Context(), cmd)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
 		plugPath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
