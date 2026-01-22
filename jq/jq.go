@@ -6,7 +6,7 @@ import (
 	"io"
 
 	"github.com/itchyny/gojq"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandLineFlag = &cli.StringFlag{

@@ -14,7 +14,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
 	"golang.org/x/text/encoding/unicode"

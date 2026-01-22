@@ -8,7 +8,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandFetch = &cli.Command{

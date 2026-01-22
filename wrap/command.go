@@ -6,7 +6,7 @@ import (
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // Command is definition of mkr wrap
