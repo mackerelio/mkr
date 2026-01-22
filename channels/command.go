@@ -20,7 +20,7 @@ var Command = &cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull channel settings",

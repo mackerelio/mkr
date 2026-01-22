@@ -19,7 +19,7 @@ var Command = &cli.Command{
     Manipulate graph annotations. Requests APIs under "/api/v0/graph-annotations".
     See https://mackerel.io/api-docs/entry/graph-annotations .
 `,
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "create",
 			Usage:     "create a graph annotation",

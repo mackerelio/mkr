@@ -18,7 +18,7 @@ import (
 var Command = &cli.Command{
 	Name:  "checks",
 	Usage: "Utility for check plugins",
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		commandRun,
 	},
 }

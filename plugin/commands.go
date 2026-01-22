@@ -12,7 +12,7 @@ var CommandPlugin = &cli.Command{
     Manage mackerel plugin.  For example, you can install a mackerel plugin and
     check plugin by "mkr plugin install".
 `,
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		commandPluginInstall,
 	},
 }

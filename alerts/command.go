@@ -41,7 +41,7 @@ var Command = &cli.Command{
 		},
 		jq.CommandLineFlag,
 	},
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",

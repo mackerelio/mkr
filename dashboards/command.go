@@ -22,7 +22,7 @@ var Command = &cli.Command{
     Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
 	Action: doListDashboards,
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "Pull custom dashboards",
