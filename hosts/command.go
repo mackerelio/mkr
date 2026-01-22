@@ -48,7 +48,7 @@ var CommandCreate = &cli.Command{
 func doCreate(ctx context.Context, c *cli.Command) error {
 	argHostName := c.Args().Get(0)
 	if argHostName == "" {
-		cli.ShowCommandHelpAndExit(c, "create", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "create", 1)
 	}
 
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))

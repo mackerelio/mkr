@@ -225,7 +225,7 @@ func TestDoPluginInstall(t *testing.T) {
 		tmpd := t.TempDir()
 
 		ctx := newPluginInstallContext(t, ts.URL+"/mackerel-plugin-sample_linux_amd64.zip", tmpd, false)
-		err := doPluginInstall(ctx)
+		err := doPluginInstall(t.Context(), ctx)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
 		fpath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")
@@ -252,7 +252,7 @@ func TestDoPluginInstall(t *testing.T) {
 		tmpd := t.TempDir()
 
 		ctx := newPluginInstallContext(t, scheme+fpath, tmpd, false)
-		err = doPluginInstall(ctx)
+		err = doPluginInstall(t.Context(), ctx)
 		assert.Nil(t, err, "sample plugin is succesfully installed")
 
 		plugPath := filepath.Join(tmpd, "bin", "mackerel-plugin-sample")

@@ -80,7 +80,7 @@ func doMetrics(ctx context.Context, c *cli.Command) error {
 		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else {
-		cli.ShowCommandHelpAndExit(c, "metrics", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "metrics", 1)
 	}
 	return nil
 }

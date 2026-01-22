@@ -58,7 +58,7 @@ func doMetricNames(ctx context.Context, c *cli.Command) error {
 		err = format.PrettyPrintJSON(os.Stdout, metricNames, jq)
 		logger.DieIf(err)
 	} else {
-		cli.ShowCommandHelpAndExit(c, "metric-names", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "metric-names", 1)
 	}
 	return nil
 }

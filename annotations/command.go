@@ -160,27 +160,27 @@ func doAnnotationsCreate(ctx context.Context, c *cli.Command) error {
 	roles := c.StringSlice("role")
 
 	if title == "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`title` is a required field to create a graph annotation.", 1)
 	}
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`service` is a required field to create a graph annotation.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`from` is a required field to create a graph annotation.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`to` is a required field to create a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
@@ -219,17 +219,17 @@ func doAnnotationsList(ctx context.Context, c *cli.Command) error {
 	to := c.Int64("to")
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`service` is a required field to list graph annotations.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`from` is a required field to list graph annotations.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`to` is a required field to list graph annotations.", 1)
 	}
 
@@ -252,27 +252,27 @@ func doAnnotationsUpdate(ctx context.Context, c *cli.Command) error {
 	roles := c.StringSlice("role")
 
 	if annotationID == "" {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`id` is a required field to delete a update annotation.", 1)
 	}
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`service` is a required field to update a graph annotation.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`from` is a required field to update a graph annotation.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`to` is a required field to update a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
@@ -309,7 +309,7 @@ func doAnnotationsDelete(ctx context.Context, c *cli.Command) error {
 	annotationID := c.String("id")
 
 	if annotationID == "" {
-		_ = cli.ShowCommandHelp(c, "delete")
+		_ = cli.ShowCommandHelp(ctx, c, "delete")
 		return cli.Exit("`id` is a required field to delete a graph annotation.", 1)
 	}
 

@@ -67,7 +67,7 @@ func doUpdate(ctx context.Context, c *cli.Command) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelpAndExit(c, "update", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "update", 1)
 		}
 	}
 
@@ -77,7 +77,7 @@ func doUpdate(ctx context.Context, c *cli.Command) error {
 
 	if !needUpdateHostStatus && !needUpdateHost {
 		logger.Log("update", "at least one argumet is required.")
-		cli.ShowCommandHelpAndExit(c, "update", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "update", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)

@@ -35,7 +35,7 @@ func doStatus(ctx context.Context, c *cli.Command) error {
 
 	if argHostID == "" {
 		if argHostID = mackerelclient.LoadHostIDFromConfig(confFile); argHostID == "" {
-			cli.ShowCommandHelpAndExit(c, "status", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "status", 1)
 		}
 	}
 

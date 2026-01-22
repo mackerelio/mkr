@@ -433,7 +433,7 @@ func doAlertsClose(ctx context.Context, c *cli.Command) error {
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
-		cli.ShowCommandHelpAndExit(c, "alerts", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -452,7 +452,7 @@ func doAlertsClose(ctx context.Context, c *cli.Command) error {
 
 func findAlertLogs(ctx context.Context, c *cli.Command) error {
 	if c.Args().Len() != 1 {
-		cli.ShowCommandHelpAndExit(c, "alerts", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)

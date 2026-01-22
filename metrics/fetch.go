@@ -36,7 +36,7 @@ func doFetch(ctx context.Context, c *cli.Command) error {
 	optMetricNames := c.StringSlice("name")
 
 	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {
-		cli.ShowCommandHelpAndExit(c, "fetch", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "fetch", 1)
 	}
 
 	allMetricValues := make(mackerel.LatestMetricValues)

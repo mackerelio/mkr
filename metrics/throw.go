@@ -110,7 +110,7 @@ func doThrow(ctx context.Context, c *cli.Command) error {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
-		cli.ShowCommandHelpAndExit(c, "throw", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "throw", 1)
 	}
 	return nil
 }

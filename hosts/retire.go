@@ -35,7 +35,7 @@ func doRetire(ctx context.Context, c *cli.Command) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelpAndExit(c, "retire", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "retire", 1)
 		}
 	}
 
