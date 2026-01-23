@@ -34,7 +34,7 @@ func newWrapCommand(t testing.TB, args []string) *cli.Command {
 				Name: "apibase",
 			},
 		},
-	}).Run(t.Context(), args)
+	}).Run(t.Context(), args) // nolint
 
 	return &retVal
 }

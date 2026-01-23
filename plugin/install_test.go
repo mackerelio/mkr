@@ -218,7 +218,7 @@ func newPluginInstallCommand(t testing.TB, target, prefix string, overwrite bool
 		return nil
 	}
 
-	cmd.Run(t.Context(), argv)
+	cmd.Run(t.Context(), argv) // nolint
 
 	return &retVal
 }
