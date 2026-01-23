@@ -6,11 +6,11 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // CommandCreate is definition of mkr create subcommand
-var CommandCreate = cli.Command{
+var CommandCreate = &cli.Command{
 	Name:      "create",
 	Usage:     "Create a new host",
 	ArgsUsage: "[--status | -st <status>] [--roleFullname | -R <service:role>] [--customIdentifier <customIdentifier>] [--memo <memo>] <hostName>",
@@ -20,14 +20,28 @@ var CommandCreate = cli.Command{
 `,
 	Action: doCreate,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Host status ('working', 'standby', 'maintenance')"},
-		cli.StringSliceFlag{
-			Name:  "roleFullname, R",
-			Value: &cli.StringSlice{},
-			Usage: "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
+		&cli.StringFlag{
+			Name:    "status",
+			Aliases: []string{"st"},
+			Value:   "",
+			Usage:   "Host status ('working', 'standby', 'maintenance')",
 		},
-		cli.StringFlag{Name: "customIdentifier", Value: "", Usage: "CustomIdentifier for the Host"},
-		cli.StringFlag{Name: "memo", Value: "", Usage: "memo for the Host"},
+		&cli.StringSliceFlag{
+			Name:    "roleFullname",
+			Aliases: []string{"R"},
+			Value:   cli.NewStringSlice(),
+			Usage:   "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
+		},
+		&cli.StringFlag{
+			Name:  "customIdentifier",
+			Value: "",
+			Usage: "CustomIdentifier for the Host",
+		},
+		&cli.StringFlag{
+			Name:  "memo",
+			Value: "",
+			Usage: "memo for the Host",
+		},
 	},
 }
 
@@ -37,7 +51,7 @@ func doCreate(c *cli.Context) error {
 		cli.ShowCommandHelpAndExit(c, "create", 1)
 	}
 
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}
@@ -56,7 +70,7 @@ func doCreate(c *cli.Context) error {
 }
 
 // CommandHosts is definition of mkr hosts subcommand
-var CommandHosts = cli.Command{
+var CommandHosts = &cli.Command{
 	Name:      "hosts",
 	Usage:     "List hosts",
 	ArgsUsage: "[--verbose | -v] [--name | -n <name>] [--service | -s <service>] [[--role | -r <role>]...] [[--status | --st <status>]...] [--jq <formula>]",
@@ -66,26 +80,47 @@ var CommandHosts = cli.Command{
 `,
 	Action: doHosts,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "List hosts only matched with <name>"},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "List hosts only belonging to <service>"},
-		cli.StringSliceFlag{
-			Name:  "role, r",
-			Value: &cli.StringSlice{},
-			Usage: "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
+		&cli.StringFlag{
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "List hosts only matched with <name>",
 		},
-		cli.StringSliceFlag{
-			Name:  "status, st",
-			Value: &cli.StringSlice{},
-			Usage: "List hosts only matched <status>. Multiple choices are allowed.",
+		&cli.StringFlag{
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "List hosts only belonging to <service>",
 		},
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		&cli.StringSliceFlag{
+			Name:    "role",
+			Aliases: []string{"r"},
+			Value:   cli.NewStringSlice(),
+			Usage:   "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
+		},
+		&cli.StringSliceFlag{
+			Name:    "status",
+			Aliases: []string{"st"},
+			Value:   cli.NewStringSlice(),
+			Usage:   "List hosts only matched <status>. Multiple choices are allowed.",
+		},
+		&cli.StringFlag{
+			Name:    "format",
+			Aliases: []string{"f"},
+			Value:   "",
+			Usage:   "Output format template",
+		},
+		&cli.BoolFlag{
+			Name:    "verbose",
+			Aliases: []string{"v"},
+			Usage:   "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }
 
 func doHosts(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

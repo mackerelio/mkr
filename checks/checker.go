@@ -10,20 +10,20 @@ import (
 
 	"github.com/mackerelio/checkers"
 	"github.com/mackerelio/mackerel-agent/config"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 	yaml "gopkg.in/yaml.v2"
 )
 
 // Command is command definition of mkr checks
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "checks",
 	Usage: "Utility for check plugins",
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		commandRun,
 	},
 }
 
-var commandRun = cli.Command{
+var commandRun = &cli.Command{
 	Name:  "run",
 	Usage: "run check commands in mackerel-agent.conf",
 	Description: `
@@ -36,7 +36,7 @@ var commandRun = cli.Command{
 }
 
 func doRunChecks(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	conf, err := config.LoadConfig(confFile)
 	if err != nil {
 		return err

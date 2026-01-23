@@ -12,10 +12,10 @@ import (
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var CommandThrow = cli.Command{
+var CommandThrow = &cli.Command{
 	Name:      "throw",
 	Usage:     "Post metric values",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--retry | -r N ] stdin",
@@ -27,9 +27,23 @@ var CommandThrow = cli.Command{
 `,
 	Action: doThrow,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "Post host metric values to <hostID>."},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "Post service metric values to <service>."},
-		cli.IntFlag{Name: "retry, r", Usage: "Retries up to N times when API request fails."},
+		&cli.StringFlag{
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "Post host metric values to <hostID>.",
+		},
+		&cli.StringFlag{
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "Post service metric values to <service>.",
+		},
+		&cli.IntFlag{
+			Name:    "retry",
+			Aliases: []string{"r"},
+			Usage:   "Retries up to N times when API request fails.",
+		},
 	},
 }
 

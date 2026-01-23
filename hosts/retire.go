@@ -6,10 +6,10 @@ import (
 	"github.com/Songmu/prompter"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var CommandRetire = cli.Command{
+var CommandRetire = &cli.Command{
 	Name:      "retire",
 	Usage:     "Retire hosts",
 	ArgsUsage: "[--force] hostIds...",
@@ -19,14 +19,17 @@ var CommandRetire = cli.Command{
 `,
 	Action: doRetire,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "force", Usage: "Force retirement without confirmation."},
+		&cli.BoolFlag{
+			Name:  "force",
+			Usage: "Force retirement without confirmation.",
+		},
 	},
 }
 
 func doRetire(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	force := c.Bool("force")
-	argHostIDs := c.Args()
+	argHostIDs := c.Args().Slice()
 
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)

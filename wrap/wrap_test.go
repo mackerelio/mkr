@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func newWrapContext(t testing.TB, args []string) *cli.Context {
@@ -19,9 +19,10 @@ func newWrapContext(t testing.TB, args []string) *cli.Context {
 	app := cli.NewApp()
 	parentFs := flag.NewFlagSet("mockmkr", flag.ContinueOnError)
 	for _, f := range []cli.Flag{
-		cli.StringFlag{Name: "conf"}, cli.StringFlag{Name: "apibase"},
+		&cli.StringFlag{Name: "conf"},
+		&cli.StringFlag{Name: "apibase"},
 	} {
-		f.Apply(parentFs)
+		f.Apply(parentFs) // nolint
 	}
 	if err := parentFs.Parse(args); err != nil {
 		t.Fatal(err)
@@ -36,7 +37,7 @@ func newWrapContext(t testing.TB, args []string) *cli.Context {
 
 	fs := flag.NewFlagSet("mockwrap", flag.ContinueOnError)
 	for _, f := range Command.Flags {
-		f.Apply(fs)
+		f.Apply(fs) // nolint
 	}
 	if err := fs.Parse(args); err != nil {
 		t.Fatal(err)
@@ -186,7 +187,7 @@ Note: This is note
 			)
 
 			c := newWrapContext(t, args)
-			err := Command.Action.(func(*cli.Context) error)(c)
+			err := Command.Action(c)
 			var exitCode int
 			if err != nil {
 				exitCode = 1
@@ -208,7 +209,7 @@ func TestCommand_Action_withoutConf(t *testing.T) {
 		"go", "run", "testdata/stub.go",
 	})
 	expect := "command exited with code: 1"
-	err := Command.Action.(func(*cli.Context) error)(c)
+	err := Command.Action(c)
 	if err == nil {
 		t.Errorf("error should be occurred but nil")
 	} else if err.Error() != expect {

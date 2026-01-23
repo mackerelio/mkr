@@ -5,11 +5,11 @@ import (
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // Command is the definition of channels subcommand
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "channels",
 	Usage: "List notification channels",
 	Description: `
@@ -20,7 +20,7 @@ var Command = cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull channel settings",
@@ -30,15 +30,24 @@ var Command = cli.Command{
 `,
 			Action: doChannelsPull,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Value: "", Usage: "Filename to store channel settings. default: channels.json"},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				&cli.StringFlag{
+					Name:    "file-path",
+					Aliases: []string{"F"},
+					Value:   "",
+					Usage:   "Filename to store channel settings. default: channels.json",
+				},
+				&cli.BoolFlag{
+					Name:    "verbose",
+					Aliases: []string{"v"},
+					Usage:   "Verbose output mode",
+				},
 			},
 		},
 	},
 }
 
 func doChannels(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}
@@ -51,7 +60,7 @@ func doChannels(c *cli.Context) error {
 }
 
 func doChannelsPull(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

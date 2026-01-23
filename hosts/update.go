@@ -4,10 +4,10 @@ import (
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var CommandUpdate = cli.Command{
+var CommandUpdate = &cli.Command{
 	Name:      "update",
 	Usage:     "Update the host",
 	ArgsUsage: "[--name | -n <name>] [--displayName <displayName>] [--status | -st <status>] [--roleFullname | -R <service:role>] [--overwriteRoles | -o] [--memo <memo>] [<hostIds...>]",
@@ -17,22 +17,45 @@ var CommandUpdate = cli.Command{
 `,
 	Action: doUpdate,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "Update hostname."},
-		cli.StringFlag{Name: "displayName", Value: "", Usage: "Update displayName."},
-		cli.StringFlag{Name: "status, st", Value: "", Usage: "Update status."},
-		cli.StringSliceFlag{
-			Name:  "roleFullname, R",
-			Value: &cli.StringSlice{},
-			Usage: "Update rolefullname.",
+		&cli.StringFlag{
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "Update hostname.",
 		},
-		cli.BoolFlag{Name: "overwriteRoles, o", Usage: "Overwrite roles instead of adding specified roles."},
-		cli.StringFlag{Name: "memo", Value: "", Usage: "memo for the Host"},
+		&cli.StringFlag{
+			Name:  "displayName",
+			Value: "",
+			Usage: "Update displayName.",
+		},
+		&cli.StringFlag{
+			Name:    "status",
+			Aliases: []string{"st"},
+			Value:   "",
+			Usage:   "Update status.",
+		},
+		&cli.StringSliceFlag{
+			Name:    "roleFullname",
+			Aliases: []string{"R"},
+			Value:   cli.NewStringSlice(),
+			Usage:   "Update rolefullname.",
+		},
+		&cli.BoolFlag{
+			Name:    "overwriteRoles",
+			Aliases: []string{"o"},
+			Usage:   "Overwrite roles instead of adding specified roles.",
+		},
+		&cli.StringFlag{
+			Name:  "memo",
+			Value: "",
+			Usage: "memo for the Host",
+		},
 	},
 }
 
 func doUpdate(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
-	argHostIDs := c.Args()
+	confFile := c.String("conf")
+	argHostIDs := c.Args().Slice()
 	optName := c.String("name")
 	optDisplayName := c.String("displayName")
 	optStatus := c.String("status")

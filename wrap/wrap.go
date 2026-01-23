@@ -12,7 +12,7 @@ import (
 	"github.com/Songmu/wrapcommander"
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -38,7 +38,7 @@ func (wr *wrap) run() error {
 		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s", err, msg)
 	}
 	if !re.Success {
-		return cli.NewExitError(re.Msg, re.ExitCode)
+		return cli.Exit(re.Msg, re.ExitCode)
 	}
 	return nil
 }

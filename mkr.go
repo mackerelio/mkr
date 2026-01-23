@@ -7,7 +7,7 @@ import (
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
@@ -16,15 +16,19 @@ func main() {
 	version, gitcommit := fromVCS()
 	app.Version = fmt.Sprintf("%s (rev:%s)", version, gitcommit)
 	app.Usage = "A CLI tool for mackerel.io"
-	app.Author = "Hatena Co., Ltd."
+	app.Authors = []*cli.Author{
+		{
+			Name: "Hatena Co., Ltd.",
+		},
+	}
 	app.Commands = Commands
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "conf",
 			Value: config.DefaultConfig.Conffile,
 			Usage: "Config file path",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name: "apibase",
 			// this default value is set in config.LoadApibaseFromConfigWithFallback
 			Usage: fmt.Sprintf("API Base (default: \"%s\")", config.DefaultConfig.Apibase),

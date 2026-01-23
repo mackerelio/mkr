@@ -17,11 +17,11 @@ import (
 	"github.com/mackerelio/mkr/status"
 	"github.com/mackerelio/mkr/users"
 	"github.com/mackerelio/mkr/wrap"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // Commands cli.Command object list
-var Commands = []cli.Command{
+var Commands = []*cli.Command{
 	status.Command,
 	hosts.CommandHosts,
 	hosts.CommandCreate,

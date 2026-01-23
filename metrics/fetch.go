@@ -8,10 +8,10 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var CommandFetch = cli.Command{
+var CommandFetch = &cli.Command{
 	Name:      "fetch",
 	Usage:     "Fetch latest metric values",
 	ArgsUsage: "[--name | -n <metricName>] [--jq <formula>] hostIds...",
@@ -21,17 +21,18 @@ var CommandFetch = cli.Command{
 `,
 	Action: doFetch,
 	Flags: []cli.Flag{
-		cli.StringSliceFlag{
-			Name:  "name, n",
-			Value: &cli.StringSlice{},
-			Usage: "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
+		&cli.StringSliceFlag{
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   cli.NewStringSlice(),
+			Usage:   "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
 		jq.CommandLineFlag,
 	},
 }
 
 func doFetch(c *cli.Context) error {
-	argHostIDs := c.Args()
+	argHostIDs := c.Args().Slice()
 	optMetricNames := c.StringSlice("name")
 
 	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {

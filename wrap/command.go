@@ -6,11 +6,11 @@ import (
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // Command is definition of mkr wrap
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "wrap",
 	Usage:     "Wrap and monitor batch jobs to run with cron etc",
 	ArgsUsage: "[--name|-n <name>] [OPTIONS] -- /path/to/batch",
@@ -21,13 +21,44 @@ var Command = cli.Command{
 `,
 	Action: doWrap,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "The `check-name` which must be unique on a host. If it is empty it will be automatically derived."},
-		cli.BoolFlag{Name: "detail, d", Usage: "send a detailed report contains command output"},
-		cli.StringFlag{Name: "note, N", Value: "", Usage: "`note` of the job"},
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "`hostID`"},
-		cli.BoolFlag{Name: "warning, w", Usage: "alerts as warning"},
-		cli.BoolFlag{Name: "auto-close, a", Usage: "automatically close an existing alert when the command success"},
-		cli.DurationFlag{Name: "notification-interval, I", Usage: "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)"},
+		&cli.StringFlag{
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "The `check-name` which must be unique on a host. If it is empty it will be automatically derived.",
+		},
+		&cli.BoolFlag{
+			Name:    "detail",
+			Aliases: []string{"d"},
+			Usage:   "send a detailed report contains command output",
+		},
+		&cli.StringFlag{
+			Name:    "note",
+			Aliases: []string{"N"},
+			Value:   "",
+			Usage:   "`note` of the job",
+		},
+		&cli.StringFlag{
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "`hostID`",
+		},
+		&cli.BoolFlag{
+			Name:    "warning",
+			Aliases: []string{"w"},
+			Usage:   "alerts as warning",
+		},
+		&cli.BoolFlag{
+			Name:    "auto-close",
+			Aliases: []string{"a"},
+			Usage:   "automatically close an existing alert when the command success",
+		},
+		&cli.DurationFlag{
+			Name:    "notification-interval",
+			Aliases: []string{"I"},
+			Usage:   "The notification re-sending `interval`. If it is zero, never re-send. (minimum 10 minutes)",
+		},
 		// XXX Implementation of maxCheckAttempts is difficult because the
 		// execution interval of cron or batches are not always one-minute.
 		// This is due to the server-side logic of the Mackerel.
@@ -35,7 +66,7 @@ var Command = cli.Command{
 }
 
 func doWrap(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	var conf *config.Config
 	if _, err := os.Stat(confFile); err == nil {
 		conf, err = config.LoadConfig(confFile)
@@ -50,7 +81,7 @@ func doWrap(c *cli.Context) error {
 		conf = config.DefaultConfig
 	}
 
-	apibase := c.GlobalString("apibase")
+	apibase := c.String("apibase")
 	if apibase == "" {
 		apibase = conf.Apibase
 	}
@@ -75,7 +106,7 @@ func doWrap(c *cli.Context) error {
 	// loading is failed, or apikey or hostID is empty, we don't return errors
 	// and only output the log here.
 
-	cmd := c.Args()
+	cmd := c.Args().Slice()
 	if len(cmd) > 0 && cmd[0] == "--" {
 		cmd = cmd[1:]
 	}

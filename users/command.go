@@ -6,10 +6,10 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var CommandUsers = cli.Command{
+var CommandUsers = &cli.Command{
 	Name:      "users",
 	Usage:     "List users",
 	ArgsUsage: "[--verbose | -v] [--format | -f <format>] [--jq <formula>]",
@@ -19,14 +19,23 @@ var CommandUsers = cli.Command{
 `,
 	Action: doUsers,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "format, f", Value: "", Usage: "Output format template"},
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		&cli.StringFlag{
+			Name:    "format",
+			Aliases: []string{"f"},
+			Value:   "",
+			Usage:   "Output format template",
+		},
+		&cli.BoolFlag{
+			Name:    "verbose",
+			Aliases: []string{"v"},
+			Usage:   "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }
 
 func doUsers(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

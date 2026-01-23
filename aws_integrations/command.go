@@ -5,10 +5,10 @@ import (
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "aws-integrations",
 	Usage:     "List aws integration settings",
 	ArgsUsage: "[--jq <formula>]",
@@ -23,7 +23,7 @@ var Command = cli.Command{
 }
 
 func doAWSIntegrations(c *cli.Context) error {
-	client, err := mackerelclient.New(c.GlobalString("conf"), c.GlobalString("apibase"))
+	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
 	}

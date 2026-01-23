@@ -12,17 +12,17 @@ import (
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:  "dashboards",
 	Usage: "Manipulate custom dashboards",
 	Description: `
     Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
 	Action: doListDashboards,
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "Pull custom dashboards",
@@ -32,7 +32,10 @@ var Command = cli.Command{
 `,
 			Action: doPullDashboard,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "id", Usage: "dashboard ID to pull (optional, if not specified, pulls all dashboards)"},
+				&cli.StringFlag{
+					Name:  "id",
+					Usage: "dashboard ID to pull (optional, if not specified, pulls all dashboards)",
+				},
 			},
 		},
 		{
@@ -46,7 +49,11 @@ var Command = cli.Command{
 `,
 			Action: doPushDashboard,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "file-path, F", Usage: "read dashboard from the file"},
+				&cli.StringFlag{
+					Name:    "file-path",
+					Aliases: []string{"F"},
+					Usage:   "read dashboard from the file",
+				},
 			},
 		},
 

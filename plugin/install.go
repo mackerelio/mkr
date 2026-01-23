@@ -14,7 +14,7 @@ import (
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mholt/archives"
 	"github.com/pkg/errors"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // The reason why an immediate function, not `init()` is used here is that
@@ -29,21 +29,21 @@ var defaultPluginInstallLocation = func() string {
 	return filepath.Join(filepath.Dir(path), "plugins")
 }()
 
-var commandPluginInstall = cli.Command{
+var commandPluginInstall = &cli.Command{
 	Name:      "install",
 	Usage:     "Install a plugin from github or plugin registry",
 	ArgsUsage: "[--prefix <prefix>] [--overwrite] [--upgrade] <install_target>",
 	Action:    doPluginInstall,
 	Flags: []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "prefix",
 			Usage: fmt.Sprintf("Plugin install location. The default is %s", defaultPluginInstallLocation),
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "overwrite",
 			Usage: "Overwrite a plugin command in a plugin directory, even if same name command exists",
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "upgrade",
 			Usage: "Upgrade a plugin command in a plugin directory only when a release_tag is modified",
 		},

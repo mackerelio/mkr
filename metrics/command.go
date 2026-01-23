@@ -8,10 +8,10 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "metrics",
 	Usage:     "Fetch metric values",
 	ArgsUsage: "[--host | -H <hostId>] [--service | -s <service>] [--name | -n <metricName>] [--jq <formula>] --from int --to int",
@@ -22,11 +22,32 @@ var Command = cli.Command{
 `,
 	Action: doMetrics,
 	Flags: []cli.Flag{
-		cli.StringFlag{Name: "host, H", Value: "", Usage: "Fetch host metric values of <hostID>."},
-		cli.StringFlag{Name: "service, s", Value: "", Usage: "Fetch service metric values of <service>."},
-		cli.StringFlag{Name: "name, n", Value: "", Usage: "The name of the metric for which you want to obtain the metric."},
-		cli.Int64Flag{Name: "from", Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)"},
-		cli.Int64Flag{Name: "to", Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)"},
+		&cli.StringFlag{
+			Name:    "host",
+			Aliases: []string{"H"},
+			Value:   "",
+			Usage:   "Fetch host metric values of <hostID>.",
+		},
+		&cli.StringFlag{
+			Name:    "service",
+			Aliases: []string{"s"},
+			Value:   "",
+			Usage:   "Fetch service metric values of <service>.",
+		},
+		&cli.StringFlag{
+			Name:    "name",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "The name of the metric for which you want to obtain the metric.",
+		},
+		&cli.Int64Flag{
+			Name:  "from",
+			Usage: "The first of the period for which you want to obtain the metric. (epoch seconds)",
+		},
+		&cli.Int64Flag{
+			Name:  "to",
+			Usage: "The end of the period for which you want to obtain the metric. (epoch seconds)",
+		},
 		jq.CommandLineFlag,
 	},
 }

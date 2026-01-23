@@ -5,10 +5,10 @@ import (
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "status",
 	Usage:     "Show the host",
 	ArgsUsage: "[--verbose | -v] [--jq <formula>] <hostId>",
@@ -18,13 +18,17 @@ var Command = cli.Command{
 `,
 	Action: doStatus,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+		&cli.BoolFlag{
+			Name:    "verbose",
+			Aliases: []string{"v"},
+			Usage:   "Verbose output mode",
+		},
 		jq.CommandLineFlag,
 	},
 }
 
 func doStatus(c *cli.Context) error {
-	confFile := c.GlobalString("conf")
+	confFile := c.String("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 

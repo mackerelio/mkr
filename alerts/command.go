@@ -15,10 +15,10 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Command = cli.Command{
+var Command = &cli.Command{
 	Name:      "alerts",
 	Usage:     "Retrieve/Close alerts",
 	ArgsUsage: "[--with-closed | -w] [--limit | -l] [--jq <formula>]",
@@ -28,11 +28,20 @@ var Command = cli.Command{
 `,
 	Action: doAlertsRetrieve,
 	Flags: []cli.Flag{
-		cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-		cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
+		&cli.BoolFlag{
+			Name:    "with-closed",
+			Aliases: []string{"w"},
+			Usage:   "Display open alert including close alert. default: false",
+		},
+		&cli.IntFlag{
+			Name:    "limit",
+			Aliases: []string{"l"},
+			Value:   defaultAlertsLimit,
+			Usage:   fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+		},
 		jq.CommandLineFlag,
 	},
-	Subcommands: []cli.Command{
+	Subcommands: []*cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",
@@ -42,19 +51,35 @@ var Command = cli.Command{
 `,
 			Action: doAlertsList,
 			Flags: []cli.Flag{
-				cli.StringSliceFlag{
-					Name:  "service, s",
-					Value: &cli.StringSlice{},
-					Usage: "Filters alerts by service. Multiple choices are allowed.",
+				&cli.StringSliceFlag{
+					Name:    "service",
+					Aliases: []string{"s"},
+					Value:   cli.NewStringSlice(),
+					Usage:   "Filters alerts by service. Multiple choices are allowed.",
 				},
-				cli.StringSliceFlag{
-					Name:  "host-status, S",
-					Value: &cli.StringSlice{},
-					Usage: "Filters alerts by status of each host. Multiple choices are allowed.",
+				&cli.StringSliceFlag{
+					Name:    "host-status",
+					Aliases: []string{"S"},
+					Value:   cli.NewStringSlice(),
+					Usage:   "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
-				cli.BoolTFlag{Name: "color, c", Usage: "Colorize output. default: true"},
-				cli.BoolFlag{Name: "with-closed, w", Usage: "Display open alert including close alert. default: false"},
-				cli.IntFlag{Name: "limit, l", Value: defaultAlertsLimit, Usage: fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit)},
+				&cli.BoolFlag{
+					Name:    "color",
+					Value:   true,
+					Aliases: []string{"c"},
+					Usage:   "Colorize output. default: true",
+				},
+				&cli.BoolFlag{
+					Name:    "with-closed",
+					Aliases: []string{"w"},
+					Usage:   "Display open alert including close alert. default: false",
+				},
+				&cli.IntFlag{
+					Name:    "limit",
+					Aliases: []string{"l"},
+					Value:   defaultAlertsLimit,
+					Usage:   fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+				},
 			},
 		},
 		{
@@ -66,8 +91,17 @@ var Command = cli.Command{
 `,
 			Action: doAlertsClose,
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "reason, r", Value: "", Usage: "Reason of closing alert."},
-				cli.BoolFlag{Name: "verbose, v", Usage: "Verbose output mode"},
+				&cli.StringFlag{
+					Name:    "reason",
+					Aliases: []string{"r"},
+					Value:   "",
+					Usage:   "Reason of closing alert.",
+				},
+				&cli.BoolFlag{
+					Name:    "verbose",
+					Aliases: []string{"v"},
+					Usage:   "Verbose output mode",
+				},
 			},
 		},
 		{
@@ -79,7 +113,12 @@ var Command = cli.Command{
 `,
 			Action: findAlertLogs,
 			Flags: []cli.Flag{
-				cli.IntFlag{Name: "limit, l", Value: defaultAlertLogsLimit, Usage: "Set the number of alert logs to display"},
+				&cli.IntFlag{
+					Name:    "limit",
+					Aliases: []string{"l"},
+					Value:   defaultAlertLogsLimit,
+					Usage:   "Set the number of alert logs to display",
+				},
 				jq.CommandLineFlag,
 			},
 		},
@@ -318,7 +357,7 @@ func doAlertsList(c *cli.Context) error {
 				continue
 			}
 		}
-		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.BoolT("color")))
+		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.Bool("color")))
 	}
 	return nil
 }
@@ -391,7 +430,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 
 func doAlertsClose(c *cli.Context) error {
 	isVerbose := c.Bool("verbose")
-	argAlertIDs := c.Args()
+	argAlertIDs := c.Args().Slice()
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
@@ -413,7 +452,7 @@ func doAlertsClose(c *cli.Context) error {
 }
 
 func findAlertLogs(c *cli.Context) error {
-	if len(c.Args()) != 1 {
+	if c.Args().Len() != 1 {
 		cli.ShowCommandHelpAndExit(c, "alerts", 1)
 	}
 
