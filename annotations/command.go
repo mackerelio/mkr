@@ -42,11 +42,11 @@ var Command = &cli.Command{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
@@ -76,11 +76,11 @@ var Command = &cli.Command{
 					Aliases: []string{"s"},
 					Usage:   "Service name for annotation",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
@@ -117,11 +117,11 @@ var Command = &cli.Command{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
