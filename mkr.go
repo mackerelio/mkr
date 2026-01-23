@@ -30,12 +30,12 @@ func main() {
 			&cli.StringFlag{
 				Name:  "conf",
 				Value: config.DefaultConfig.Conffile,
-				Usage: "Config file path",
+				Usage: "Config `file` path",
 			},
 			&cli.StringFlag{
 				Name: "apibase",
 				// this default value is set in config.LoadApibaseFromConfigWithFallback
-				Usage: fmt.Sprintf("API Base (default: \"%s\")", config.DefaultConfig.Apibase),
+				Usage: fmt.Sprintf("API Base `URL` (default: \"%s\")", config.DefaultConfig.Apibase),
 			},
 		},
 	}
