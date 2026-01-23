@@ -50,7 +50,7 @@ func TestCommand_Action(t *testing.T) {
 		Name                 string               `json:"name"`
 		Status               mackerel.CheckStatus `json:"status"`
 		Message              string               `json:"message"`
-		NotificationInterval uint                 `json:"notificationInterval,omitempty"`
+		NotificationInterval uint                 `json:"notificationInterval,omitempty"` // Minutes
 	}
 	type testReq struct {
 		Reports []testResult `json:"reports"`
@@ -122,9 +122,8 @@ Note: This is note
 				Name:   "test-check2",
 				Status: mackerel.CheckStatusOK,
 				Message: `command exited with code: 0
-% echo 1
-`,
-				NotificationInterval: 1200,
+% echo 1`,
+				NotificationInterval: 20,
 			},
 			ExitCode: 0,
 		},
@@ -138,12 +137,11 @@ Note: This is note
 				"echo", "2",
 			},
 			Result: testResult{
-				Name:   "test-check2",
+				Name:   "test-check3",
 				Status: mackerel.CheckStatusOK,
 				Message: `command exited with code: 0
-% echo 2
-`,
-				NotificationInterval: 600,
+% echo 2`,
+				NotificationInterval: 10,
 			},
 			ExitCode: 0,
 		},
@@ -182,7 +180,9 @@ Note: This is note
 			defer ts.Close()
 
 			args := append(
-				[]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap"},
+				// This tests for verify the sending request.
+				// therefore, to test in an environment without a configuration file, need to set the host argument.
+				[]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap", "-host", "3Yr"},
 				tc.Args...,
 			)
 
@@ -202,6 +202,7 @@ Note: This is note
 	}
 }
 
+// Commands are executed even if the configuration file does not exist.
 func TestCommand_Action_withoutConf(t *testing.T) {
 	c := newWrapContext(t, []string{
 		"-conf=notfound", "-apibase=http://localhost", "wrap",
