@@ -482,9 +482,11 @@ func doMonitorsPush(ctx context.Context, c *cli.Command) error {
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
 
-	client := mackerelclient.NewFromCliCommand(c)
+	var client mackerelclient.Client
 	if isVerbose {
-		client.Verbose = true
+		client = mackerelclient.NewFromCliCommandVerbose(c)
+	} else {
+		client = mackerelclient.NewFromCliCommand(c)
 	}
 
 	for _, m := range monitorDiff.onlyLocal {

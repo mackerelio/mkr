@@ -40,7 +40,17 @@ func New(conffile, apibase string) (Client, error) {
 }
 
 // NewFromCliCommand returns mackerel client from cli.Command
-func NewFromCliCommand(c *cli.Command) *mackerel.Client {
+func NewFromCliCommand(c *cli.Command) Client {
+	return newFromCliCommand(c, false)
+}
+
+// NewFromCliCommand returns mackerel client from cli.Command
+func NewFromCliCommandVerbose(c *cli.Command) Client {
+	return newFromCliCommand(c, true)
+}
+
+// newFromCliCommand returns mackerel client from cli.Command
+func newFromCliCommand(c *cli.Command, verbose bool) Client {
 	confFile := c.String("conf")
 	apiBase := c.String("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(confFile)
@@ -57,6 +67,6 @@ func NewFromCliCommand(c *cli.Command) *mackerel.Client {
 
 	client, err := mackerel.NewClientWithOptions(apiKey, apiBase, os.Getenv("DEBUG") != "")
 	logger.DieIf(err)
-
+	client.Verbose = verbose
 	return client
 }
