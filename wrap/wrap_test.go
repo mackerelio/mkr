@@ -132,7 +132,7 @@ Note: This is note
 			Args: []string{
 				"-name=test-check3",
 				"-auto-close",
-				"-notification-interval", "5m",
+				"-notification-interval", "5m", // when less 10 min then 10 min.
 				"--",
 				"echo", "2",
 			},
@@ -180,8 +180,8 @@ Note: This is note
 			defer ts.Close()
 
 			args := append(
-				// This tests for verify the sending request.
-				// therefore, to test in an environment without a configuration file, need to set the host argument.
+				// This test checks to verify the sending request.
+				// Therefore, to test in an environment without a configuration file, it needs to set the host argument.
 				[]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap", "-host", "3Yr"},
 				tc.Args...,
 			)
