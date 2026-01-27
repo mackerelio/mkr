@@ -44,7 +44,7 @@ func TestCommand_Action(t *testing.T) {
 		Name                 string               `json:"name"`
 		Status               mackerel.CheckStatus `json:"status"`
 		Message              string               `json:"message"`
-		NotificationInterval uint                 `json:"notificationInterval,omitempty"`
+		NotificationInterval uint                 `json:"notificationInterval,omitempty"` // Minutes
 	}
 	type testReq struct {
 		Reports []testResult `json:"reports"`
@@ -116,9 +116,8 @@ Note: This is note
 				Name:   "test-check2",
 				Status: mackerel.CheckStatusOK,
 				Message: `command exited with code: 0
-% echo 1
-`,
-				NotificationInterval: 1200,
+% echo 1`,
+				NotificationInterval: 20,
 			},
 			ExitCode: 0,
 		},
@@ -127,17 +126,16 @@ Note: This is note
 			Args: []string{
 				"-name=test-check3",
 				"-auto-close",
-				"-notification-interval", "5m",
+				"-notification-interval", "5m", // when less 10 min then 10 min.
 				"--",
 				"echo", "2",
 			},
 			Result: testResult{
-				Name:   "test-check2",
+				Name:   "test-check3",
 				Status: mackerel.CheckStatusOK,
 				Message: `command exited with code: 0
-% echo 2
-`,
-				NotificationInterval: 600,
+% echo 2`,
+				NotificationInterval: 10,
 			},
 			ExitCode: 0,
 		},
@@ -176,7 +174,9 @@ Note: This is note
 			defer ts.Close()
 
 			args := append(
-				[]string{"$0", "-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap"},
+				// This test checks to verify the sending request.
+				// Therefore, to test in an environment without a configuration file, it needs to set the host argument.
+				[]string{"$0", "-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap", "-host", "3Yr"},
 				tc.Args...,
 			)
 
@@ -196,6 +196,7 @@ Note: This is note
 	}
 }
 
+// Commands are executed even if the configuration file does not exist.
 func TestCommand_Action_withoutConf(t *testing.T) {
 	cmd := newWrapCommand(t, []string{
 		"$0", "-conf=notfound", "-apibase=http://localhost", "wrap",
