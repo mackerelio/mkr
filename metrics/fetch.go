@@ -42,7 +42,7 @@ func doFetch(ctx context.Context, c *cli.Command) error {
 	allMetricValues := make(mackerel.LatestMetricValues)
 	// Fetches 100 hosts per one request (to avoid URL maximum length).
 	for _, hostIds := range split(argHostIDs, 100) {
-		metricValues, err := mackerelclient.NewFromContext(c).FetchLatestMetricValues(hostIds, optMetricNames)
+		metricValues, err := mackerelclient.NewFromCliCommand(c).FetchLatestMetricValuesContext(ctx, hostIds, optMetricNames)
 		logger.DieIf(err)
 		for key := range metricValues {
 			allMetricValues[key] = metricValues[key]

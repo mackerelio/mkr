@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"io"
 
 	"github.com/mackerelio/mkr/format"
@@ -14,8 +15,8 @@ type servicesApp struct {
 	jqFilter  string
 }
 
-func (app *servicesApp) run() error {
-	services, err := app.client.FindServices()
+func (app *servicesApp) run(ctx context.Context) error {
+	services, err := app.client.FindServicesContext(ctx)
 	if err != nil {
 		return err
 	}

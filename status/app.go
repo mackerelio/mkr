@@ -1,6 +1,7 @@
 package status
 
 import (
+	"context"
 	"io"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -24,14 +25,14 @@ type HostWithMetrics struct {
 	Metrics []string `json:"metrics,omitempty"`
 }
 
-func (app *statussApp) run() error {
-	host, err := app.client.FindHost(app.argHostID)
+func (app *statussApp) run(ctx context.Context) error {
+	host, err := app.client.FindHostContext(ctx, app.argHostID)
 	if err != nil {
 		return err
 	}
 
 	if app.isVerbose {
-		metrics, err := app.client.ListHostMetricNames(host.ID)
+		metrics, err := app.client.ListHostMetricNamesContext(ctx, host.ID)
 		logger.DieIf(err)
 		hostWithMetrics := HostWithMetrics{Host: host, Metrics: metrics}
 		err = format.PrettyPrintJSON(app.outStream, hostWithMetrics, app.jqFilter)

@@ -1,6 +1,7 @@
 package channels
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -18,8 +19,8 @@ type channelsApp struct {
 	jqFilter  string
 }
 
-func (app *channelsApp) run() error {
-	channels, err := app.client.FindChannels()
+func (app *channelsApp) run(ctx context.Context) error {
+	channels, err := app.client.FindChannelsContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -29,8 +30,8 @@ func (app *channelsApp) run() error {
 	return nil
 }
 
-func (app *channelsApp) pullChannels(isVerbose bool, optFilePath string) error {
-	channels, err := app.client.FindChannels()
+func (app *channelsApp) pullChannels(ctx context.Context, isVerbose bool, optFilePath string) error {
+	channels, err := app.client.FindChannelsContext(ctx)
 	logger.DieIf(err)
 
 	filePath := "channels.json"

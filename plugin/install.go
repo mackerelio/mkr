@@ -111,13 +111,13 @@ func doPluginInstall(ctx context.Context, c *cli.Command) error {
 	defer os.RemoveAll(workdir)
 
 	// Download an artifact and install by it
-	downloadURL, err := it.makeDownloadURL()
+	downloadURL, err := it.makeDownloadURL(ctx)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while making a download URL")
 	}
 
 	isMetaDataStoreEnabled := true
-	meta, err := newMetaDataStore(pluginDir, it)
+	meta, err := newMetaDataStore(ctx, pluginDir, it)
 	if err != nil {
 		if err == errDisaleMetaDataStore {
 			isMetaDataStoreEnabled = false
@@ -139,11 +139,11 @@ func doPluginInstall(ctx context.Context, c *cli.Command) error {
 		overwrite = true // force overwrite in upgrade
 	}
 
-	artifactFile, err := downloadPluginArtifact(downloadURL, workdir)
+	artifactFile, err := downloadPluginArtifact(ctx, downloadURL, workdir)
 	if err != nil {
 		return errors.Wrap(err, "Failed to install plugin while downloading an artifact")
 	}
-	err = installByArtifact(artifactFile, filepath.Join(pluginDir, "bin"), overwrite)
+	err = installByArtifact(ctx, artifactFile, filepath.Join(pluginDir, "bin"), overwrite)
 	if err == nil { // nolint
 		if meta != nil {
 			if err := meta.store("release_tag", it.releaseTag); err != nil {
@@ -182,11 +182,11 @@ func setupPluginDir(pluginDir string) (string, error) {
 
 // Download plugin artifact from `u`(URL) to `workdir`,
 // and returns downloaded filepath
-func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
+func downloadPluginArtifact(ctx context.Context, u, workdir string) (fpath string, err error) {
 	logger.Log("", fmt.Sprintf("Downloading %s", u))
 
 	// Create request to download
-	resp, err := (&client{}).get(u)
+	resp, err := (&client{}).get(ctx, u)
 	if err != nil {
 		return "", err
 	}
@@ -211,14 +211,14 @@ func downloadPluginArtifact(u, workdir string) (fpath string, err error) {
 }
 
 // Extract artifact and install plugin
-func installByArtifact(artifactFile, bindir string, overwrite bool) error {
+func installByArtifact(ctx context.Context, artifactFile, bindir string, overwrite bool) error {
 	fd, err := os.Open(artifactFile)
 	if err != nil {
 		return err
 	}
 	defer fd.Close()
 
-	format, stream, err := archives.Identify(context.TODO(), artifactFile, fd)
+	format, stream, err := archives.Identify(ctx, artifactFile, fd)
 	if err != nil {
 		return err
 	}
@@ -229,7 +229,7 @@ func installByArtifact(artifactFile, bindir string, overwrite bool) error {
 	}
 
 	// Look for plugin files recursively, and place those to binPath
-	return ex.Extract(context.TODO(), stream, func(ctx context.Context, info archives.FileInfo) error {
+	return ex.Extract(ctx, stream, func(ctx context.Context, info archives.FileInfo) error {
 		if info.IsDir() {
 			return nil
 		}

@@ -44,10 +44,10 @@ func doRetire(ctx context.Context, c *cli.Command) error {
 		return nil
 	}
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	for _, hostID := range argHostIDs {
-		err := client.RetireHost(hostID)
+		err := client.RetireHostContext(ctx, hostID)
 		logger.DieIf(err)
 
 		logger.Log("retired", hostID)

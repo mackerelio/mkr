@@ -127,7 +127,7 @@ func TestChannelsApp_Run(t *testing.T) {
 				client:    client,
 				outStream: out,
 			}
-			assert.NoError(t, app.run())
+			assert.NoError(t, app.run(t.Context()))
 			assert.Equal(t, tc.expected, out.String())
 		})
 	}
@@ -156,7 +156,7 @@ func TestChannelsApp_PullChannels(t *testing.T) {
 		out := new(bytes.Buffer)
 
 		// override saveChannels to simply print filePath
-		saveChannels = func(rules []*mackerel.Channel, filePath string) error {
+		saveChannels = func(_ []*mackerel.Channel, filePath string) error {
 			fmt.Fprint(out, filePath)
 			return nil
 		}
@@ -171,7 +171,7 @@ func TestChannelsApp_PullChannels(t *testing.T) {
 			outStream: out,
 		}
 
-		assert.NoError(t, app.pullChannels(false, tc.input))
+		assert.NoError(t, app.pullChannels(t.Context(), false, tc.input))
 		assert.Equal(t, tc.expected, out.String())
 	}
 }

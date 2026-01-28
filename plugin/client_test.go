@@ -24,7 +24,7 @@ func TestClientGet(t *testing.T) {
 
 	{
 		// Response is 200
-		resp, err := c.get(ts.URL + "/200")
+		resp, err := c.get(t.Context(), ts.URL+"/200")
 		assert.NoError(t, err, "get finished successfully")
 
 		b, _ := io.ReadAll(resp.Body)
@@ -35,7 +35,7 @@ func TestClientGet(t *testing.T) {
 
 	{
 		// Response is 404
-		resp, err := c.get(ts.URL + "/404")
+		resp, err := c.get(t.Context(), ts.URL+"/404")
 
 		assert.Nil(t, resp, "Return nothing as resp")
 		assert.Error(t, err, "get failed")

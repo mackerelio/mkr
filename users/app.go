@@ -1,6 +1,7 @@
 package users
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"text/template"
@@ -39,8 +40,8 @@ type User struct {
 	JoinedAt                string   `json:"joinedAt,omitempty"`
 }
 
-func (ua *userApp) findUsers(param findUsersParam) error {
-	users, err := ua.client.FindUsers()
+func (ua *userApp) findUsers(ctx context.Context, param findUsersParam) error {
+	users, err := ua.client.FindUsersContext(ctx)
 	if err != nil {
 		return err
 	}

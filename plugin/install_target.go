@@ -69,17 +69,17 @@ func newInstallTargetFromString(target string) (*installTarget, error) {
 }
 
 // Make artifact's download URL
-func (it *installTarget) makeDownloadURL() (string, error) {
+func (it *installTarget) makeDownloadURL(ctx context.Context) (string, error) {
 	if it.directURL != "" {
 		return it.directURL, nil
 	}
 
-	owner, repo, err := it.getOwnerAndRepo()
+	owner, repo, err := it.getOwnerAndRepo(ctx)
 	if err != nil {
 		return "", err
 	}
 
-	releaseTag, err := it.getTagFromReleasesURL(owner, repo)
+	releaseTag, err := it.getTagFromReleasesURL(ctx, owner, repo)
 	if releaseTag == "" || err != nil {
 		releaseTag, err = it.getReleaseTag(owner, repo)
 		if err != nil {
@@ -99,7 +99,7 @@ func (it *installTarget) makeDownloadURL() (string, error) {
 	return downloadURL, nil
 }
 
-func (it *installTarget) getOwnerAndRepo() (string, string, error) {
+func (it *installTarget) getOwnerAndRepo(ctx context.Context) (string, string, error) {
 	if it.owner != "" && it.repo != "" {
 		return it.owner, it.repo, nil
 	}
@@ -115,7 +115,7 @@ func (it *installTarget) getOwnerAndRepo() (string, string, error) {
 		it.getRawGithubURL(),
 		url.PathEscape(it.pluginName),
 	)
-	resp, err := (&client{}).get(defURL)
+	resp, err := (&client{}).get(ctx, defURL)
 	if err != nil {
 		return "", "", err
 	}
@@ -159,7 +159,7 @@ func (it *installTarget) getReleaseTag(owner, repo string) (string, error) {
 	return it.releaseTag, nil
 }
 
-func (it *installTarget) getTagFromReleasesURL(owner, repo string) (string, error) {
+func (it *installTarget) getTagFromReleasesURL(ctx context.Context, owner, repo string) (string, error) {
 	if it.releaseTag != "" {
 		return it.releaseTag, nil
 	}
@@ -173,7 +173,7 @@ func (it *installTarget) getTagFromReleasesURL(owner, repo string) (string, erro
 		},
 	}
 
-	req, err := http.NewRequest(http.MethodHead, latestURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
 	if err != nil {
 		return "", err
 	}

@@ -2,6 +2,7 @@ package wrap
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -31,9 +32,9 @@ type wrap struct {
 	outStream, errStream io.Writer
 }
 
-func (wr *wrap) run() error {
-	re := wr.runCmd()
-	if err := wr.report(re); err != nil {
+func (wr *wrap) run(ctx context.Context) error {
+	re := wr.runCmd(ctx)
+	if err := wr.report(context.Background(), re); err != nil {
 		msg, _ := re.buildMsg(wr.detail)
 		logger.Logf("error", "failed to post following report to Mackerel: %s\n%s", err, msg)
 	}
@@ -43,8 +44,8 @@ func (wr *wrap) run() error {
 	return nil
 }
 
-func (wr *wrap) runCmd() *result {
-	cmd := exec.Command(wr.cmd[0], wr.cmd[1:]...)
+func (wr *wrap) runCmd(ctx context.Context) *result {
+	cmd := exec.CommandContext(ctx, wr.cmd[0], wr.cmd[1:]...)
 	re := &result{
 		Cmd:  wr.cmd,
 		Name: wr.name,
@@ -107,7 +108,7 @@ func (wr *wrap) runCmd() *result {
 	return re
 }
 
-func (wr *wrap) report(re *result) error {
+func (wr *wrap) report(ctx context.Context, re *result) error {
 	if wr.autoClose {
 		defer func() {
 			err := re.saveResult()
@@ -135,12 +136,12 @@ func (wr *wrap) report(re *result) error {
 		}
 	}
 	if !re.Success || wr.autoClose && (lastRe == nil || !lastRe.Success) {
-		return wr.doReport(re)
+		return wr.doReport(ctx, re)
 	}
 	return nil
 }
 
-func (wr *wrap) doReport(re *result) error {
+func (wr *wrap) doReport(ctx context.Context, re *result) error {
 	checkSt := mackerel.CheckStatusOK
 	if !re.Success {
 		if wr.warning {
@@ -175,6 +176,6 @@ func (wr *wrap) doReport(re *result) error {
 		return err
 	}
 	return retry.Retry(3, time.Second*3, func() error {
-		return mcli.PostCheckReports(payload)
+		return mcli.PostCheckReportsContext(ctx, payload)
 	})
 }

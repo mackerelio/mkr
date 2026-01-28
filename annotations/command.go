@@ -198,8 +198,8 @@ func doAnnotationsCreate(ctx context.Context, c *cli.Command) error {
 		description = string(b)
 	}
 
-	client := mackerelclient.NewFromContext(c)
-	annotation, err := client.CreateGraphAnnotation(&mackerel.GraphAnnotation{
+	client := mackerelclient.NewFromCliCommand(c)
+	annotation, err := client.CreateGraphAnnotationContext(ctx, &mackerel.GraphAnnotation{
 		Title:       title,
 		Description: description,
 		From:        from,
@@ -233,8 +233,8 @@ func doAnnotationsList(ctx context.Context, c *cli.Command) error {
 		return cli.Exit("`to` is a required field to list graph annotations.", 1)
 	}
 
-	client := mackerelclient.NewFromContext(c)
-	annotations, err := client.FindGraphAnnotations(service, from, to)
+	client := mackerelclient.NewFromCliCommand(c)
+	annotations, err := client.FindGraphAnnotationsContext(ctx, service, from, to)
 	logger.DieIf(err)
 	err = format.PrettyPrintJSON(os.Stdout, annotations, c.String("jq"))
 	logger.DieIf(err)
@@ -290,8 +290,8 @@ func doAnnotationsUpdate(ctx context.Context, c *cli.Command) error {
 		description = string(b)
 	}
 
-	client := mackerelclient.NewFromContext(c)
-	annotation, err := client.UpdateGraphAnnotation(annotationID, &mackerel.GraphAnnotation{
+	client := mackerelclient.NewFromCliCommand(c)
+	annotation, err := client.UpdateGraphAnnotationContext(ctx, annotationID, &mackerel.GraphAnnotation{
 		Title:       title,
 		Description: description,
 		From:        from,
@@ -313,8 +313,8 @@ func doAnnotationsDelete(ctx context.Context, c *cli.Command) error {
 		return cli.Exit("`id` is a required field to delete a graph annotation.", 1)
 	}
 
-	client := mackerelclient.NewFromContext(c)
-	annotation, err := client.DeleteGraphAnnotation(annotationID)
+	client := mackerelclient.NewFromCliCommand(c)
+	annotation, err := client.DeleteGraphAnnotationContext(ctx, annotationID)
 	logger.DieIf(err)
 	err = format.PrettyPrintJSON(os.Stdout, annotation, "")
 	logger.DieIf(err)

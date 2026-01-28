@@ -57,7 +57,7 @@ func doChannels(ctx context.Context, c *cli.Command) error {
 		client:    client,
 		outStream: os.Stdout,
 		jqFilter:  c.String("jq"),
-	}).run()
+	}).run(ctx)
 }
 
 func doChannelsPull(ctx context.Context, c *cli.Command) error {
@@ -72,5 +72,5 @@ func doChannelsPull(ctx context.Context, c *cli.Command) error {
 	return (&channelsApp{
 		client:    client,
 		outStream: os.Stdout,
-	}).pullChannels(isVerbose, filePath)
+	}).pullChannels(ctx, isVerbose, filePath)
 }

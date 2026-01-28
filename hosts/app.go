@@ -1,6 +1,7 @@
 package hosts
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"text/template"
@@ -34,8 +35,8 @@ type findHostsParam struct {
 	format string
 }
 
-func (ha *hostApp) findHosts(param findHostsParam) error {
-	hosts, err := ha.client.FindHosts(&mackerel.FindHostsParam{
+func (ha *hostApp) findHosts(ctx context.Context, param findHostsParam) error {
+	hosts, err := ha.client.FindHostsContext(ctx, &mackerel.FindHostsParam{
 		Name:     param.name,
 		Service:  param.service,
 		Roles:    param.roles,
@@ -82,8 +83,8 @@ type createHostParam struct {
 	memo             string
 }
 
-func (ha *hostApp) createHost(param createHostParam) error {
-	hostID, err := ha.client.CreateHost(&mackerel.CreateHostParam{
+func (ha *hostApp) createHost(ctx context.Context, param createHostParam) error {
+	hostID, err := ha.client.CreateHostContext(ctx, &mackerel.CreateHostParam{
 		Name:             param.name,
 		RoleFullnames:    param.roleFullnames,
 		CustomIdentifier: param.customIdentifier,
@@ -97,7 +98,7 @@ func (ha *hostApp) createHost(param createHostParam) error {
 	ha.log("created", hostID)
 
 	if param.status != "" {
-		err := ha.client.UpdateHostStatus(hostID, param.status)
+		err := ha.client.UpdateHostStatusContext(ctx, hostID, param.status)
 		if err != nil {
 			ha.error(err)
 			return err

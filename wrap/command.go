@@ -128,5 +128,5 @@ func doWrap(ctx context.Context, c *cli.Command) error {
 		cmd:                  cmd,
 		outStream:            os.Stdout,
 		errStream:            os.Stderr,
-	}).run()
+	}).run(ctx)
 }

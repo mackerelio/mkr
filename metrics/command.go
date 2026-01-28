@@ -65,16 +65,16 @@ func doMetrics(ctx context.Context, c *cli.Command) error {
 	}
 	jq := c.String("jq")
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	if optHostID != "" {
-		metricValue, err := client.FetchHostMetricValues(optHostID, optMetricName, from, to)
+		metricValue, err := client.FetchHostMetricValuesContext(ctx, optHostID, optMetricName, from, to)
 		logger.DieIf(err)
 
 		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else if optService != "" {
-		metricValue, err := client.FetchServiceMetricValues(optService, optMetricName, from, to)
+		metricValue, err := client.FetchServiceMetricValuesContext(ctx, optService, optMetricName, from, to)
 		logger.DieIf(err)
 
 		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
