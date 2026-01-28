@@ -122,7 +122,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			repo:       "mackerel-plugin-sample",
 			releaseTag: "v0.1.0",
 		}
-		url, err := it.makeDownloadURL()
+		url, err := it.makeDownloadURL(t.Context())
 		assert.Nil(t, err, "makeDownloadURL is successful")
 		assert.Equal(
 			t,
@@ -149,7 +149,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			releaseTag:   "v1.2.3",
 			rawGithubURL: rawGithubServer.URL,
 		}
-		url, err := it.makeDownloadURL()
+		url, err := it.makeDownloadURL(t.Context())
 		assert.NoError(t, err, "makeDownloadURL is successful")
 		assert.Equal(
 			t,
@@ -164,7 +164,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			releaseTag:   "v1.2.3",
 			rawGithubURL: rawGithubServer.URL,
 		}
-		_, err = it.makeDownloadURL()
+		_, err = it.makeDownloadURL(t.Context())
 		assert.Error(t, err, "makeDownloadURL is failed")
 	}
 
@@ -183,7 +183,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			apiGithubURL: apiGithubServer.URL,
 			githubURL:    apiGithubServer.URL,
 		}
-		url, err := it.makeDownloadURL()
+		url, err := it.makeDownloadURL(t.Context())
 		assert.NoError(t, err, "makeDownloadURL is successful")
 		assert.Equal(
 			t,
@@ -199,7 +199,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			apiGithubURL: apiGithubServer.URL,
 			githubURL:    apiGithubServer.URL,
 		}
-		_, err = it.makeDownloadURL()
+		_, err = it.makeDownloadURL(t.Context())
 		assert.Error(t, err, "makeDownloadURL is failed")
 	}
 
@@ -229,7 +229,7 @@ func TestInstallTargetMakeDownloadURL(t *testing.T) {
 			githubURL:    rawGithubServer.URL,
 		}
 
-		url, err := it.makeDownloadURL()
+		url, err := it.makeDownloadURL(t.Context())
 		assert.NoError(t, err, "makeDownloadURL is successful")
 		assert.Equal(
 			t,
@@ -247,7 +247,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 			owner: "owner1",
 			repo:  "check-repo1",
 		}
-		owner, repo, err := it.getOwnerAndRepo()
+		owner, repo, err := it.getOwnerAndRepo(t.Context())
 		assert.Equal(t, "owner1", owner)
 		assert.Equal(t, "check-repo1", repo)
 		assert.NoError(t, err, "getOwnerAndRepo is finished successfully")
@@ -262,7 +262,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 			pluginName:   "mackerel-plugin-not-found",
 			rawGithubURL: ts.URL,
 		}
-		owner, repo, err := it.getOwnerAndRepo()
+		owner, repo, err := it.getOwnerAndRepo(t.Context())
 		assert.Equal(t, "", owner)
 		assert.Equal(t, "", repo)
 		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is not found")
@@ -280,7 +280,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 			pluginName:   "mackerel-plugin-invalid-json",
 			rawGithubURL: ts.URL,
 		}
-		owner, repo, err := it.getOwnerAndRepo()
+		owner, repo, err := it.getOwnerAndRepo(t.Context())
 		assert.Equal(t, "", owner)
 		assert.Equal(t, "", repo)
 		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def is invalid json")
@@ -298,7 +298,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 			pluginName:   "mackerel-plugin-invalid-source",
 			rawGithubURL: ts.URL,
 		}
-		owner, repo, err := it.getOwnerAndRepo()
+		owner, repo, err := it.getOwnerAndRepo(t.Context())
 		assert.Equal(t, "", owner)
 		assert.Equal(t, "", repo)
 		assert.Error(t, err, "getOwnerAndRepo is failed because plugin def has invalid source")
@@ -320,7 +320,7 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 			pluginName:   "mackerel-plugin-sample",
 			rawGithubURL: ts.URL,
 		}
-		owner, repo, err := it.getOwnerAndRepo()
+		owner, repo, err := it.getOwnerAndRepo(t.Context())
 		assert.Equal(t, "mackerelio", owner)
 		assert.Equal(t, "mackerel-plugin-sample", repo)
 		assert.NoError(t, err, "getOwnerAndRepo finished successfully")
@@ -347,7 +347,7 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 	{
 		// it already has releaseTag
 		it := &installTarget{releaseTag: "v0.1.2"}
-		releaseTag, err := it.getTagFromReleasesURL("owner", "repo")
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner", "repo")
 		assert.NoError(t, err, "getReleaseTag is successful")
 		assert.Equal(t, "v0.1.2", releaseTag, "Returns correct releaseTag")
 	}
@@ -355,7 +355,7 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 	{
 		// Specified owner and repo is not found
 		it := &installTarget{githubURL: ts.URL}
-		releaseTag, err := it.getTagFromReleasesURL("owner1", "not-found-repo")
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner1", "not-found-repo")
 		assert.Error(t, err, "Returns err if the repository is not found")
 		assert.Equal(t, "", releaseTag, "Returns empty string")
 	}
@@ -363,7 +363,7 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 	{
 		// Get latest releaseTag correctly
 		it := &installTarget{githubURL: ts.URL}
-		releaseTag, err := it.getTagFromReleasesURL("owner1", "repo1")
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner1", "repo1")
 		assert.NoError(t, err, "getReleaseTag is successful")
 		assert.Equal(t, "v0.5.1", releaseTag, "releaseTag is fetched correctly from api")
 	}
@@ -371,7 +371,7 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 	{
 		// Specified owner and repo is not found (wrong redirect url)
 		it := &installTarget{githubURL: ts.URL}
-		releaseTag, err := it.getTagFromReleasesURL("owner2", "repo2")
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner2", "repo2")
 		assert.Error(t, err, "Returns err if the repository is not found")
 		assert.Equal(t, "", releaseTag, "Returns empty string")
 	}

@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 
@@ -14,8 +15,8 @@ type metaDataStore struct {
 
 var errDisaleMetaDataStore = errors.New("MetaData disabled. could not detect owner/repo")
 
-func newMetaDataStore(pluginDir string, target *installTarget) (*metaDataStore, error) {
-	owner, repo, err := target.getOwnerAndRepo()
+func newMetaDataStore(ctx context.Context, pluginDir string, target *installTarget) (*metaDataStore, error) {
+	owner, repo, err := target.getOwnerAndRepo(ctx)
 	if err != nil {
 		return nil, errDisaleMetaDataStore
 	}

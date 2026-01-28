@@ -12,7 +12,7 @@ func TestNewMetaData(t *testing.T) {
 	it, err := newInstallTargetFromString("mackerelio/mackerel-plugin-sample@v1.0.1")
 	assert.Nil(t, err, "error does not occur while newInstallTargetFromString")
 
-	meta, err := newMetaDataStore(tmpd, it)
+	meta, err := newMetaDataStore(t.Context(), tmpd, it)
 	assert.Nil(t, err, "error does not occur while newMetaDataStore")
 
 	v1, err := meta.load("foo")
