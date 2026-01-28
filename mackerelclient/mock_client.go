@@ -1,6 +1,11 @@
 package mackerelclient
 
-import "github.com/mackerelio/mackerel-client-go"
+import (
+	"context"
+	"errors"
+
+	"github.com/mackerelio/mackerel-client-go"
+)
 
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {
@@ -40,7 +45,7 @@ func (err errCallbackNotFound) Error() string {
 }
 
 // FindHost ...
-func (c *MockClient) FindHost(id string) (*mackerel.Host, error) {
+func (c *MockClient) FindHostContext(ctx context.Context, id string) (*mackerel.Host, error) {
 	if c.findHostCallback != nil {
 		return c.findHostCallback(id)
 	}
@@ -55,7 +60,7 @@ func MockFindHost(callback func(id string) (*mackerel.Host, error)) MockClientOp
 }
 
 // FindHosts ...
-func (c *MockClient) FindHosts(param *mackerel.FindHostsParam) ([]*mackerel.Host, error) {
+func (c *MockClient) FindHostsContext(ctx context.Context, param *mackerel.FindHostsParam) ([]*mackerel.Host, error) {
 	if c.findHostsCallback != nil {
 		return c.findHostsCallback(param)
 	}
@@ -70,7 +75,7 @@ func MockFindHosts(callback func(param *mackerel.FindHostsParam) ([]*mackerel.Ho
 }
 
 // FindServices ...
-func (c *MockClient) FindServices() ([]*mackerel.Service, error) {
+func (c *MockClient) FindServicesContext(ctx context.Context) ([]*mackerel.Service, error) {
 	if c.findServicesCallback != nil {
 		return c.findServicesCallback()
 	}
@@ -85,7 +90,7 @@ func MockFindServices(callback func() ([]*mackerel.Service, error)) MockClientOp
 }
 
 // FindChannels ...
-func (c *MockClient) FindChannels() ([]*mackerel.Channel, error) {
+func (c *MockClient) FindChannelsContext(ctx context.Context) ([]*mackerel.Channel, error) {
 	if c.findChannelsCallback != nil {
 		return c.findChannelsCallback()
 	}
@@ -100,7 +105,7 @@ func MockFindChannels(callback func() ([]*mackerel.Channel, error)) MockClientOp
 }
 
 // GetOrg ...
-func (c *MockClient) GetOrg() (*mackerel.Org, error) {
+func (c *MockClient) GetOrgContext(ctx context.Context) (*mackerel.Org, error) {
 	if c.getOrgCallback != nil {
 		return c.getOrgCallback()
 	}
@@ -115,7 +120,7 @@ func MockGetOrg(callback func() (*mackerel.Org, error)) MockClientOption {
 }
 
 // CreateHost ...
-func (c *MockClient) CreateHost(param *mackerel.CreateHostParam) (string, error) {
+func (c *MockClient) CreateHostContext(ctx context.Context, param *mackerel.CreateHostParam) (string, error) {
 	if c.createHostCallback != nil {
 		return c.createHostCallback(param)
 	}
@@ -130,7 +135,7 @@ func MockCreateHost(callback func(*mackerel.CreateHostParam) (string, error)) Mo
 }
 
 // UpdateHostStatus ...
-func (c *MockClient) UpdateHostStatus(hostID string, status string) error {
+func (c *MockClient) UpdateHostStatusContext(ctx context.Context, hostID string, status string) error {
 	if c.updateHostStatusCallback != nil {
 		return c.updateHostStatusCallback(hostID, status)
 	}
@@ -145,7 +150,7 @@ func MockUpdateHostStatus(callback func(string, string) error) MockClientOption 
 }
 
 // FindAWSIntegrations ...
-func (c *MockClient) FindAWSIntegrations() ([]*mackerel.AWSIntegration, error) {
+func (c *MockClient) FindAWSIntegrationsContext(ctx context.Context) ([]*mackerel.AWSIntegration, error) {
 	if c.findAWSIntegrationsCallback != nil {
 		return c.findAWSIntegrationsCallback()
 	}
@@ -160,7 +165,7 @@ func MockFindAWSIntegrations(callback func() ([]*mackerel.AWSIntegration, error)
 }
 
 // ListHostMetricNames ...
-func (c *MockClient) ListHostMetricNames(hostID string) ([]string, error) {
+func (c *MockClient) ListHostMetricNamesContext(ctx context.Context, hostID string) ([]string, error) {
 	if c.listHostMetricNamesCallback != nil {
 		return c.listHostMetricNamesCallback(hostID)
 	}
@@ -175,7 +180,7 @@ func MockListHostMetricNames(callback func(string) ([]string, error)) MockClient
 }
 
 // FindUsers ...
-func (c *MockClient) FindUsers() ([]*mackerel.User, error) {
+func (c *MockClient) FindUsersContext(ctx context.Context) ([]*mackerel.User, error) {
 	if c.findUsersCallback != nil {
 		return c.findUsersCallback()
 	}
@@ -187,4 +192,89 @@ func MockFindUsers(callback func() ([]*mackerel.User, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findUsersCallback = callback
 	}
+}
+
+var errNotImplemented = errors.New("not implemented")
+
+func (c *MockClient) FindWithClosedAlertsContext(context.Context) (*mackerel.AlertsResp, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindWithClosedAlertsByNextIDContext(context.Context, string) (*mackerel.AlertsResp, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindAlertsContext(context.Context) (*mackerel.AlertsResp, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindAlertsByNextIDContext(context.Context, string) (*mackerel.AlertsResp, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) CloseAlertContext(context.Context, string, string) (*mackerel.Alert, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindAlertLogsContext(context.Context, string, *mackerel.FindAlertLogsParam) (*mackerel.FindAlertLogsResp, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindMonitorsContext(context.Context) ([]mackerel.Monitor, error) {
+	return nil, errNotImplemented
+}
+
+func (c *MockClient) CreateGraphAnnotationContext(ctx context.Context, annotation *mackerel.GraphAnnotation) (*mackerel.GraphAnnotation, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindGraphAnnotationsContext(ctx context.Context, service string, from int64, to int64) ([]*mackerel.GraphAnnotation, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) UpdateGraphAnnotationContext(ctx context.Context, annotationID string, annotation *mackerel.GraphAnnotation) (*mackerel.GraphAnnotation, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) DeleteGraphAnnotationContext(ctx context.Context, annotationID string) (*mackerel.GraphAnnotation, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindDashboardsContext(ctx context.Context) ([]*mackerel.Dashboard, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FindDashboardContext(ctx context.Context, dashboardID string) (*mackerel.Dashboard, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) UpdateDashboardContext(ctx context.Context, dashboardID string, param *mackerel.Dashboard) (*mackerel.Dashboard, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) CreateDashboardContext(ctx context.Context, param *mackerel.Dashboard) (*mackerel.Dashboard, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) RetireHostContext(ctx context.Context, hostID string) error {
+	return errNotImplemented
+}
+func (c *MockClient) UpdateHostRoleFullnamesContext(ctx context.Context, hostID string, roleFullnames []string) error {
+	return errNotImplemented
+}
+func (c *MockClient) UpdateHostContext(ctx context.Context, hostID string, param *mackerel.UpdateHostParam) (string, error) {
+	return "", errNotImplemented
+}
+func (c *MockClient) ListServiceMetricNamesContext(ctx context.Context, serviceName string) ([]string, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FetchHostMetricValuesContext(ctx context.Context, hostID string, metricName string, from int64, to int64) ([]mackerel.MetricValue, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FetchServiceMetricValuesContext(ctx context.Context, serviceName string, metricName string, from int64, to int64) ([]mackerel.MetricValue, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) FetchLatestMetricValuesContext(ctx context.Context, hostIDs []string, metricNames []string) (mackerel.LatestMetricValues, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) PostHostMetricValuesByHostIDContext(ctx context.Context, hostID string, metricValues []*mackerel.MetricValue) error {
+	return errNotImplemented
+}
+func (c *MockClient) PostServiceMetricValuesContext(ctx context.Context, serviceName string, metricValues []*mackerel.MetricValue) error {
+	return errNotImplemented
+}
+func (c *MockClient) CreateMonitorContext(ctx context.Context, param mackerel.Monitor) (mackerel.Monitor, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) DeleteMonitorContext(ctx context.Context, monitorID string) (mackerel.Monitor, error) {
+	return nil, errNotImplemented
+}
+func (c *MockClient) UpdateMonitorContext(ctx context.Context, monitorID string, param mackerel.Monitor) (mackerel.Monitor, error) {
+	return nil, errNotImplemented
 }

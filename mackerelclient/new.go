@@ -39,8 +39,8 @@ func New(conffile, apibase string) (Client, error) {
 	return mackerel.NewClientWithOptions(apikey, apibase, os.Getenv("DEBUG") != "")
 }
 
-// NewFromContext returns mackerel client from cli.Command
-func NewFromContext(c *cli.Command) *mackerel.Client {
+// NewFromCliCommand returns mackerel client from cli.Command
+func NewFromCliCommand(c *cli.Command) *mackerel.Client {
 	confFile := c.String("conf")
 	apiBase := c.String("apibase")
 	apiKey := LoadApikeyFromEnvOrConfig(confFile)
