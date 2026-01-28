@@ -60,7 +60,7 @@ func doCreate(ctx context.Context, c *cli.Command) error {
 		client:    client,
 		logger:    logger.New(),
 		outStream: os.Stdout,
-	}).createHost(createHostParam{
+	}).createHost(ctx, createHostParam{
 		name:             argHostName,
 		roleFullnames:    c.StringSlice("roleFullname"),
 		status:           c.String("status"),
@@ -128,7 +128,7 @@ func doHosts(ctx context.Context, c *cli.Command) error {
 		logger:    logger.New(),
 		outStream: os.Stdout,
 		jqFilter:  c.String("jq"),
-	}).findHosts(findHostsParam{
+	}).findHosts(ctx, findHostsParam{
 		verbose: c.Bool("verbose"),
 
 		name:     c.String("name"),

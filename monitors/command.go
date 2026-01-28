@@ -202,7 +202,7 @@ func decodeMonitor(mes json.RawMessage) (mackerel.Monitor, error) {
 }
 
 func doMonitorsList(ctx context.Context, c *cli.Command) error {
-	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
+	monitors, err := mackerelclient.NewFromCliCommand(c).FindMonitorsContext(ctx)
 	logger.DieIf(err)
 
 	err = format.PrettyPrintJSON(os.Stdout, monitors, c.String("jq"))
@@ -214,7 +214,7 @@ func doMonitorsPull(ctx context.Context, c *cli.Command) error {
 	isVerbose := c.Bool("verbose")
 	filePath := c.String("file-path")
 
-	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
+	monitors, err := mackerelclient.NewFromCliCommand(c).FindMonitorsContext(ctx)
 	logger.DieIf(err)
 
 	if filePath == "" {
@@ -388,12 +388,12 @@ type monitorDiff struct {
 	diff       []*monitorDiffPair
 }
 
-func checkMonitorsDiff(c *cli.Command) monitorDiff {
+func checkMonitorsDiff(ctx context.Context, c *cli.Command) monitorDiff {
 	filePath := c.String("file-path")
 
 	var monitorDiff monitorDiff
 
-	monitorsRemote, err := mackerelclient.NewFromContext(c).FindMonitors()
+	monitorsRemote, err := mackerelclient.NewFromCliCommand(c).FindMonitorsContext(ctx)
 	logger.DieIf(err)
 	flagNameUniquenessRemote, err := validateRules(monitorsRemote, "remote rules")
 	logger.DieIf(err)
@@ -432,7 +432,7 @@ func checkMonitorsDiff(c *cli.Command) monitorDiff {
 }
 
 func doMonitorsDiff(ctx context.Context, c *cli.Command) error {
-	monitorDiff := checkMonitorsDiff(c)
+	monitorDiff := checkMonitorsDiff(ctx, c)
 	isExitCode := c.Bool("exit-code")
 	isReverse := c.Bool("reverse")
 
@@ -478,11 +478,11 @@ func doMonitorsDiff(ctx context.Context, c *cli.Command) error {
 }
 
 func doMonitorsPush(ctx context.Context, c *cli.Command) error {
-	monitorDiff := checkMonitorsDiff(c)
+	monitorDiff := checkMonitorsDiff(ctx, c)
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 	if isVerbose {
 		client.Verbose = true
 	}
@@ -491,7 +491,7 @@ func doMonitorsPush(ctx context.Context, c *cli.Command) error {
 		logger.Log("info", "Create a new rule.")
 		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
-			_, err := client.CreateMonitor(m)
+			_, err := client.CreateMonitorContext(ctx, m)
 			logger.DieIf(err)
 		}
 	}
@@ -499,7 +499,7 @@ func doMonitorsPush(ctx context.Context, c *cli.Command) error {
 		logger.Log("info", "Delete a rule.")
 		fmt.Println(stringifyMonitor(m, ""))
 		if !isDryRun {
-			_, err := client.DeleteMonitor(m.MonitorID())
+			_, err := client.DeleteMonitorContext(ctx, m.MonitorID())
 			logger.DieIf(err)
 		}
 	}
@@ -507,7 +507,7 @@ func doMonitorsPush(ctx context.Context, c *cli.Command) error {
 		logger.Log("info", "Update a rule.")
 		fmt.Println(stringifyMonitor(d.local, ""))
 		if !isDryRun {
-			_, err := client.UpdateMonitor(d.remote.MonitorID(), d.local)
+			_, err := client.UpdateMonitorContext(ctx, d.remote.MonitorID(), d.local)
 			logger.DieIf(err)
 		}
 	}

@@ -133,8 +133,8 @@ type alertSet struct {
 	Monitor mackerel.Monitor
 }
 
-func joinMonitorsAndHosts(client *mackerel.Client, alerts []*mackerel.Alert) []*alertSet {
-	hostsJSON, err := client.FindHosts(&mackerel.FindHostsParam{
+func joinMonitorsAndHosts(ctx context.Context, client mackerelclient.Client, alerts []*mackerel.Alert) []*alertSet {
+	hostsJSON, err := client.FindHostsContext(ctx, &mackerel.FindHostsParam{
 		Statuses: []string{"working", "standby", "poweroff", "maintenance"},
 	})
 	logger.DieIf(err)
@@ -144,7 +144,7 @@ func joinMonitorsAndHosts(client *mackerel.Client, alerts []*mackerel.Alert) []*
 		hosts[host.ID] = host
 	}
 
-	monitorsJSON, err := client.FindMonitors()
+	monitorsJSON, err := client.FindMonitorsContext(ctx)
 	logger.DieIf(err)
 
 	monitors := map[string]mackerel.Monitor{}
@@ -305,9 +305,9 @@ func formatCheckMessage(msg string) string {
 }
 
 func doAlertsRetrieve(ctx context.Context, c *cli.Command) error {
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 	withClosed := c.Bool("with-closed")
-	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
+	alerts, err := fetchAlerts(ctx, client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
 	err = format.PrettyPrintJSON(os.Stdout, alerts, c.String("jq"))
 	logger.DieIf(err)
@@ -317,12 +317,12 @@ func doAlertsRetrieve(ctx context.Context, c *cli.Command) error {
 func doAlertsList(ctx context.Context, c *cli.Command) error {
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 	withClosed := c.Bool("with-closed")
-	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
+	alerts, err := fetchAlerts(ctx, client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
 
-	joinedAlerts := joinMonitorsAndHosts(client, alerts)
+	joinedAlerts := joinMonitorsAndHosts(ctx, client, alerts)
 	for _, joinAlert := range joinedAlerts {
 		if len(filterServices) > 0 {
 			found := false
@@ -372,14 +372,14 @@ func getAlertsLimit(c *cli.Command, withClosed bool) int {
 	return math.MaxInt32
 }
 
-func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*mackerel.Alert, error) {
+func fetchAlerts(ctx context.Context, client mackerelclient.Client, withClosed bool, limit int) ([]*mackerel.Alert, error) {
 	if limit < 0 {
 		return nil, errors.New("limit should not be negative")
 	}
 	var resp *mackerel.AlertsResp
 	var err error
 	if withClosed {
-		if resp, err = client.FindWithClosedAlerts(); err != nil {
+		if resp, err = client.FindWithClosedAlertsContext(ctx); err != nil {
 			return nil, err
 		}
 		if resp.NextID != "" {
@@ -387,7 +387,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 				if limit <= len(resp.Alerts) { // nolint
 					break
 				}
-				nextResp, err := client.FindWithClosedAlertsByNextID(resp.NextID)
+				nextResp, err := client.FindWithClosedAlertsByNextIDContext(ctx, resp.NextID)
 				if err != nil {
 					return nil, err
 				}
@@ -400,7 +400,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 			}
 		}
 	} else {
-		if resp, err = client.FindAlerts(); err != nil {
+		if resp, err = client.FindAlertsContext(ctx); err != nil {
 			return nil, err
 		}
 		if resp.NextID != "" {
@@ -408,7 +408,7 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 				if limit <= len(resp.Alerts) { // nolint
 					break
 				}
-				nextResp, err := client.FindAlertsByNextID(resp.NextID)
+				nextResp, err := client.FindAlertsByNextIDContext(ctx, resp.NextID)
 				if err != nil {
 					return nil, err
 				}
@@ -436,9 +436,9 @@ func doAlertsClose(ctx context.Context, c *cli.Command) error {
 		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 	for _, alertID := range argAlertIDs {
-		alert, err := client.CloseAlert(alertID, reason)
+		alert, err := client.CloseAlertContext(ctx, alertID, reason)
 		logger.DieIf(err)
 
 		logger.Log("Alert closed", alertID)
@@ -455,7 +455,7 @@ func findAlertLogs(ctx context.Context, c *cli.Command) error {
 		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 	alertId := c.Args().Get(0)
 	limit := c.Int("limit")
 	logs := make([]*mackerel.AlertLog, 0, limit)
@@ -472,7 +472,7 @@ func findAlertLogs(ctx context.Context, c *cli.Command) error {
 			Limit:  &requestLimit,
 		}
 
-		log, err := client.FindAlertLogs(alertId, &param)
+		log, err := client.FindAlertLogsContext(ctx, alertId, &param)
 		logger.DieIf(err)
 		logs = append(logs, log.AlertLogs...)
 

@@ -43,16 +43,16 @@ func doMetricNames(ctx context.Context, c *cli.Command) error {
 	optService := c.String("service")
 	jq := c.String("jq")
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	if optHostID != "" {
-		metricNames, err := client.ListHostMetricNames(optHostID)
+		metricNames, err := client.ListHostMetricNamesContext(ctx, optHostID)
 		logger.DieIf(err)
 
 		err = format.PrettyPrintJSON(os.Stdout, metricNames, jq)
 		logger.DieIf(err)
 	} else if optService != "" {
-		metricNames, err := client.ListServiceMetricNames(optService)
+		metricNames, err := client.ListServiceMetricNamesContext(ctx, optService)
 		logger.DieIf(err)
 
 		err = format.PrettyPrintJSON(os.Stdout, metricNames, jq)

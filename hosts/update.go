@@ -80,21 +80,21 @@ func doUpdate(ctx context.Context, c *cli.Command) error {
 		cli.ShowCommandHelpAndExit(ctx, c, "update", 1)
 	}
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	for _, hostID := range argHostIDs {
 		if needUpdateHostStatus {
-			err := client.UpdateHostStatus(hostID, optStatus)
+			err := client.UpdateHostStatusContext(ctx, hostID, optStatus)
 			logger.DieIf(err)
 		}
 
 		if overwriteRoles {
-			err := client.UpdateHostRoleFullnames(hostID, optRoleFullnames)
+			err := client.UpdateHostRoleFullnamesContext(ctx, hostID, optRoleFullnames)
 			logger.DieIf(err)
 		}
 
 		if needUpdateHost {
-			host, err := client.FindHost(hostID)
+			host, err := client.FindHostContext(ctx, hostID)
 			logger.DieIf(err)
 			name := ""
 			if optName == "" {
@@ -124,7 +124,7 @@ func doUpdate(ctx context.Context, c *cli.Command) error {
 			if needUpdateRolesInHostUpdate {
 				param.RoleFullnames = optRoleFullnames
 			}
-			_, err = client.UpdateHost(hostID, param)
+			_, err = client.UpdateHostContext(ctx, hostID, param)
 			logger.DieIf(err)
 		}
 

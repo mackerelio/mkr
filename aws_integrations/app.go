@@ -1,6 +1,7 @@
 package aws_integrations
 
 import (
+	"context"
 	"io"
 
 	"github.com/mackerelio/mkr/format"
@@ -14,8 +15,8 @@ type awsIntegrationsApp struct {
 	jqFilter  string
 }
 
-func (app *awsIntegrationsApp) run() error {
-	awsIntegrations, err := app.client.FindAWSIntegrations()
+func (app *awsIntegrationsApp) run(ctx context.Context) error {
+	awsIntegrations, err := app.client.FindAWSIntegrationsContext(ctx)
 	if err != nil {
 		return err
 	}

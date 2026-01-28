@@ -80,7 +80,7 @@ func TestServicesApp_Run(t *testing.T) {
 				client:    client,
 				outStream: out,
 			}
-			assert.NoError(t, app.run())
+			assert.NoError(t, app.run(t.Context()))
 			assert.Equal(t, tc.expected, out.String())
 		})
 	}

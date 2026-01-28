@@ -91,11 +91,11 @@ func doThrow(ctx context.Context, c *cli.Command) error {
 	}
 	logger.ErrorIf(scanner.Err())
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	if optHostID != "" {
 		logger.DieIf(requestWithRetry(func() error {
-			return client.PostHostMetricValuesByHostID(optHostID, metricValues)
+			return client.PostHostMetricValuesByHostIDContext(ctx, optHostID, metricValues)
 		}, optMaxRetry))
 
 		for _, metric := range metricValues {
@@ -103,7 +103,7 @@ func doThrow(ctx context.Context, c *cli.Command) error {
 		}
 	} else if optService != "" {
 		logger.DieIf(requestWithRetry(func() error {
-			return client.PostServiceMetricValues(optService, metricValues)
+			return client.PostServiceMetricValuesContext(ctx, optService, metricValues)
 		}, optMaxRetry))
 
 		for _, metric := range metricValues {

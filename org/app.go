@@ -1,6 +1,7 @@
 package org
 
 import (
+	"context"
 	"io"
 
 	"github.com/mackerelio/mkr/format"
@@ -14,8 +15,8 @@ type orgApp struct {
 	jqFilter  string
 }
 
-func (app *orgApp) run() error {
-	org, err := app.client.GetOrg()
+func (app *orgApp) run(ctx context.Context) error {
+	org, err := app.client.GetOrgContext(ctx)
 	if err != nil {
 		return err
 	}

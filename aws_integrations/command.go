@@ -32,5 +32,5 @@ func doAWSIntegrations(ctx context.Context, c *cli.Command) error {
 		client:    client,
 		outStream: os.Stdout,
 		jqFilter:  c.String("jq"),
-	}).run()
+	}).run(ctx)
 }

@@ -62,7 +62,7 @@ func TestOrgApp_Run(t *testing.T) {
 				outStream: out,
 				jqFilter:  jqFilter,
 			}
-			assert.NoError(t, app.run())
+			assert.NoError(t, app.run(t.Context()))
 			assert.Equal(t, tc.expected, out.String())
 		})
 	}

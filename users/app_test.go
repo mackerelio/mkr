@@ -134,7 +134,7 @@ user2 Bob collaborator 1552000000
 				client:    client,
 				outStream: out,
 			}
-			assert.NoError(t, app.findUsers(findUsersParam{
+			assert.NoError(t, app.findUsers(t.Context(), findUsersParam{
 				verbose: tc.verbose,
 				format:  tc.format,
 			}))
@@ -154,7 +154,7 @@ func TestUserApp_FindUsersError(t *testing.T) {
 		client:    client,
 		outStream: out,
 	}
-	err := app.findUsers(findUsersParam{})
+	err := app.findUsers(t.Context(), findUsersParam{})
 	assert.Error(t, err)
 	assert.Equal(t, "API error", err.Error())
 }
@@ -171,7 +171,7 @@ func TestUserApp_FindUsersFormatAndJqIncompatible(t *testing.T) {
 		outStream: out,
 		jqFilter:  ".[]",
 	}
-	err := app.findUsers(findUsersParam{
+	err := app.findUsers(t.Context(), findUsersParam{
 		format: "{{.ID}}",
 	})
 	assert.Error(t, err)

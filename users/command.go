@@ -46,7 +46,7 @@ func doUsers(ctx context.Context, c *cli.Command) error {
 		logger:    logger.New(),
 		outStream: os.Stdout,
 		jqFilter:  c.String("jq"),
-	}).findUsers(findUsersParam{
+	}).findUsers(ctx, findUsersParam{
 		verbose: c.Bool("verbose"),
 		format:  c.String("format"),
 	})

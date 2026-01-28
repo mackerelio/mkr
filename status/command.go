@@ -39,7 +39,7 @@ func doStatus(ctx context.Context, c *cli.Command) error {
 		}
 	}
 
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	return (&statussApp{
 		client:    client,
@@ -48,5 +48,5 @@ func doStatus(ctx context.Context, c *cli.Command) error {
 		argHostID: argHostID,
 
 		jqFilter: c.String("jq"),
-	}).run()
+	}).run(ctx)
 }

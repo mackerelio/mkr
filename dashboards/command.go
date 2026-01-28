@@ -73,9 +73,9 @@ var Command = &cli.Command{
 }
 
 func doListDashboards(ctx context.Context, c *cli.Command) error {
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
-	dashboards, err := client.FindDashboards()
+	dashboards, err := client.FindDashboardsContext(ctx)
 	logger.DieIf(err)
 
 	fmt.Println(format.JSONMarshalIndent(dashboards, "", "    "))
@@ -83,16 +83,16 @@ func doListDashboards(ctx context.Context, c *cli.Command) error {
 }
 
 func doPullDashboard(ctx context.Context, c *cli.Command) error {
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	var dashboards []*mackerel.Dashboard
 	if id := c.String("id"); id != "" {
-		dashboard, err := client.FindDashboard(id)
+		dashboard, err := client.FindDashboardContext(ctx, id)
 		logger.DieIf(err)
 		dashboards = append(dashboards, dashboard)
 	} else {
 		var err error
-		dashboards, err = client.FindDashboards()
+		dashboards, err = client.FindDashboardsContext(ctx)
 		logger.DieIf(err)
 	}
 
@@ -109,7 +109,7 @@ func doPullDashboard(ctx context.Context, c *cli.Command) error {
 }
 
 func doPushDashboard(ctx context.Context, c *cli.Command) error {
-	client := mackerelclient.NewFromContext(c)
+	client := mackerelclient.NewFromCliCommand(c)
 
 	f := c.String("file-path")
 	src, err := os.Open(f)
@@ -122,13 +122,13 @@ func doPushDashboard(ctx context.Context, c *cli.Command) error {
 	err = dec.Decode(&dashboard)
 	logger.DieIf(err)
 	if id := dashboard.ID; id != "" {
-		_, err := client.FindDashboard(id)
+		_, err := client.FindDashboardContext(ctx, id)
 		logger.DieIf(err)
 
-		_, err = client.UpdateDashboard(id, &dashboard)
+		_, err = client.UpdateDashboardContext(ctx, id, &dashboard)
 		logger.DieIf(err)
 	} else {
-		_, err := client.CreateDashboard(&dashboard)
+		_, err := client.CreateDashboardContext(ctx, &dashboard)
 		logger.DieIf(err)
 	}
 	return nil

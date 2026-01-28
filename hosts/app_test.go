@@ -200,7 +200,7 @@ bar sample.app2 standby 1552000000
 				client:    client,
 				outStream: out,
 			}
-			assert.NoError(t, app.findHosts(findHostsParam{
+			assert.NoError(t, app.findHosts(t.Context(), findHostsParam{
 				verbose:  tc.verbose,
 				name:     tc.name,
 				service:  tc.service,
@@ -295,7 +295,7 @@ func TestHostApp_CreateHost(t *testing.T) {
 				logger:    &testLogger{out},
 				outStream: out,
 			}
-			assert.Equal(t, tc.err, app.createHost(createHostParam{
+			assert.Equal(t, tc.err, app.createHost(t.Context(), createHostParam{
 				name:             tc.name,
 				roleFullnames:    tc.roleFullnames,
 				status:           tc.status,
