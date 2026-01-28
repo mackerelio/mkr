@@ -3,16 +3,16 @@ package main
 import (
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestCommands_requirements(t *testing.T) {
 	var cs, subcs []*cli.Command
 	for _, c := range Commands {
-		if len(c.Subcommands) == 0 {
+		if len(c.Commands) == 0 {
 			cs = append(cs, c)
 		} else {
-			cs = append(cs, c.Subcommands...)
+			cs = append(cs, c.Commands...)
 			subcs = append(subcs, c)
 		}
 	}

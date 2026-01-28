@@ -1,6 +1,7 @@
 package monitors
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,7 +15,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
 	"golang.org/x/text/encoding/unicode"
@@ -32,7 +33,7 @@ var Command = &cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull rules",
@@ -200,7 +201,7 @@ func decodeMonitor(mes json.RawMessage) (mackerel.Monitor, error) {
 	return m, nil
 }
 
-func doMonitorsList(c *cli.Context) error {
+func doMonitorsList(ctx context.Context, c *cli.Command) error {
 	monitors, err := mackerelclient.NewFromContext(c).FindMonitors()
 	logger.DieIf(err)
 
@@ -209,7 +210,7 @@ func doMonitorsList(c *cli.Context) error {
 	return nil
 }
 
-func doMonitorsPull(c *cli.Context) error {
+func doMonitorsPull(ctx context.Context, c *cli.Command) error {
 	isVerbose := c.Bool("verbose")
 	filePath := c.String("file-path")
 
@@ -387,7 +388,7 @@ type monitorDiff struct {
 	diff       []*monitorDiffPair
 }
 
-func checkMonitorsDiff(c *cli.Context) monitorDiff {
+func checkMonitorsDiff(c *cli.Command) monitorDiff {
 	filePath := c.String("file-path")
 
 	var monitorDiff monitorDiff
@@ -430,7 +431,7 @@ func checkMonitorsDiff(c *cli.Context) monitorDiff {
 	return monitorDiff
 }
 
-func doMonitorsDiff(c *cli.Context) error {
+func doMonitorsDiff(ctx context.Context, c *cli.Command) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isExitCode := c.Bool("exit-code")
 	isReverse := c.Bool("reverse")
@@ -476,7 +477,7 @@ func doMonitorsDiff(c *cli.Context) error {
 	return nil
 }
 
-func doMonitorsPush(c *cli.Context) error {
+func doMonitorsPush(ctx context.Context, c *cli.Command) error {
 	monitorDiff := checkMonitorsDiff(c)
 	isDryRun := c.Bool("dry-run")
 	isVerbose := c.Bool("verbose")

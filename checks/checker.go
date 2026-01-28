@@ -1,6 +1,7 @@
 package checks
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -10,7 +11,7 @@ import (
 
 	"github.com/mackerelio/checkers"
 	"github.com/mackerelio/mackerel-agent/config"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -18,7 +19,7 @@ import (
 var Command = &cli.Command{
 	Name:  "checks",
 	Usage: "Utility for check plugins",
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		commandRun,
 	},
 }
@@ -35,7 +36,7 @@ var commandRun = &cli.Command{
 	Action: doRunChecks,
 }
 
-func doRunChecks(c *cli.Context) error {
+func doRunChecks(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	conf, err := config.LoadConfig(confFile)
 	if err != nil {

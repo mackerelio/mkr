@@ -1,6 +1,7 @@
 package alerts
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"math"
@@ -15,7 +16,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -41,7 +42,7 @@ var Command = &cli.Command{
 		},
 		jq.CommandLineFlag,
 	},
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "list",
 			Usage:     "list alerts",
@@ -54,13 +55,11 @@ var Command = &cli.Command{
 				&cli.StringSliceFlag{
 					Name:    "service",
 					Aliases: []string{"s"},
-					Value:   cli.NewStringSlice(),
 					Usage:   "Filters alerts by service. Multiple choices are allowed.",
 				},
 				&cli.StringSliceFlag{
 					Name:    "host-status",
 					Aliases: []string{"S"},
-					Value:   cli.NewStringSlice(),
 					Usage:   "Filters alerts by status of each host. Multiple choices are allowed.",
 				},
 				&cli.BoolFlag{
@@ -305,7 +304,7 @@ func formatCheckMessage(msg string) string {
 	return msg
 }
 
-func doAlertsRetrieve(c *cli.Context) error {
+func doAlertsRetrieve(ctx context.Context, c *cli.Command) error {
 	client := mackerelclient.NewFromContext(c)
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(client, withClosed, getAlertsLimit(c, withClosed))
@@ -315,7 +314,7 @@ func doAlertsRetrieve(c *cli.Context) error {
 	return nil
 }
 
-func doAlertsList(c *cli.Context) error {
+func doAlertsList(ctx context.Context, c *cli.Command) error {
 	filterServices := c.StringSlice("service")
 	filterStatuses := c.StringSlice("host-status")
 	client := mackerelclient.NewFromContext(c)
@@ -362,7 +361,7 @@ func doAlertsList(c *cli.Context) error {
 	return nil
 }
 
-func getAlertsLimit(c *cli.Context, withClosed bool) int {
+func getAlertsLimit(c *cli.Command, withClosed bool) int {
 	if c.IsSet("limit") {
 		return c.Int("limit")
 	}
@@ -428,13 +427,13 @@ func fetchAlerts(client *mackerel.Client, withClosed bool, limit int) ([]*macker
 	return resp.Alerts, nil
 }
 
-func doAlertsClose(c *cli.Context) error {
+func doAlertsClose(ctx context.Context, c *cli.Command) error {
 	isVerbose := c.Bool("verbose")
 	argAlertIDs := c.Args().Slice()
 	reason := c.String("reason")
 
 	if len(argAlertIDs) < 1 {
-		cli.ShowCommandHelpAndExit(c, "alerts", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)
@@ -451,9 +450,9 @@ func doAlertsClose(c *cli.Context) error {
 	return nil
 }
 
-func findAlertLogs(c *cli.Context) error {
+func findAlertLogs(ctx context.Context, c *cli.Command) error {
 	if c.Args().Len() != 1 {
-		cli.ShowCommandHelpAndExit(c, "alerts", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "alerts", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)

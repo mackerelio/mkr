@@ -1,12 +1,13 @@
 package users
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandUsers = &cli.Command{
@@ -34,7 +35,7 @@ var CommandUsers = &cli.Command{
 	},
 }
 
-func doUsers(c *cli.Context) error {
+func doUsers(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"strconv"
@@ -12,7 +13,7 @@ import (
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandThrow = &cli.Command{
@@ -47,7 +48,7 @@ var CommandThrow = &cli.Command{
 	},
 }
 
-func doThrow(c *cli.Context) error {
+func doThrow(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMaxRetry := c.Int("retry")
@@ -109,7 +110,7 @@ func doThrow(c *cli.Context) error {
 			logger.Log("thrown", fmt.Sprintf("%s '%s\t%f\t%d'", optService, metric.Name, metric.Value, metric.Time))
 		}
 	} else {
-		cli.ShowCommandHelpAndExit(c, "throw", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "throw", 1)
 	}
 	return nil
 }

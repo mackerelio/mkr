@@ -1,11 +1,12 @@
 package channels
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // Command is the definition of channels subcommand
@@ -20,7 +21,7 @@ var Command = &cli.Command{
 	Flags: []cli.Flag{
 		jq.CommandLineFlag,
 	},
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "pull",
 			Usage:     "pull channel settings",
@@ -46,7 +47,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doChannels(c *cli.Context) error {
+func doChannels(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
@@ -59,7 +60,7 @@ func doChannels(c *cli.Context) error {
 	}).run()
 }
 
-func doChannelsPull(c *cli.Context) error {
+func doChannelsPull(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

@@ -1,11 +1,12 @@
 package status
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -27,14 +28,14 @@ var Command = &cli.Command{
 	},
 }
 
-func doStatus(c *cli.Context) error {
+func doStatus(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	argHostID := c.Args().Get(0)
 	isVerbose := c.Bool("verbose")
 
 	if argHostID == "" {
 		if argHostID = mackerelclient.LoadHostIDFromConfig(confFile); argHostID == "" {
-			cli.ShowCommandHelpAndExit(c, "status", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "status", 1)
 		}
 	}
 

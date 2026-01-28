@@ -1,10 +1,12 @@
 package hosts
 
 import (
+	"context"
+
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandUpdate = &cli.Command{
@@ -37,7 +39,6 @@ var CommandUpdate = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "Update rolefullname.",
 		},
 		&cli.BoolFlag{
@@ -53,7 +54,7 @@ var CommandUpdate = &cli.Command{
 	},
 }
 
-func doUpdate(c *cli.Context) error {
+func doUpdate(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	argHostIDs := c.Args().Slice()
 	optName := c.String("name")
@@ -66,7 +67,7 @@ func doUpdate(c *cli.Context) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelpAndExit(c, "update", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "update", 1)
 		}
 	}
 
@@ -76,7 +77,7 @@ func doUpdate(c *cli.Context) error {
 
 	if !needUpdateHostStatus && !needUpdateHost {
 		logger.Log("update", "at least one argumet is required.")
-		cli.ShowCommandHelpAndExit(c, "update", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "update", 1)
 	}
 
 	client := mackerelclient.NewFromContext(c)

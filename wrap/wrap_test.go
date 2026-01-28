@@ -1,8 +1,8 @@
 package wrap
 
 import (
+	"context"
 	"encoding/json"
-	"flag"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -11,38 +11,32 @@ import (
 	"testing"
 
 	"github.com/mackerelio/mackerel-client-go"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-func newWrapContext(t testing.TB, args []string) *cli.Context {
+func newWrapCommand(t testing.TB, args []string) *cli.Command {
 	t.Helper()
-	app := cli.NewApp()
-	parentFs := flag.NewFlagSet("mockmkr", flag.ContinueOnError)
-	for _, f := range []cli.Flag{
-		&cli.StringFlag{Name: "conf"},
-		&cli.StringFlag{Name: "apibase"},
-	} {
-		f.Apply(parentFs) // nolint
-	}
-	if err := parentFs.Parse(args); err != nil {
-		t.Fatal(err)
-	}
-	for i, v := range parentFs.Args() {
-		if v == "wrap" {
-			args = parentFs.Args()[i+1:]
-			break
-		}
-	}
-	parentCtx := cli.NewContext(app, parentFs, nil)
+	var retVal cli.Command
 
-	fs := flag.NewFlagSet("mockwrap", flag.ContinueOnError)
-	for _, f := range Command.Flags {
-		f.Apply(fs) // nolint
+	var cmd = *Command
+	cmd.Action = func(_ context.Context, c *cli.Command) error {
+		retVal = *c
+		return nil
 	}
-	if err := fs.Parse(args); err != nil {
-		t.Fatal(err)
-	}
-	return cli.NewContext(app, fs, parentCtx)
+
+	(&cli.Command{
+		Commands: []*cli.Command{&cmd},
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name: "conf",
+			},
+			&cli.StringFlag{
+				Name: "apibase",
+			},
+		},
+	}).Run(t.Context(), args) // nolint
+
+	return &retVal
 }
 
 func TestCommand_Action(t *testing.T) {
@@ -182,12 +176,12 @@ Note: This is note
 			args := append(
 				// This test checks to verify the sending request.
 				// Therefore, to test in an environment without a configuration file, it needs to set the host argument.
-				[]string{"-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap", "-host", "3Yr"},
+				[]string{"$0", "-conf=testdata/dummy.conf", "-apibase", ts.URL, "wrap", "-host", "3Yr"},
 				tc.Args...,
 			)
 
-			c := newWrapContext(t, args)
-			err := Command.Action(c)
+			cmd := newWrapCommand(t, args)
+			err := doWrap(t.Context(), cmd)
 			var exitCode int
 			if err != nil {
 				exitCode = 1
@@ -204,13 +198,13 @@ Note: This is note
 
 // Commands are executed even if the configuration file does not exist.
 func TestCommand_Action_withoutConf(t *testing.T) {
-	c := newWrapContext(t, []string{
-		"-conf=notfound", "-apibase=http://localhost", "wrap",
+	cmd := newWrapCommand(t, []string{
+		"$0", "-conf=notfound", "-apibase=http://localhost", "wrap",
 		"--detail", "--",
 		"go", "run", "testdata/stub.go",
 	})
 	expect := "command exited with code: 1"
-	err := Command.Action(c)
+	err := doWrap(t.Context(), cmd)
 	if err == nil {
 		t.Errorf("error should be occurred but nil")
 	} else if err.Error() != expect {

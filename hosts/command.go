@@ -1,12 +1,13 @@
 package hosts
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // CommandCreate is definition of mkr create subcommand
@@ -29,7 +30,6 @@ var CommandCreate = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "roleFullname",
 			Aliases: []string{"R"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "Multiple choices are allowed. ex. My-Service:proxy, My-Service:db-master",
 		},
 		&cli.StringFlag{
@@ -45,10 +45,10 @@ var CommandCreate = &cli.Command{
 	},
 }
 
-func doCreate(c *cli.Context) error {
+func doCreate(ctx context.Context, c *cli.Command) error {
 	argHostName := c.Args().Get(0)
 	if argHostName == "" {
-		cli.ShowCommandHelpAndExit(c, "create", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "create", 1)
 	}
 
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
@@ -95,13 +95,11 @@ var CommandHosts = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "role",
 			Aliases: []string{"r"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "List hosts only belonging to <role>. Multiple choices are allowed. Required --service",
 		},
 		&cli.StringSliceFlag{
 			Name:    "status",
 			Aliases: []string{"st"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "List hosts only matched <status>. Multiple choices are allowed.",
 		},
 		&cli.StringFlag{
@@ -119,7 +117,7 @@ var CommandHosts = &cli.Command{
 	},
 }
 
-func doHosts(c *cli.Context) error {
+func doHosts(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

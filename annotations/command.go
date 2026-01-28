@@ -1,6 +1,7 @@
 package annotations
 
 import (
+	"context"
 	"io"
 	"os"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -19,7 +20,7 @@ var Command = &cli.Command{
     Manipulate graph annotations. Requests APIs under "/api/v0/graph-annotations".
     See https://mackerel.io/api-docs/entry/graph-annotations .
 `,
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		{
 			Name:      "create",
 			Usage:     "create a graph annotation",
@@ -41,11 +42,11 @@ var Command = &cli.Command{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
@@ -57,7 +58,6 @@ var Command = &cli.Command{
 				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
-					Value:   cli.NewStringSlice(),
 					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
@@ -76,11 +76,11 @@ var Command = &cli.Command{
 					Aliases: []string{"s"},
 					Usage:   "Service name for annotation",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
@@ -117,18 +117,17 @@ var Command = &cli.Command{
 					Name:  "description-file",
 					Usage: `Read description text for annotation from file (use "-" to read from stdin)`,
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "from",
 					Usage: "Starting time (epoch seconds)",
 				},
-				&cli.IntFlag{
+				&cli.Int64Flag{
 					Name:  "to",
 					Usage: "Ending time (epoch seconds)",
 				},
 				&cli.StringSliceFlag{
 					Name:    "role",
 					Aliases: []string{"r"},
-					Value:   cli.NewStringSlice(),
 					Usage:   "Roles for annotation. Multiple choices are allowed",
 				},
 			},
@@ -151,7 +150,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doAnnotationsCreate(c *cli.Context) error {
+func doAnnotationsCreate(ctx context.Context, c *cli.Command) error {
 	title := c.String("title")
 	description := c.String("description")
 	descriptionFile := c.String("description-file")
@@ -161,27 +160,27 @@ func doAnnotationsCreate(c *cli.Context) error {
 	roles := c.StringSlice("role")
 
 	if title == "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`title` is a required field to create a graph annotation.", 1)
 	}
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`service` is a required field to create a graph annotation.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`from` is a required field to create a graph annotation.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("`to` is a required field to create a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
@@ -214,23 +213,23 @@ func doAnnotationsCreate(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsList(c *cli.Context) error {
+func doAnnotationsList(ctx context.Context, c *cli.Command) error {
 	service := c.String("service")
 	from := c.Int64("from")
 	to := c.Int64("to")
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`service` is a required field to list graph annotations.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`from` is a required field to list graph annotations.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "list")
+		_ = cli.ShowCommandHelp(ctx, c, "list")
 		return cli.Exit("`to` is a required field to list graph annotations.", 1)
 	}
 
@@ -242,7 +241,7 @@ func doAnnotationsList(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsUpdate(c *cli.Context) error {
+func doAnnotationsUpdate(ctx context.Context, c *cli.Command) error {
 	annotationID := c.String("id")
 	title := c.String("title")
 	description := c.String("description")
@@ -253,27 +252,27 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	roles := c.StringSlice("role")
 
 	if annotationID == "" {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`id` is a required field to delete a update annotation.", 1)
 	}
 
 	if service == "" {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`service` is a required field to update a graph annotation.", 1)
 	}
 
 	if from == 0 {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`from` is a required field to update a graph annotation.", 1)
 	}
 
 	if to == 0 {
-		_ = cli.ShowCommandHelp(c, "update")
+		_ = cli.ShowCommandHelp(ctx, c, "update")
 		return cli.Exit("`to` is a required field to update a graph annotation.", 1)
 	}
 
 	if description != "" && descriptionFile != "" {
-		_ = cli.ShowCommandHelp(c, "create")
+		_ = cli.ShowCommandHelp(ctx, c, "create")
 		return cli.Exit("specify one of `description` or `description-file`.", 1)
 	}
 
@@ -306,11 +305,11 @@ func doAnnotationsUpdate(c *cli.Context) error {
 	return nil
 }
 
-func doAnnotationsDelete(c *cli.Context) error {
+func doAnnotationsDelete(ctx context.Context, c *cli.Command) error {
 	annotationID := c.String("id")
 
 	if annotationID == "" {
-		_ = cli.ShowCommandHelp(c, "delete")
+		_ = cli.ShowCommandHelp(ctx, c, "delete")
 		return cli.Exit("`id` is a required field to delete a graph annotation.", 1)
 	}
 

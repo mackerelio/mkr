@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"os"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -52,7 +53,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doMetrics(c *cli.Context) error {
+func doMetrics(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	optMetricName := c.String("name")
@@ -79,7 +80,7 @@ func doMetrics(c *cli.Context) error {
 		err = format.PrettyPrintJSON(os.Stdout, metricValue, jq)
 		logger.DieIf(err)
 	} else {
-		cli.ShowCommandHelpAndExit(c, "metrics", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "metrics", 1)
 	}
 	return nil
 }

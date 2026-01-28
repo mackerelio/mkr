@@ -1,13 +1,14 @@
 package metric_names
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/format"
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -37,7 +38,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doMetricNames(c *cli.Context) error {
+func doMetricNames(ctx context.Context, c *cli.Command) error {
 	optHostID := c.String("host")
 	optService := c.String("service")
 	jq := c.String("jq")
@@ -57,7 +58,7 @@ func doMetricNames(c *cli.Context) error {
 		err = format.PrettyPrintJSON(os.Stdout, metricNames, jq)
 		logger.DieIf(err)
 	} else {
-		cli.ShowCommandHelpAndExit(c, "metric-names", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "metric-names", 1)
 	}
 	return nil
 }

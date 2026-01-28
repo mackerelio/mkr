@@ -1,12 +1,13 @@
 package hosts
 
 import (
+	"context"
 	"strings"
 
 	"github.com/Songmu/prompter"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandRetire = &cli.Command{
@@ -26,7 +27,7 @@ var CommandRetire = &cli.Command{
 	},
 }
 
-func doRetire(c *cli.Context) error {
+func doRetire(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	force := c.Bool("force")
 	argHostIDs := c.Args().Slice()
@@ -34,7 +35,7 @@ func doRetire(c *cli.Context) error {
 	if len(argHostIDs) < 1 {
 		argHostIDs = make([]string, 1)
 		if argHostIDs[0] = mackerelclient.LoadHostIDFromConfig(confFile); argHostIDs[0] == "" {
-			cli.ShowCommandHelpAndExit(c, "retire", 1)
+			cli.ShowCommandHelpAndExit(ctx, c, "retire", 1)
 		}
 	}
 

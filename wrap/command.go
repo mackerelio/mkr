@@ -1,12 +1,13 @@
 package wrap
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/mackerelio/mackerel-agent/config"
 	"github.com/mackerelio/mkr/logger"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // Command is definition of mkr wrap
@@ -65,7 +66,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doWrap(c *cli.Context) error {
+func doWrap(ctx context.Context, c *cli.Command) error {
 	confFile := c.String("conf")
 	var conf *config.Config
 	if _, err := os.Stat(confFile); err == nil {

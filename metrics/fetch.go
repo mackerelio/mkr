@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mackerel-client-go"
@@ -8,7 +9,7 @@ import (
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var CommandFetch = &cli.Command{
@@ -24,19 +25,18 @@ var CommandFetch = &cli.Command{
 		&cli.StringSliceFlag{
 			Name:    "name",
 			Aliases: []string{"n"},
-			Value:   cli.NewStringSlice(),
 			Usage:   "Fetch metric values identified with <name>. Required. Multiple choices are allowed. ",
 		},
 		jq.CommandLineFlag,
 	},
 }
 
-func doFetch(c *cli.Context) error {
+func doFetch(ctx context.Context, c *cli.Command) error {
 	argHostIDs := c.Args().Slice()
 	optMetricNames := c.StringSlice("name")
 
 	if len(argHostIDs) < 1 || len(optMetricNames) < 1 {
-		cli.ShowCommandHelpAndExit(c, "fetch", 1)
+		cli.ShowCommandHelpAndExit(ctx, c, "fetch", 1)
 	}
 
 	allMetricValues := make(mackerel.LatestMetricValues)

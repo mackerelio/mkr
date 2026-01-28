@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // CommandPlugin is definition of mkr plugin
@@ -12,7 +12,7 @@ var CommandPlugin = &cli.Command{
     Manage mackerel plugin.  For example, you can install a mackerel plugin and
     check plugin by "mkr plugin install".
 `,
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		commandPluginInstall,
 	},
 }

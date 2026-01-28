@@ -1,11 +1,12 @@
 package org
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // Command is the definition of org subcommand
@@ -23,7 +24,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doOrg(c *cli.Context) error {
+func doOrg(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err

@@ -1,11 +1,12 @@
 package aws_integrations
 
 import (
+	"context"
 	"os"
 
 	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/mackerelclient"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
@@ -22,7 +23,7 @@ var Command = &cli.Command{
 	},
 }
 
-func doAWSIntegrations(c *cli.Context) error {
+func doAWSIntegrations(ctx context.Context, c *cli.Command) error {
 	client, err := mackerelclient.New(c.String("conf"), c.String("apibase"))
 	if err != nil {
 		return err
