@@ -13,7 +13,7 @@ require (
 	github.com/itchyny/gojq v0.12.18
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.0
-	github.com/mackerelio/mackerel-agent v0.86.0
+	github.com/mackerelio/mackerel-agent v0.86.1
 	github.com/mackerelio/mackerel-client-go v0.40.0
 	github.com/mholt/archives v0.1.5
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
