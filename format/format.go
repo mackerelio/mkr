@@ -25,7 +25,7 @@ type Host struct {
 }
 
 // PrettyPrintJSON outputs JSON or filtered result by jq query via stdout.
-func PrettyPrintJSON(outStream io.Writer, src interface{}, query string) error {
+func PrettyPrintJSON(outStream io.Writer, src any, query string) error {
 	if query == "" {
 		_, err := fmt.Fprintln(outStream, JSONMarshalIndent(src, "", "    "))
 		return err
@@ -37,7 +37,7 @@ func PrettyPrintJSON(outStream io.Writer, src interface{}, query string) error {
 var angleBracketReplacer = strings.NewReplacer(`\u003c`, "<", `\u003e`, ">")
 
 // JSONMarshalIndent call json.MarshalIndent and replace encoded angle brackets
-func JSONMarshalIndent(src interface{}, prefix, indent string) string {
+func JSONMarshalIndent(src any, prefix, indent string) string {
 	dataRaw, err := json.MarshalIndent(src, prefix, indent)
 	logger.DieIf(err)
 	return angleBracketReplacer.Replace(string(dataRaw))

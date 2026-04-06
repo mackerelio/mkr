@@ -119,7 +119,7 @@ func monitorSaveRules(rules []mackerel.Monitor, filePath string) error {
 	}
 	defer file.Close()
 
-	monitors := map[string]interface{}{"monitors": rules}
+	monitors := map[string]any{"monitors": rules}
 	data := format.JSONMarshalIndent(monitors, "", "    ") + "\n"
 
 	_, err = file.WriteString(data)
@@ -246,7 +246,7 @@ func diffMonitor(a mackerel.Monitor, b mackerel.Monitor) string {
 	if err != nil || !diff.Modified() {
 		return ""
 	}
-	var left map[string]interface{}
+	var left map[string]any
 	err = json.Unmarshal([]byte(as), &left)
 	if err != nil {
 		return ""

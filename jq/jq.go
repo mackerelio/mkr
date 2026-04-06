@@ -14,7 +14,7 @@ var CommandLineFlag = &cli.StringFlag{
 	Usage: "Filter response values using jq syntax",
 }
 
-func FilterJSON(outStream io.Writer, src interface{}, queryStr string) error {
+func FilterJSON(outStream io.Writer, src any, queryStr string) error {
 	query, err := gojq.Parse(queryStr)
 	if err != nil {
 		return err
@@ -57,8 +57,8 @@ func FilterJSON(outStream io.Writer, src interface{}, queryStr string) error {
 
 // gojq.TypeOf solves only a part of builtin types, or slices or maps.
 // Therefore we should convert arbitary structs to map[string]interface{}.
-func normalize(src interface{}) (interface{}, error) {
-	var dst interface{}
+func normalize(src any) (any, error) {
+	var dst any
 	jsonObj, err := json.Marshal(src)
 	if err != nil {
 		return nil, err

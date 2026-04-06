@@ -60,7 +60,7 @@ func channelSaveRules(rules []*mackerel.Channel, filePath string) error {
 	}
 	defer file.Close()
 
-	channels := map[string]interface{}{"channels": rules}
+	channels := map[string]any{"channels": rules}
 	data := format.JSONMarshalIndent(channels, "", "    ") + "\n"
 
 	_, err = file.WriteString(data)

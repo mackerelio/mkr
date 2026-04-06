@@ -462,10 +462,7 @@ func findAlertLogs(ctx context.Context, c *cli.Command) error {
 	var nextId string
 
 	for len(logs) < limit {
-		requestLimit := limit - len(logs)
-		if requestLimit > defaultAlertLogsLimit {
-			requestLimit = defaultAlertLogsLimit
-		}
+		requestLimit := min(limit-len(logs), defaultAlertLogsLimit)
 
 		param := mackerel.FindAlertLogsParam{
 			NextId: &nextId,

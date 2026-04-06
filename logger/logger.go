@@ -42,7 +42,7 @@ func (l *Logger) Log(prefix, message string) {
 }
 
 // Logf outputs `message` with `prefix` by go-colorine
-func (l *Logger) Logf(prefix, message string, args ...interface{}) {
+func (l *Logger) Logf(prefix, message string, args ...any) {
 	msg := fmt.Sprintf(message, args...)
 	l.logger.Log(prefix, msg)
 }
@@ -60,7 +60,7 @@ func Log(prefix, message string) {
 }
 
 // Logf outputs `message` with `prefix` by go-colorine
-func Logf(prefix, message string, args ...interface{}) {
+func Logf(prefix, message string, args ...any) {
 	defaultLogger.Logf(prefix, message, args...)
 }
 
