@@ -37,6 +37,15 @@ func main() {
 				// this default value is set in config.LoadApibaseFromConfigWithFallback
 				Usage: fmt.Sprintf("API Base `URL` (default: \"%s\")", config.DefaultConfig.Apibase),
 			},
+			&cli.BoolFlag{
+				Name:    "quiet",
+				Aliases: []string{"q"},
+				Usage:   "Suppress info-level output",
+			},
+		},
+		Before: func(ctx context.Context, c *cli.Command) (context.Context, error) {
+			logger.SetQuiet(c.Bool("quiet"))
+			return ctx, nil
 		},
 	}
 

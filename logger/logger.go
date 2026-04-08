@@ -12,6 +12,17 @@ import (
 // Logger is wrapped go-colorine logger for mkr
 type Logger struct {
 	logger *colorine.Logger
+	quiet  bool
+}
+
+// infoLevels is the set of prefixes that should be suppressed in quiet mode.
+var infoLevels = map[string]bool{
+	"":        true,
+	"info":    true,
+	"created": true,
+	"updated": true,
+	"thrown":  true,
+	"retired": true,
 }
 
 // New is constructor for new colorine logger
@@ -36,8 +47,17 @@ func New() *Logger {
 	return &Logger{logger: logger}
 }
 
+// SetQuiet enables or disables quiet mode.
+// In quiet mode, info-level log messages are suppressed.
+func (l *Logger) SetQuiet(q bool) {
+	l.quiet = q
+}
+
 // Log outputs `message` with `prefix` by go-colorine
 func (l *Logger) Log(prefix, message string) {
+	if l.quiet && infoLevels[prefix] {
+		return
+	}
 	l.logger.Log(prefix, message)
 }
 
@@ -53,6 +73,11 @@ func (l *Logger) Error(err error) {
 }
 
 var defaultLogger = New()
+
+// SetQuiet enables or disables quiet mode on the default logger.
+func SetQuiet(q bool) {
+	defaultLogger.SetQuiet(q)
+}
 
 // Log outputs `message` with `prefix` by go-colorine
 func Log(prefix, message string) {
