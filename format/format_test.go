@@ -88,7 +88,7 @@ func TestPrettyPrintJSON(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.id, func(t *testing.T) {
 			out := new(bytes.Buffer)
-			var src interface{}
+			var src any
 			assert.NoError(t, json.Unmarshal([]byte(tc.srcJson), &src))
 			assert.NoError(t, PrettyPrintJSON(out, src, tc.query))
 			assert.Equal(t, tc.expected, out.String())

@@ -29,7 +29,7 @@ import (
 )
 
 // copy from https://github.com/cli/cli/blob/d21d388b8dc10c8f04187c3afa6e0b44f0977c65/pkg/export/template.go#L110-L127
-func jsonScalarToString(input interface{}) (string, error) {
+func jsonScalarToString(input any) (string, error) {
 	switch tt := input.(type) {
 	case string:
 		return tt, nil

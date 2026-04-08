@@ -2,6 +2,8 @@ module github.com/mackerelio/mkr
 
 go 1.25.0
 
+toolchain go1.26.1
+
 require (
 	github.com/Songmu/prompter v0.5.1
 	github.com/Songmu/retry v0.1.0
