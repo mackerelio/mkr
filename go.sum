@@ -142,8 +142,8 @@ github.com/mackerelio/checkers v0.2.1 h1:vRXzAT+CEyaLjSrHVxKUBjyWq1kfo8QcI8ZoSKZ
 github.com/mackerelio/checkers v0.2.1/go.mod h1:CW3k/5bvHhxDrfKgWvMvNH0R51zco141ZVxlI7o/KAc=
 github.com/mackerelio/golib v1.2.2 h1:fQfW1o2KvPyIsAH/7+M2J0gpf2jLu+NyYpDCN79zxW4=
 github.com/mackerelio/golib v1.2.2/go.mod h1:itcSOfrsT5XvkzflFPebT43RrliaKDz2T6YGYt3jclw=
-github.com/mackerelio/mackerel-agent v0.86.2 h1:hMygOMZLmCgbK8uQx+XmlOzCvT1HY7oQN45rrYGQDVA=
-github.com/mackerelio/mackerel-agent v0.86.2/go.mod h1:n36UldXGgRpPFxY3xxoJuWFwB3mXlVFB658rHvvAPO0=
+github.com/mackerelio/mackerel-agent v0.86.3 h1:dmBG3QLSZ0An67J5gtjCq0GktUwuLaVh+WuyezZ10/Y=
+github.com/mackerelio/mackerel-agent v0.86.3/go.mod h1:7KJRs5rJLN9YxS4rpoTfXovDeNidFNzyHlhkL5/GUyg=
 github.com/mackerelio/mackerel-client-go v0.41.0 h1:2/yuToHH/iBZlFnlUQVPHyBsgJdjdQPBqbVQ9/SFao4=
 github.com/mackerelio/mackerel-client-go v0.41.0/go.mod h1:idAyt+GkVknFIupw1Y3vW1v5fJuqz2eiQrWU/oHOrEM=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
