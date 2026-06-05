@@ -48,13 +48,24 @@ var httpServerStatsCommand = &cli.Command{
 			Required:  false,
 			TakesFile: false,
 		},
+		&cli.StringFlag{
+			Name:      "route",
+			Usage:     "Filter by route",
+			Aliases:   []string{},
+			Required:  false,
+			TakesFile: false,
+		},
 		&cli.TimestampFlag{
 			Name:      "from",
 			Usage:     "Start timestamp",
 			Aliases:   []string{},
 			Required:  false,
 			TakesFile: false,
-			Value:     time.Now().Truncate(time.Minute).Add(-30 * time.Minute),
+			Config: cli.TimestampConfig{
+				Timezone: time.Local,
+				Layouts:  []string{time.RFC3339, time.DateTime},
+			},
+			Value: time.Now().Truncate(time.Minute).Add(-30 * time.Minute),
 		},
 		&cli.TimestampFlag{
 			Name:      "to",
@@ -62,7 +73,11 @@ var httpServerStatsCommand = &cli.Command{
 			Aliases:   []string{},
 			Required:  false,
 			TakesFile: false,
-			Value:     time.Now().Truncate(time.Minute),
+			Config: cli.TimestampConfig{
+				Timezone: time.Local,
+				Layouts:  []string{time.RFC3339, time.DateTime},
+			},
+			Value: time.Now().Truncate(time.Minute),
 		},
 		&cli.IntFlag{
 			Name:      "page",
@@ -93,6 +108,9 @@ func doHTTPServerStats(ctx context.Context, c *cli.Command) error {
 	}
 	if env := c.String("environment"); env != "" {
 		param.Environment = &env
+	}
+	if route := c.String("route"); route != "" {
+		param.Route = &route
 	}
 	if page := c.Int("page"); page != 0 {
 		param.Page = &page
