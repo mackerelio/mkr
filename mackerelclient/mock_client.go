@@ -19,6 +19,7 @@ type MockClient struct {
 	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
 	updateHostStatusCallback    func(hostID string, status string) error
 	listHostMetricNamesCallback func(id string) ([]string, error)
+	listHTTPServerStatsCallback func(param *mackerel.ListHTTPServerStatsParam) (*mackerel.HTTPServerStatsPageConnection, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -191,6 +192,21 @@ func (c *MockClient) FindUsersContext(ctx context.Context) ([]*mackerel.User, er
 func MockFindUsers(callback func() ([]*mackerel.User, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.findUsersCallback = callback
+	}
+}
+
+// HTTPServerStats ...
+func (c *MockClient) ListHTTPServerStatsContext(ctx context.Context, param *mackerel.ListHTTPServerStatsParam) (*mackerel.HTTPServerStatsPageConnection, error) {
+	if c.listHTTPServerStatsCallback != nil {
+		return c.listHTTPServerStatsCallback(param)
+	}
+	return nil, errCallbackNotFound("HTTPServerStats")
+}
+
+// MockListHTTPServerStats returns an option to set the callback of ListHTTPServerStats
+func MockListHTTPServerStats(callback func(param *mackerel.ListHTTPServerStatsParam) (*mackerel.HTTPServerStatsPageConnection, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.listHTTPServerStatsCallback = callback
 	}
 }
 

@@ -46,4 +46,5 @@ type Client interface {
 	CreateMonitorContext(ctx context.Context, param mackerel.Monitor) (mackerel.Monitor, error)
 	DeleteMonitorContext(ctx context.Context, monitorID string) (mackerel.Monitor, error)
 	UpdateMonitorContext(ctx context.Context, monitorID string, param mackerel.Monitor) (mackerel.Monitor, error)
+	ListHTTPServerStatsContext(ctx context.Context, param *mackerel.ListHTTPServerStatsParam) (*mackerel.HTTPServerStatsPageConnection, error)
 }
