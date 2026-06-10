@@ -23,7 +23,7 @@ require (
 	github.com/urfave/cli/v3 v3.9.0
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/sync v0.20.0
+	golang.org/x/sync v0.21.0
 	golang.org/x/text v0.37.0
 	gopkg.in/yaml.v2 v2.4.0
 )
