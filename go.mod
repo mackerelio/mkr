@@ -13,7 +13,7 @@ require (
 	github.com/itchyny/gojq v0.12.19
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.1
-	github.com/mackerelio/mackerel-agent v0.86.3
+	github.com/mackerelio/mackerel-agent v0.87.0
 	github.com/mackerelio/mackerel-client-go v0.43.0
 	github.com/mholt/archives v0.1.5
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
@@ -67,7 +67,7 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/term v0.37.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
