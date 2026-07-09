@@ -14,7 +14,7 @@ require (
 	github.com/jpillora/backoff v1.0.0
 	github.com/mackerelio/checkers v0.2.1
 	github.com/mackerelio/mackerel-agent v0.87.0
-	github.com/mackerelio/mackerel-client-go v0.43.0
+	github.com/mackerelio/mackerel-client-go v0.44.0
 	github.com/mholt/archives v0.1.5
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
@@ -23,7 +23,7 @@ require (
 	github.com/urfave/cli/v3 v3.10.1
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/sync v0.21.0
+	golang.org/x/sync v0.22.0
 	golang.org/x/text v0.39.0
 	gopkg.in/yaml.v2 v2.4.0
 )
