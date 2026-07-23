@@ -41,19 +41,10 @@ curl -fsSL https://mackerel.io/file/script/amznlinux/setup-yum-v2.sh | sh
 yum install mkr
 ```
 
-#### Unsupported legacy Amazon Linux
-
-### Amazon Linux 2
+### Amazon Linux 2 (unsupported)
 
 ```bash
 curl -fsSL https://mackerel.io/file/script/amznlinux/setup-yum-v2.sh | sh
-yum install mkr
-```
-
-### Amazon Linux AMI
-
-```bash
-curl -fsSL https://mackerel.io/file/script/amznlinux/setup-yum.sh | sh
 yum install mkr
 ```
 
