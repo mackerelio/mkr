@@ -25,6 +25,7 @@ type Client interface {
 	FindAlertsByNextIDContext(ctx context.Context, nextID string) (*mackerel.AlertsResp, error)
 	CloseAlertContext(ctx context.Context, alertID string, reason string) (*mackerel.Alert, error)
 	FindAlertLogsContext(ctx context.Context, alertId string, params *mackerel.FindAlertLogsParam) (*mackerel.FindAlertLogsResp, error)
+	FindCheckMonitorsContext(ctx context.Context, params *mackerel.FindCheckMonitorsParam) (*mackerel.FindCheckMonitorsResp, error)
 	FindMonitorsContext(ctx context.Context) ([]mackerel.Monitor, error)
 	CreateGraphAnnotationContext(ctx context.Context, annotation *mackerel.GraphAnnotation) (*mackerel.GraphAnnotation, error)
 	FindGraphAnnotationsContext(ctx context.Context, service string, from int64, to int64) ([]*mackerel.GraphAnnotation, error)

@@ -128,9 +128,10 @@ const defaultAlertsLimit int = 100
 const defaultAlertLogsLimit int = 100
 
 type alertSet struct {
-	Alert   *mackerel.Alert
-	Host    *mackerel.Host
-	Monitor mackerel.Monitor
+	Alert        *mackerel.Alert
+	Host         *mackerel.Host
+	Monitor      mackerel.Monitor
+	CheckMonitor *mackerel.CheckMonitor
 }
 
 func joinMonitorsAndHosts(ctx context.Context, client mackerelclient.Client, alerts []*mackerel.Alert) []*alertSet {
@@ -152,11 +153,26 @@ func joinMonitorsAndHosts(ctx context.Context, client mackerelclient.Client, ale
 		monitors[monitor.MonitorID()] = monitor
 	}
 
+	checkMonitors := map[string]*mackerel.CheckMonitor{}
+	param := &mackerel.FindCheckMonitorsParam{}
+	for {
+		c, err := client.FindCheckMonitorsContext(ctx, param)
+		logger.DieIf(err)
+
+		for _, monitor := range c.Checks {
+			checkMonitors[monitor.ID] = monitor
+		}
+		if c.NextID == "" {
+			break
+		}
+		param.NextID = &c.NextID
+	}
+
 	alertSets := []*alertSet{}
 	for _, alert := range alerts {
 		alertSets = append(
 			alertSets,
-			&alertSet{Alert: alert, Host: hosts[alert.HostID], Monitor: monitors[alert.MonitorID]},
+			&alertSet{Alert: alert, Host: hosts[alert.HostID], Monitor: monitors[alert.MonitorID], CheckMonitor: checkMonitors[alert.MonitorID]},
 		)
 	}
 	return alertSets
@@ -257,9 +273,9 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
-	// If alert is caused by check monitoring, take monitorMsg from alert.message
+	// If alert is caused by check monitoring, take and overwrite monitorMsg from alert.message
 	if alert.Type == "check" {
-		monitorMsg = formatCheckMessage(alert.Message)
+		monitorMsg = formatCheckMessage(alert.Message, alertSet.CheckMonitor)
 	}
 
 	statusMsg := alert.Status
@@ -288,7 +304,7 @@ func formatExpressionOneline(expr string) string {
 	return expressionParenthesisReplacer.Replace(expr)
 }
 
-func formatCheckMessage(msg string) string {
+func formatCheckMessage(msg string, checkMonitor *mackerel.CheckMonitor) string {
 	truncated := false
 	if index := strings.IndexAny(msg, "\n\r"); index != -1 {
 		msg = msg[0:index]
@@ -300,6 +316,9 @@ func formatCheckMessage(msg string) string {
 	}
 	if truncated {
 		msg += "..."
+	}
+	if checkMonitor != nil {
+		return checkMonitor.Name + " " + msg
 	}
 	return msg
 }
