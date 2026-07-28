@@ -144,8 +144,8 @@ github.com/mackerelio/golib v1.2.2 h1:fQfW1o2KvPyIsAH/7+M2J0gpf2jLu+NyYpDCN79zxW
 github.com/mackerelio/golib v1.2.2/go.mod h1:itcSOfrsT5XvkzflFPebT43RrliaKDz2T6YGYt3jclw=
 github.com/mackerelio/mackerel-agent v0.87.0 h1:XIfbSAjG6kAmTSWcY3yk6vhA043/x7VR4lBh/3DOdGo=
 github.com/mackerelio/mackerel-agent v0.87.0/go.mod h1:/TzlgQl6uB9LUs6pHIScyrGtECJcuEjnEQHAlLxfMR8=
-github.com/mackerelio/mackerel-client-go v0.44.0 h1:Qb9P1hpIdoXSCm26SPKLNK0vmKUCrlJOuur6ATfnQAY=
-github.com/mackerelio/mackerel-client-go v0.44.0/go.mod h1:idAyt+GkVknFIupw1Y3vW1v5fJuqz2eiQrWU/oHOrEM=
+github.com/mackerelio/mackerel-client-go v0.45.0 h1:Tw+eSr8AkSoM7wHtTwF/hRbi7/Ib8m+B3NsxnI0xV5I=
+github.com/mackerelio/mackerel-client-go v0.45.0/go.mod h1:idAyt+GkVknFIupw1Y3vW1v5fJuqz2eiQrWU/oHOrEM=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
 github.com/mattn/go-colorable v0.1.14/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
