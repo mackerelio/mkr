@@ -15,6 +15,7 @@ import (
 	"github.com/mackerelio/mkr/plugin"
 	"github.com/mackerelio/mkr/services"
 	"github.com/mackerelio/mkr/status"
+	"github.com/mackerelio/mkr/traces"
 	"github.com/mackerelio/mkr/users"
 	"github.com/mackerelio/mkr/wrap"
 	"github.com/urfave/cli/v3"
@@ -43,4 +44,5 @@ var Commands = []*cli.Command{
 	aws_integrations.Command,
 	metric_names.Command,
 	users.CommandUsers,
+	traces.Command,
 }
