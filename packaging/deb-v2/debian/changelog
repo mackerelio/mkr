@@ -1,3 +1,100 @@
+mkr (0.65.0-1.v2) stable; urgency=low
+
+  * Bump aws-actions/configure-aws-credentials from 6.2.2 to 6.2.3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/862>
+  * Bump docker/login-action from 4.4.0 to 4.5.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/861>
+  * Bump actions/checkout from 7.0.0 to 7.0.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/860>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.44.0 to 0.45.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/859>
+  * Update supported Linux distributions in README (by mechairoi)
+    <https://github.com/mackerelio/mkr/pull/857>
+  * Bump actions/setup-go from 6.5.0 to 7.0.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/856>
+  * Bump aws-actions/configure-aws-credentials from 6.2.1 to 6.2.2 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/855>
+  * Bump golang.org/x/text from 0.39.0 to 0.40.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/854>
+  * Bump docker/login-action from 4.3.0 to 4.4.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/853>
+  * Bump the stable-packages group across 1 directory with 2 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/852>
+  * Bump golang.org/x/crypto from 0.45.0 to 0.52.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/851>
+  * Bump docker/setup-buildx-action from 4.1.0 to 4.2.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/850>
+  * Bump docker/login-action from 4.2.0 to 4.3.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/849>
+  * Bump docker/build-push-action from 7.2.0 to 7.3.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/848>
+  * Bump docker/setup-qemu-action from 4.1.0 to 4.2.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/847>
+  * Bump golang.org/x/text from 0.38.0 to 0.39.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/846>
+  * Change Dependabot schedule from daily to weekly (by yseto)
+    <https://github.com/mackerelio/mkr/pull/845>
+  * Bump github.com/urfave/cli/v3 from 3.10.0 to 3.10.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/844>
+  * Bump aws-actions/configure-aws-credentials from 6.2.0 to 6.2.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/843>
+  * Bump actions/setup-go from 6.4.0 to 6.5.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/842>
+  * Bump github.com/mackerelio/mackerel-agent from 0.86.3 to 0.87.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/841>
+  * Bump actions/checkout from 6.0.3 to 7.0.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/840>
+  * Bump github.com/urfave/cli/v3 from 3.9.1 to 3.10.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/839>
+  * Bump github.com/urfave/cli/v3 from 3.9.0 to 3.9.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/837>
+  * Bump the stable-packages group across 1 directory with 2 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/836>
+  * Bump alpine from 3.23 to 3.24 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/834>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.42.0 to 0.43.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/833>
+  * Bump actions/checkout from 6.0.2 to 6.0.3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/832>
+  * Bump aws-actions/configure-aws-credentials from 6.1.3 to 6.2.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/831>
+  * Bump aws-actions/configure-aws-credentials from 6.1.1 to 6.1.3 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/829>
+  * Bump docker/setup-qemu-action from 4.0.0 to 4.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/828>
+  * Bump docker/login-action from 4.1.0 to 4.2.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/825>
+  * Bump docker/setup-buildx-action from 4.0.0 to 4.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/824>
+  * Bump docker/build-push-action from 7.1.0 to 7.2.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/823>
+  * Bump github.com/urfave/cli/v3 from 3.8.0 to 3.9.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/820>
+  * Bump golang.org/x/text from 0.36.0 to 0.37.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/819>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.41.0 to 0.42.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/818>
+  * Bump aws-actions/configure-aws-credentials from 6.1.0 to 6.1.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/817>
+  * Bump github.com/mackerelio/mackerel-agent from 0.86.2 to 0.86.3 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/816>
+  * Bump actions/upload-artifact from 7.0.0 to 7.0.1 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/815>
+  * Bump docker/build-push-action from 7.0.0 to 7.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/814>
+  * Bump the stable-packages group across 1 directory with 2 updates (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/813>
+  * Bump aws-actions/configure-aws-credentials from 6.0.0 to 6.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/811>
+  * Bump github.com/mackerelio/mackerel-client-go from 0.40.0 to 0.41.0 in the stable-packages group (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/810>
+  * Bump docker/login-action from 4.0.0 to 4.1.0 (by dependabot[bot])
+    <https://github.com/mackerelio/mkr/pull/809>
+  * Add traces get command for trace retrieval (by kga)
+    <https://github.com/mackerelio/mkr/pull/731>
+
+ -- mackerel <mackerel-developers@hatena.ne.jp>  Wed, 29 Jul 2026 05:53:06 +0000
+
 mkr (0.64.0-1.v2) stable; urgency=low
 
   * Add --quiet flag (by fujiwara)
