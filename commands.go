@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/mackerelio/mkr/alerts"
 	"github.com/mackerelio/mkr/annotations"
+	"github.com/mackerelio/mkr/apm"
 	"github.com/mackerelio/mkr/aws_integrations"
 	"github.com/mackerelio/mkr/channels"
 	"github.com/mackerelio/mkr/checks"
@@ -43,4 +44,5 @@ var Commands = []*cli.Command{
 	aws_integrations.Command,
 	metric_names.Command,
 	users.CommandUsers,
+	apm.Command,
 }
