@@ -1,6 +1,7 @@
 package alerts
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -13,6 +14,18 @@ func pfloat64(x float64) *float64 {
 
 func puint64(x uint64) *uint64 {
 	return &x
+}
+
+type dummyClient struct {
+}
+
+func (d *dummyClient) FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error) {
+	return &mackerel.FindCheckMonitorResp{
+		Check: mackerel.CheckMonitor{
+			ID:   "5rXR3",
+			Name: "foo-check-script",
+		},
+	}, nil
 }
 
 func TestFormatJoinedAlert(t *testing.T) {
@@ -75,7 +88,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING Short check monitoring description app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script Short check monitoring description app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -83,7 +96,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING description with... app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script description with... app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -91,7 +104,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -104,7 +117,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		str := formatJoinedAlert(testCase.alertSet, false)
+		str := formatJoinedAlert(t.Context(), &dummyClient{}, testCase.alertSet, false)
 		if str != testCase.want {
 			t.Errorf("should be '%s' but got '%s'", testCase.want, str)
 		}

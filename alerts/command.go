@@ -164,7 +164,11 @@ func joinMonitorsAndHosts(ctx context.Context, client mackerelclient.Client, ale
 
 var statusRegexp = regexp.MustCompile("^[2-5][0-9][0-9]$")
 
-func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
+type formatJoinedAlertClient interface {
+	FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error)
+}
+
+func formatJoinedAlert(ctx context.Context, client formatJoinedAlertClient, alertSet *alertSet, colorize bool) string {
 	const layout = "2006-01-02 15:04:05"
 
 	host := alertSet.Host
@@ -257,9 +261,13 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
-	// If alert is caused by check monitoring, take monitorMsg from alert.message
+	// If alert is caused by check monitoring, take and overwrite monitorMsg from alert.message
 	if alert.Type == "check" {
-		monitorMsg = formatCheckMessage(alert.Message)
+		var checkMonitorName string
+		if cm, err := client.FindCheckMonitorContext(ctx, alert.MonitorID); err == nil && cm != nil {
+			checkMonitorName = cm.Check.Name
+		}
+		monitorMsg = formatCheckMessage(alert.Message, checkMonitorName)
 	}
 
 	statusMsg := alert.Status
@@ -288,7 +296,7 @@ func formatExpressionOneline(expr string) string {
 	return expressionParenthesisReplacer.Replace(expr)
 }
 
-func formatCheckMessage(msg string) string {
+func formatCheckMessage(msg string, checkMonitorName string) string {
 	truncated := false
 	if index := strings.IndexAny(msg, "\n\r"); index != -1 {
 		msg = msg[0:index]
@@ -300,6 +308,9 @@ func formatCheckMessage(msg string) string {
 	}
 	if truncated {
 		msg += "..."
+	}
+	if checkMonitorName != "" {
+		return checkMonitorName + " " + msg
 	}
 	return msg
 }
@@ -356,7 +367,7 @@ func doAlertsList(ctx context.Context, c *cli.Command) error {
 				continue
 			}
 		}
-		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.Bool("color")))
+		fmt.Fprintln(color.Output, formatJoinedAlert(ctx, client, joinAlert, c.Bool("color")))
 	}
 	return nil
 }
