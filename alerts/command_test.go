@@ -2,6 +2,7 @@ package alerts
 
 import (
 	"context"
+	"reflect"
 	"testing"
 	"time"
 
@@ -17,9 +18,11 @@ func puint64(x uint64) *uint64 {
 }
 
 type dummyClient struct {
+	called int
 }
 
 func (d *dummyClient) FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error) {
+	d.called++
 	return &mackerel.FindCheckMonitorResp{
 		Check: mackerel.CheckMonitor{
 			ID:   "5rXR3",
@@ -121,5 +124,25 @@ func TestFormatJoinedAlert(t *testing.T) {
 		if str != testCase.want {
 			t.Errorf("should be '%s' but got '%s'", testCase.want, str)
 		}
+	}
+}
+
+func Test_checkMonitorsWithCache(t *testing.T) {
+	d := &dummyClient{}
+	client := checkMonitorsWithCacheNew(d)
+	resp, err := client.FindCheckMonitorContext(t.Context(), "5rXR3")
+	if err != nil {
+		t.Error("error occured")
+	}
+
+	got := mackerel.CheckMonitor{ID: "5rXR3", Name: "foo-check-script"}
+	if !reflect.DeepEqual(resp.Check, got) {
+		t.Errorf("should be '%s' but got '%s'", resp.Check, got)
+	}
+	if _, err := client.FindCheckMonitorContext(t.Context(), "5rXR3"); err != nil {
+		t.Error("error occured")
+	}
+	if d.called != 1 {
+		t.Error("d.called != 1")
 	}
 }
