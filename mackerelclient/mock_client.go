@@ -294,3 +294,6 @@ func (c *MockClient) DeleteMonitorContext(ctx context.Context, monitorID string)
 func (c *MockClient) UpdateMonitorContext(ctx context.Context, monitorID string, param mackerel.Monitor) (mackerel.Monitor, error) {
 	return nil, errNotImplemented
 }
+func (c *MockClient) FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error) {
+	return nil, errNotImplemented
+}

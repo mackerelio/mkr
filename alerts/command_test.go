@@ -1,6 +1,8 @@
 package alerts
 
 import (
+	"context"
+	"reflect"
 	"testing"
 	"time"
 
@@ -13,6 +15,20 @@ func pfloat64(x float64) *float64 {
 
 func puint64(x uint64) *uint64 {
 	return &x
+}
+
+type dummyClient struct {
+	called int
+}
+
+func (d *dummyClient) FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error) {
+	d.called++
+	return &mackerel.FindCheckMonitorResp{
+		Check: mackerel.CheckMonitor{
+			ID:   "5rXR3",
+			Name: "foo-check-script",
+		},
+	}, nil
 }
 
 func TestFormatJoinedAlert(t *testing.T) {
@@ -75,7 +91,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING Short check monitoring description app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script Short check monitoring description app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -83,7 +99,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING description with... app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script description with... app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -91,7 +107,7 @@ func TestFormatJoinedAlert(t *testing.T) {
 				&mackerel.Host{ID: "3XYyG", Name: "app.example.com", Roles: mackerel.Roles{"foo": {"bar", "baz"}}, Status: "working"},
 				nil,
 			},
-			"2tZhm 1970-01-01 00:08:20 WARNING long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
+			"2tZhm 1970-01-01 00:08:20 WARNING foo-check-script long long long long long long long long long long long long long long long long long long long そして長い... app.example.com working [foo:bar,baz]",
 		},
 		{
 			&alertSet{
@@ -104,9 +120,29 @@ func TestFormatJoinedAlert(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		str := formatJoinedAlert(testCase.alertSet, false)
+		str := formatJoinedAlert(t.Context(), &dummyClient{}, testCase.alertSet, false)
 		if str != testCase.want {
 			t.Errorf("should be '%s' but got '%s'", testCase.want, str)
 		}
+	}
+}
+
+func Test_checkMonitorsWithCache(t *testing.T) {
+	d := &dummyClient{}
+	client := checkMonitorsWithCacheNew(d)
+	resp, err := client.FindCheckMonitorContext(t.Context(), "5rXR3")
+	if err != nil {
+		t.Error("error occured")
+	}
+
+	got := mackerel.CheckMonitor{ID: "5rXR3", Name: "foo-check-script"}
+	if !reflect.DeepEqual(resp.Check, got) {
+		t.Errorf("should be '%s' but got '%s'", resp.Check, got)
+	}
+	if _, err := client.FindCheckMonitorContext(t.Context(), "5rXR3"); err != nil {
+		t.Error("error occured")
+	}
+	if d.called != 1 {
+		t.Error("d.called != 1")
 	}
 }

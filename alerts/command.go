@@ -164,7 +164,36 @@ func joinMonitorsAndHosts(ctx context.Context, client mackerelclient.Client, ale
 
 var statusRegexp = regexp.MustCompile("^[2-5][0-9][0-9]$")
 
-func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
+type clientFindCheckMonitorContext interface {
+	FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error)
+}
+
+type checkMonitorsWithCache struct {
+	cache  map[string]*mackerel.FindCheckMonitorResp
+	client clientFindCheckMonitorContext
+}
+
+func checkMonitorsWithCacheNew(client clientFindCheckMonitorContext) *checkMonitorsWithCache {
+	return &checkMonitorsWithCache{
+		cache:  make(map[string]*mackerel.FindCheckMonitorResp),
+		client: client,
+	}
+}
+
+func (c *checkMonitorsWithCache) FindCheckMonitorContext(ctx context.Context, monitorID string) (*mackerel.FindCheckMonitorResp, error) {
+	if monitor, ok := c.cache[monitorID]; ok {
+		return monitor, nil
+	}
+
+	monitor, err := c.client.FindCheckMonitorContext(ctx, monitorID)
+	if err != nil {
+		return nil, err
+	}
+	c.cache[monitorID] = monitor
+	return monitor, nil
+}
+
+func formatJoinedAlert(ctx context.Context, client clientFindCheckMonitorContext, alertSet *alertSet, colorize bool) string {
 	const layout = "2006-01-02 15:04:05"
 
 	host := alertSet.Host
@@ -257,9 +286,13 @@ func formatJoinedAlert(alertSet *alertSet, colorize bool) string {
 			monitorMsg = monitor.MonitorName() + " " + monitorMsg
 		}
 	}
-	// If alert is caused by check monitoring, take monitorMsg from alert.message
+	// If alert is caused by check monitoring, take and overwrite monitorMsg from alert.message
 	if alert.Type == "check" {
-		monitorMsg = formatCheckMessage(alert.Message)
+		var checkMonitorName string
+		if cm, err := client.FindCheckMonitorContext(ctx, alert.MonitorID); err == nil && cm != nil {
+			checkMonitorName = cm.Check.Name
+		}
+		monitorMsg = formatCheckMessage(alert.Message, checkMonitorName)
 	}
 
 	statusMsg := alert.Status
@@ -288,7 +321,7 @@ func formatExpressionOneline(expr string) string {
 	return expressionParenthesisReplacer.Replace(expr)
 }
 
-func formatCheckMessage(msg string) string {
+func formatCheckMessage(msg string, checkMonitorName string) string {
 	truncated := false
 	if index := strings.IndexAny(msg, "\n\r"); index != -1 {
 		msg = msg[0:index]
@@ -300,6 +333,9 @@ func formatCheckMessage(msg string) string {
 	}
 	if truncated {
 		msg += "..."
+	}
+	if checkMonitorName != "" {
+		return checkMonitorName + " " + msg
 	}
 	return msg
 }
@@ -321,6 +357,8 @@ func doAlertsList(ctx context.Context, c *cli.Command) error {
 	withClosed := c.Bool("with-closed")
 	alerts, err := fetchAlerts(ctx, client, withClosed, getAlertsLimit(c, withClosed))
 	logger.DieIf(err)
+
+	cmClient := checkMonitorsWithCacheNew(client)
 
 	joinedAlerts := joinMonitorsAndHosts(ctx, client, alerts)
 	for _, joinAlert := range joinedAlerts {
@@ -356,7 +394,7 @@ func doAlertsList(ctx context.Context, c *cli.Command) error {
 				continue
 			}
 		}
-		fmt.Fprintln(color.Output, formatJoinedAlert(joinAlert, c.Bool("color")))
+		fmt.Fprintln(color.Output, formatJoinedAlert(ctx, cmClient, joinAlert, c.Bool("color")))
 	}
 	return nil
 }
