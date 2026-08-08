@@ -1,8 +1,10 @@
 package wrap
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -290,6 +292,62 @@ func Test_truncate(t *testing.T) {
 		if len([]rune(got)) > tc.limit {
 			t.Errorf("length of truncate(%q, %d, %q) should not exceed %d but got: %d",
 				tc.src, tc.limit, tc.sep, tc.limit, len([]rune(got)))
+		}
+	}
+}
+
+// TestRunCmd_Output checks that stdout and stderr of the command are passed
+// through to their respective streams, and that both are merged into the
+// output of the report. Running it under -race also detects unsynchronized
+// access to the merged buffer.
+func TestRunCmd_Output(t *testing.T) {
+	const lines = 100
+	var bufOut, bufErr bytes.Buffer
+	wr := &wrap{
+		cmd:       []string{"go", "run", "testdata/interleave.go"},
+		outStream: &bufOut,
+		errStream: &bufErr,
+	}
+
+	re := wr.runCmd(t.Context())
+
+	if re.ExitCode != 0 {
+		t.Fatalf("exit code = %d, want 0 (msg: %s)", re.ExitCode, re.Msg)
+	}
+
+	for _, tc := range []struct {
+		name, got, prefix, unexpected string
+	}{
+		{"stdout", bufOut.String(), "out ", "err "},
+		{"stderr", bufErr.String(), "err ", "out "},
+	} {
+		if strings.Contains(tc.got, tc.unexpected) {
+			t.Errorf("%s should not contain %q", tc.name, tc.unexpected)
+		}
+		got := strings.Split(strings.TrimSuffix(tc.got, "\n"), "\n")
+		if len(got) != lines {
+			t.Errorf("%s has %d lines, want %d", tc.name, len(got), lines)
+			continue
+		}
+		for i, line := range got {
+			if want := fmt.Sprintf("%s%d", tc.prefix, i); line != want {
+				t.Errorf("%s line %d is %q, want %q", tc.name, i, line, want)
+				break
+			}
+		}
+	}
+
+	if got, want := strings.Count(re.Output, "\n"), lines*2; got != want {
+		t.Errorf("merged output has %d lines, want %d", got, want)
+	}
+	for i := range lines {
+		for _, want := range []string{
+			fmt.Sprintf("out %d\n", i),
+			fmt.Sprintf("err %d\n", i),
+		} {
+			if !strings.Contains(re.Output, want) {
+				t.Errorf("merged output does not contain %q", want)
+			}
 		}
 	}
 }

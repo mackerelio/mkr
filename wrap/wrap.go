@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"sync"
 	"time"
 
 	"github.com/Songmu/retry"
@@ -14,7 +15,6 @@ import (
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/urfave/cli/v3"
-	"golang.org/x/sync/errgroup"
 )
 
 type wrap struct {
@@ -44,6 +44,17 @@ func (wr *wrap) run(ctx context.Context) error {
 	return nil
 }
 
+type syncBuffer struct {
+	bytes.Buffer
+	mu sync.Mutex
+}
+
+func (b *syncBuffer) Write(p []byte) (int, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.Buffer.Write(p)
+}
+
 func (wr *wrap) runCmd(ctx context.Context) *result {
 	cmd := exec.CommandContext(ctx, wr.cmd[0], wr.cmd[1:]...)
 	re := &result{
@@ -52,40 +63,11 @@ func (wr *wrap) runCmd(ctx context.Context) *result {
 		Note: wr.note,
 	}
 
-	stdoutPipe, err := cmd.StdoutPipe()
-	if err != nil {
-		return re.errorEnd("command invocation failed with follwing error: %s", err)
-	}
-	defer stdoutPipe.Close()
+	bufMerged := &syncBuffer{}
+	cmd.Stdout = io.MultiWriter(wr.outStream, bufMerged)
+	cmd.Stderr = io.MultiWriter(wr.errStream, bufMerged)
 
-	stderrPipe, err := cmd.StderrPipe()
-	if err != nil {
-		return re.errorEnd("command invocation failed with follwing error: %s", err)
-	}
-	defer stderrPipe.Close()
-
-	bufMerged := &bytes.Buffer{}
-	stdoutPipe2 := io.TeeReader(stdoutPipe, bufMerged)
-	stderrPipe2 := io.TeeReader(stderrPipe, bufMerged)
-
-	err = cmd.Start()
-	if err != nil {
-		return re.errorEnd("command invocation failed with follwing error: %s", err)
-	}
-	eg := &errgroup.Group{}
-
-	eg.Go(func() error {
-		defer stdoutPipe.Close()
-		_, err := io.Copy(wr.outStream, stdoutPipe2)
-		return err
-	})
-	eg.Go(func() error {
-		defer stderrPipe.Close()
-		_, err := io.Copy(wr.errStream, stderrPipe2)
-		return err
-	})
-	err = eg.Wait()
-	if err != nil {
+	if err := cmd.Start(); err != nil {
 		return re.errorEnd("command invocation failed with follwing error: %s", err)
 	}
 
