@@ -376,7 +376,7 @@ func doAlertsList(ctx context.Context, c *cli.Command) error {
 					} else if m, ok := joinAlert.Monitor.(*mackerel.MonitorExternalHTTP); ok {
 						service = m.Service
 					}
-					found = service == filterService
+					found = found || service == filterService
 				}
 			}
 			if !found {
