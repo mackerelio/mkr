@@ -173,34 +173,56 @@ func (it *installTarget) getTagFromReleasesURL(ctx context.Context, owner, repo 
 		},
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("User-Agent", userAgent)
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	io.Copy(io.Discard, resp.Body) //nolint:errcheck
-	defer resp.Body.Close()
+	for i := 0; i < 5; i++ {
+		req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
+		if err != nil {
+			return "", err
+		}
+		req.Header.Set("User-Agent", userAgent)
+		resp, err := client.Do(req)
+		if err != nil {
+			return "", err
+		}
+		io.Copy(io.Discard, resp.Body) //nolint:errcheck
+		resp.Body.Close()
 
-	loc := resp.Header.Get("Location")
-	if loc == "" {
-		return "", fmt.Errorf("no Location header found (status=%d)", resp.StatusCode)
+		loc := resp.Header.Get("Location")
+		if loc == "" {
+			return "", fmt.Errorf("no Location header found (status=%d)", resp.StatusCode)
+		}
+
+		u, err := resp.Request.URL.Parse(loc)
+		if err != nil {
+			return "", err
+		}
+
+		// Follow redirect caused by repository transfer.
+		// GitHub redirects /owner/repo/releases/latest to the new repository's latest URL.
+		if it.isReleasesLatestURL(u) {
+			latestURL = u.String()
+			continue
+		}
+
+		tag, err := extractTagFromReleasesURL(u)
+		if err != nil {
+			return "", err
+		}
+		it.releaseTag = tag
+		return it.releaseTag, nil
 	}
 
-	u, err := resp.Request.URL.Parse(loc)
-	if err != nil {
-		return "", err
-	}
+	return "", fmt.Errorf("too many redirects")
+}
 
-	tag, err := extractTagFromReleasesURL(u)
-	if err != nil {
-		return "", err
+func (it *installTarget) isReleasesLatestURL(u *url.URL) bool {
+	if strings.Index(u.String(), it.getGithubURL()) != 0 {
+		return false
 	}
-	it.releaseTag = tag
-	return it.releaseTag, nil
+	segments := strings.Split(strings.Trim(u.EscapedPath(), "/"), "/")
+	if len(segments) < 4 {
+		return false
+	}
+	return segments[len(segments)-2] == "releases" && segments[len(segments)-1] == "latest"
 }
 
 func extractTagFromReleasesURL(u *url.URL) (string, error) {
