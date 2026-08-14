@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"runtime"
 	"testing"
 
@@ -330,6 +331,37 @@ func TestInstallTargetGetOwnerAndRepo(t *testing.T) {
 	}
 }
 
+func TestIsReleasesLatestURL(t *testing.T) {
+	testCases := []struct {
+		Name   string
+		Input  string
+		Output bool
+	}{
+		{
+			Name:   "Valid releases/latest URL",
+			Input:  "https://github.com/owner/repo/releases/latest",
+			Output: true,
+		},
+		{
+			Name:   "Invalid releases/latest URL",
+			Input:  "https://github.com/owner/repo/releases/tag/v1.2.3",
+			Output: false,
+		},
+		{
+			Name:   "Invalid URL",
+			Input:  "https://example.com/owner/repo/releases/latest",
+			Output: false,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			it := &installTarget{githubURL: "https://github.com"}
+			u, _ := url.Parse(tc.Input)
+			assert.Equal(t, tc.Output, it.isReleasesLatestURL(u))
+		})
+	}
+}
+
 func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 
 	mux := http.NewServeMux()
@@ -343,6 +375,19 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 	})
 	ts := httptest.NewServer(mux)
 	defer ts.Close()
+
+	mux.HandleFunc("/old-owner/repo3/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Location", fmt.Sprintf("%s/new-owner/repo3/releases/latest", ts.URL))
+		w.WriteHeader(http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/new-owner/repo3/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Location", "https://github.com/new-owner/repo3/releases/tag/v1.0.0")
+		w.WriteHeader(http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/owner3/repo4/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Location", fmt.Sprintf("%s/owner3/repo4/releases/latest", ts.URL))
+		w.WriteHeader(http.StatusMovedPermanently)
+	})
 
 	{
 		// it already has releaseTag
@@ -373,6 +418,22 @@ func TestInstallTargetgetTagFromReleasesURL(t *testing.T) {
 		it := &installTarget{githubURL: ts.URL}
 		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner2", "repo2")
 		assert.Error(t, err, "Returns err if the repository is not found")
+		assert.Equal(t, "", releaseTag, "Returns empty string")
+	}
+
+	{
+		// Repository transfer: follow redirect to new repository's releases/latest
+		it := &installTarget{githubURL: ts.URL}
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "old-owner", "repo3")
+		assert.NoError(t, err, "getReleaseTag is successful")
+		assert.Equal(t, "v1.0.0", releaseTag, "releaseTag is fetched from transferred repository")
+	}
+
+	{
+		// Too many redirects
+		it := &installTarget{githubURL: ts.URL}
+		releaseTag, err := it.getTagFromReleasesURL(t.Context(), "owner3", "repo4")
+		assert.Error(t, err, "Returns err if too many redirects")
 		assert.Equal(t, "", releaseTag, "Returns empty string")
 	}
 }
