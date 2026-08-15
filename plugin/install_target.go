@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"regexp"
 	"runtime"
 	"strings"
@@ -214,32 +213,27 @@ func (it *installTarget) getTagFromReleasesURL(ctx context.Context, owner, repo 
 	return "", fmt.Errorf("too many redirects")
 }
 
+func pathSegments(u *url.URL) []string {
+	return strings.FieldsFunc(u.EscapedPath(), func(r rune) bool { return r == '/' })
+}
+
 func (it *installTarget) isReleasesLatestURL(u *url.URL) bool {
-	if strings.Index(u.String(), it.getGithubURL()) != 0 {
+	base, err := url.Parse(it.getGithubURL())
+	if err != nil || u.Scheme != base.Scheme || u.Host != base.Host {
 		return false
 	}
-	segments := strings.Split(strings.Trim(u.EscapedPath(), "/"), "/")
-	if len(segments) < 4 {
-		return false
-	}
-	return segments[len(segments)-2] == "releases" && segments[len(segments)-1] == "latest"
+	// /<owner>/<repo>/releases/latest
+	segments := pathSegments(u)
+	return len(segments) == 4 && segments[2] == "releases" && segments[3] == "latest"
 }
 
 func extractTagFromReleasesURL(u *url.URL) (string, error) {
 	// /<owner>/<repo>/releases/tag/v1.2.3
-	segments := strings.Split(strings.Trim(u.EscapedPath(), "/"), "/")
-	for i := 0; i < len(segments)-1; i++ {
-		if segments[i] == "releases" && i+1 < len(segments) && segments[i+1] == "tag" {
-			// Ends with a tag
-			raw := path.Base(u.EscapedPath())
-			tag, err := url.PathUnescape(raw)
-			if err != nil {
-				return "", err
-			}
-			return tag, nil
-		}
+	segments := pathSegments(u)
+	if len(segments) != 5 || segments[2] != "releases" || segments[3] != "tag" {
+		return "", fmt.Errorf("not a releases/tag URL")
 	}
-	return "", fmt.Errorf("not a releases/tag URL")
+	return url.PathUnescape(segments[4])
 }
 
 func (it *installTarget) getRawGithubURL() string {
