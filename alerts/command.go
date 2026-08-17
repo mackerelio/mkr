@@ -39,6 +39,7 @@ var Command = &cli.Command{
 			Aliases: []string{"l"},
 			Value:   defaultAlertsLimit,
 			Usage:   fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+			Action:  validateLimitFlag,
 		},
 		jq.CommandLineFlag,
 	},
@@ -78,6 +79,7 @@ var Command = &cli.Command{
 					Aliases: []string{"l"},
 					Value:   defaultAlertsLimit,
 					Usage:   fmt.Sprintf("Set the number of alerts to display. Default is set to %d when -with-closed is set, otherwise all the open alerts are displayed.", defaultAlertsLimit),
+					Action:  validateLimitFlag,
 				},
 			},
 		},
@@ -117,6 +119,7 @@ var Command = &cli.Command{
 					Aliases: []string{"l"},
 					Value:   defaultAlertLogsLimit,
 					Usage:   "Set the number of alert logs to display",
+					Action:  validateLimitFlag,
 				},
 				jq.CommandLineFlag,
 			},
@@ -126,6 +129,22 @@ var Command = &cli.Command{
 
 const defaultAlertsLimit int = 100
 const defaultAlertLogsLimit int = 100
+
+// maxAlertsLimit is the upper bound of the limit flags. The API returns at most
+// 100 items per request, so this limit already requires 10,000 requests, and no
+// larger value is of practical use. Note that the limit is used as the capacity
+// of a slice, which panics on a too large value, especially on 32-bit systems.
+const maxAlertsLimit int = 1_000_000
+
+func validateLimitFlag(_ context.Context, _ *cli.Command, limit int) error {
+	if limit < 0 {
+		return errors.New("limit should not be negative")
+	}
+	if limit > maxAlertsLimit {
+		return fmt.Errorf("limit should not exceed %d", maxAlertsLimit)
+	}
+	return nil
+}
 
 type alertSet struct {
 	Alert   *mackerel.Alert
@@ -411,9 +430,6 @@ func getAlertsLimit(c *cli.Command, withClosed bool) int {
 }
 
 func fetchAlerts(ctx context.Context, client mackerelclient.Client, withClosed bool, limit int) ([]*mackerel.Alert, error) {
-	if limit < 0 {
-		return nil, errors.New("limit should not be negative")
-	}
 	var resp *mackerel.AlertsResp
 	var err error
 	if withClosed {
