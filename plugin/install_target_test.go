@@ -352,12 +352,91 @@ func TestIsReleasesLatestURL(t *testing.T) {
 			Input:  "https://example.com/owner/repo/releases/latest",
 			Output: false,
 		},
+		{
+			Name:   "Invalid host with the github URL as its prefix",
+			Input:  "https://github.com.example.com/owner/repo/releases/latest",
+			Output: false,
+		},
+		{
+			Name:   "Different scheme",
+			Input:  "http://github.com/owner/repo/releases/latest",
+			Output: false,
+		},
+		{
+			Name:   "Extra segment before the owner",
+			Input:  "https://github.com/extra/owner/repo/releases/latest",
+			Output: false,
+		},
+		{
+			Name:   "Path ending with a slash",
+			Input:  "https://github.com/owner/repo/releases/latest/",
+			Output: true,
+		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.Name, func(t *testing.T) {
 			it := &installTarget{githubURL: "https://github.com"}
 			u, _ := url.Parse(tc.Input)
 			assert.Equal(t, tc.Output, it.isReleasesLatestURL(u))
+		})
+	}
+}
+
+func TestExtractTagFromReleasesURL(t *testing.T) {
+	testCases := []struct {
+		Name   string
+		Input  string
+		Output string
+		Error  bool
+	}{
+		{
+			Name:   "Valid releases/tag URL",
+			Input:  "https://github.com/owner/repo/releases/tag/v1.2.3",
+			Output: "v1.2.3",
+		},
+		{
+			Name:   "Release tag containing an escaped slash",
+			Input:  "https://github.com/owner/repo/releases/tag/release%2Fv0.5.1",
+			Output: "release/v0.5.1",
+		},
+		{
+			Name:   "Path ending with a slash",
+			Input:  "https://github.com/owner/repo/releases/tag/v1.2.3/",
+			Output: "v1.2.3",
+		},
+		{
+			Name:  "Extra segment after the release tag",
+			Input: "https://github.com/owner/repo/releases/tag/v1.2.3/extra",
+			Error: true,
+		},
+		{
+			Name:  "releases/tag in an unexpected position",
+			Input: "https://github.com/releases/tag/owner/repo",
+			Error: true,
+		},
+		{
+			Name:  "releases/latest URL",
+			Input: "https://github.com/owner/repo/releases/latest",
+			Error: true,
+		},
+		{
+			Name:  "Too few segments",
+			Input: "https://github.com/owner/repo",
+			Error: true,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			u, err := url.Parse(tc.Input)
+			assert.NoError(t, err)
+			tag, err := extractTagFromReleasesURL(u)
+			if tc.Error {
+				assert.Error(t, err, "returns an error for an unexpected URL")
+				assert.Equal(t, "", tag, "returns an empty string")
+				return
+			}
+			assert.NoError(t, err, "extractTagFromReleasesURL is successful")
+			assert.Equal(t, tc.Output, tag, "release tag is extracted correctly")
 		})
 	}
 }
