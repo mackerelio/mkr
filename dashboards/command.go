@@ -11,18 +11,23 @@ import (
 
 	"github.com/mackerelio/mackerel-client-go"
 	"github.com/mackerelio/mkr/format"
+	"github.com/mackerelio/mkr/jq"
 	"github.com/mackerelio/mkr/logger"
 	"github.com/mackerelio/mkr/mackerelclient"
 	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
-	Name:  "dashboards",
-	Usage: "Manipulate custom dashboards",
+	Name:      "dashboards",
+	Usage:     "Manipulate custom dashboards",
+	ArgsUsage: "[--jq <formula>]",
 	Description: `
     Manipulate custom dashboards. With no subcommand specified, this will show all dashboards. See https://mackerel.io/docs/entry/advanced/cli
 `,
 	Action: doListDashboards,
+	Flags: []cli.Flag{
+		jq.CommandLineFlag,
+	},
 	Commands: []*cli.Command{
 		{
 			Name:      "pull",
@@ -78,8 +83,7 @@ func doListDashboards(ctx context.Context, c *cli.Command) error {
 	dashboards, err := client.FindDashboardsContext(ctx)
 	logger.DieIf(err)
 
-	fmt.Println(format.JSONMarshalIndent(dashboards, "", "    "))
-	return nil
+	return format.PrettyPrintJSON(os.Stdout, dashboards, c.String("jq"))
 }
 
 func doPullDashboard(ctx context.Context, c *cli.Command) error {
