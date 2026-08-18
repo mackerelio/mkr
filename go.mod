@@ -18,7 +18,7 @@ require (
 	github.com/mholt/archives v0.1.5
 	github.com/motemen/go-colorine v0.0.0-20180816141035-45d19169413a
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/urfave/cli/v3 v3.10.1
 	github.com/yudai/gojsondiff v1.0.0
@@ -37,7 +37,6 @@ require (
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/sevenzip v1.6.1 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/daviddengcn/go-colortext v1.0.0 // indirect
 	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
@@ -57,7 +56,6 @@ require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.20.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sorairolake/lzip-go v0.3.8 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
