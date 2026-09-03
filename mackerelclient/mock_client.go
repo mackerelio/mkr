@@ -20,6 +20,7 @@ type MockClient struct {
 	updateHostStatusCallback    func(hostID string, status string) error
 	listHostMetricNamesCallback func(id string) ([]string, error)
 	getTraceCallback            func(traceID string) (*mackerel.TraceResponse, error)
+	findLogsCallback            func(param *mackerel.FindLogsParam) (*mackerel.FindLogsResponse, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -207,6 +208,21 @@ func (c *MockClient) GetTraceContext(ctx context.Context, traceID string) (*mack
 func MockGetTrace(callback func(traceID string) (*mackerel.TraceResponse, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.getTraceCallback = callback
+	}
+}
+
+// FindLogsContext returns the logs matched by the given param using the callback set by MockFindLogs
+func (c *MockClient) FindLogsContext(ctx context.Context, param *mackerel.FindLogsParam) (*mackerel.FindLogsResponse, error) {
+	if c.findLogsCallback != nil {
+		return c.findLogsCallback(param)
+	}
+	return nil, errCallbackNotFound("FindLogs")
+}
+
+// MockFindLogs returns an option to set the callback of FindLogs
+func MockFindLogs(callback func(param *mackerel.FindLogsParam) (*mackerel.FindLogsResponse, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.findLogsCallback = callback
 	}
 }
 
