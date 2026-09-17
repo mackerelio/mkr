@@ -70,8 +70,9 @@ func TestValidateRoles(t *testing.T) {
 	})
 }
 
+//go:fix inline
 func pfloat64(x float64) *float64 {
-	return &x
+	return new(x)
 }
 
 func TestDiffMonitors(t *testing.T) {
