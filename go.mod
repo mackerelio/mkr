@@ -20,7 +20,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.12.1
 	github.com/tcnksm/go-gitconfig v0.1.2
-	github.com/urfave/cli/v3 v3.11.0
+	github.com/urfave/cli/v3 v3.12.0
 	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/text v0.41.0
