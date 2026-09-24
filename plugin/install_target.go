@@ -172,7 +172,7 @@ func (it *installTarget) getTagFromReleasesURL(ctx context.Context, owner, repo 
 		},
 	}
 
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		req, err := http.NewRequestWithContext(ctx, http.MethodHead, latestURL, nil)
 		if err != nil {
 			return "", err
