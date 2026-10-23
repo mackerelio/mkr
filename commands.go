@@ -8,6 +8,7 @@ import (
 	"github.com/mackerelio/mkr/checks"
 	"github.com/mackerelio/mkr/dashboards"
 	"github.com/mackerelio/mkr/hosts"
+	"github.com/mackerelio/mkr/logs"
 	"github.com/mackerelio/mkr/metric_names"
 	"github.com/mackerelio/mkr/metrics"
 	"github.com/mackerelio/mkr/monitors"
@@ -45,4 +46,5 @@ var Commands = []*cli.Command{
 	metric_names.Command,
 	users.CommandUsers,
 	traces.Command,
+	logs.Command,
 }

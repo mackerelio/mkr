@@ -9,17 +9,19 @@ import (
 
 // MockClient represents a mock client of Mackerel API
 type MockClient struct {
-	findAWSIntegrationsCallback func() ([]*mackerel.AWSIntegration, error)
-	findHostsCallback           func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
-	findHostCallback            func(id string) (*mackerel.Host, error)
-	findServicesCallback        func() ([]*mackerel.Service, error)
-	findChannelsCallback        func() ([]*mackerel.Channel, error)
-	findUsersCallback           func() ([]*mackerel.User, error)
-	getOrgCallback              func() (*mackerel.Org, error)
-	createHostCallback          func(param *mackerel.CreateHostParam) (string, error)
-	updateHostStatusCallback    func(hostID string, status string) error
-	listHostMetricNamesCallback func(id string) ([]string, error)
-	getTraceCallback            func(traceID string) (*mackerel.TraceResponse, error)
+	findAWSIntegrationsCallback  func() ([]*mackerel.AWSIntegration, error)
+	findHostsCallback            func(param *mackerel.FindHostsParam) ([]*mackerel.Host, error)
+	findHostCallback             func(id string) (*mackerel.Host, error)
+	findServicesCallback         func() ([]*mackerel.Service, error)
+	findChannelsCallback         func() ([]*mackerel.Channel, error)
+	findUsersCallback            func() ([]*mackerel.User, error)
+	getOrgCallback               func() (*mackerel.Org, error)
+	createHostCallback           func(param *mackerel.CreateHostParam) (string, error)
+	updateHostStatusCallback     func(hostID string, status string) error
+	listHostMetricNamesCallback  func(id string) ([]string, error)
+	getTraceCallback             func(traceID string) (*mackerel.TraceResponse, error)
+	listLogsCallback             func(param *mackerel.ListLogsParam) (*mackerel.ListLogsResponse, error)
+	findSavedLogSearchesCallback func() (*mackerel.FindSavedLogSearchesResponse, error)
 }
 
 // MockClientOption represents an option of mock client of Mackerel API
@@ -207,6 +209,36 @@ func (c *MockClient) GetTraceContext(ctx context.Context, traceID string) (*mack
 func MockGetTrace(callback func(traceID string) (*mackerel.TraceResponse, error)) MockClientOption {
 	return func(c *MockClient) {
 		c.getTraceCallback = callback
+	}
+}
+
+// ListLogsContext searches logs using the callback set by MockListLogs
+func (c *MockClient) ListLogsContext(ctx context.Context, param *mackerel.ListLogsParam) (*mackerel.ListLogsResponse, error) {
+	if c.listLogsCallback != nil {
+		return c.listLogsCallback(param)
+	}
+	return nil, errCallbackNotFound("ListLogs")
+}
+
+// MockListLogs returns an option to set the callback of ListLogs
+func MockListLogs(callback func(param *mackerel.ListLogsParam) (*mackerel.ListLogsResponse, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.listLogsCallback = callback
+	}
+}
+
+// FindSavedLogSearchesContext lists saved log searches using the callback set by MockFindSavedLogSearches
+func (c *MockClient) FindSavedLogSearchesContext(ctx context.Context) (*mackerel.FindSavedLogSearchesResponse, error) {
+	if c.findSavedLogSearchesCallback != nil {
+		return c.findSavedLogSearchesCallback()
+	}
+	return nil, errCallbackNotFound("FindSavedLogSearches")
+}
+
+// MockFindSavedLogSearches returns an option to set the callback of FindSavedLogSearches
+func MockFindSavedLogSearches(callback func() (*mackerel.FindSavedLogSearchesResponse, error)) MockClientOption {
+	return func(c *MockClient) {
+		c.findSavedLogSearchesCallback = callback
 	}
 }
 
