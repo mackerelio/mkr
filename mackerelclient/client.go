@@ -19,6 +19,8 @@ type Client interface {
 	UpdateHostStatusContext(ctx context.Context, hostID string, status string) error
 	ListHostMetricNamesContext(ctx context.Context, id string) ([]string, error)
 	GetTraceContext(ctx context.Context, traceID string) (*mackerel.TraceResponse, error)
+	ListLogsContext(ctx context.Context, param *mackerel.ListLogsParam) (*mackerel.ListLogsResponse, error)
+	FindSavedLogSearchesContext(ctx context.Context) (*mackerel.FindSavedLogSearchesResponse, error)
 	// below mock needed implemented.
 	FindWithClosedAlertsContext(ctx context.Context) (*mackerel.AlertsResp, error)
 	FindWithClosedAlertsByNextIDContext(ctx context.Context, nextID string) (*mackerel.AlertsResp, error)
