@@ -35,6 +35,27 @@ rm -f %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Nov 5 2026 <mackerel-developers@hatena.ne.jp> - 0.67.0
+- Bump the stable-packages group across 1 directory with 3 updates (by dependabot[bot])
+- Bump docker/login-action from 4.6.0 to 4.7.0 (by dependabot[bot])
+- Bump github.com/jpillora/backoff from 1.0.0 to 1.1.0 (by dependabot[bot])
+- Bump github.com/Songmu/prompter from 0.5.1 to 1.0.0 (by dependabot[bot])
+- Implement logs command for log search (by azukiazusa1)
+- Bump github.com/klauspost/compress from 1.18.0 to 1.18.7 (by dependabot[bot])
+- Bump actions/upload-artifact from 7.0.1 to 7.0.2 (by dependabot[bot])
+- Bump actions/download-artifact from 8.0.1 to 8.0.2 (by dependabot[bot])
+- Bump github.com/urfave/cli/v3 from 3.13.0 to 3.14.0 (by dependabot[bot])
+- Bump mackerelio/workflows/.github/workflows/go-test.yml from 1.9.0 to 1.10.0 (by dependabot[bot])
+- Bump mackerelio/workflows/.github/workflows/go-lint.yml from 1.9.0 to 1.10.0 (by dependabot[bot])
+- Bump github.com/urfave/cli/v3 from 3.12.0 to 3.13.0 (by dependabot[bot])
+- Bump docker/build-push-action from 7.3.0 to 7.4.0 (by dependabot[bot])
+- Bump docker/setup-buildx-action from 4.3.0 to 4.4.1 (by dependabot[bot])
+- Bump docker/setup-qemu-action from 4.3.0 to 4.4.0 (by dependabot[bot])
+- Bump github.com/urfave/cli/v3 from 3.11.0 to 3.12.0 (by dependabot[bot])
+- Bump aws-actions/configure-aws-credentials from 6.2.4 to 6.3.0 (by dependabot[bot])
+- Bump aws-actions/configure-aws-credentials from 6.2.3 to 6.2.4 (by dependabot[bot])
+- Bump docker/setup-qemu-action from 4.2.0 to 4.3.0 (by dependabot[bot])
+
 * Tue Aug 25 2026 <mackerel-developers@hatena.ne.jp> - 0.66.0
 - Bump docker/setup-buildx-action from 4.2.0 to 4.3.0 (by dependabot[bot])
 - Bump github.com/urfave/cli/v3 from 3.10.1 to 3.11.0 (by dependabot[bot])

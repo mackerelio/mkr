@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.67.0 (2026-11-05)
+
+* Bump the stable-packages group across 1 directory with 3 updates #904 (dependabot[bot])
+* Bump docker/login-action from 4.6.0 to 4.7.0 #903 (dependabot[bot])
+* Bump github.com/jpillora/backoff from 1.0.0 to 1.1.0 #901 (dependabot[bot])
+* Bump github.com/Songmu/prompter from 0.5.1 to 1.0.0 #899 (dependabot[bot])
+* Implement logs command for log search #898 (azukiazusa1)
+* Bump github.com/klauspost/compress from 1.18.0 to 1.18.7 #897 (dependabot[bot])
+* Bump actions/upload-artifact from 7.0.1 to 7.0.2 #896 (dependabot[bot])
+* Bump actions/download-artifact from 8.0.1 to 8.0.2 #895 (dependabot[bot])
+* Bump github.com/urfave/cli/v3 from 3.13.0 to 3.14.0 #894 (dependabot[bot])
+* Bump mackerelio/workflows/.github/workflows/go-test.yml from 1.9.0 to 1.10.0 #893 (dependabot[bot])
+* Bump mackerelio/workflows/.github/workflows/go-lint.yml from 1.9.0 to 1.10.0 #892 (dependabot[bot])
+* Bump github.com/urfave/cli/v3 from 3.12.0 to 3.13.0 #890 (dependabot[bot])
+* Bump docker/build-push-action from 7.3.0 to 7.4.0 #889 (dependabot[bot])
+* Bump docker/setup-buildx-action from 4.3.0 to 4.4.1 #888 (dependabot[bot])
+* Bump docker/setup-qemu-action from 4.3.0 to 4.4.0 #887 (dependabot[bot])
+* Bump github.com/urfave/cli/v3 from 3.11.0 to 3.12.0 #886 (dependabot[bot])
+* Bump aws-actions/configure-aws-credentials from 6.2.4 to 6.3.0 #885 (dependabot[bot])
+* Bump aws-actions/configure-aws-credentials from 6.2.3 to 6.2.4 #882 (dependabot[bot])
+* Bump docker/setup-qemu-action from 4.2.0 to 4.3.0 #881 (dependabot[bot])
+
+
 ## 0.66.0 (2026-08-25)
 
 * Bump docker/setup-buildx-action from 4.2.0 to 4.3.0 #878 (dependabot[bot])
