@@ -9,7 +9,7 @@ require (
 	github.com/fatih/color v1.19.0
 	github.com/google/go-github/v49 v49.1.0
 	github.com/itchyny/gojq v0.12.19
-	github.com/jpillora/backoff v1.0.0
+	github.com/jpillora/backoff v1.1.0
 	github.com/mackerelio/checkers v0.2.1
 	github.com/mackerelio/mackerel-agent v0.87.0
 	github.com/mackerelio/mackerel-client-go v0.48.0
