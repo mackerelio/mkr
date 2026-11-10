@@ -21,8 +21,8 @@ github.com/BurntSushi/toml v1.6.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/STARRY-S/zip v0.2.3 h1:luE4dMvRPDOWQdeDdUxUoZkzUIpTccdKdhHHsQJ1fm4=
 github.com/STARRY-S/zip v0.2.3/go.mod h1:lqJ9JdeRipyOQJrYSOtpNAiaesFO6zVDsE8GIGFaoSk=
-github.com/Songmu/goxz v0.10.1 h1:EkfljID8fp5GZCmbOCciCIQkZHGz1SOoP4rp9XRpMcQ=
-github.com/Songmu/goxz v0.10.1/go.mod h1:fAi6kShBlksu8bqS5z+5/UnIE2irAgdDxzmvA5Svyk8=
+github.com/Songmu/goxz v0.13.0 h1:wMgYeKCwRW3JbHmJDoePZQMRdLDZf9IlDcucdhmwi8k=
+github.com/Songmu/goxz v0.13.0/go.mod h1:+mdasXHBzzXMytu+6bncs3gPjPLpTEEHQqMWMSe5M+g=
 github.com/Songmu/prompter v1.0.0 h1:dW2BBACHBxukpIIALBOCxIsdQOFgAYXSjBy24kPOgEU=
 github.com/Songmu/prompter v1.0.0/go.mod h1:skvsmWqB3131LtocK6gRSEqRkZZndyyZDIQlFPGoij0=
 github.com/Songmu/retry v0.1.0 h1:hPA5xybQsksLR/ry/+t/7cFajPW+dqjmjhzZhioBILA=
@@ -141,8 +141,8 @@ github.com/mackerelio/checkers v0.2.1 h1:vRXzAT+CEyaLjSrHVxKUBjyWq1kfo8QcI8ZoSKZ
 github.com/mackerelio/checkers v0.2.1/go.mod h1:CW3k/5bvHhxDrfKgWvMvNH0R51zco141ZVxlI7o/KAc=
 github.com/mackerelio/golib v1.2.2 h1:fQfW1o2KvPyIsAH/7+M2J0gpf2jLu+NyYpDCN79zxW4=
 github.com/mackerelio/golib v1.2.2/go.mod h1:itcSOfrsT5XvkzflFPebT43RrliaKDz2T6YGYt3jclw=
-github.com/mackerelio/mackerel-agent v0.87.1 h1:ckxtim9K3W+xOb7iUxjn2gESJd59NZgcYtGN6HKvIP8=
-github.com/mackerelio/mackerel-agent v0.87.1/go.mod h1:msSvhmMi+ByyGUrMsURperZAkKiTSRcQPlF8NvPw62k=
+github.com/mackerelio/mackerel-agent v0.87.2 h1:Ma5mjfuTbsiKOg34Hi/3ycCrMImHxP4E7uZzPKJLfhw=
+github.com/mackerelio/mackerel-agent v0.87.2/go.mod h1:u4nr95nImeGNDNkT4YWyaLnupt5nuvPcVdxlsUmpu0o=
 github.com/mackerelio/mackerel-client-go v0.48.0 h1:Cr//eZiYjFaI4MP1Rv3wN+7e4jr1DuQPD0dcNGyI+Nw=
 github.com/mackerelio/mackerel-client-go v0.48.0/go.mod h1:zPdPZuuSrKOcWPpsW4aiMi+XubuvQqqPzPuAT/YE+/E=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
